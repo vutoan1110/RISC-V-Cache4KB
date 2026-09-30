@@ -4868,3 +4868,6 @@
 - STOP `r14_E15` rc=2 last=`29-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/nix/store/alhgaybdgmv706469rp57ggcyg3750yk-openroad-python3-3.11.9-env/lib/openroad-python3`
 
 - START `r14_E15` (soc_dm_4kb) args: ` --from Odb.RemoveRoutingObstructions --to OpenROAD.STAPostPNR` at 2026-09-30T08:51:07+00:00
+- DONE `r14_E15` rc=0 last=`final` final/ present
+
+- START `r14_E16` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/22-odb-addroutingobstructions/state_out.json --from OpenROAD.GlobalPlacementSkipIO --to OpenROAD.STAPostPNR` at 2026-09-30T09:00:35+00:00

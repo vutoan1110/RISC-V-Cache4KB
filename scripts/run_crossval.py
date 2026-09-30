@@ -40,9 +40,9 @@ def rtl_counts(log: Path) -> dict | None:
     return out
 
 
-def model_counts(trace: Path, cfg: int) -> dict | None:
+def model_counts(trace: Path, cfg: int, lines: int = 64) -> dict | None:
     p = subprocess.run([sys.executable, str(ROOT / "scripts" / "cache_model.py"),
-                        str(trace), "--config", str(cfg)],
+                        str(trace), "--config", str(cfg), "--lines", str(lines)],
                        cwd=ROOT, capture_output=True, text=True)
     if p.returncode:
         return None
@@ -60,6 +60,11 @@ def main() -> int:
     ap.add_argument("--kernels", default="up_crc32,up_matmult-int,up_nettle-sha256,up_md5sum,up_edn")
     ap.add_argument("--configs", default="0,1,2")
     ap.add_argument("--out", default="results/crossval.csv")
+    # Cache capacity in lines per cache (both caches), passed to the testbench and the model alike.
+    ap.add_argument("--lines", type=int, default=64)
+    # Simulation library (work_b lets this run beside a batch that uses work). The testbench writes its trace
+    # to the fixed path results/cache_trace.txt, so only ONE cross-validation batch may run at a time.
+    ap.add_argument("--lib", default="work")
     args = ap.parse_args()
 
     log_dir = ROOT / "results" / "crossval_logs"
@@ -76,16 +81,17 @@ def main() -> int:
                 continue
             log = log_dir / ("%s_%s.log" % (kern, name))
             do = ("vsim -onfinish stop -voptargs=+acc -gCACHE_CONFIG=%d "
-                  "-gMEMFILE=%s work.tb_benchmark_snapshot +benchmark=%s "
+                  "-gICACHE_LINE_COUNT=%d -gDCACHE_LINE_COUNT=%d "
+                  "-gMEMFILE=%s %s.tb_benchmark_snapshot +benchmark=%s "
                   "+max_cycles=%d +trace_cache; run -all; quit -f"
-                  % (cfg, hexfile, kern, MAX_CYCLES))
+                  % (cfg, args.lines, args.lines, hexfile, args.lib, kern, MAX_CYCLES))
             t0 = time.time()
             if vsim(do, log) != 0:
                 bad.append("%s/%s: simulation failed" % (kern, name))
                 print("[FAIL] %-11s %-7s simulation" % (kern, name))
                 continue
             rtl = rtl_counts(log)
-            mdl = model_counts(trace, cfg)
+            mdl = model_counts(trace, cfg, args.lines)
             if not rtl or not mdl:
                 bad.append("%s/%s: could not read counts" % (kern, name))
                 print("[FAIL] %-11s %-7s counts unreadable" % (kern, name))

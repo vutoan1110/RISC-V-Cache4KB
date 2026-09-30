@@ -91,6 +91,8 @@ def main() -> int:
     ap.add_argument("--bp", type=int, default=1)
     # Full-iteration upstream images (fw_board/) need more than the default cycle budget.
     ap.add_argument("--max-cycles", type=int, default=MAX_CYCLES)
+    # FPGA-view simulation library (work_b: scripts/metrics/compile_active_design_b.do) for a parallel batch.
+    ap.add_argument("--lib", default="work")
     args = ap.parse_args()
 
     configs = [int(c) for c in args.configs.split(",")]
@@ -122,7 +124,7 @@ def main() -> int:
                   "run -all; quit -f"
                   % (cfg, hexfile, args.lines, args.lines, args.l0, args.bp,
                      ("-gVERBOSE=0 %s.tb_benchmark_snapshot %s.asic_view_checker" % (args.asic_lib, args.asic_lib)
-                      if args.asic_view else "work.tb_benchmark_snapshot"),
+                      if args.asic_view else "%s.tb_benchmark_snapshot" % args.lib),
                      kern, args.max_cycles))
             t0 = time.time()
             rc = vsim(do, log)
