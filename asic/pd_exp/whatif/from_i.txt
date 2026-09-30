@@ -1,0 +1,2 @@
+# I-side: PC register (final3 names its Q nets u_soc.if_req_addr)
+u_soc.if_req_addr*

@@ -1,0 +1,18 @@
+
+5. Printing statistics.
+
+=== dup_test2 ===
+
+   Number of wires:                  9
+   Number of wire bits:             51
+   Number of public wires:           9
+   Number of public wire bits:      51
+   Number of ports:                  6
+   Number of port bits:             27
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 24
+     $_DFFE_PN0P_                   16
+     sky130_fd_sc_hd__buf_1          8
+

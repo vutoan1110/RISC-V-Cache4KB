@@ -1,0 +1,6 @@
+# cut 1: I-cache hit registered (arrival at the cut 22.7 ns: OK)
+_019357_
+# cut 2: EX redirect registered (arrival 29.9 ns: needs a faster branch comparator too)
+_021005_
+# cut 3: 33x33 multiplier pipelined (approximation: remove paths through its CSA/xor nets of the worst path)
+_040562_ _040658_ _040708_ _040746_ _040748_ _040998_ _041000_ _041232_ _041237_

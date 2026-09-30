@@ -4720,3 +4720,112 @@
 
 - START `final3_B` (soc_dm_4kb) args: ` --from Odb.CellFrequencyTables` at 2026-09-28T00:29:44+00:00
 - STOP `final3_B` rc=2 last=`74-yosys-eqy` err: `Subprocess had a non-zero exit. Last 10 line(s):   File "/nix/store/7hnr99nxrd2aw6lghybqdmkckq60j6l9-python3-3.11.9/lib/python3.11/shlex.py", line 315, in split     return list(lex)            ^^^^^^^`
+
+- START `final3_eqy` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/final3_A/71-checker-lvs/state_out.json --from Yosys.EQY --to Yosys.EQY` at 2026-09-28T19:45:02+00:00
+- STOP `final3_eqy` rc=2 last=`01-yosys-eqy` err: `Subprocess had a non-zero exit. Last 10 line(s): EQY 20:00:51 \[/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/final3_eqy/01-yosys-eqy/scratch] run: Elapsed clock time [H:MM:SS (secs)]: 0:00:00 (`
+
+- START `x_E1` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/final3_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-28T20:01:51+00:00
+- DONE `x_E1` rc=0 last=`final` final/ present
+
+- START `x_E2` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/final3_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-28T21:59:11+00:00
+
+- START `x_E1H` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/x_E1/15-openroad-detailedrouting/state_out.json --from OpenROAD.PostRouteHoldECO --to OpenROAD.STAPostPNR` at 2026-09-28T22:11:21+00:00
+- STOP `x_E1H` rc=2 last=`01-openroad-postrouteholdeco` err: `Subprocess had a non-zero exit. Last 10 line(s): [INFO ODB-0127] Reading DEF file: /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/x_E1/15-openroad-detailedrouting/soc_asic_top.def [INFO ODB-0128]`
+- DONE `x_E2` rc=0 last=`final` final/ present
+
+- START `r13a_A` (soc_dm_4kb) args: `full flow` at 2026-09-28T23:38:05+00:00
+
+- START `x_E1H` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/x_E1/15-openroad-detailedrouting/state_out.json --from OpenROAD.PostRouteHoldECO --to OpenROAD.STAPostPNR` at 2026-09-29T01:22:14+00:00
+- ODD `x_E1H` rc=1 last=`01-openroad-postrouteholdeco` empty error.log, suspect a native crash
+
+- START `x_E1H` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/x_E1/15-openroad-detailedrouting/state_out.json --from OpenROAD.PostRouteHoldECO --to OpenROAD.STAPostPNR` at 2026-09-29T01:46:22+00:00
+- DONE `x_E1H` rc=0 last=`final` final/ present
+
+- START `x_E3` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/final3_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-29T01:56:19+00:00
+
+- START `x_E4_A` (soc_dm_4kb) args: `full flow` at 2026-09-29T02:00:24+00:00
+- STOP `r13a_A` rc=2 last=`72-yosys-eqy` err: `Subprocess had a non-zero exit. Last 10 line(s): EQY  3:09:57 \[/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r13a_A/72-yosys-eqy/scratch] run: Running strategy 'sat' on 'soc_asic_top.HEX0'.. EQ`
+- ODD `x_E3` rc=1 last=`21-odb-reportdisconnectedpins` empty error.log, suspect a native crash
+
+- START `x_E3` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins --to OpenROAD.STAPostPNR` at 2026-09-29T03:52:27+00:00
+- STOP `x_E3` rc=2 last=`22-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/odbpy/reader.py", line 217, in wrapp`
+
+- START `x_E3` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins --to OpenROAD.STAPostPNR` at 2026-09-29T03:53:14+00:00
+- STOP `x_E3` rc=1 last=`23-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/odbpy/reader.py", line 217, in wrapp`
+- STOP `x_E4_A` rc=2 last=`49-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/odbpy/reader.py", line 217, in wrapp`
+
+- START `x_E3` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins --to OpenROAD.STAPostPNR` at 2026-09-29T03:59:34+00:00
+- DONE `x_E3` rc=0 last=`final` final/ present
+
+- START `x_E3` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins --to OpenROAD.STAPostPNR` at 2026-09-29T04:03:07+00:00
+- DONE `x_E3` rc=2 last=`final` final/ present
+
+- START `x_E3` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins --to OpenROAD.STAPostPNR` at 2026-09-29T04:03:22+00:00
+- DONE `x_E3` rc=2 last=`final` final/ present
+
+- START `x_E3` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins --to OpenROAD.STAPostPNR` at 2026-09-29T04:03:34+00:00
+- DONE `x_E3` rc=2 last=`final` final/ present
+
+- START `x_E3` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins --to OpenROAD.STAPostPNR` at 2026-09-29T04:03:47+00:00
+- DONE `x_E3` rc=0 last=`final` final/ present
+
+- START `x_E3` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins --to OpenROAD.STAPostPNR` at 2026-09-29T04:07:38+00:00
+- DONE `x_E3` rc=1 last=`final` final/ present
+
+- START `x_E4_A` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins` at 2026-09-29T04:07:51+00:00
+- STOP `x_E4_A` rc=2 last=`50-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/odbpy/reader.py", line 217, in wrapp`
+
+- START `x_E4_A` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins` at 2026-09-29T04:08:01+00:00
+- STOP `x_E4_A` rc=1 last=`51-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/odbpy/reader.py", line 217, in wrapp`
+
+- START `x_E4_A` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins` at 2026-09-29T04:08:14+00:00
+- STOP `x_E4_A` rc=2 last=`52-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/odbpy/reader.py", line 217, in wrapp`
+
+- START `x_E4_A` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins` at 2026-09-29T04:08:24+00:00
+- STOP `x_E4_A` rc=1 last=`53-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/odbpy/reader.py", line 217, in wrapp`
+
+- START `x_E4_A` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins` at 2026-09-29T04:08:33+00:00
+- STOP `x_E4_A` rc=2 last=`77-yosys-eqy` err: `Subprocess had a non-zero exit. Last 10 line(s):            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/odbpy/reader.py", line 217, in wrapp`
+
+- START `x_E4_A` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins` at 2026-09-29T05:19:51+00:00
+- STOP `x_E4_A` rc=1 last=`83-odb-cellfrequencytables` err: `Subprocess had a non-zero exit. Last 10 line(s):            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/odbpy/reader.py", line 217, in wrapp`
+
+- START `x_E3R` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/x_E3/16-openroad-detailedrouting/state_out.json --from OpenROAD.PostRouteHoldECO --to OpenROAD.STAPostPNR` at 2026-09-29T05:30:28+00:00
+
+- START `x_E5` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/final3_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-29T05:30:33+00:00
+- STOP `x_E3R` rc=2 last=`01-openroad-postrouteholdeco` err: `[DRT-0218] Guide is not connected to design. `
+- STOP `x_E5` rc=2 last=`07-openroad-resizertimingpostcts` err: `[ODB-0370] Attempt to disconnect iterm of dont_touch instance macro_pin_pre_245 `
+
+- START `x_E3R` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/x_E3/16-openroad-detailedrouting/state_out.json --from OpenROAD.PostRouteHoldECO --to OpenROAD.STAPostPNR` at 2026-09-29T06:02:27+00:00
+
+- START `x_E5` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/final3_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-29T06:02:30+00:00
+- ODD `x_E3R` rc=1 last=`03-openroad-checkantennas-1` empty error.log, suspect a native crash
+
+- START `x_E3R` (soc_dm_4kb) args: ` --from Odb.RemoveRoutingObstructions --to OpenROAD.STAPostPNR` at 2026-09-29T06:27:17+00:00
+- ODD `x_E3R` rc=1 last=`07-odb-reportdisconnectedpins` empty error.log, suspect a native crash
+
+- START `x_E3R` (soc_dm_4kb) args: ` --from Odb.ReportDisconnectedPins --to OpenROAD.STAPostPNR` at 2026-09-29T06:28:47+00:00
+- DONE `x_E3R` rc=0 last=`final` final/ present
+
+- START `x_E3R2` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/x_E3/16-openroad-detailedrouting/state_out.json --from OpenROAD.PostRouteHoldECO --to OpenROAD.STAPostPNR` at 2026-09-29T06:33:23+00:00
+- DONE `x_E3R2` rc=0 last=`final` final/ present
+
+- START `x_E6` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/final3_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-29T07:02:58+00:00
+
+- START `x_E5b` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/x_E5/16-openroad-detailedrouting/state_out.json --from OpenROAD.PostRouteHoldECO --to OpenROAD.STAPostPNR` at 2026-09-29T07:44:49+00:00
+- DONE `x_E5b` rc=0 last=`final` final/ present
+- DONE `x_E5` rc=0 last=`final` final/ present
+- ODD `x_E6` rc=1 last=`21-odb-reportdisconnectedpins` empty error.log, suspect a native crash
+
+- START `x_E6` (soc_dm_4kb) args: ` --from Odb.RemoveRoutingObstructions --to OpenROAD.STAPostPNR` at 2026-09-29T08:40:18+00:00
+- STOP `x_E6` rc=2 last=`25-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):     return ctx.invoke(self.callback, **ctx.params)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/nix/store/alhgaybdgmv706469rp57ggcyg3750`
+
+- START `x_E6` (soc_dm_4kb) args: ` --from Odb.RemoveRoutingObstructions --to OpenROAD.STAPostPNR` at 2026-09-29T08:41:20+00:00
+- STOP `x_E6` rc=1 last=`29-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):     return ctx.invoke(self.callback, **ctx.params)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/nix/store/alhgaybdgmv706469rp57ggcyg3750`
+
+- START `x_E6` (soc_dm_4kb) args: ` --from Odb.RemoveRoutingObstructions --to OpenROAD.STAPostPNR` at 2026-09-29T08:42:21+00:00
+- STOP `x_E6` rc=1 last=`33-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):     return ctx.invoke(self.callback, **ctx.params)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/nix/store/alhgaybdgmv706469rp57ggcyg3750`
+
+- START `x_E6` (soc_dm_4kb) args: ` --from Odb.RemoveRoutingObstructions --to OpenROAD.STAPostPNR` at 2026-09-29T08:43:22+00:00
+- DONE `x_E6` rc=0 last=`final` final/ present
+

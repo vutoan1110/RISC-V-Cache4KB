@@ -133,6 +133,15 @@ pdk_variables = [
         "Per-layer wire RC used by the resizer/GRT parasitic estimates: '<layer> <capacitance pF/um> <resistance kOhm/um>' entries separated by commas (set_layer_rc). Unset: tech LEF values.",
         pdk=True,
     ),
+    # FLOW_JOURNAL Incident 93 (local addition): where LAYERS_RC applies. "all" (default, stock behaviour
+    # when LAYERS_RC is set) or "repair_design" (only the two repair_design steps, which fix slew/cap; the
+    # timing-driven global placement, CTS and timing repair keep the tech-LEF RC, so the placement is unchanged).
+    Variable(
+        "LAYERS_RC_SCOPE",
+        Optional[str],
+        "Scope of LAYERS_RC: 'all' (default) or 'repair_design' (only the repair_design steps).",
+        pdk=True,
+    ),
     Variable(
         "DEFAULT_CORNER",
         str,

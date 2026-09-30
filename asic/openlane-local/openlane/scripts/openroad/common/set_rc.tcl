@@ -25,7 +25,11 @@ if { [info exist ::env(VIAS_RC)] } {
 }
 
 # Metal resistance and capacitence
-if { [info exist ::env(LAYERS_RC)] } {
+# FLOW_JOURNAL Incident 93 (local): LAYERS_RC_SCOPE "repair_design" applies the per-layer RC only in the
+# repair_design scripts (they set ::LAYERS_RC_HERE), not in timing-driven GPL / CTS / timing repair, so the
+# placement is unchanged (Incident 91: a global LAYERS_RC moved the GPL placement). Unset or "all" = stock.
+if { [info exist ::env(LAYERS_RC)] && ( ![info exist ::env(LAYERS_RC_SCOPE)] || $::env(LAYERS_RC_SCOPE) eq "all" || [info exists ::LAYERS_RC_HERE] ) } {
+    puts "\[INFO\] LAYERS_RC applied (scope [expr {[info exist ::env(LAYERS_RC_SCOPE)] ? $::env(LAYERS_RC_SCOPE) : {all}}])"
     set layers_rc [split $::env(LAYERS_RC) ","]
     foreach layer_rc $layers_rc {
         set layer_name [lindex $layer_rc 0]

@@ -1,0 +1,2 @@
+# cut 1: I-cache hit (nor2_8 output feeding stall/advance) registered = 2-stage fetch
+_019357_

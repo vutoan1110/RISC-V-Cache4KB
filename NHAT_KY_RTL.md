@@ -1233,3 +1233,27 @@ day cung la mot lan tai lap doc lap. Luot 2 chinh thuc dang chay.
 ### 2026-09-27 01:48 — Quartus luot 2 tren 8b163675: VERIFIED, 16/16 trung tung truong voi luot 1
 `results/le_r12b_p2.log`: "[VERIFIED] 16 row(s) compared, 16 identical, 0 mismatched, 0 unpaired", 0 failure. Phia FPGA cua
 RTL cuoi HOAN TAT (4 diem x 4 seed x 2 luot; them luot kiem tra so bo r12 cung trung tung truong).
+
+
+## R13a (2026-09-29) — THU NGHIEM Task B (FLOW_JOURNAL Incident 93): 4 thay doi cycle-exact cho goc ss, tren BAN SAO asic/snapshots/rtl_r13a (hdl/ chinh thuc CHUA doi)
+Muc tieu: rut ngan cac vong toi han do duoc o max_ss (phan ra + STA what-if). Moi thay doi giu nguyen ham so chu ky (cycle-exact), co bo kiem tra chi-mo-phong so voi cong thuc goc.
+- R13a-1 `cache/icache_controller.v`: hit L0 = so sanh song song 8 tag hot voi request_block roi chon one-hot theo hot_index (truoc: giai ma -> mux 8:1 tag 25 bit -> so sanh -> cay OR, 13 ns o max_ss). Kiem: `r13a1_ref_hit` moi chu ky.
+- R13a-2 `datapath.v`/`riscv_core.v`/`riscv_core_native.v`: thanh ghi `pc_f_ic` = ban sao cua pc_f chi cho yeu cau I-cache (cung reset/enable/next state). O ASIC, D di qua `sky130_fd_sc_hd__buf_1` tuong minh vi Yosys opt_merge gop ca thanh ghi lan logic nhan ban du co (* keep *) (thu nghiem pd_exp/r13/dup_test*.v: keep -> 8 DFF; buffer tuong minh -> 16 DFF). Kiem: pc_f_ic == pc_f moi chu ky.
+- R13a-3 `branch.v`: bo so sanh cay prefix 5 tang (lt, eq) voi (* keep *) moi tang (diem cat ABC) — truoc: ABC (chien luoc AREA) bien <, >= thanh chuoi gon song a2111o 7-9 ns. Kiem trong datapath.v: bo so sanh hanh vi goc tren mux forwarding goc, lay mau truoc moi suon clock.
+- R13a-4 `datapath.v`: mux forwarding rieng cho bo so sanh (`br_src_a_e/b_e`) voi ban sao thanh ghi select `fwd_a_br/fwd_b_br` (buffer tuong minh o ASIC); tach bo so sanh khoi fanout rat lon cua forward_src (bo nhan 33x33). Kiem: fwd_*_br == forward_*_e moi chu ky.
+Kiem chung buoc dau: ASIC-view 12/12 Embench (tb/compile_asic_view_r13a.do, thu vien work_r13a; run_ablation.py them --asic-compile/--asic-lib): **0 truong khac** so voi results/asic_view_4kb_p1.csv (43 truong, moi kernel), 0 lan bo kiem tra kich hoat. Chua chay: lint 8 to hop, regression, UVM, chuoi day du, Quartus, chung minh hinh thuc (se lam neu PD cho thay loi ich).
+
+## R13b (2026-09-29) — THU NGHIEM Task B: bo nhan RV32M 2 tang (DOI CPI), tren ban sao asic/snapshots/rtl_r13b = rtl_r13a + thay doi nay
+- Ly do: vong forward (load) -> nhan 33x33 (CSA -> cong 64 bit) -> alu_result_m ~22 ns o max_ss (-7.47 ns sau khi cat vong fetch va redirect trong STA what-if).
+- `alu.v`: bo bo nhan; MUL* tra 0. `datapath.v`: tang E tach toan hang 33 bit co dau thanh nua thap 17 bit khong dau + nua cao 16 bit co dau, 4 tich rieng phan (18x18, 18x16, 16x18, 16x16) thanh ghi hoa o bien E/M (duoi !stall_pipe); tang M cong co trong so (mod 2^64) -> chon tu cao/thap -> alu_result_w (is_mul_m ? mul_result_m : alu_result_m). `hazard_unit.v`: load_use_hazard them `mul_e` (ket qua nhan san sang muon 1 tang nhu load): lenh ngay sau MUL ma dung ket qua bi stall 1 chu ky; khoang cach >= 2 forward tu W (nhu load). Forward tu M cho MUL khong bao gio xay ra (lenh khoang cach 1 bi stall; lenh khoang cach 2 vao E khi MUL o W).
+- Ket qua ASIC-view Embench (tb/compile_asic_view_r13b.do, work_r13b): 12/12 PASS (tu kiem + bat bien); so lenh KHONG doi; tong chu ky 1,436,264 -> 1,451,112 (**+1.03 %**, CPI 1.2755 -> 1.2887); chi edn (+8.37 %), matmult (+10.01 %), fdct (+0.49 %) doi, toan bo chu ky them la stall load_use (MUL -> dung ngay: 9,728 / 4,096 / 1,024). Chu y: bo dem load_use gio bao gom ca stall mul-use.
+- Chua lam: unit test tb/alu_zmmul_tb.sv (kiem MUL cua module alu) phai viet lai cho bo nhan 2 tang; UVM / regression / chuoi day du / Quartus; port sang hdl/ chi khi PD chung minh loi ich.
+
+## R13a — KET QUA PD (2026-09-29, r13a_A full flow, knob final3, 1 lan): TE HON -> KHONG port sang hdl/
+- max_ss -8.311 -> **-9.930**; nom_tt +2.086 -> +1.194 (van dat); nom_tt slew 757 -> 1,387. Chi tiet: FLOW_JOURNAL Incident 93.
+- R13a-1 CO TAC DUNG: phan hit I-cache nhanh 2.5 ns o ss; cac nhom tang D (pc_d, predicted_target_e, pc_plus4_e/d, immext_e, bht) tot hon 1-2.5 ns.
+- R13a-2 CO HAI: thanh ghi pc_f_ic them mux irq thua + buffer keep + mux enable o phia D (duong tt moi SRAM dout -> ... -> pc_f_ic +1.19 thay +2.09), ma phia Q van qua 1 buffer hold + 5 buffer fanout (~3.3 ns o ss).
+- Duong te nhat ss la vong du doan o Fetch: PC -> hit -> lenh -> immediate -> bo cong dich nhanh (chuoi carry gon song ~12 ns, chien luoc ABC AREA 0) -> pc_next.
+- Theo diem khoi dau: stall toan cuc (`pipeline_advance = if_available && d_available`, hit cache cung chu ky) chi phoi ~1,850 endpoint o ca hai ban (final3: tu PC/I-cache; r13a: tu d_req_addr/D-cache). 1,766 endpoint cua final3 < -5 ns: vi pham lan rong, dong ss can giam do sau logic ~1.4-1.6x o moi tang.
+- R13b KHONG chay PD (huy tu hang doi): no xay tren R13a co hai. Buoc tiep: do E4 (AREA 3 + REMOVE_BUFFERS, khong doi RTL) truoc khi quyet dinh kien truc lai pipeline.
+

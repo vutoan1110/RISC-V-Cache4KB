@@ -49,8 +49,8 @@ def vsim(do: str, log: Path) -> int:
     return proc.returncode
 
 
-def compile_design(log_dir: Path, asic_view: bool = False) -> None:
-    script = "tb/compile_asic_view.do" if asic_view else "tb/compile_active_design.do"
+def compile_design(log_dir: Path, asic_view: bool = False, asic_script: str = "tb/compile_asic_view.do") -> None:
+    script = asic_script if asic_view else "tb/compile_active_design.do"
     print("[COMPILE] %s" % script)
     log = log_dir / ("compile_asic_view.log" if asic_view else "compile.log")
     if vsim("do %s; quit -f" % script, log) != 0:
@@ -79,6 +79,9 @@ def main() -> int:
     # macro wrappers) instead of the behavioural RAMs. Only the DM 4 KiB point
     # exists as an ASIC, so this forces CACHE_CONFIG 0 and 256 lines.
     ap.add_argument("--asic-view", action="store_true")
+    # FLOW_JOURNAL Incident 93: an experimental RTL copy is compiled by its own script into its own library
+    ap.add_argument("--asic-compile", default="tb/compile_asic_view.do")
+    ap.add_argument("--asic-lib", default="work_asic")
     args = ap.parse_args()
 
     configs = [int(c) for c in args.configs.split(",")]
@@ -93,7 +96,7 @@ def main() -> int:
     log_dir = ROOT / "results" / log_root / Path(args.out).stem
     log_dir.mkdir(parents=True, exist_ok=True)
     if args.compile:
-        compile_design(log_dir, args.asic_view)
+        compile_design(log_dir, args.asic_view, args.asic_compile)
 
     rows, failures = [], []
     for cfg in configs:
@@ -109,8 +112,7 @@ def main() -> int:
                   "%s +benchmark=%s +max_cycles=%d; "
                   "run -all; quit -f"
                   % (cfg, hexfile, args.lines, args.lines, args.l0,
-                     ("-gVERBOSE=0 work_asic.tb_benchmark_snapshot "
-                      "work_asic.asic_view_checker"
+                     ("-gVERBOSE=0 %s.tb_benchmark_snapshot %s.asic_view_checker" % (args.asic_lib, args.asic_lib)
                       if args.asic_view else "work.tb_benchmark_snapshot"),
                      kern, MAX_CYCLES))
             t0 = time.time()

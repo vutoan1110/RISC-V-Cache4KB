@@ -2434,6 +2434,185 @@ class ResizerTimingPostGRT(ResizerStep):
 
 
 @Step.factory.register()
+class MacroPinBuffers(OpenROADStep):
+    """
+    FLOW_JOURNAL Incident 93 (local addition): inserts a dedicated buffer just
+    outside the macro edge at every selected macro pin, so that the pin's
+    transition/load limits hold regardless of how far the original driver or
+    loads are. Placed after global placement; detailed placement legalises them.
+    """
+
+    id = "OpenROAD.MacroPinBuffers"
+    name = "Macro Pin Buffers"
+
+    config_vars = OpenROADStep.config_vars + [
+        Variable(
+            "MACRO_PIN_BUFFER_IN_PINS",
+            str,
+            "Regular expression on macro input pin names that get a buffer.",
+            default="^$",
+        ),
+        Variable(
+            "MACRO_PIN_BUFFER_OUT_PINS",
+            str,
+            "Regular expression on macro output pin names that get a buffer (subject to MACRO_PIN_BUFFER_OUT_MIN_HPWL).",
+            default="^$",
+        ),
+        Variable(
+            "MACRO_PIN_BUFFER_OUT_MIN_HPWL",
+            Decimal,
+            "Macro output pins get a buffer only when their net's half-perimeter wirelength exceeds this.",
+            default=80,
+            units="µm",
+        ),
+        Variable(
+            "MACRO_PIN_BUFFER_IN_CELL",
+            str,
+            "Buffer cell driving macro input pins.",
+            default="sky130_fd_sc_hd__buf_8",
+        ),
+        Variable(
+            "MACRO_PIN_BUFFER_OUT_CELL",
+            str,
+            "Buffer cell loading macro output pins.",
+            default="sky130_fd_sc_hd__buf_4",
+        ),
+        Variable(
+            "MACRO_PIN_BUFFER_IN_PRE_CELL",
+            Optional[str],
+            "If set, a second buffer of this cell drives each macro input pin buffer, so that its input transition is sharp.",
+        ),
+        Variable(
+            "MACRO_PIN_BUFFER_GAP",
+            Decimal,
+            "Distance between the macro edge and the buffer's initial location.",
+            default=2,
+            units="µm",
+        ),
+    ]
+
+    def get_script_path(self):
+        return os.path.join(get_script_dir(), "openroad", "macro_pin_buffers.tcl")
+
+
+@Step.factory.register()
+class PostRouteHoldECO(ResizerStep):
+    """
+    FLOW_JOURNAL Incident 93 (local addition): hold repair after detailed routing,
+    on parasitics extracted from the routed design instead of estimated ones.
+
+    The routed DEF is extracted with one OpenRCX ruleset and its tech LEF (as the
+    RCX step does), the SPEF is annotated on every resizer corner, repair_timing
+    -hold inserts buffers, detailed placement legalises them and detailed routing
+    reroutes the touched nets incrementally.
+    """
+
+    id = "OpenROAD.PostRouteHoldECO"
+    name = "Post-Route Hold ECO"
+
+    inputs = [DesignFormat.ODB, DesignFormat.DEF]
+
+    config_vars = (
+        ResizerStep.config_vars
+        + [v for v in DetailedRouting.config_vars if v.name.startswith("DRT_")]
+        + [
+            v
+            for v in RCX.config_vars
+            if v.name in ("RCX_RULESETS", "RCX_MERGE_VIA_WIRE_RES")
+        ]
+        + [
+            Variable(
+                "POST_ROUTE_HOLD_ECO_RCX_CORNER",
+                str,
+                "The RCX_RULESETS / TECH_LEFS corner pattern whose extraction is annotated on every resizer corner.",
+                default="max_*",
+            ),
+            Variable(
+                "POST_ROUTE_HOLD_ECO_MARGIN",
+                Decimal,
+                "Hold slack margin for the post-route hold repair.",
+                default=0.05,
+                units="ns",
+            ),
+            Variable(
+                "POST_ROUTE_HOLD_ECO_MAX_BUFFER_PCT",
+                Decimal,
+                "Max buffers the post-route hold repair may insert, as a percentage of the instance count.",
+                default=5,
+                units="%",
+            ),
+            Variable(
+                "POST_ROUTE_HOLD_ECO_ALLOW_SETUP_VIOS",
+                bool,
+                "Allows setup violations when fixing hold after routing.",
+                default=False,
+            ),
+            Variable(
+                "POST_ROUTE_ECO_REPAIR_DESIGN",
+                bool,
+                "Also runs repair_design (max slew/cap/fanout) on the extracted parasitics, before the hold repair.",
+                default=False,
+            ),
+            Variable(
+                "POST_ROUTE_ECO_SLEW_PCT",
+                Decimal,
+                "Slew margin for the post-route repair_design.",
+                default=10,
+                units="%",
+            ),
+            Variable(
+                "POST_ROUTE_ECO_CAP_PCT",
+                Decimal,
+                "Capacitance margin for the post-route repair_design.",
+                default=10,
+                units="%",
+            ),
+        ]
+    )
+
+    def get_script_path(self):
+        return os.path.join(get_script_dir(), "openroad", "post_route_hold_eco.tcl")
+
+    def run(self, state_in: State, **kwargs) -> Tuple[ViewsUpdate, MetricsUpdate]:
+        kwargs, env = self.extract_env(kwargs)
+        env["DRT_THREADS"] = env.get("DRT_THREADS", str(_get_process_limit()))
+
+        corner = self.config["POST_ROUTE_HOLD_ECO_RCX_CORNER"]
+        rcx_ruleset = self.config["RCX_RULESETS"].get(corner)
+        if rcx_ruleset is None:
+            raise StepException(f"No RCX ruleset for corner '{corner}'.")
+        tech_lefs = self.toolbox.filter_views(
+            self.config, self.config["TECH_LEFS"], corner
+        )
+        if len(tech_lefs) < 1:
+            raise StepException(f"No tech LEF for corner '{corner}'.")
+
+        rcx_env = self.prepare_env(env, state_in)
+        for key in [k for k in rcx_env if k.startswith("SAVE_")]:
+            del rcx_env[key]
+        spef = os.path.join(self.step_dir, "eco.spef")
+        rcx_env["RCX_LEF"] = tech_lefs[0]
+        rcx_env["RCX_RULESET"] = rcx_ruleset
+        rcx_env["SAVE_SPEF"] = spef
+        log_path = os.path.join(self.step_dir, "eco_rcx.log")
+        info(f"Extracting the routed design for corner {corner} ({log_path})…")
+        self.run_subprocess(
+            [
+                "openroad",
+                "-exit",
+                "-no_splash",
+                os.path.join(get_script_dir(), "openroad", "rcx.tcl"),
+            ],
+            log_to=log_path,
+            env=rcx_env,
+            silent=True,
+        )
+
+        env["_ECO_SPEF"] = spef
+        return super().run(state_in, env=env, **kwargs)
+
+
+@Step.factory.register()
 class DEFtoODB(OpenROADStep):
     """
     Converts a DEF view to an ODB view.
