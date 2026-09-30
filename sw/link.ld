@@ -1,12 +1,12 @@
 OUTPUT_ARCH(riscv)
 ENTRY(_start)
 
-/* The hardware has one unified 2048-word AXI backing RAM.  The address
+/* The hardware has one unified 4096-word AXI backing RAM (R14, 2026-09-29: was 2048 words; RAM16K_CHANGES.md).  The address
  * decoder exposes a larger cacheable window, but axi_ram_32 returns SLVERR for
- * every word above this physical 8-KiB range. */
+ * every word above this physical 16-KiB range. */
 MEMORY
 {
-    RAM (rwx) : ORIGIN = 0x00000000, LENGTH = 8K
+    RAM (rwx) : ORIGIN = 0x00000000, LENGTH = 16K
 }
 
 __ram_base     = ORIGIN(RAM);

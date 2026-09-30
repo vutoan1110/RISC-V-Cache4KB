@@ -34,17 +34,31 @@ module tb_gls_soc;
         .LCD_ON(LCD_ON), .LCD_BLON(LCD_BLON));
 
     // Main memory: word w lives in bank w/512 at offset w%512
-    // (axi_ram_32_asic_macro.v: bank_sel = word_addr[10:9]).
-    reg [31:0] img [0:2047];
+    // (axi_ram_32_asic_macro.v: bank_sel = word_addr[WORD_BITS-1:9]).
+    // R14 (RAM16K_CHANGES.md): compile with +define+GLS_RAM16K for the 16 KiB design (8 banks, 4096 words).
+    // Without it the testbench stays as it was for the signed-off 8 KiB netlists (4 banks, 2048 words): the
+    // gate netlist's bank instances are escaped names, so each bank is listed explicitly.
+`ifdef GLS_RAM16K
+    localparam int RAM_WORDS = 4096;
+`else
+    localparam int RAM_WORDS = 2048;
+`endif
+    reg [31:0] img [0:RAM_WORDS-1];
     integer i;
     initial begin
-        for (i = 0; i < 2048; i = i + 1) img[i] = 32'h0;
+        for (i = 0; i < RAM_WORDS; i = i + 1) img[i] = 32'h0;
         $readmemh(MEMFILE, img);
         for (i = 0; i < 512; i = i + 1) begin
             dut.\u_soc.u_axi_ram.g_bank[0].u_bank .mem[i] = img[i];
             dut.\u_soc.u_axi_ram.g_bank[1].u_bank .mem[i] = img[512  + i];
             dut.\u_soc.u_axi_ram.g_bank[2].u_bank .mem[i] = img[1024 + i];
             dut.\u_soc.u_axi_ram.g_bank[3].u_bank .mem[i] = img[1536 + i];
+`ifdef GLS_RAM16K
+            dut.\u_soc.u_axi_ram.g_bank[4].u_bank .mem[i] = img[2048 + i];
+            dut.\u_soc.u_axi_ram.g_bank[5].u_bank .mem[i] = img[2560 + i];
+            dut.\u_soc.u_axi_ram.g_bank[6].u_bank .mem[i] = img[3072 + i];
+            dut.\u_soc.u_axi_ram.g_bank[7].u_bank .mem[i] = img[3584 + i];
+`endif
         end
     end
 

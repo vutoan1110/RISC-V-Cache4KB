@@ -1,0 +1,105 @@
+# R14 (2026-09-29, RAM16K_CHANGES.md): same script, gold sources from asic/snapshots/rtl_r14.
+# memory_map variant of the rtl_r12 script (Incident 78)
+# R10A/R10B variant (FLOW_JOURNAL Incident 76): identical to eqy_soc_asic_top_hide.eqy except that the gold
+# sources are read from asic/snapshots/rtl_r12 (the exact RTL those runs synthesise).
+# EQY script for soc_asic_top, corrected.
+#
+# OpenLane's generated script puts `read_liberty -setattr blackbox` in the
+# SHARED [script] section, so all 428 sky130_fd_sc_hd cell models become
+# blackbox modules on BOTH sides. On the gate side formal_pdk.v then supplies
+# real models and `prep -flatten` absorbs them, leaving 3 modules. On the gold
+# side nothing instantiates them, `opt_clean` does not remove blackboxes, and
+# 431 modules survive -- which is the "Unmatched module exists in gold that does
+# not exist in gate" error that stopped the comparison.
+#
+# Counted from the failing run: gold 431 modules, gate 3, and every one of the
+# 428 extra was a sky130_fd_sc_hd cell, not design logic.
+#
+# The gate side names no file: @PDK_FORMAL@ and @NETLIST@ are filled in by the
+# Yosys.EQY step with this run's formal PDK models and netlist. The script
+# used to hard-code runs/ch4kb/294-openroad-fillinsertion/soc_asic_top.nl.v,
+# so every EQY attempt compared the RTL with an older run's netlist.
+#
+# The liberty read therefore belongs to [gate] only. The two SRAM macro models
+# stay shared, because the RTL really does instantiate those.
+
+[script]
+verilog_defines -DPDK_sky130A
+verilog_defines -DSCL_sky130_fd_sc_hd
+verilog_defines -D__openlane__
+verilog_defines -D__pnr__
+read_verilog -sv -lib  /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/verilog/sky130_sram_2kbyte_1rw1r_32x512_8.v
+read_verilog -sv -lib  /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v
+
+blackbox
+
+[gold]
+read_verilog -formal -sv /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/alu.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/aludec.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/branch.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/predictor/bht_2bit.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/controller.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/datapath.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/extend.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/hazard_unit.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/maindec.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/regfile.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/riscv_core.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/riscv_core_native.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/cache/icache_tag_ram.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/cache/icache_controller.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/cache/cache_dse_data_bank.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/cache/icache_dse_core.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/cache/icache.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/cache/dcache_tag_ram.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/cache/dcache_controller.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/cache/dcache_dse_core.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/cache/dcache.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/axi/cache_axi_master.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/asic/soc_dm_4kb/axi_ram_32_asic_macro.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/axi/native_axi_lite_master.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/axi/axi_lite_to_apb.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/bus/soc_address_decoder.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/perf_counters.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/apb_performance_monitor.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/performance_observability.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/apb_timer.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/apb_display_regs.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/hex7seg_decoder.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/lcd_1602_hex.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/fifo.sv /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/baudrate_gen_block.sv /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/rx_block.sv /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/tx_block.sv /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/uart_core.sv /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/uart_apb.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/asic/soc_dm_4kb/cache_data_ram_sram4.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/hdl/soc_top.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r14/asic/soc_dm_4kb/soc_asic_top.v
+
+# (FLOW_JOURNAL Incident 72, fourth replay) gold-nomatch removed
+# u_soc.u_uart.u_uart_core.tx_fifo.clk from matched.ids, yet the clk
+# partition still listed it: when EQY writes a partition it names every gold
+# alias of the matched net. So hide the module-port aliases of the clock on
+# the gold side (the top-level clk port has no dot and stays).
+hierarchy -top soc_asic_top
+flatten
+# fifth replay: the fourth still built the clk partition, now through the
+# lower-case alias u_soc.u_uart.pclk (the only other gold name containing
+# 'clk' after the fourth replay's hiding, listed from gold.ids).
+rename -hide w:*.clk w:*.PCLK w:*.pclk
+
+[gate]
+read_liberty -lib -ignore_miss_dir -setattr blackbox /home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog -formal -sv @PDK_FORMAL@ @NETLIST@
+# (FLOW_JOURNAL Incident 72) Flatten the gate netlist here and hide the
+# internal wires of the flattened cell models (formal_pdk.v), e.g.
+# _053534_.nor0_out_Y. After flattening each is an alias of the net the cell
+# drives, and EQY's partition split such an alias from the RTL-named net it
+# duplicates: "conflicting matches for gold bit u_soc.u_axi_ram.bank_csb0[0]:
+# u_soc.u_axi_ram.bank_csb0[0] vs _053534_.nor0_out_Y". These names do not
+# exist in the RTL, so hiding them removes no comparison point. Every net
+# named after the RTL is u_soc.* (counted in gate_recoded.ids: 20,554 u_soc.*
+# names; the rest of the dotted names, ~1M, are cell-instance internals:
+# _N_, FILLER_, hold, fanout, clkbuf_*, ANTENNA_, clkload, wire, ...).
+hierarchy -top soc_asic_top
+flatten
+# Second replay: the same conflict came back on another alias kind,
+# "bank_web0[2] vs net5224" -- net5224 is a resizer net across a buffer, and a
+# flattened buffer is a wire. So the rule is general: keep on the gate side
+# only names that exist in the RTL (gold.ids: the ports, u_soc.*, and the seven
+# wrapper signals below) and hide the rest.
+rename -hide w:* x:* %d w:u_soc.* %d w:reset_meta_q %d w:reset_sync_q %d w:key1_sync_q* %d w:uart_rx_sync_q* %d w:soc_key1_n %d w:soc_reset_n %d w:soc_uart_rx %d
+
+[script]
+hierarchy -top soc_asic_top
+proc
+prep -top soc_asic_top -flatten
+
+memory -nomap
+# Incident 78: map memories to flops on both sides (EQY quickstart does the same)
+# so their registers are cut points; with $mem kept, every partition dragged in
+# the register file and both tag RAMs (~3 GB per proof, OOM at -j 8).
+memory_map
+# Incident 84: the gate netlist is bit-blasted (one wire per bit, e.g. u_soc.if_req_addr[0]) while
+# gold keeps buses (u_soc.if_req_addr, 31:0), so EQY matched only 169 names (the ports) and 225 of 288
+# partitions held about the whole design. splitnets gives gold the same per-bit names: 21,116 common.
+splitnets
+async2sync
+
+[match *]
+# (FLOW_JOURNAL Incident 72, third replay) Do not match aliases of the clock
+# net by name. u_soc.u_uart.u_uart_core.tx_fifo.clk exists on both sides; on
+# the gate side it is clk through clock-tree buffers (identity after the
+# formal models are flattened), so EQY built a partition whose only content
+# was a wire from the input clk to that name, without declaring clk an input:
+# check -assert "Wire gate.soc_asic_top.clk.\clk is used but has no driver".
+# The top-level clk port itself stays matched.
+gold-nomatch /.+\.(clk|PCLK)/
+
+[strategy sat]
+use sat
+depth 5
+
+[strategy pdr]
+use sby
+engine abc pdr -rfi

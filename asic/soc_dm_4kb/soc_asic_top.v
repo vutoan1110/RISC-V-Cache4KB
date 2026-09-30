@@ -97,8 +97,8 @@ soc_top #(
     .DCACHE_LINE_COUNT     (256),
     .ICACHE_MISS_PENALTY   (2),
     .DCACHE_MISS_PENALTY   (2),
-    .IMEM_DEPTH            (1024),
-    .DMEM_DEPTH            (1024),
+    .IMEM_DEPTH            (2048),   // R14 2026-09-29: 16 KiB unified RAM, was 1024+1024 words (RAM16K_CHANGES.md)
+    .DMEM_DEPTH            (2048),
     .MEMFILE               ("riscv_full.hex"),
     .BRANCH_PREDICT_ENABLE (1),
     .BHT_ENTRIES           (256),

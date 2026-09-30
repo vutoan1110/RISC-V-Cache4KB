@@ -18,7 +18,7 @@ class native_mem_model extends uvm_object;
 
     function new(string name = "native_mem_model");
         super.new(name);
-        set_size(8192);
+        set_size(16384);  // R14: SoC RAM, was 8192
     endfunction
 
     function void set_size(int unsigned bytes);

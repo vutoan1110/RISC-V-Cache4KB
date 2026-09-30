@@ -66,7 +66,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, default=Path("benchmark.hex"))
     parser.add_argument("--output", type=Path, default=Path("benchmark_rv32.hex"))
-    parser.add_argument("--ram-bytes", type=int, default=8192)
+    parser.add_argument("--ram-bytes", type=int, default=16384)  # R14: was 8192
     args = parser.parse_args()
 
     image, used_end = parse_verilog_bytes(args.input, args.ram_bytes)

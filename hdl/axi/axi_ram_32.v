@@ -1,5 +1,5 @@
 module axi_ram_32 #(
-    parameter DEPTH_WORDS = 2048,
+    parameter DEPTH_WORDS = 4096,   // R14: default follows soc_top (IMEM_DEPTH + DMEM_DEPTH)
     parameter MEMFILE     = "riscv_full.hex"
 )(
     input  wire        clk,

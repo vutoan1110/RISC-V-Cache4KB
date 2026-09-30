@@ -1,4 +1,4 @@
-// ASIC drop-in replacement for hdl/axi/axi_ram_32.v, backed by four real
+// ASIC drop-in replacement for hdl/axi/axi_ram_32.v, backed by eight real
 // Sky130 SRAM hard macros (sky130_sram_2kbyte_1rw1r_32x512_8, pre-built by
 // OpenRAM, from github.com/VLSIDA/sky130_sram_macros) instead of a
 // behavioral register array.
@@ -14,10 +14,11 @@
 // checks: 4-beat INCR burst, RLAST on beat 4, one active read transaction,
 // AW/W independent acceptance, B only after both AW and W).
 //
-// Address mapping: word address = {araddr,awaddr}[31:2]. Four banks of
-// 512 words each cover the required 2048-word (8 KiB) depth:
-//   bank_sel  = word_addr[10:9]   (selects among the 4 macro instances)
-//   bank_addr = word_addr[8:0]    (9-bit address INTO the selected macro)
+// Address mapping: word address = {araddr,awaddr}[31:2]. NBANKS = DEPTH_WORDS/512
+// banks of 512 words each. R14 (2026-09-29, RAM16K_CHANGES.md): 8 banks cover the
+// 4096-word (16 KiB) depth; it was 4 banks / 2048 words / 8 KiB.
+//   bank_sel  = word_addr[WORD_BITS-1:9]  (selects among the NBANKS macro instances)
+//   bank_addr = word_addr[8:0]            (9-bit address INTO the selected macro)
 // A 4-word INCR burst is always 16-byte (4-word) aligned in this design
 // (see docs/reference/01_RTL_ARCHITECTURE.md: refill is always aligned),
 // and 512 is an exact multiple of 4, so a burst can never straddle a bank
@@ -37,7 +38,7 @@
 // soc_top_asic.v to reach a differently named module, and that copy drifted
 // 66 lines away from hdl/soc_top.v without anything noticing.
 module axi_ram_32 #(
-    parameter DEPTH_WORDS = 2048,   // must equal 4 * 512 for this bank count
+    parameter DEPTH_WORDS = 4096,   // must be a power-of-two multiple of 512 (R14: 8 * 512)
     parameter MEMFILE     = "riscv_full.hex"  // unused: macros are not
                                                // preloaded by a MIF at
                                                // synthesis time; see NOTE
@@ -114,23 +115,33 @@ module axi_ram_32 #(
 
     localparam [1:0] RESP_OKAY = 2'b00;
 
+    // R14: bank count and address widths follow DEPTH_WORDS (was fixed at 4 banks).
+    localparam integer NBANKS    = DEPTH_WORDS / 512;
+    localparam integer BANK_BITS = (NBANKS > 1) ? $clog2(NBANKS) : 1;
+    localparam integer WORD_BITS = $clog2(DEPTH_WORDS);
+    generate
+        if ((NBANKS * 512 != DEPTH_WORDS) || ((1 << (WORD_BITS - 9)) != NBANKS)) begin : g_bad_depth
+            DEPTH_WORDS_must_be_a_power_of_two_multiple_of_512 bad_depth ();
+        end
+    endgenerate
+
     // ------------------------------------------------------------------
-    // Four SRAM macro banks, port 0 (RW) used; port 1 (R-only) unused and
+    // NBANKS SRAM macro banks, port 0 (RW) used; port 1 (R-only) unused and
     // held disabled (csb1=1).
     // ------------------------------------------------------------------
     // csb0 on the macro is one bit. This was declared two bits wide, so every
     // instance connection truncated silently; only bit 0 was ever wired, which
     // is why the behaviour was right by accident.
-    reg         bank_csb0   [0:3]; // active-low chip select, one per bank
-    reg         bank_web0   [0:3]; // active-low write enable
-    reg  [3:0]  bank_wmask0 [0:3];
-    reg  [8:0]  bank_addr0  [0:3];
-    reg  [31:0] bank_din0   [0:3];
-    wire [31:0] bank_dout0  [0:3];
+    reg         bank_csb0   [0:NBANKS-1]; // active-low chip select, one per bank
+    reg         bank_web0   [0:NBANKS-1]; // active-low write enable
+    reg  [3:0]  bank_wmask0 [0:NBANKS-1];
+    reg  [8:0]  bank_addr0  [0:NBANKS-1];
+    reg  [31:0] bank_din0   [0:NBANKS-1];
+    wire [31:0] bank_dout0  [0:NBANKS-1];
 
     genvar gi;
     generate
-        for (gi = 0; gi < 4; gi = gi + 1) begin : g_bank
+        for (gi = 0; gi < NBANKS; gi = gi + 1) begin : g_bank
             sky130_sram_2kbyte_1rw1r_32x512_8 u_bank (
 `ifdef USE_POWER_PINS
                 .vccd1 (vccd1),
@@ -148,6 +159,19 @@ module axi_ram_32 #(
                 .addr1 (9'd0),
                 .dout1 ()           // left open, port 1 not read
             );
+`ifdef ASIC_VIEW_SIM
+            // ASIC-view simulation only (see the note at the end of the module): this bank's slice of
+            // MEMFILE, words gi*512 .. gi*512+511, written straight into the macro model's storage.
+            reg [31:0] asic_view_init [0:DEPTH_WORDS-1];
+            integer    asic_view_i;
+            initial begin
+                for (asic_view_i = 0; asic_view_i < DEPTH_WORDS; asic_view_i = asic_view_i + 1)
+                    asic_view_init[asic_view_i] = 32'h0000_0000;
+                if (MEMFILE != "") $readmemh(MEMFILE, asic_view_init);
+                for (asic_view_i = 0; asic_view_i < 512; asic_view_i = asic_view_i + 1)
+                    u_bank.mem[asic_view_i] = asic_view_init[gi * 512 + asic_view_i];
+            end
+`endif
         end
     endgenerate
 
@@ -164,12 +188,12 @@ module axi_ram_32 #(
     reg [1:0]  rd_state;
     reg [7:0]  rd_len_q;
     reg [7:0]  rd_beat_q;
-    reg [1:0]  rd_bank_q;
+    reg [BANK_BITS-1:0] rd_bank_q;
     reg [8:0]  rd_bank_addr_q;
 
     wire        rd_accept = (rd_state == RD_IDLE) && s_axi_arvalid;
-    wire [10:0] rd_word_addr = s_axi_araddr[12:2]; // 11 bits: 2048 words
-    wire [1:0]  rd_bank_sel  = rd_word_addr[10:9];
+    wire [WORD_BITS-1:0] rd_word_addr = s_axi_araddr[WORD_BITS+1:2]; // R14: 12 bits, 4096 words
+    wire [BANK_BITS-1:0] rd_bank_sel  = rd_word_addr[WORD_BITS-1:9];
     wire [8:0]  rd_bank_off  = rd_word_addr[8:0];
 
     assign s_axi_arready = (rd_state == RD_IDLE);
@@ -188,14 +212,14 @@ module axi_ram_32 #(
     reg [31:0] w_data_q;
     reg [3:0]  w_strb_q;
 
-    reg [1:0]  wr_bank_r;
+    reg [BANK_BITS-1:0] wr_bank_r;
     reg [8:0]  wr_bank_off_r;
     reg [31:0] wr_data_r;
     reg [3:0]  wr_strb_r;
 
     integer rb;
     always @(*) begin
-        for (rb = 0; rb < 4; rb = rb + 1) begin
+        for (rb = 0; rb < NBANKS; rb = rb + 1) begin
             bank_csb0[rb]   = 1'b1;
             bank_web0[rb]   = 1'b1;
             bank_wmask0[rb] = 4'b0000;
@@ -225,7 +249,7 @@ module axi_ram_32 #(
             rd_state       <= RD_IDLE;
             rd_len_q       <= 8'd0;
             rd_beat_q      <= 8'd0;
-            rd_bank_q      <= 2'd0;
+            rd_bank_q      <= {BANK_BITS{1'b0}};
             rd_bank_addr_q <= 9'd0;
             read_burst_count <= 32'd0;
         end else begin
@@ -287,7 +311,7 @@ module axi_ram_32 #(
     // ASIC-view run. hdl/axi/axi_ram_32.v has had this bypass all along
     // (selected_awaddr); the macro wrapper had never been simulated.
     wire [31:0] wr_sel_addr  = aw_have_q ? aw_addr_q : s_axi_awaddr;
-    wire [10:0] wr_word_addr = wr_sel_addr[12:2];
+    wire [WORD_BITS-1:0] wr_word_addr = wr_sel_addr[WORD_BITS+1:2];
 
     assign s_axi_awready = (wr_state == WR_IDLE) && !aw_have_q;
     assign s_axi_wready  = (wr_state == WR_IDLE) && !w_have_q;
@@ -300,7 +324,7 @@ module axi_ram_32 #(
             aw_addr_q     <= 32'd0;
             w_data_q      <= 32'd0;
             w_strb_q      <= 4'd0;
-            wr_bank_r     <= 2'd0;
+            wr_bank_r     <= {BANK_BITS{1'b0}};
             wr_bank_off_r <= 9'd0;
             wr_data_r     <= 32'd0;
             wr_strb_r     <= 4'd0;
@@ -321,7 +345,7 @@ module axi_ram_32 #(
                     // previous one).
                     if ((aw_have_q || (s_axi_awvalid && s_axi_awready)) &&
                         (w_have_q  || (s_axi_wvalid  && s_axi_wready))) begin
-                        wr_bank_r     <= wr_word_addr[10:9];
+                        wr_bank_r     <= wr_word_addr[WORD_BITS-1:9];
                         wr_bank_off_r <= wr_word_addr[8:0];
                         wr_data_r     <= w_have_q ? w_data_q : s_axi_wdata;
                         wr_strb_r     <= w_have_q ? w_strb_q : s_axi_wstrb;
@@ -351,25 +375,13 @@ module axi_ram_32 #(
     assign s_axi_bvalid = (wr_state == WR_RESP);
     assign s_axi_bresp  = RESP_OKAY;
 
-// ASIC-view simulation only. The macros have no initialisation port, so the
-// program is written straight into their storage, the way the FPGA RAM's
-// $readmemh fills its arrays. Bank b holds words b*512 .. b*512+511, the same
-// split as bank_sel = word_addr[10:9] above. ASIC_VIEW_SIM is defined only by
-// tb/compile_asic_view.do; synthesis and lint never see this block.
-`ifdef ASIC_VIEW_SIM
-reg [31:0] asic_view_init [0:2047];
-integer    asic_view_i;
-initial begin
-    for (asic_view_i = 0; asic_view_i < 2048; asic_view_i = asic_view_i + 1)
-        asic_view_init[asic_view_i] = 32'h0000_0000;
-    if (MEMFILE != "") $readmemh(MEMFILE, asic_view_init);
-    for (asic_view_i = 0; asic_view_i < 512; asic_view_i = asic_view_i + 1) begin
-        g_bank[0].u_bank.mem[asic_view_i] = asic_view_init[asic_view_i];
-        g_bank[1].u_bank.mem[asic_view_i] = asic_view_init[512  + asic_view_i];
-        g_bank[2].u_bank.mem[asic_view_i] = asic_view_init[1024 + asic_view_i];
-        g_bank[3].u_bank.mem[asic_view_i] = asic_view_init[1536 + asic_view_i];
-    end
-end
-`endif
+// ASIC-view simulation: the macros have no initialisation port, so the program is
+// written straight into their storage, the way the FPGA RAM's $readmemh fills its
+// arrays. Bank b holds words b*512 .. b*512+511, the same split as
+// bank_sel = word_addr[WORD_BITS-1:9] above. ASIC_VIEW_SIM is defined only by
+// tb/compile_asic_view*.do; synthesis and lint never see it. R14: each bank loads its
+// own slice inside the g_bank generate loop, so any bank count works; the first R14
+// version listed eight banks by name and failed to elaborate for the directed-ISA
+// testbench, which builds the SoC with a 2048-word (4-bank) RAM.
 
 endmodule

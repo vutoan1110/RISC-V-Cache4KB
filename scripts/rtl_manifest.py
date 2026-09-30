@@ -16,7 +16,11 @@ import sys
 # verification/ holds the UVM environment and fw/ the benchmark images; both
 # decide verification results, and the first version of this manifest left
 # them out along with every ASIC design file.
-ROOTS = ("hdl", "sim", "tb", "sw_baremetal", "uvm", "rtl", "verification", "fw")
+ROOTS = ("hdl", "sim", "tb", "sw_baremetal", "uvm", "rtl", "verification", "fw", "sw")
+# R14 (2026-09-29, RAM16K_CHANGES.md): "sw" added. The firmware sources (link.ld, platform.h, the
+# benchmark ports) decide the memory layout and every benchmark result, and the tree is called sw/,
+# not sw_baremetal/, so the manifest had silently not covered them. Build products are excluded.
+SKIP_FILES = ("benchmark.hex", "benchmark_rv32.hex")
 EXTS = (".v", ".sv", ".svh", ".vh", ".c", ".h", ".S", ".ld", ".hex")
 # ASIC design sources, top level of each design directory only (runs/ holds
 # generated netlists and is not a source).
@@ -34,7 +38,7 @@ def collect():
         for dirpath, dirs, names in os.walk(root):
             dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
             for name in sorted(names):
-                if not name.endswith(EXTS):
+                if not name.endswith(EXTS) or name in SKIP_FILES:
                     continue
                 path = os.path.join(dirpath, name).replace(os.sep, "/")
                 with open(path, "rb") as fh:

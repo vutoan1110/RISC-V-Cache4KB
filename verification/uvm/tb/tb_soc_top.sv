@@ -39,8 +39,8 @@ module tb_soc_top #(
 
     soc_top #(
         .MEMFILE               ("verification/directed/directed_isa.hex"),
-        .IMEM_DEPTH            (1024),
-        .DMEM_DEPTH            (1024),
+        .IMEM_DEPTH            (2048),   // R14 2026-09-29: 16 KiB unified RAM, was 1024+1024 words (RAM16K_CHANGES.md)
+        .DMEM_DEPTH            (2048),
         .ICACHE_LINE_COUNT     (CACHE_LINE_COUNT),
         .DCACHE_LINE_COUNT     (CACHE_LINE_COUNT),
         .BRANCH_PREDICT_ENABLE (1),

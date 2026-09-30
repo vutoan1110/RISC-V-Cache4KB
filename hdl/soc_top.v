@@ -3,8 +3,8 @@ module soc_top #(
     parameter DCACHE_LINE_COUNT   = 64,
     parameter ICACHE_MISS_PENALTY = 2,
     parameter DCACHE_MISS_PENALTY = 2,
-    parameter IMEM_DEPTH          = 1024,
-    parameter DMEM_DEPTH          = 1024,
+    parameter IMEM_DEPTH          = 2048,   // R14 2026-09-29: 16 KiB unified RAM, was 1024+1024 words (RAM16K_CHANGES.md)
+    parameter DMEM_DEPTH          = 2048,
     parameter MEMFILE             = "riscv_full.hex",
     parameter integer BRANCH_PREDICT_ENABLE = 1,
     parameter integer BHT_ENTRIES = 256,

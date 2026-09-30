@@ -82,6 +82,9 @@ def main() -> int:
     # FLOW_JOURNAL Incident 93: an experimental RTL copy is compiled by its own script into its own library
     ap.add_argument("--asic-compile", default="tb/compile_asic_view.do")
     ap.add_argument("--asic-lib", default="work_asic")
+    # R14 (RAM16K_CHANGES.md): images from another directory, e.g. the upstream Embench suite or a
+    # scale-factor probe; the default keeps the frozen fw/ images.
+    ap.add_argument("--fw-dir", default="fw")
     args = ap.parse_args()
 
     configs = [int(c) for c in args.configs.split(",")]
@@ -102,7 +105,7 @@ def main() -> int:
     for cfg in configs:
         for kern in kernels:
             name = CONFIGS[cfg]
-            hexfile = "fw/%s.hex" % kern
+            hexfile = "%s/%s.hex" % (args.fw_dir, kern)
             if not (ROOT / hexfile).is_file():
                 failures.append("%s: missing %s" % (kern, hexfile))
                 continue

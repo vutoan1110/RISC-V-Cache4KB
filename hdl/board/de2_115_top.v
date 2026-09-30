@@ -6,8 +6,8 @@ module de2_115_top #(
     parameter integer DCACHE_LINE_COUNT       = 64,
     parameter integer ICACHE_MISS_PENALTY     = 2,
     parameter integer DCACHE_MISS_PENALTY     = 2,
-    parameter integer IMEM_DEPTH              = 1024,
-    parameter integer DMEM_DEPTH              = 1024,
+    parameter integer IMEM_DEPTH              = 2048,  // R14 2026-09-29: 16 KiB unified RAM, was 1024+1024 words (RAM16K_CHANGES.md)
+    parameter integer DMEM_DEPTH              = 2048,
     parameter         MEMFILE                 = "riscv_full.hex",
     parameter integer BRANCH_PREDICT_ENABLE   = 1,
     parameter integer BHT_ENTRIES             = 256,

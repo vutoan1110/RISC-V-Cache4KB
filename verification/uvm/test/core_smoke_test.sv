@@ -15,7 +15,7 @@ class core_smoke_test extends core_base_test;
     function void configure();
         cfg.program_hex     = "verification/directed/directed_isa.hex";
         cfg.expected_retire = 217;         // matches the locked golden trace
-        cfg.mem_size_bytes  = 8192;        // physical RAM of the SoC
+        cfg.mem_size_bytes  = 16384;       // physical RAM of the SoC (R14: was 8192)
         cfg.timeout_cycles  = 20000;
     endfunction
 

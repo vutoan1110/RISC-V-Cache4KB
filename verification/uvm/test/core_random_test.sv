@@ -18,7 +18,7 @@ class core_random_test extends core_base_test;
 
     function void configure();
         cfg.expected_retire = 0;          // program length is not fixed
-        cfg.mem_size_bytes  = 8192;
+        cfg.mem_size_bytes  = 16384;  // R14: SoC RAM, was 8192
         cfg.timeout_cycles  = 100000;
         cfg.rsp_latency_min = 1;
         cfg.rsp_latency_max = 3;

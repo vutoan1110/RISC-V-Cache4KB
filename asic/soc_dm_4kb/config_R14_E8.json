@@ -1,0 +1,248 @@
+{
+    "//EXPERIMENT": "R14_E8 (FLOW_JOURNAL Incident 94): config_R14 with the E5b cap margins (DESIGN_REPAIR_MAX_CAP_PCT 20 / GRT 10 instead of 50/50). r14_A carries 11,092 \"wire\" repeaters (final3 1,092, x_E6 6,205): the 50 % cap margin chops long nets into ~50 um buf_6 chains (RAM dout -> bank mux: 43 buffers over 2.1 mm, ~4.5 ns) and max_tt fails by 0.162 ns. From r14_A post-GPL state.",
+    "DESIGN_NAME": "soc_asic_top",
+    "VERILOG_FILES": [
+        "dir::../snapshots/rtl_r14/hdl/alu.v",
+        "dir::../snapshots/rtl_r14/hdl/aludec.v",
+        "dir::../snapshots/rtl_r14/hdl/branch.v",
+        "dir::../snapshots/rtl_r14/hdl/predictor/bht_2bit.v",
+        "dir::../snapshots/rtl_r14/hdl/controller.v",
+        "dir::../snapshots/rtl_r14/hdl/datapath.v",
+        "dir::../snapshots/rtl_r14/hdl/extend.v",
+        "dir::../snapshots/rtl_r14/hdl/hazard_unit.v",
+        "dir::../snapshots/rtl_r14/hdl/maindec.v",
+        "dir::../snapshots/rtl_r14/hdl/regfile.v",
+        "dir::../snapshots/rtl_r14/hdl/riscv_core.v",
+        "dir::../snapshots/rtl_r14/hdl/riscv_core_native.v",
+        "dir::../snapshots/rtl_r14/hdl/cache/icache_tag_ram.v",
+        "dir::../snapshots/rtl_r14/hdl/cache/icache_controller.v",
+        "dir::../snapshots/rtl_r14/hdl/cache/cache_dse_data_bank.v",
+        "dir::../snapshots/rtl_r14/hdl/cache/icache_dse_core.v",
+        "dir::../snapshots/rtl_r14/hdl/cache/icache.v",
+        "dir::../snapshots/rtl_r14/hdl/cache/dcache_tag_ram.v",
+        "dir::../snapshots/rtl_r14/hdl/cache/dcache_controller.v",
+        "dir::../snapshots/rtl_r14/hdl/cache/dcache_dse_core.v",
+        "dir::../snapshots/rtl_r14/hdl/cache/dcache.v",
+        "dir::../snapshots/rtl_r14/hdl/axi/cache_axi_master.v",
+        "dir::../snapshots/rtl_r14/asic/soc_dm_4kb/axi_ram_32_asic_macro.v",
+        "dir::../snapshots/rtl_r14/hdl/axi/native_axi_lite_master.v",
+        "dir::../snapshots/rtl_r14/hdl/axi/axi_lite_to_apb.v",
+        "dir::../snapshots/rtl_r14/hdl/bus/soc_address_decoder.v",
+        "dir::../snapshots/rtl_r14/hdl/perf_counters.v",
+        "dir::../snapshots/rtl_r14/hdl/apb_performance_monitor.v",
+        "dir::../snapshots/rtl_r14/hdl/performance_observability.v",
+        "dir::../snapshots/rtl_r14/hdl/apb_timer.v",
+        "dir::../snapshots/rtl_r14/hdl/apb_display_regs.v",
+        "dir::../snapshots/rtl_r14/hdl/hex7seg_decoder.v",
+        "dir::../snapshots/rtl_r14/hdl/lcd_1602_hex.v",
+        "dir::../snapshots/rtl_r14/hdl/fifo.sv",
+        "dir::../snapshots/rtl_r14/hdl/baudrate_gen_block.sv",
+        "dir::../snapshots/rtl_r14/hdl/rx_block.sv",
+        "dir::../snapshots/rtl_r14/hdl/tx_block.sv",
+        "dir::../snapshots/rtl_r14/hdl/uart_core.sv",
+        "dir::../snapshots/rtl_r14/hdl/uart_apb.v",
+        "dir::../snapshots/rtl_r14/asic/soc_dm_4kb/cache_data_ram_sram4.v",
+        "dir::../snapshots/rtl_r14/hdl/soc_top.v",
+        "dir::../snapshots/rtl_r14/asic/soc_dm_4kb/soc_asic_top.v"
+    ],
+    "CLOCK_PORT": "clk",
+    "CLOCK_PERIOD": 20.0,
+    "PNR_SDC_FILE": "dir::soc.sdc",
+    "SIGNOFF_SDC_FILE": "dir::soc.sdc",
+    "FP_SIZING": "absolute",
+    "DIE_AREA": [
+        0,
+        0,
+        3665,
+        2900
+    ],
+    "CORE_AREA": [
+        12,
+        12,
+        3653,
+        2888
+    ],
+    "FP_CORE_UTIL": 35,
+    "PL_TARGET_DENSITY_PCT": 42,
+    "MAX_FANOUT_CONSTRAINT": 8,
+    "PL_RESIZER_ALLOW_SETUP_VIOS": true,
+    "GRT_RESIZER_ALLOW_SETUP_VIOS": true,
+    "RUN_POST_CTS_RESIZER_TIMING": true,
+    "RUN_POST_GRT_RESIZER_TIMING": true,
+    "PL_RESIZER_SETUP_MAX_BUFFER_PCT": 15,
+    "PL_RESIZER_HOLD_MAX_BUFFER_PCT": 15,
+    "PL_RESIZER_GATE_CLONING": false,
+    "PL_RESIZER_FIX_HOLD_FIRST": false,
+    "GRT_RESIZER_SETUP_MAX_BUFFER_PCT": 15,
+    "GRT_RESIZER_HOLD_MAX_BUFFER_PCT": 15,
+    "GRT_RESIZER_GATE_CLONING": false,
+    "GRT_MACRO_EXTENSION": 1,
+    "RUN_CTS": true,
+    "RUN_ANTENNA_REPAIR": true,
+    "ERROR_ON_TR_DRC": true,
+    "ERROR_ON_MAGIC_DRC": true,
+    "ERROR_ON_ILLEGAL_OVERLAPS": true,
+    "FP_PIN_ORDER_CFG": "dir::pin_order.cfg",
+    "FP_PDN_VPITCH": 90,
+    "FP_PDN_HPITCH": 90,
+    "FP_PDN_VOFFSET": 16.32,
+    "FP_PDN_HOFFSET": 16.65,
+    "FP_PDN_VWIDTH": 3.1,
+    "FP_PDN_HWIDTH": 3.1,
+    "FP_PDN_CORE_RING": true,
+    "FP_PDN_CORE_RING_VWIDTH": 3.1,
+    "FP_PDN_CORE_RING_HWIDTH": 3.1,
+    "FP_PDN_CORE_RING_VOFFSET": 2,
+    "FP_PDN_CORE_RING_HOFFSET": 2,
+    "FP_PDN_CFG": "dir::pdn_cfg.tcl",
+    "FP_PDN_HORIZONTAL_HALO": 0,
+    "FP_PDN_VERTICAL_HALO": 0,
+    "RUN_IRDROP_REPORT": true,
+    "RUN_HEURISTIC_DIODE_INSERTION": false,
+    "PRIMARY_GDSII_STREAMOUT_TOOL": "klayout",
+    "PDN_MACRO_CONNECTIONS": [
+        ".*u_bank VPWR VGND vccd1 vssd1"
+    ],
+    "MACROS": {
+        "sky130_sram_2kbyte_1rw1r_32x512_8": {
+            "gds": [
+                "dir::macros/gds/sky130_sram_2kbyte_1rw1r_32x512_8.magicsafe.gds"
+            ],
+            "lef": [
+                "dir::macros/lef/sky130_sram_2kbyte_1rw1r_32x512_8.lef"
+            ],
+            "nl": [
+                "dir::macros/verilog/sky130_sram_2kbyte_1rw1r_32x512_8.v"
+            ],
+            "lib": {
+                "*": "dir::macros/lib/sky130_sram_2kbyte_1rw1r_32x512_8_TT_1p8V_25C.lib"
+            },
+            "instances": {
+                "u_soc.u_axi_ram.g_bank[0].u_bank": {
+                    "location": [
+                        150.0,
+                        150.0
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[1].u_bank": {
+                    "location": [
+                        150.0,
+                        650.0
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[2].u_bank": {
+                    "location": [
+                        150.0,
+                        1150.0
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[3].u_bank": {
+                    "location": [
+                        150.0,
+                        1650.0
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[4].u_bank": {
+                    "location": [
+                        2787.99,
+                        261.58
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[5].u_bank": {
+                    "location": [
+                        2787.99,
+                        927.71
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[6].u_bank": {
+                    "location": [
+                        2787.99,
+                        1593.83
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[7].u_bank": {
+                    "location": [
+                        2787.99,
+                        2240.92
+                    ],
+                    "orientation": "N"
+                }
+            }
+        },
+        "sky130_sram_1kbyte_1rw1r_32x256_8": {
+            "gds": [
+                "dir::macros/gds/sky130_sram_1kbyte_1rw1r_32x256_8.magicsafe.gds"
+            ],
+            "lef": [
+                "dir::macros/lef/sky130_sram_1kbyte_1rw1r_32x256_8.lef"
+            ],
+            "nl": [
+                "dir::macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v"
+            ],
+            "lib": {
+                "*": "dir::macros/lib/sky130_sram_1kbyte_1rw1r_32x256_8_TT_1p8V_25C.lib"
+            },
+            "instances": {}
+        }
+    },
+    "pdk::sky130A": {
+        "scl::sky130_fd_sc_hd": {
+            "CLOCK_PERIOD": 20.0
+        }
+    },
+    "//IGNORE_DISCONNECTED_MODULES": "The SRAM macro's second port is deliberately unused: csb1 is tied high, addr1 tied low and dout1 left open in axi_ram_32_asic_macro.v. The disconnected-pin checker's own error message says to declare that here when it is intentional. This is a declaration, not a bypass -- the step still runs on every other instance.",
+    "IGNORE_DISCONNECTED_MODULES": [
+        "sky130_sram_1kbyte_1rw1r_32x256_8",
+        "sky130_sram_2kbyte_1rw1r_32x512_8"
+    ],
+    "MAGIC_CAPTURE_ERRORS": true,
+    "MACRO_PLACEMENT_CFG": "dir::macro_placement_grid_r14.cfg",
+    "PL_TIME_DRIVEN": false,
+    "PL_MAX_DISPLACEMENT_X": 1000,
+    "PL_MAX_DISPLACEMENT_Y": 500,
+    "GRT_ADJUSTMENT": 0.2,
+    "RUN_EQY": true,
+    "EQY_SCRIPT": "dir::eqy_soc_asic_top_hide_r14_mm_sn.eqy",
+    "DIODE_ON_PORTS": "none",
+    "GRT_ANTENNA_ITERS": 10,
+    "GRT_ANTENNA_MARGIN": 30,
+    "RUN_POST_GRT_DESIGN_REPAIR": true,
+    "MAX_SLEW_VIOLATION_CORNERS": [
+        "*tt*"
+    ],
+    "MAX_CAP_VIOLATION_CORNERS": [
+        "*tt*"
+    ],
+    "MAGIC_DRC_USE_GDS": true,
+    "ERROR_ON_LINTER_WARNINGS": false,
+    "GPL_CELL_PADDING": 0,
+    "DPL_CELL_PADDING": 0,
+    "HEURISTIC_ANTENNA_THRESHOLD": 250,
+    "//MAGIC_DRC_USE_GDS": "True since 2026-09-25 (FLOW_JOURNAL Incident 61): Magic DRC runs on the real GDS of the standard cells and routing, with the SRAM macros held as LEF abstracts by a local patch to scripts/magic/drc.tcl. DEF mode checked LEF abstracts of the standard cells and reported 4,187 false nwell.4 (0 with real geometry). Macro internals: KLayout DRC on the full GDS, reported separately.",
+    "GRT_RESIZER_HOLD_SLACK_MARGIN": 0.1,
+    "PL_RESIZER_SETUP_SLACK_MARGIN": 2.0,
+    "GRT_RESIZER_SETUP_SLACK_MARGIN": 2.0,
+    "DRT_ANTENNA_REPAIR_ITERS": 5,
+    "DRT_ANTENNA_REPAIR_MARGIN": 10,
+    "LAYERS_RC": "li1 1.7536e-04 7.5294e-02,met1 1.6949e-04 8.9286e-04,met2 1.5578e-04 8.9286e-04,met3 1.7138e-04 1.5667e-04,met4 1.5175e-04 1.5667e-04,met5 1.7563e-04 1.7812e-05",
+    "LAYERS_RC_SCOPE": "repair_design",
+    "CTS_CLK_MAX_WIRE_LENGTH": 800,
+    "RUN_MACRO_PIN_BUFFERS": true,
+    "MACRO_PIN_BUFFER_IN_PINS": "^(addr[01]|wmask0)(\\[|$)",
+    "MACRO_PIN_BUFFER_OUT_PINS": "^dout[01](\\[|$)",
+    "MACRO_PIN_BUFFER_OUT_MIN_HPWL": 80,
+    "RSZ_DONT_TOUCH_RX": "^macro_pin_(pre_)?net_",
+    "RUN_POST_ROUTE_HOLD_ECO": true,
+    "POST_ROUTE_HOLD_ECO_MARGIN": 0.05,
+    "MACRO_PIN_BUFFER_IN_PRE_CELL": "sky130_fd_sc_hd__buf_4",
+    "POST_ROUTE_ECO_REPAIR_DESIGN": false,
+    "DESIGN_REPAIR_MAX_CAP_PCT": 20,
+    "GRT_DESIGN_REPAIR_MAX_CAP_PCT": 10
+}

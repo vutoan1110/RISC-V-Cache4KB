@@ -1,0 +1,1 @@
+3ea52396 (results/rtl_manifest_3ea52396.json): hdl subset used by the ASIC flow + asic/soc_dm_4kb wrappers, R14 16 KiB RAM

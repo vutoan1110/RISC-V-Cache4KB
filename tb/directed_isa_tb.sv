@@ -229,7 +229,7 @@ initial begin
         $fatal(1, "directed ISA self-check failed with code %0d",
                architectural_regs[31]);
 `ifdef ASIC_VIEW_SIM
-    // Macro-backed RAM: word 1027 is bank 1027[10:9]=2, offset 1027[8:0]=3.
+    // Macro-backed RAM: word 1027 is bank 1027[11:9]=2 (R14: 8 banks; 1027[10:9] with 4), offset 1027[8:0]=3.
     if(dut.u_axi_ram.g_bank[2].u_bank.mem[3] !== 32'h0000_0000)
 `else
     if({dut.u_axi_ram.RAM3[1027], dut.u_axi_ram.RAM2[1027],

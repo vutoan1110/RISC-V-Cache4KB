@@ -16,7 +16,7 @@ class core_cfg extends uvm_object;
     native_mem_model iss_mem;
     bit              use_iss = 1;
 
-    int unsigned mem_size_bytes  = 8192;   // physical RAM of the SoC
+    int unsigned mem_size_bytes  = 16384;  // physical RAM of the SoC (R14: was 8192)
     int unsigned rsp_latency_min = 1;      // cycles from accept to rsp_valid
     int unsigned rsp_latency_max = 1;
 

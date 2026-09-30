@@ -4,7 +4,7 @@
 /* Verified against the active RTL and DE2-115 CLOCK_50 build. */
 #define SYSTEM_CLOCK_HZ 50000000u
 #define RAM_BASE        0x00000000u
-#define RAM_SIZE_BYTES  8192u
+#define RAM_SIZE_BYTES  16384u /* R14: was 8192 (RAM16K_CHANGES.md) */
 
 #define UART_BASE      0x40000000u
 #define UART_TXDATA    (*(volatile unsigned int *)(UART_BASE + 0x00))

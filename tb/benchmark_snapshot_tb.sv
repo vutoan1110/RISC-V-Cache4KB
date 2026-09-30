@@ -13,11 +13,11 @@ module tb_benchmark_snapshot #(
  // 8 -> 4 saves 721 LE and 616 registers. What it costs in cycles is what
  // this parameter exists to measure.
  parameter integer L0_ENTRIES=8,
- // RAM depth in 32-bit words per half. The frozen 1024+1024 gives 8 KiB,
- // which CoreMark does not fit; it needs these raised together with a
- // matching linker script.
- parameter integer IMEM_DEPTH=1024,
- parameter integer DMEM_DEPTH=1024,
+ // RAM depth in 32-bit words per half. R14 (2026-09-29, RAM16K_CHANGES.md): 2048+2048 = 16 KiB,
+ // was 1024+1024 = 8 KiB. CoreMark (16.4 KiB) still does not fit; scripts/run_coremark.py raises
+ // these together with a matching linker script.
+ parameter integer IMEM_DEPTH=2048,
+ parameter integer DMEM_DEPTH=2048,
  parameter MEMFILE="riscv_full.hex"
 );
 reg clk=0, reset_n=0, uart_rx=1, key1_n=1;

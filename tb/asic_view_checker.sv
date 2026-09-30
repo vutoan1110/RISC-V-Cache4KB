@@ -30,7 +30,9 @@ always @(posedge `SOC.clk) begin
         last_aw_addr <= `AR.s_axi_awaddr;
     if (`AR.wr_state == `AR.WR_COMMIT) begin
         writes = writes + 1;
-        if ({`AR.wr_bank_r, `AR.wr_bank_off_r} !== last_aw_addr[12:2])
+        // R14 (RAM16K_CHANGES.md): the word index is as wide as the RAM (12 bits for 16 KiB); it was a
+        // fixed [12:2] (11 bits, 8 KiB), which cut bit 13 and failed every write above 0x2000.
+        if ({`AR.wr_bank_r, `AR.wr_bank_off_r} !== ((last_aw_addr >> 2) & (`AR.DEPTH_WORDS - 1)))
             $fatal(1, "ASIC_VIEW_CHECK cycle %0d: write accepted at %h committed to word %h",
                    cyc, last_aw_addr, {`AR.wr_bank_r, `AR.wr_bank_off_r});
     end

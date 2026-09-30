@@ -13,5 +13,7 @@ vlog -work work_gls -timescale 1ns/1ps \
     asic/soc_dm_4kb/macros/verilog/sky130_sram_2kbyte_1rw1r_32x512_8.v \
     asic/soc_dm_4kb/macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v
 vlog -work work_gls -timescale 1ns/1ps -suppress 2892 $NETLIST
-vlog -work work_gls -sv asic/gls/tb_gls_soc.sv
+# R14 (RAM16K_CHANGES.md): set TB_DEFINES "+define+GLS_RAM16K" for the 16 KiB (8-bank) netlist.
+if {![info exists TB_DEFINES]} { set TB_DEFINES "" }
+vlog -work work_gls -sv {*}$TB_DEFINES asic/gls/tb_gls_soc.sv
 echo "\[PASS\] gate-level library compiled from $NETLIST"

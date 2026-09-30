@@ -54,7 +54,7 @@ def main() -> int:
     parser.add_argument("--input", type=Path, default=root / "hdl" / "riscv_full.hex")
     parser.add_argument("--output-dir", type=Path, default=root / "hdl")
     parser.add_argument("--prefix", default="riscv_full_byte")
-    parser.add_argument("--depth", type=int, default=2048)
+    parser.add_argument("--depth", type=int, default=4096)  # R14: was 2048 (16 KiB RAM)
     args = parser.parse_args()
 
     words = parse_hex(args.input.resolve(), args.depth)

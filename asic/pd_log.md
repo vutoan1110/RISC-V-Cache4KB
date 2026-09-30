@@ -4829,3 +4829,24 @@
 - START `x_E6` (soc_dm_4kb) args: ` --from Odb.RemoveRoutingObstructions --to OpenROAD.STAPostPNR` at 2026-09-29T08:43:22+00:00
 - DONE `x_E6` rc=0 last=`final` final/ present
 
+- START `r14_A` (soc_dm_4kb) args: `full flow` at 2026-09-29T12:16:09+00:00
+
+- START `r14_E7` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-29T14:35:43+00:00
+- DONE `r14_E7` rc=0 last=`final` final/ present
+- ODD `r14_A` rc=1 last=`74-yosys-eqy` empty error.log, suspect a native crash
+
+- START `r14_E8` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-29T16:43:55+00:00
+
+- START `r14_E9` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-29T17:13:55+00:00
+- DONE `r14_E8` rc=0 last=`final` final/ present
+- DONE `r14_E9` rc=0 last=`final` final/ present
+
+- START `r14_E10` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-29T19:34:49+00:00
+
+- START `r14_E11` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-29T20:04:49+00:00
+- DONE `r14_E10` rc=0 last=`final` final/ present
+- ODD `r14_E11` rc=1 last=`14-openroad-resizertimingpostgrt` empty error.log, suspect a native crash
+
+- START `r14_E12` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-29T21:38:08+00:00
+
+- START `r14_E12` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-30T03:01:24+00:00

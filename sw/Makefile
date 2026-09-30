@@ -29,6 +29,11 @@ MAP      = benchmark.map
 SIZE_RPT = benchmark.size
 RV32HEX  = benchmark_rv32.hex
 
+# R14 (2026-09-29, RAM16K_CHANGES.md): the unified RAM is 16 KiB (was 8 KiB). Must match sw/link.ld,
+#   sw/platform.h RAM_SIZE_BYTES and IMEM_DEPTH + DMEM_DEPTH of hdl/soc_top.v.
+RAM_BYTES ?= 16384
+RAM_WORDS = $(shell expr $(RAM_BYTES) / 4)
+
 BENCH ?= cachesweep
 MODE  ?= embench
 # cachesweep is the default so that a bare `make install_hex` reproduces the
@@ -49,11 +54,27 @@ MODE  ?= embench
 #   whole tree is permissively licensed (Apache-2.0). insertsort replaces
 #   bubblesort's store-bound role; to re-add either, re-port from upstream
 #   (github.com/mageec/beebs, github.com/embench/embench-iot).
-BENCHES = crc32 edn fdct huffbench matmult mont64 sha256 tarfind wikisort wikisort_trace md5sum depthconv insertsort cachesweep
+# ramsweep (R14, RAM16K_CHANGES.md): RAM test over every free word of the 16 KiB RAM, not a benchmark.
+BENCHES = crc32 edn fdct huffbench matmult mont64 sha256 tarfind wikisort wikisort_trace md5sum depthconv insertsort cachesweep ramsweep
+# R14 upstream Embench-IoT kernels that fit the 16 KiB RAM (MODE=upstream; GPL-3.0 except md5sum,
+#   tarfind (MIT) and depthconv (Apache-2.0): research tree only, see embench_upstream/README.md).
+#   nettle-aes and sglib-combined do not fit and are not ported.
+UP_BENCHES = aha-mont64 crc32 depthconv edn huffbench matmult-int md5sum nettle-sha256 \
+	slre statemate tarfind ud
 
 ifeq ($(MODE),smoke)
 COMMON_SRCS = startup.S main_synthetic_legacy.c
 SOURCE_DEPS = platform.h platform_counter_map.h platform_branch_metrics.h platform_cache_metrics.h platform_benchmark.h
+else ifeq ($(MODE),upstream)
+# R14 upstream Embench-IoT suite (RAM16K_CHANGES.md, embench_upstream/README.md): BENCH is a kernel
+#   directory under embench_upstream/, SCALE the LOCAL_SCALE_FACTOR override (scripts/build_upstream_fw.sh).
+UP_DIR = embench_upstream
+# software division (the core is rv32i_zmmul, no DIV) and 64-bit helpers from libgcc
+LDLIBS = -lgcc
+COMMON_SRCS = startup.S main_upstream.c $(UP_DIR)/libc_shim.c embench_beebs.c $(wildcard $(UP_DIR)/$(BENCH)/*.c)
+SOURCE_DEPS = platform.h platform_counter_map.h platform_branch_metrics.h platform_cache_metrics.h platform_benchmark.h embench_beebs.h $(UP_DIR)/support.h
+EXTRA_CFLAGS += -I$(UP_DIR) -I$(UP_DIR)/inc -I$(UP_DIR)/$(BENCH) -DUPSTREAM_NAME='"up_$(BENCH)"' \
+	-DGLOBAL_SCALE_FACTOR=1 -DWARMUP_HEAT=1 $(if $(SCALE),-DLOCAL_SCALE_FACTOR_OVERRIDE=$(SCALE))
 else
 COMMON_SRCS = startup.S main_$(BENCH).c embench_$(BENCH).c embench_beebs.c
 SOURCE_DEPS = platform.h platform_counter_map.h platform_branch_metrics.h platform_cache_metrics.h platform_benchmark.h embench_$(BENCH).h embench_beebs.h
@@ -68,7 +89,10 @@ LDFLAGS = -T link.ld -nostdlib -nostartfiles \
 all: check-bench $(BIN) $(HEX) $(DUMP) guard size-report rv32hex
 
 check-bench:
-	@if [ "$(MODE)" != "smoke" ]; then \
+	@if [ "$(MODE)" = "upstream" ]; then \
+		case " $(UP_BENCHES) " in *" $(BENCH) "*) ;; \
+		*) echo "[FAIL] unknown upstream BENCH=$(BENCH); valid: $(UP_BENCHES)"; exit 1 ;; esac; \
+	elif [ "$(MODE)" != "smoke" ]; then \
 		case " $(BENCHES) " in *" $(BENCH) "*) ;; \
 		*) echo "[FAIL] unknown BENCH=$(BENCH); valid: $(BENCHES)"; exit 1 ;; esac; \
 	fi
@@ -79,7 +103,7 @@ check-toolchain:
 	@$(PYTHON) --version
 
 $(ELF): $(COMMON_SRCS) $(SOURCE_DEPS) link.ld
-	$(CC) $(CFLAGS) $(LDFLAGS) $(COMMON_SRCS) -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $(COMMON_SRCS) $(LDLIBS) -o $@
 
 $(BIN): $(ELF)
 	$(OBJCOPY) -O binary $< $@
@@ -98,11 +122,11 @@ size-report: $(ELF)
 	@echo "[INFO] reserved stack: 0x400 bytes; linker ASSERT checks image/stack overlap"
 
 rv32hex: $(HEX)
-	$(PYTHON) fix_hex.py --input $(HEX) --output $(RV32HEX) --ram-bytes 8192
+	$(PYTHON) fix_hex.py --input $(HEX) --output $(RV32HEX) --ram-bytes $(RAM_BYTES)
 
 install_hex: rv32hex
 	cp $(RV32HEX) ../hdl/riscv_full.hex
-	$(PYTHON) ../scripts/fpga/hex_to_mif.py --input ../hdl/riscv_full.hex --output-dir ../hdl --depth 2048
+	$(PYTHON) ../scripts/fpga/hex_to_mif.py --input ../hdl/riscv_full.hex --output-dir ../hdl --depth $(RAM_WORDS)
 
 smoke:
 	$(MAKE) clean
