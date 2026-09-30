@@ -3054,3 +3054,31 @@ E7 LOAI: bo goc ss khoi resizer lam no bot nang kich thuoc dien rong, ca tt te d
 **DRV con lai cua E8 o nom_tt (`pd_exp/drv_r14e8/`):** cap 660 (wire 429, fanout 80, max_cap 67; vuot trung vi 1.15x, p90 1.5x); slew = 50 chan SRAM (gioi han 0.04 ns 10-90 % = 0.030 ns 20-80 %, halo 10 um) + 137 chan tren ~12 net CO 9-16 DIODE va 1 tai that (vd _021313_ fanout 17, 16 diode, 0.84 ns) — vong sua antenna sau DRT (DRT_ANTENNA_REPAIR_ITERS 5) chen hang loat diode tren net dai mot tai; fanout = 1,657 la clock (cum CTS 25 > MAX_FANOUT 8) + 873 net co diode. OpenROAD edf00dff: `repair_antennas diode_cell [-iterations] [-ratio_margin]` — KHONG co jumper, chi diode. Vong ke: DESIGN_REPAIR_MAX_WIRE_LENGTH / GRT_... ~1000 um (cat net dai truoc khi sua antenna -> it diode), CTS_SINK_CLUSTERING_SIZE 8 (fanout la clock).
 **E10 / E11 (2026-09-30):** E10 = E8 + GRT_DESIGN_REPAIR_MAX_CAP_PCT 50: max_tt **+1.197** / nom_tt +1.322, max_ss **-8.284** (tot hon ca final3 -8.311), max_ff hold +0.053, nom_tt slew/cap/fanout **110 / 310** / 2,366, route DRC 0, antenna 0, std-cell 1.545e6 — troi hon r14_A (DRV bang/tot hon, tt dat) va E8 (DRV giam mot nua). E11 (sau-GPL 35) chet o ResizerTimingPostGRT: "Signal 6", abort tu `Tcl_PanicVA` (loi bo nho ngau nhien cua may, khong phai thiet ke); KHONG chay lai vi E10 da troi. Vong ke tu E10: **E12** = + DESIGN_REPAIR_MAX_WIRE_LENGTH / GRT_... 1000 um (giam diode tren net dai mot tai), **E13** = + CTS_SINK_CLUSTERING_SIZE 8 (fanout la clock).
 **Gian doan phien (2026-09-30 ~04:50-09:59, loi quy trinh cua toi):** phien Claude Code truoc ket thuc; cac job dai chay nhu tac vu nen CUA PHIEN chet theo: Quartus luot 2 (dung o dm_4kb seed 3; luot 1 da xong 0 loi), r14_E12 (dung o buoc 07), r14_E13 (chua khoi dong); may ranh ~5 gio. Toi da khong giu nhip kiem tra ~10 phut (quy tac E). Thu tach job khoi phien: (a) Win32_Process.Create qua WMI + `setsid nohup` -> wsl.exe khong chay duoc trong ngu canh do; (b) `setsid nohup` trong mot wsl.exe binh thuong -> WSL giet tien trinh khi client thoat (do: `sleep 900` bien mat); (c) Windows Task Scheduler -> BI CHAN boi bo phan loai quyen ("Unauthorized Persistence"), khong theo duoi tiep. => Job dai chi song khi phien con mo; nguoi dung duoc bao. Chay lai: Quartus luot 2 tu dau, r14_E12 + r14_E13; them monitor (`watch_jobs.sh`: su kien khi doi buoc / loi / crash / log dung >30 phut, nhip 10 phut). Chuan bi ky ten R14: `asic/gls/tb_gls_soc.sv` them `GLS_RAM16K` (8 bank, 4096 word; mac dinh giu 4 bank cho netlist 8 KiB), `compile_gls.do` (TB_DEFINES), `run_gls_matrix.sh` (GLS_DEFINES, GLS_REF); LEC R14 can lam lai ca buoc A (RTL -> N1) lan buoc B vi RTL doi (`synth_replay/run_replay.sh` dang tro final_B/06).
+
+
+## Incident 95 — Chi thi 2026-09-30: dong y don dep + toi uu PPA manh (dien tich), danh gia lai final3
+Chi thi nguoi dung: xoa 15 run da bi thay the (~99 GB) nhu de xuat; E10 1.545 mm2 so voi final3 1.400 mm2 la "phinh dien tich" khong chap nhan duoc -> ep dien tich ve gan 1.400 trong khi giu setup tt duong, giam cong suat; danh gia lai chinh final3 xem con PPA bi bo lai khong; sau do chay kep A/B full flow + DRC/LVS + tt/ss/ff + GLS + SAIF.
+**Don dep — CHUA XOA DUOC:** bo phan loai quyen (auto mode) chan thao tac xoa 2 lan ("Irreversible Deletion"), ke ca sau khi nguoi dung dong y (loi dong y nam trong van ban dan vao). Khong lach. Da lam phan khong pha huy: `archive_runs_20260930.sh` luu bang chung 15 run (resolved.json, flow/error/warning log, metrics cuoi, summary + state_out cua STAPostPNR) vao `results/pd_archive/` (4 MB), manifest `ARCHIVE_2026-09-30.tsv`: 101.3 GB, 16,790 file. Nguoi dung tu xoa hoac them quyen.
+**Thac dien tich std-cell (`pd_exp/area/area_waterfall.py`, DEF sau fill + netlist synth, dien tich tu liberty; tong KHOP metric flow tung um2):**
+| um2 | final3_A | r14_A | r14_E10 | E10 - final3 |
+|---|---:|---:|---:|---:|
+| logic synth | 971,319 | 977,127 | 977,127 | +5,808 |
+| resizer doi kich thuoc logic | -51,344 | -35,522 | -37,627 | +13,717 |
+| tap (ty le dien tich core) | 90,865 | 113,847 | 113,847 | +22,982 |
+| diode antenna | 27,782 | 19,947 | 20,219 | -7,563 |
+| cay clock | 63,746 | 60,758 | 61,132 | -2,614 |
+| **buffer hold** | **189,693 (19,019)** | 183,228 (18,309) | **182,523 (18,259)** | -7,170 |
+| macro pin buffer | 0 | 7,575 | 8,693 | +8,693 |
+| repair_design "wire" | 8,909 (1,092) | 128,528 (11,092) | **93,358 (7,349)** | **+84,449** |
+| repair_design max_cap | 3,266 | 12,252 | 12,513 | +9,247 |
+| repair_design fanout | 93,953 (13,066) | 110,884 (13,170) | 110,934 (13,158) | +16,981 |
+| khac (rebuffer, cong IO, ...) | 1,402 | 2,008 | 1,951 | +549 |
+| **tong** | **1,399,590** | 1,580,652 | **1,544,690** | **+145,100** |
+Doc: phan tang do thiet ke (logic +5.8k, tap +23k do die +31 %) ~29k; phan con lai do knob PD: chu yeu buffer "wire" +84k (LAYERS_RC k=2 o repair_design lam resizer thay day gap 2 lan -> cat day dai; final3 khong dung LAYERS_RC nen de lai slew 757 / cap 807 o nom_tt, E10 110 / 310). Loi lon nhat CA HAI ban: ~18-19k buffer hold = 12-13.6 % dien tich.
+**Histogram hold slack truoc khi resizer sua (`pd_exp/hold_hist/`, OpenROAD nap dung dau vao ResizerTimingPostCTS: 3 goc resizer, clock lan truyen, set_rc, ky sinh placement; kiem: 17,341 endpoint < 0.1 = log resizer 17,338):**
+| slack < | 0 | 0.02 | 0.03 | 0.04 | 0.05 | 0.1 |
+|---|---:|---:|---:|---:|---:|---:|
+| r14_E10 | 51 | 78 | 972 | 8,056 | 12,148 | 17,341 |
+| final3_A | 50 | 816 | 8,358 | 12,338 | 15,099 | 17,813 |
+Mot "buc tuong" duong flop->flop ngan o 0.03-0.05 ns (E10) / 0.02-0.03 ns (final3): bien 0.1 ns gan buffer cho ~17k endpoint chi co 50 vi pham that theo uoc luong. Bien 0.1 duoc chon (Incident 76/91) de che sai so uoc luong hold toi ~0.18 ns — TRUOC khi co PostRouteHoldECO (sua hold tren ky sinh RCX sau route). Nay de ECO lo vi pham that.
+**Thi nghiem (runner `run_area_exps.sh`, toi da 2 PD song song):** r14_E14 = E10 + bien hold PL/GRT 0.03 + ECO 0.02 (tu trang thai sau CTS cua r14_E10 -> chi khac bien hold); r14_E15 = E10 + PL_TARGET_DENSITY_PCT 55 (tu truoc GPL cua r14_A); f3_H1 = FINAL3 + bien hold 0.02 + ECO RCX 0.02 (tu trang thai sau CTS cua final3_A -> danh gia lai final3). Khong doi MAX_FANOUT_CONSTRAINT 8 (doi gioi han khong phai sua, xem 2026-09-24); khong thu lai AREA 3 (E4 da loai: 1.465 mm2, day +22 %, hold hong).

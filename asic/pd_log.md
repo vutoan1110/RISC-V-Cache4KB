@@ -4850,3 +4850,5 @@
 - START `r14_E12` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-29T21:38:08+00:00
 
 - START `r14_E12` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-30T03:01:24+00:00
+
+- START `r14_E13` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-30T03:31:23+00:00
