@@ -1,0 +1,11 @@
+# FLOW_JOURNAL Incident 89: multiplier black-boxing (MBB) for step A. Cut the ALU multiplier out at its
+# named boundary: product becomes an input+output port pair (expose -cut). mul_a/mul_b are NOT cut: their low 32
+# bits are the same net as the ALU operand src_a/src_b (alias), so cutting them would cut the whole ALU.
+# The LEC then compares the operand logic (mul_a/mul_b outputs) and everything downstream of product
+# (product inputs shared); the multiplier itself (product outputs vs mul_a/mul_b inputs) is proved
+# separately as a pure arithmetic circuit.
+read_ilang gold_flat.il
+hierarchy -top soc_asic_top
+expose -cut -sep __mbb w:u_soc.u_core.u_pipeline.datapath.alu.product
+opt_clean
+write_ilang gold_mbb.il

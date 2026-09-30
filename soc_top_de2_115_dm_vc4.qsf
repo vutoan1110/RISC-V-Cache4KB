@@ -1,0 +1,193 @@
+set_global_assignment -name TOP_LEVEL_ENTITY de2_115_top
+source quartus/soc_core_common.qsf
+source quartus/de2_115/de2_115_common.qsf
+
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files_de2_115_dm_vc4
+set_parameter -name CACHE_CONFIG 2
+set_parameter -name VICTIM_ENTRIES 4
+set_parameter -name ICACHE_LINE_COUNT 64
+set_parameter -name DCACHE_LINE_COUNT 64
+set_parameter -name BRANCH_PREDICT_ENABLE 1
+set_parameter -name BHT_ENTRIES 256
+
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 18.1.0
+set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
+set_location_assignment PIN_G18 -to HEX0[0]
+set_location_assignment PIN_F22 -to HEX0[1]
+set_location_assignment PIN_E17 -to HEX0[2]
+set_location_assignment PIN_L26 -to HEX0[3]
+set_location_assignment PIN_L25 -to HEX0[4]
+set_location_assignment PIN_J22 -to HEX0[5]
+set_location_assignment PIN_H22 -to HEX0[6]
+set_location_assignment PIN_M24 -to HEX1[0]
+set_location_assignment PIN_Y22 -to HEX1[1]
+set_location_assignment PIN_W21 -to HEX1[2]
+set_location_assignment PIN_W22 -to HEX1[3]
+set_location_assignment PIN_W25 -to HEX1[4]
+set_location_assignment PIN_U23 -to HEX1[5]
+set_location_assignment PIN_U24 -to HEX1[6]
+set_location_assignment PIN_AA25 -to HEX2[0]
+set_location_assignment PIN_AA26 -to HEX2[1]
+set_location_assignment PIN_Y25 -to HEX2[2]
+set_location_assignment PIN_W26 -to HEX2[3]
+set_location_assignment PIN_Y26 -to HEX2[4]
+set_location_assignment PIN_W27 -to HEX2[5]
+set_location_assignment PIN_W28 -to HEX2[6]
+set_location_assignment PIN_V21 -to HEX3[0]
+set_location_assignment PIN_U21 -to HEX3[1]
+set_location_assignment PIN_AB20 -to HEX3[2]
+set_location_assignment PIN_AA21 -to HEX3[3]
+set_location_assignment PIN_AD24 -to HEX3[4]
+set_location_assignment PIN_AF23 -to HEX3[5]
+set_location_assignment PIN_Y19 -to HEX3[6]
+set_location_assignment PIN_AB19 -to HEX4[0]
+set_location_assignment PIN_AA19 -to HEX4[1]
+set_location_assignment PIN_AG21 -to HEX4[2]
+set_location_assignment PIN_AH21 -to HEX4[3]
+set_location_assignment PIN_AE19 -to HEX4[4]
+set_location_assignment PIN_AF19 -to HEX4[5]
+set_location_assignment PIN_AE18 -to HEX4[6]
+set_location_assignment PIN_AD18 -to HEX5[0]
+set_location_assignment PIN_AC18 -to HEX5[1]
+set_location_assignment PIN_AB18 -to HEX5[2]
+set_location_assignment PIN_AH19 -to HEX5[3]
+set_location_assignment PIN_AG19 -to HEX5[4]
+set_location_assignment PIN_AF18 -to HEX5[5]
+set_location_assignment PIN_AH18 -to HEX5[6]
+set_location_assignment PIN_AA17 -to HEX6[0]
+set_location_assignment PIN_AB16 -to HEX6[1]
+set_location_assignment PIN_AA16 -to HEX6[2]
+set_location_assignment PIN_AB17 -to HEX6[3]
+set_location_assignment PIN_AB15 -to HEX6[4]
+set_location_assignment PIN_AA15 -to HEX6[5]
+set_location_assignment PIN_AC17 -to HEX6[6]
+set_location_assignment PIN_AD17 -to HEX7[0]
+set_location_assignment PIN_AE17 -to HEX7[1]
+set_location_assignment PIN_AG17 -to HEX7[2]
+set_location_assignment PIN_AH17 -to HEX7[3]
+set_location_assignment PIN_AF17 -to HEX7[4]
+set_location_assignment PIN_AG18 -to HEX7[5]
+set_location_assignment PIN_AA14 -to HEX7[6]
+set_location_assignment PIN_L3 -to LCD_DATA[0]
+set_location_assignment PIN_L1 -to LCD_DATA[1]
+set_location_assignment PIN_L2 -to LCD_DATA[2]
+set_location_assignment PIN_K7 -to LCD_DATA[3]
+set_location_assignment PIN_K1 -to LCD_DATA[4]
+set_location_assignment PIN_K2 -to LCD_DATA[5]
+set_location_assignment PIN_M3 -to LCD_DATA[6]
+set_location_assignment PIN_M5 -to LCD_DATA[7]
+set_location_assignment PIN_L4 -to LCD_EN
+set_location_assignment PIN_L5 -to LCD_ON
+set_location_assignment PIN_M2 -to LCD_RS
+set_location_assignment PIN_M1 -to LCD_RW
+set_location_assignment PIN_G19 -to LEDR[0]
+set_location_assignment PIN_F19 -to LEDR[1]
+set_location_assignment PIN_E19 -to LEDR[2]
+set_location_assignment PIN_F21 -to LEDR[3]
+set_location_assignment PIN_F18 -to LEDR[4]
+set_location_assignment PIN_E18 -to LEDR[5]
+set_location_assignment PIN_J19 -to LEDR[6]
+set_location_assignment PIN_H19 -to LEDR[7]
+set_location_assignment PIN_Y2 -to clk
+set_location_assignment PIN_M21 -to key1_n
+set_location_assignment PIN_M23 -to reset_n
+set_location_assignment PIN_AC15 -to uart_rx
+set_location_assignment PIN_AB22 -to uart_tx
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
+set_global_assignment -name DEVICE EP4CE115F29C7
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 16
+set_global_assignment -name SEARCH_PATH hdl
+set_global_assignment -name FAMILY "Cyclone IV E"
+# Fitter seed, pinned HERE in the revision .qsf rather than only in the sourced
+# quartus/soc_core_common.qsf. Two things were measured on 2026-09-11:
+#  1. a SEED assignment arriving through `source` does not take effect (other
+#     assignments from the same file, e.g. NUM_PARALLEL_PROCESSORS, do);
+#  2. `quartus_fit --seed=N` WRITES N back into this file, which is how the
+#     stale `SEED 5` lines got here in the first place.
+# So after any seed sweep, check this line before quoting a build as canonical.
+set_global_assignment -name SEED 2
+set_global_assignment -name SDC_FILE quartus/soc_core_50mhz.sdc
+set_global_assignment -name VERILOG_FILE hdl/alu.v
+set_global_assignment -name VERILOG_FILE hdl/aludec.v
+set_global_assignment -name VERILOG_FILE hdl/branch.v
+set_global_assignment -name VERILOG_FILE hdl/predictor/bht_2bit.v
+set_global_assignment -name VERILOG_FILE hdl/controller.v
+set_global_assignment -name VERILOG_FILE hdl/datapath.v
+set_global_assignment -name VERILOG_FILE hdl/extend.v
+set_global_assignment -name VERILOG_FILE hdl/hazard_unit.v
+set_global_assignment -name VERILOG_FILE hdl/maindec.v
+set_global_assignment -name VERILOG_FILE hdl/regfile.v
+set_global_assignment -name VERILOG_FILE hdl/riscv_core.v
+set_global_assignment -name VERILOG_FILE hdl/riscv_core_native.v
+set_global_assignment -name VERILOG_FILE hdl/cache/icache_tag_ram.v
+set_global_assignment -name VERILOG_FILE hdl/cache/icache_data_ram.v
+set_global_assignment -name VERILOG_FILE hdl/cache/icache_controller.v
+set_global_assignment -name VERILOG_FILE hdl/cache/cache_dse_data_bank.v
+set_global_assignment -name VERILOG_FILE hdl/cache/icache_dse_core.v
+set_global_assignment -name VERILOG_FILE hdl/cache/icache.v
+set_global_assignment -name VERILOG_FILE hdl/cache/dcache_tag_ram.v
+set_global_assignment -name VERILOG_FILE hdl/cache/dcache_data_ram.v
+set_global_assignment -name VERILOG_FILE hdl/cache/dcache_controller.v
+set_global_assignment -name VERILOG_FILE hdl/cache/dcache_dse_core.v
+set_global_assignment -name VERILOG_FILE hdl/cache/dcache.v
+set_global_assignment -name VERILOG_FILE hdl/axi/cache_axi_master.v
+set_global_assignment -name VERILOG_FILE hdl/axi/axi_ram_32.v
+set_global_assignment -name VERILOG_FILE hdl/axi/native_axi_lite_master.v
+set_global_assignment -name VERILOG_FILE hdl/axi/axi_lite_to_apb.v
+set_global_assignment -name VERILOG_FILE hdl/bus/soc_address_decoder.v
+set_global_assignment -name VERILOG_FILE hdl/apb_display_regs.v
+set_global_assignment -name VERILOG_FILE hdl/apb_timer.v
+set_global_assignment -name VERILOG_FILE hdl/perf_counters.v
+set_global_assignment -name VERILOG_FILE hdl/apb_performance_monitor.v
+set_global_assignment -name VERILOG_FILE hdl/performance_observability.v
+set_global_assignment -name VERILOG_FILE hdl/hex7seg_decoder.v
+set_global_assignment -name VERILOG_FILE hdl/lcd_1602_hex.v
+set_global_assignment -name SYSTEMVERILOG_FILE hdl/fifo.sv
+set_global_assignment -name SYSTEMVERILOG_FILE hdl/baudrate_gen_block.sv
+set_global_assignment -name SYSTEMVERILOG_FILE hdl/rx_block.sv
+set_global_assignment -name SYSTEMVERILOG_FILE hdl/tx_block.sv
+set_global_assignment -name SYSTEMVERILOG_FILE hdl/uart_core.sv
+set_global_assignment -name VERILOG_FILE hdl/uart_apb.v
+set_global_assignment -name VERILOG_FILE hdl/soc_top.v
+set_global_assignment -name HEX_FILE hdl/riscv_full.hex
+set_global_assignment -name MIF_FILE hdl/riscv_full_byte0.mif
+set_global_assignment -name MIF_FILE hdl/riscv_full_byte1.mif
+set_global_assignment -name MIF_FILE hdl/riscv_full_byte2.mif
+set_global_assignment -name MIF_FILE hdl/riscv_full_byte3.mif
+set_global_assignment -name VERILOG_FILE hdl/board/de2_115_top.v
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX0[*]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX1[*]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX2[*]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX3[0]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to HEX3[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX3[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX4[*]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX5[*]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX6[*]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HEX7[*]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LCD_DATA[*]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LCD_EN
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LCD_ON
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LCD_RS
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LCD_RW
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[0]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[1]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[2]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[3]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[4]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[5]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[6]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to LEDR[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk
+set_instance_assignment -name IO_STANDARD "2.5 V" -to key1_n
+set_instance_assignment -name IO_STANDARD "2.5 V" -to reset_n
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_rx
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_tx
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to key1_n
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to reset_n
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to uart_rx

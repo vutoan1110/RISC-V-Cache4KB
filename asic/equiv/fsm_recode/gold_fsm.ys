@@ -1,0 +1,20 @@
+# FLOW_JOURNAL Incident 86: gold for the RTL-vs-netlist proof = final RTL + the `fsm` pass
+# (proved separately in prove_fsm.ys), then exactly the EQY [script] tail that produced
+# the gate side (eqy_standalone/fh2/gate.il), so both sides carry the same per-bit names.
+script front_end.ys
+proc
+opt_expr
+opt_clean
+opt -nodffe -nosdff
+fsm
+hierarchy -top soc_asic_top
+proc
+prep -top soc_asic_top -flatten
+memory -nomap
+memory_map
+splitnets
+async2sync
+opt_clean
+check -initdrv
+setundef -undriven -undef
+write_ilang gold_fsm.il

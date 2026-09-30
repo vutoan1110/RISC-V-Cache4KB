@@ -1,0 +1,10 @@
+read_ilang mulG.il
+techmap; opt_clean; aigmap; opt_clean
+write_aiger -symbols mulG.aig
+design -reset
+read_ilang mulN.il
+techmap
+opt -fast
+opt -fast
+opt_clean; aigmap; opt_clean
+write_aiger -symbols mulN.aig

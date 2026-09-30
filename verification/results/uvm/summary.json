@@ -1,0 +1,51 @@
+{
+  "simulator": "C:\\questasim64_2024.1\\win64\\vsim.exe",
+  "requested": 8,
+  "passed": 8,
+  "failed": 0,
+  "random_seeds": 3,
+  "coverage_report": "verification/uvm/out/coverage_summary.txt",
+  "results": [
+    {
+      "test": "core_smoke_test",
+      "seed": 1,
+      "result": "PASS"
+    },
+    {
+      "test": "core_random_test",
+      "seed": 1,
+      "result": "PASS"
+    },
+    {
+      "test": "core_random_test",
+      "seed": 2,
+      "result": "PASS"
+    },
+    {
+      "test": "core_random_test",
+      "seed": 3,
+      "result": "PASS"
+    },
+    {
+      "test": "axi_smoke_test",
+      "seed": 1,
+      "result": "PASS"
+    },
+    {
+      "test": "axi_stress_test",
+      "seed": 1,
+      "result": "PASS"
+    },
+    {
+      "test": "soc_directed_test",
+      "seed": 1,
+      "result": "PASS"
+    },
+    {
+      "test": "soc_periph_test",
+      "seed": 1,
+      "result": "PASS"
+    }
+  ],
+  "failures": []
+}

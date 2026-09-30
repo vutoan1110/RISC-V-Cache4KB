@@ -1,0 +1,10 @@
+{
+  "riscv_arch_test_act4": "NOT RUN",
+  "riscof": "NOT RUN",
+  "spike": "NOT RUN",
+  "reason": "Windows and WSL audit: RISC-V GCC is present in WSL; ACT4, RISCOF, Sail and Spike are not installed",
+  "detected": {
+    "riscof": null,
+    "spike": null
+  }
+}

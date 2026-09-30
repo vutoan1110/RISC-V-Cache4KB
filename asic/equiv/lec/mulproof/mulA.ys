@@ -1,0 +1,6 @@
+# gold's multiplier: RTL $mul -> Yosys default techmap (what the LEC gold side contains)
+read_verilog mul33.v
+hierarchy -top mul33
+proc; opt_clean
+techmap; opt_clean; aigmap; opt_clean
+write_aiger -symbols mulA.aig

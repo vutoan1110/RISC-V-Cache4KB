@@ -1,0 +1,6 @@
+# diagnosis only (Incident 89): techmap S exactly as synthesis does next, to diff the multiplier region with N1
+read_ilang synth_replay/s_pre_techmap.il
+hierarchy -top soc_asic_top
+techmap
+tee -q -o s_tm_cells.txt select -list t:* c:*macc* %i
+tee -q -o s_tm_types.txt stat

@@ -1,0 +1,11 @@
+# diagnosis (Incident 89): does techmap(S) + openlane_opt(fast) x2 reproduce N1 exactly?
+read_ilang synth_replay/s_pre_techmap.il
+hierarchy -top soc_asic_top
+techmap
+opt -fast
+opt -fast
+tee -q -o t_stat.txt stat
+design -reset
+read_ilang synth_replay/n1_pre_abc_fast.il
+hierarchy -top soc_asic_top
+tee -q -o n1_stat.txt stat

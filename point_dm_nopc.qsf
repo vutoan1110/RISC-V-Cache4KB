@@ -1,0 +1,23 @@
+set_global_assignment -name TOP_LEVEL_ENTITY de2_115_top
+source quartus/soc_core_common.qsf
+source quartus/de2_115/de2_115_common.qsf
+
+# Seed 2 is pinned in the revision .qsf, not only in the sourced common file:
+# a SEED arriving through `source` does not take effect.
+set_global_assignment -name SEED 2
+
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files_dm_nopc
+set_parameter -name CACHE_CONFIG 0
+set_parameter -name VICTIM_ENTRIES 4
+set_parameter -name ICACHE_LINE_COUNT 64
+set_parameter -name DCACHE_LINE_COUNT 64
+set_parameter -name CACHE_LINE_WORDS 4
+set_parameter -name BRANCH_PREDICT_ENABLE 1
+set_parameter -name PERF_COUNTERS_ENABLE 0
+set_parameter -name L0_ENTRIES 8
+set_parameter -name BHT_ENTRIES 256
+
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top

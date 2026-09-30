@@ -1,0 +1,15 @@
+# Common board integration shared by all cache configurations.
+# The common SoC manifest selects EP4CE115F29C7, lists the frozen RTL/MIF
+# inputs, and attaches the 50-MHz timing constraint.
+
+set_global_assignment -name TOP_LEVEL_ENTITY de2_115_top
+set_global_assignment -name VERILOG_FILE hdl/board/de2_115_top.v
+source quartus/de2_115/de2_115_pins.qsf
+
+# Prevent the fitter from driving unrelated DE2-115 peripherals.
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
+
+# Reproducible initial board build seed. Additional seeds can be explored
+# explicitly after first hardware bring-up.
+set_global_assignment -name SEED 1

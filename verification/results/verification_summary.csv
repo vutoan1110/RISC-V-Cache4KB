@@ -1,0 +1,12 @@
+Verification Layer,Scope,Tests/Runs,Result
+Core-to-SoC regression,active RTL,run_full_regression.do,PASS
+Directed ISA,claimed RV32I subset,full-SoC retirement trace,PASS
+Zmmul corner cases,MUL/MULH/MULHU/MULHSU,46 ALU checks + pipeline,PASS
+Hazard/forwarding,forwarding and load-use assertions,directed + legacy,PASS
+Branch prediction/recovery,BP_OFF/BP_ON,directed + random,PASS
+Cache/AXI,"accounting, no-allocate, protocol",directed + bus regression,PASS
+Assertions,retirement/core/cache/AXI,sampled every active cycle,PASS
+UVM environment,core / cache_axi_master / soc_top,verification/uvm/out/*.status,see verification/results/uvm/summary.json
+Random differential,"project Python ISS, BP_OFF/BP_ON",3,PASS 3/3
+Official architecture tests,ACT4/RISCOF,0,NOT RUN
+Spike differential,agreed unprivileged subset,0,NOT RUN

@@ -1,0 +1,23 @@
+read_verilog -sv -D__openlane__ datapath_old.v /mnt/e/Projects/RISCV-research/hdl/alu.v /mnt/e/Projects/RISCV-research/hdl/extend.v /mnt/e/Projects/RISCV-research/hdl/regfile.v /mnt/e/Projects/RISCV-research/hdl/branch.v /mnt/e/Projects/RISCV-research/hdl/hazard_unit.v /mnt/e/Projects/RISCV-research/hdl/predictor/bht_2bit.v
+hierarchy -top datapath
+proc
+flatten
+rename datapath datapath_gold
+design -stash gold
+read_verilog -sv -D__openlane__ /mnt/e/Projects/RISCV-research/hdl/datapath.v /mnt/e/Projects/RISCV-research/hdl/alu.v /mnt/e/Projects/RISCV-research/hdl/extend.v /mnt/e/Projects/RISCV-research/hdl/regfile.v /mnt/e/Projects/RISCV-research/hdl/branch.v /mnt/e/Projects/RISCV-research/hdl/hazard_unit.v /mnt/e/Projects/RISCV-research/hdl/predictor/bht_2bit.v
+hierarchy -top datapath
+proc
+flatten
+rename datapath datapath_gate
+design -stash gate
+design -copy-from gold -as datapath_gold datapath_gold
+design -copy-from gate -as datapath_gate datapath_gate
+proc; opt_clean
+memory_map; opt_clean
+async2sync
+equiv_make datapath_gold datapath_gate eq
+hierarchy -top eq
+flatten
+equiv_simple -seq 2
+equiv_induct -seq 2
+equiv_status -assert

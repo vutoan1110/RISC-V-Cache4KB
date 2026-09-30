@@ -1,0 +1,34 @@
+flops with Q net: 19081
+violating endpoints analysed: 2557 (worst slack -8.335, median -5.330)
+[all] mean: slack -5.00 | launch clk 8.53 capture clk 7.64 (skew -0.90) setup 0.23 unc 0.25 | data: logic 15.81 ns in 22.6 cells, repeaters 7.84 ns in 16.1 cells, nets 0.53
+[worst 100] mean: slack -7.28 | launch clk 8.58 capture clk 7.64 (skew -0.94) setup 0.18 unc 0.25 | data: logic 18.64 ns in 33.0 cells, repeaters 7.48 ns in 15.9 cells, nets 0.25
+
+start register group -> end register group (count, worst slack, mean repeater ns / logic ns / net ns):
+   992   -6.501   8.09/15.64/ 0.65  u_soc.if_req_addr -> u_soc.u_core.u_pipeline.datapath.regfile.regs
+   512   -7.110   8.19/15.35/ 0.75  u_soc.if_req_addr -> u_soc.u_core.u_pipeline.datapath.g_bp_on.u_bht.bht_mem
+    32   -7.711   6.96/18.71/ 0.15  u_soc.u_core.u_pipeline.datapath.forward_a_e -> u_soc.u_core.u_pipeline.datapath.pc_d
+    32   -7.409   7.00/19.00/ 0.16  u_soc.u_core.u_pipeline.datapath.forward_a_e -> u_soc.u_core.u_pipeline.datapath.immext_e
+    32   -7.215   6.94/19.10/ 0.15  u_soc.u_core.u_pipeline.datapath.forward_a_e -> u_soc.u_core.u_pipeline.datapath.src_a_e
+    32   -7.112   3.27/21.32/ 0.20  u_soc.u_core.u_pipeline.datapath.rd_data_w -> u_soc.d_req_addr
+    32   -7.058   7.43/18.29/ 0.19  u_soc.u_core.u_pipeline.datapath.forward_a_e -> u_soc.u_core.u_pipeline.datapath.csr_mie
+    32   -7.056   7.43/18.31/ 0.19  u_soc.u_core.u_pipeline.datapath.forward_a_e -> u_soc.mtvec_dbg
+    32   -7.053   7.44/18.31/ 0.19  u_soc.u_core.u_pipeline.datapath.forward_a_e -> u_soc.minstret_dbg
+    32   -7.014   7.36/18.27/ 0.19  u_soc.u_core.u_pipeline.datapath.forward_a_e -> u_soc.mcycle_dbg
+    32   -6.979   7.34/18.03/ 0.19  u_soc.u_core.u_pipeline.datapath.forward_a_e -> u_soc.u_core.u_pipeline.datapath.csr_mstatus
+    32   -6.839   7.05/18.31/ 0.16  u_soc.u_core.u_pipeline.datapath.forward_a_e -> u_soc.mepc_dbg
+    32   -6.530   7.01/17.92/ 0.17  u_soc.u_core.u_pipeline.datapath.forward_a_e -> u_soc.mcause_dbg
+    32   -5.677   6.50/18.21/ 0.15  u_soc.u_core.u_pipeline.datapath.forward_a_e -> u_soc.u_core.u_pipeline.datapath.src_b_e
+    32   -3.203   7.75/12.97/ 0.60  u_soc.if_req_addr -> u_soc.u_core.u_pipeline.datapath.alu_result_w
+    32   -3.149   8.44/12.76/ 0.59  u_soc.if_req_addr -> u_soc.u_core.u_pipeline.datapath.upper_w
+    32   -3.143   8.74/12.76/ 0.59  u_soc.if_req_addr -> u_soc.u_core.u_pipeline.datapath.pc_plus4_w
+    32   -3.111   7.91/12.75/ 0.59  u_soc.if_req_addr -> u_soc.u_core.u_pipeline.datapath.pc_plus4_m
+    32   -2.338   7.93/12.71/ 0.59  u_soc.if_req_addr -> u_soc.u_core.u_pipeline.datapath.wr_data_m
+    32   -1.283   7.10/12.76/ 0.58  u_soc.if_req_addr -> u_soc.u_core.u_pipeline.datapath.rd_data_w
+    32   -0.909  10.80/ 8.74/ 0.39  reset_sync_q -> u_soc.u_observability.dcache_wait_cycle_count
+    31   -7.558   7.28/18.72/ 0.16  u_soc.u_core.u_pipeline.datapath.forward_a_e -> u_soc.u_core.u_pipeline.datapath.predicted_target_e
+
+end register groups: [('u_soc.u_core.u_pipeline.datapath.regfile.regs', 992), ('u_soc.u_core.u_pipeline.datapath.g_bp_on.u_bht.bht_mem', 512), ('u_soc.if_req_addr', 32), ('u_soc.u_core.u_pipeline.datapath.pc_d', 32), ('u_soc.u_core.u_pipeline.datapath.immext_e', 32), ('u_soc.u_core.u_pipeline.datapath.src_a_e', 32), ('u_soc.d_req_addr', 32), ('u_soc.u_core.u_pipeline.datapath.csr_mie', 32), ('u_soc.mtvec_dbg', 32), ('u_soc.minstret_dbg', 32), ('u_soc.mcycle_dbg', 32), ('u_soc.u_core.u_pipeline.datapath.csr_mstatus', 32), ('u_soc.mepc_dbg', 32), ('u_soc.mcause_dbg', 32), ('u_soc.u_core.u_pipeline.datapath.src_b_e', 32), ('u_soc.u_core.u_pipeline.datapath.alu_result_w', 32), ('u_soc.u_core.u_pipeline.datapath.upper_w', 32), ('u_soc.u_core.u_pipeline.datapath.pc_plus4_w', 32), ('u_soc.u_core.u_pipeline.datapath.pc_plus4_m', 32), ('u_soc.u_core.u_pipeline.datapath.wr_data_m', 32), ('u_soc.u_core.u_pipeline.datapath.rd_data_w', 32), ('u_soc.u_observability.dcache_wait_cycle_count', 32)]
+
+start register groups: [('u_soc.if_req_addr', 1857), ('u_soc.u_core.u_pipeline.datapath.forward_a_e', 604), ('reset_sync_q', 61), ('u_soc.u_core.u_pipeline.datapath.rd_data_w', 32), ('u_soc.u_core.u_pipeline.datapath.is_link_m', 2), ('u_soc.u_uart.u_uart_core.tx_block.tx_data_i', 1)]
+
+endpoints that would pass with zero repeater delay: 2494 / 2557; with zero repeater AND zero net delay: 2508 / 2557

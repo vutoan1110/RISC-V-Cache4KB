@@ -1,0 +1,74 @@
+# Research workspace git (2026-09-30, for /code-review ultra): sources, scripts, configs and documents only.
+# Everything generated stays out: PD runs (~150 GB), Quartus databases, simulator libraries, waveforms,
+# results. Whitelist: ignore every top-level entry, then re-include the source trees.
+/*
+!/.gitignore
+!/*.md
+!/*.qsf
+!/*.qpf
+!/hdl/
+!/sw/
+!/fw/
+!/tb/
+!/verification/
+!/scripts/
+!/quartus/
+!/asic/
+!/results/
+
+# results/: documents only
+/results/*
+!/results/*.md
+
+# asic/: flow sources and configs, not runs or tool outputs
+/asic/*
+!/asic/*.md
+!/asic/*.sh
+!/asic/openlane-local/
+!/asic/gls/
+!/asic/sta_query/
+!/asic/snapshots/
+!/asic/soc_dm_4kb/
+!/asic/pd_exp/
+!/asic/equiv/
+/asic/soc_dm_4kb/runs/
+/asic/soc_dm_4kb/macros/
+# pd_exp/ and equiv/ hold experiment outputs next to their scripts: keep the scripts and cut lists only
+/asic/pd_exp/**
+!/asic/pd_exp/**/
+!/asic/pd_exp/**/*.py
+!/asic/pd_exp/**/*.tcl
+!/asic/pd_exp/**/*.sh
+!/asic/pd_exp/**/*.txt
+/asic/equiv/**
+!/asic/equiv/**/
+!/asic/equiv/**/*.py
+!/asic/equiv/**/*.ps1
+!/asic/equiv/**/*.sh
+!/asic/equiv/**/*.ys
+!/asic/equiv/**/*.tcl
+
+# build products, simulator output and caches anywhere
+__pycache__/
+*.pyc
+/sw/benchmark.*
+/sw/benchmark_rv32.hex
+/sw/coremark/*.elf
+/sw/coremark/*.bin
+/sw/coremark/*.dump
+/sw/coremark/*.map
+*.vcd
+*.wlf
+*.vstf
+transcript
+work/
+work_*/
+/verification/uvm/out/
+
+# data dumps and third-party models that are not project code
+/asic/gls/lib/
+/asic/sta_query/*.txt
+/asic/sta_query/*.out
+/asic/pd_exp/rc_corr/est*.txt
+/asic/pd_exp/rc_corr/spef*.txt
+*.elf

@@ -1,0 +1,14 @@
+# mulB + the two `opt -fast` rounds OpenLane runs after techmap (openlane_opt fast x2): wreduce + alumacc ($mul -> $macc) + techmap (maccmap CSA tree),
+# the steps OpenLane's synthesis applies to this cell (06-yosys-synthesis log: wreduce "Removed top 2
+# bits (of 66) from port Y of cell ...alu.$mul", alumacc "creating $macc model")
+read_verilog mul33.v
+hierarchy -top mul33
+proc; opt_clean
+wreduce t:$mul
+alumacc t:$mul
+opt_clean
+techmap
+opt -fast
+opt -fast
+opt_clean; aigmap; opt_clean
+write_aiger -symbols mulC.aig

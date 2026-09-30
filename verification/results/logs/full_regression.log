@@ -1,0 +1,1091 @@
+Reading pref.tcl
+
+# 2020.1
+
+# do tb/run_full_regression.do
+# onerror {quit -code 1 -f}
+# do tb/compile_active_design.do
+# transcript on
+# onerror {quit -code 1 -f}
+# 
+# if {[file exists work]} {
+#     vdel -lib work -all
+# }
+# vlib work
+# 
+# Processor core and native request/response wrapper.
+# vlog -sv \
+#     hdl/alu.v \
+#     hdl/aludec.v \
+#     hdl/branch.v \
+#     hdl/predictor/bht_2bit.v \
+#     hdl/controller.v \
+#     hdl/datapath.v \
+#     hdl/extend.v \
+#     hdl/hazard_unit.v \
+#     hdl/maindec.v \
+#     hdl/regfile.v \
+#     hdl/riscv_core.v \
+#     hdl/riscv_core_native.v
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 11:17:43 on Sep 15,2026
+# vlog -sv hdl/alu.v hdl/aludec.v hdl/branch.v hdl/predictor/bht_2bit.v hdl/controller.v hdl/datapath.v hdl/extend.v hdl/hazard_unit.v hdl/maindec.v hdl/regfile.v hdl/riscv_core.v hdl/riscv_core_native.v 
+# -- Compiling module alu
+# -- Compiling module aludec
+# -- Compiling module branch
+# -- Compiling module bht_2bit
+# -- Compiling module controller
+# -- Compiling module datapath
+# -- Compiling module extend
+# -- Compiling module hazard_unit
+# -- Compiling module maindec
+# -- Compiling module regfile
+# -- Compiling module riscv_core
+# -- Compiling module riscv_core_native
+# 
+# Top level modules:
+# 	riscv_core_native
+# End time: 11:17:43 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# Active cache hierarchy.
+# vlog -sv \
+#     hdl/cache/icache_tag_ram.v \
+#     hdl/cache/icache_data_ram.v \
+#     hdl/cache/icache_controller.v \
+#     hdl/cache/cache_dse_data_bank.v \
+#     hdl/cache/icache_dse_core.v \
+#     hdl/cache/icache.v \
+#     hdl/cache/dcache_tag_ram.v \
+#     hdl/cache/dcache_data_ram.v \
+#     hdl/cache/dcache_controller.v \
+#     hdl/cache/dcache_dse_core.v \
+#     hdl/cache/dcache.v
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 11:17:43 on Sep 15,2026
+# vlog -sv hdl/cache/icache_tag_ram.v hdl/cache/icache_data_ram.v hdl/cache/icache_controller.v hdl/cache/cache_dse_data_bank.v hdl/cache/icache_dse_core.v hdl/cache/icache.v hdl/cache/dcache_tag_ram.v hdl/cache/dcache_data_ram.v hdl/cache/dcache_controller.v hdl/cache/dcache_dse_core.v hdl/cache/dcache.v 
+# -- Compiling module icache_tag_ram
+# -- Compiling module icache_data_ram
+# -- Compiling module icache_controller
+# -- Compiling module cache_dse_data_bank
+# -- Compiling module icache_dse_core
+# -- Compiling module icache
+# -- Compiling module dcache_tag_ram
+# -- Compiling module dcache_data_ram
+# -- Compiling module dcache_controller
+# -- Compiling module dcache_dse_core
+# -- Compiling module dcache
+# 
+# Top level modules:
+# 	icache
+# 	dcache
+# End time: 11:17:43 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# AXI, APB, performance monitoring, peripherals, and active SoC.
+# vlog -sv \
+#     hdl/axi/cache_axi_master.v \
+#     hdl/axi/axi_ram_32.v \
+#     hdl/axi/native_axi_lite_master.v \
+#     hdl/axi/axi_lite_to_apb.v \
+#     hdl/bus/soc_address_decoder.v \
+#     hdl/apb_display_regs.v \
+#     hdl/apb_timer.v \
+#     hdl/perf_counters.v \
+#     hdl/apb_performance_monitor.v \
+#     hdl/performance_observability.v \
+#     hdl/hex7seg_decoder.v \
+#     hdl/lcd_1602_hex.v \
+#     hdl/fifo.sv \
+#     hdl/baudrate_gen_block.sv \
+#     hdl/rx_block.sv \
+#     hdl/tx_block.sv \
+#     hdl/uart_core.sv \
+#     hdl/uart_apb.v \
+#     hdl/soc_top.v
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 11:17:43 on Sep 15,2026
+# vlog -sv hdl/axi/cache_axi_master.v hdl/axi/axi_ram_32.v hdl/axi/native_axi_lite_master.v hdl/axi/axi_lite_to_apb.v hdl/bus/soc_address_decoder.v hdl/apb_display_regs.v hdl/apb_timer.v hdl/perf_counters.v hdl/apb_performance_monitor.v hdl/performance_observability.v hdl/hex7seg_decoder.v hdl/lcd_1602_hex.v hdl/fifo.sv hdl/baudrate_gen_block.sv hdl/rx_block.sv hdl/tx_block.sv hdl/uart_core.sv hdl/uart_apb.v hdl/soc_top.v 
+# -- Compiling module cache_axi_master
+# -- Compiling module axi_ram_32
+# -- Compiling module native_axi_lite_master
+# -- Compiling module axi_lite_to_apb
+# -- Compiling module soc_address_decoder
+# -- Compiling module apb_display_regs
+# -- Compiling module apb_timer
+# -- Compiling module perf_counters
+# -- Compiling module apb_performance_monitor
+# -- Compiling module performance_observability
+# -- Compiling module hex7seg_decoder
+# -- Compiling module lcd_1602_hex
+# -- Compiling module fifo
+# -- Compiling module baudrate_gen_block
+# -- Compiling module rx_block
+# -- Compiling module tx_block
+# -- Compiling module uart_core
+# -- Compiling module uart_apb
+# -- Compiling module soc_top
+# 
+# Top level modules:
+# 	soc_top
+# End time: 11:17:44 on Sep 15,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# 
+# Simulation-only assertions and functional coverage.
+# vlog -sv \
+#     verification/assertions/core_assertions.sv \
+#     verification/assertions/axi_assertions.sv \
+#     verification/assertions/cache_assertions.sv \
+#     verification/coverage/core_coverage.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 11:17:45 on Sep 15,2026
+# vlog -sv verification/assertions/core_assertions.sv verification/assertions/axi_assertions.sv verification/assertions/cache_assertions.sv verification/coverage/core_coverage.sv 
+# -- Compiling module core_assertions
+# -- Compiling module axi_assertions
+# -- Compiling module cache_assertions
+# -- Compiling module core_coverage
+# 
+# Top level modules:
+# 	core_assertions
+# 	axi_assertions
+# 	cache_assertions
+# 	core_coverage
+# End time: 11:17:45 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# Active self-checking testbenches and reusable backend model.
+# vlog -sv \
+#     tb/cache_backend_model.sv \
+#     tb/branch_predictor_core_tb.sv \
+#     tb/valid_irq_tb.sv \
+#     tb/native_interface_tb.sv \
+#     tb/icache_tb.sv \
+#     tb/dcache_tb.sv \
+#     tb/mmio_bypass_tb.sv \
+#     tb/axi_memory_tb.sv \
+#     tb/axi_mmio_tb.sv \
+#     tb/soc_integration_tb.sv \
+#     tb/cache_event_accounting_tb.sv \
+#     tb/performance_counters_tb.sv \
+#     tb/bht_tb.sv \
+#     tb/branch_predictor_tb.sv \
+#     tb/predictor_axi_tb.sv \
+#     tb/alu_zmmul_tb.sv \
+#     tb/directed_isa_tb.sv \
+#     tb/random_trace_tb.sv \
+#     tb/architecture_signature_tb.sv \
+#     tb/set_associative_cache_tb.sv \
+#     tb/victim_cache_tb.sv \
+#     tb/cache_configuration_tb.sv \
+#     tb/cache_architecture_equivalence_tb.sv \
+#     tb/benchmark_snapshot_tb.sv \
+#     tb/cache_conflict_experiment_tb.sv
+# Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+# Start time: 11:17:45 on Sep 15,2026
+# vlog -sv tb/cache_backend_model.sv tb/branch_predictor_core_tb.sv tb/valid_irq_tb.sv tb/native_interface_tb.sv tb/icache_tb.sv tb/dcache_tb.sv tb/mmio_bypass_tb.sv tb/axi_memory_tb.sv tb/axi_mmio_tb.sv tb/soc_integration_tb.sv tb/cache_event_accounting_tb.sv tb/performance_counters_tb.sv tb/bht_tb.sv tb/branch_predictor_tb.sv tb/predictor_axi_tb.sv tb/alu_zmmul_tb.sv tb/directed_isa_tb.sv tb/random_trace_tb.sv tb/architecture_signature_tb.sv tb/set_associative_cache_tb.sv tb/victim_cache_tb.sv tb/cache_configuration_tb.sv tb/cache_architecture_equivalence_tb.sv tb/benchmark_snapshot_tb.sv tb/cache_conflict_experiment_tb.sv 
+# -- Compiling module cache_backend_model
+# -- Compiling module tb_branch_predictor_core
+# -- Compiling module tb_valid_irq
+# -- Compiling module tb_native_interface
+# -- Compiling module tb_icache
+# -- Compiling module tb_dcache
+# -- Compiling module tb_mmio_bypass
+# -- Compiling module tb_axi_memory
+# -- Compiling module tb_axi_mmio
+# -- Compiling module tb_soc_integration
+# -- Compiling module tb_cache_event_accounting
+# -- Compiling module tb_performance_counters
+# -- Compiling module tb_bht
+# -- Compiling module tb_branch_predictor
+# -- Compiling module tb_predictor_axi
+# -- Compiling module tb_alu_zmmul
+# -- Compiling module tb_directed_isa
+# -- Compiling module tb_random_trace
+# -- Compiling module tb_architecture_signature
+# -- Compiling module tb_set_associative_cache
+# -- Compiling module tb_victim_cache
+# -- Compiling module tb_cache_configuration
+# -- Compiling module tb_cache_architecture_equivalence
+# -- Compiling module tb_benchmark_snapshot
+# -- Compiling module tb_cache_conflict_experiment
+# 
+# Top level modules:
+# 	tb_branch_predictor_core
+# 	tb_valid_irq
+# 	tb_native_interface
+# 	tb_icache
+# 	tb_dcache
+# 	tb_mmio_bypass
+# 	tb_axi_memory
+# 	tb_axi_mmio
+# 	tb_soc_integration
+# 	tb_cache_event_accounting
+# 	tb_performance_counters
+# 	tb_bht
+# 	tb_branch_predictor
+# 	tb_predictor_axi
+# 	tb_alu_zmmul
+# 	tb_directed_isa
+# 	tb_random_trace
+# 	tb_architecture_signature
+# 	tb_set_associative_cache
+# 	tb_victim_cache
+# 	tb_cache_configuration
+# 	tb_cache_architecture_equivalence
+# 	tb_benchmark_snapshot
+# 	tb_cache_conflict_experiment
+# End time: 11:17:46 on Sep 15,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# 
+# echo {[PASS] Active RTL and verification sources compiled}
+# [PASS] Active RTL and verification sources compiled
+# 
+# foreach test {
+#     tb_branch_predictor_core
+#     tb_valid_irq
+#     tb_native_interface
+#     tb_bht
+#     tb_branch_predictor
+#     tb_alu_zmmul
+#     tb_icache
+#     tb_dcache
+#     tb_cache_event_accounting
+#     tb_set_associative_cache
+#     tb_victim_cache
+#     tb_mmio_bypass
+#     tb_axi_memory
+#     tb_axi_mmio
+#     tb_soc_integration
+#     tb_performance_counters
+#     tb_predictor_axi
+#     tb_directed_isa
+# } {
+#     echo "===== FULL REGRESSION $test ====="
+#     vsim -onfinish stop -voptargs=+acc work.$test
+#     run -all
+#     quit -sim
+# }
+# ===== FULL REGRESSION tb_branch_predictor_core =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_branch_predictor_core 
+# Start time: 11:17:46 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_branch_predictor_core
+# Loading work.riscv_core
+# Loading work.controller
+# Loading work.maindec
+# Loading work.aludec
+# Loading work.datapath
+# Loading work.extend
+# Loading work.regfile
+# Loading work.alu
+# Loading work.branch
+# Loading work.hazard_unit
+# Loading work.bht_2bit
+# 
+# ============================================================
+# SCENARIO: BHT reset + correct not-taken prediction
+# ============================================================
+#   [OK]   BHT entry resets to weakly not-taken (01)
+#   [OK]   Execute prediction register resets to 0
+#   [OK]   Execute JAL marker resets to 0
+# [C4] BRANCH pc=00000004 state=01 pred=0 actual=0 miss=0
+#   [OK]   Exactly one conditional branch resolves
+#   [OK]   Initial not-taken prediction is correct
+#   [OK]   Resolution observes state=01, prediction=NT, actual=NT
+#   [OK]   Not-taken update changes BHT 01 -> 00
+#   [OK]   Correct not-taken prediction causes no recovery flush
+#   [OK]   Fall-through instruction commits exactly once
+# [SCENARIO PASS] BHT reset + correct not-taken
+# 
+# ============================================================
+# SCENARIO: 2-bit BHT learning + both misprediction directions
+# ============================================================
+# [C6] BRANCH pc=0000000c state=01 pred=0 actual=1 miss=1
+# [C10] BRANCH pc=0000000c state=10 pred=1 actual=1 miss=0
+# [C12] BRANCH pc=0000000c state=11 pred=1 actual=1 miss=0
+# [C14] BRANCH pc=0000000c state=11 pred=1 actual=0 miss=1
+#   [OK]   Dynamic branch outcomes are T,T,T,NT
+#   [OK]   Two predictions correct and two predictions wrong
+#   [OK]   Both NT->T and T->NT recovery paths occur once
+#   [OK]   BHT state sequence before updates is 01,10,11,11
+#   [OK]   Prediction sequence is NT,T,T,T
+#   [OK]   Final BHT state is weakly taken (10)
+#   [OK]   Taken prediction redirects Fetch on the last three visits
+#   [OK]   Only the two mispredictions cause Execute recovery flushes
+#   [OK]   Loop result is correct and exit path commits once
+# [SCENARIO PASS] 2-bit learning + recovery
+# 
+# ============================================================
+# SCENARIO: All six RV32I conditional branch types
+# ============================================================
+# [C7] BRANCH pc=00000010 state=01 pred=0 actual=1 miss=1
+# [C10] BRANCH pc=00000018 state=01 pred=0 actual=1 miss=1
+# [C13] BRANCH pc=00000020 state=01 pred=0 actual=1 miss=1
+# [C16] BRANCH pc=00000028 state=01 pred=0 actual=1 miss=1
+# [C19] BRANCH pc=00000030 state=01 pred=0 actual=1 miss=1
+# [C22] BRANCH pc=00000038 state=01 pred=0 actual=1 miss=1
+#   [OK]   BEQ/BNE/BLT/BGE/BLTU/BGEU all resolve taken
+#   [OK]   All six cold branches exercise NT->T recovery
+#   [OK]   No cold branch falsely reports a BHT-taken prediction
+#   [OK]   Exactly six recovery flushes occur
+#   [OK]   Each branch updates its own BHT entry 01 -> 10
+#   [OK]   All six wrong-path instructions are squashed
+#   [OK]   Final correct-path marker commits exactly once
+# [SCENARIO PASS] All six B-type instructions
+# 
+# ============================================================
+# SCENARIO: JAL early Fetch redirect without Execute re-flush
+# ============================================================
+#   [OK]   JAL does not update the conditional-branch BHT
+#   [OK]   BHT entry at the JAL PC remains unchanged
+#   [OK]   JAL redirects Fetch exactly once
+#   [OK]   JAL target PC is fetched exactly once
+#   [OK]   JAL is not redirected/flushed again in Execute
+#   [OK]   Correct early JAL redirect adds no Execute flush
+#   [OK]   JAL writes the correct return address to x5
+#   [OK]   JAL wrong path is squashed and target commits once
+# [SCENARIO PASS] JAL early redirect
+# 
+# ============================================================
+# SCENARIO: BHT-taken prediction held safely during stall_pipe
+# ============================================================
+# [C6] BRANCH pc=0000000c state=01 pred=0 actual=1 miss=1
+# [C12] BRANCH pc=0000000c state=10 pred=1 actual=1 miss=0
+# [C14] BRANCH pc=0000000c state=11 pred=1 actual=0 miss=1
+#   [OK]   PC holds and Fetch redirect is suppressed while stalled
+#   [OK]   Stall does not duplicate or lose a branch update
+#   [OK]   Prediction classification remains correct across the stall
+#   [OK]   BHT updates once per branch: 01,10,11 before updates
+#   [OK]   Each predicted-taken visit redirects once, not once per stall cycle
+#   [OK]   Final state after T,T,NT is 10
+#   [OK]   Only the first-taken and final-not-taken misses flush
+#   [OK]   Architectural result stays correct across stall_pipe
+# [SCENARIO PASS] Prediction during stall_pipe
+# 
+# ============================================================
+# COMPLETE BRANCH-PREDICTION TEST SUMMARY
+# Checks: 41, failures: 0
+# ============================================================
+# [PASS] All branch-prediction scenarios passed
+# ** Note: $finish    : tb/branch_predictor_core_tb.sv(600)
+#    Time: 1946 ns  Iteration: 0  Instance: /tb_branch_predictor_core
+# Break in Module tb_branch_predictor_core at tb/branch_predictor_core_tb.sv line 600
+# Stopped at tb/branch_predictor_core_tb.sv line 600
+# End time: 11:17:46 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_valid_irq =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_valid_irq 
+# Start time: 11:17:46 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_valid_irq
+# Loading work.riscv_core
+# Loading work.controller
+# Loading work.maindec
+# Loading work.aludec
+# Loading work.datapath
+# Loading work.extend
+# Loading work.regfile
+# Loading work.alu
+# Loading work.branch
+# Loading work.hazard_unit
+# Loading work.bht_2bit
+# ----- VALID IRQ SUMMARY -----
+# mepc              = 0x00000014
+# mcause            = 0x80000007
+# trap_count        = 1
+# x11_write_count   = 1
+# minstret          = 8
+# x20(handler flag) = 0x00000001
+# x11(resumed)      = 0x00000066
+# [PASS] Valid-bit and pending-interrupt test
+# ** Note: $finish    : tb/valid_irq_tb.sv(291)
+#    Time: 226 ns  Iteration: 0  Instance: /tb_valid_irq
+# Break in Module tb_valid_irq at tb/valid_irq_tb.sv line 291
+# Stopped at tb/valid_irq_tb.sv line 291
+# End time: 11:17:46 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_native_interface =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_native_interface 
+# Start time: 11:17:46 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_native_interface
+# Loading work.riscv_core_native
+# Loading work.riscv_core
+# Loading work.controller
+# Loading work.maindec
+# Loading work.aludec
+# Loading work.datapath
+# Loading work.extend
+# Loading work.regfile
+# Loading work.alu
+# Loading work.branch
+# Loading work.hazard_unit
+# Loading work.bht_2bit
+# ----- NATIVE INTERFACE SUMMARY -----
+# IF accepted/responses = 15/15
+# D accepted/responses  = 4/4
+# Final RAM[0]          = 0x00000605
+# x3/x4/x5/x6           = 5/6/6/7
+# [PASS] Native CPU request/response interface test
+# ** Note: $finish    : tb/native_interface_tb.sv(387)
+#    Time: 716 ns  Iteration: 0  Instance: /tb_native_interface
+# Break in Module tb_native_interface at tb/native_interface_tb.sv line 387
+# Stopped at tb/native_interface_tb.sv line 387
+# End time: 11:17:47 on Sep 15,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_bht =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_bht 
+# Start time: 11:17:47 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_bht
+# Loading work.bht_2bit
+# [TEST BHT-1] deterministic weakly-not-taken reset
+# [PASS] BHT reset initializes every entry to 01 / predict NT
+# [TEST BHT-2] taken training
+# [PASS] Taken transition 01 -> 10 changes prediction to taken
+# [PASS] Taken transition 10 -> 11
+# [TEST BHT-3] saturate taken
+# [PASS] Repeated taken updates saturate at 11
+# [TEST BHT-4] not-taken training
+# [PASS] Not-taken transition 11 -> 10
+# [PASS] Not-taken transition 10 -> 01 changes prediction to NT
+# [PASS] Not-taken transition 01 -> 00
+# [TEST BHT-5] saturate not taken
+# [PASS] Repeated not-taken updates saturate at 00
+# [TEST BHT-6] intentional tagless aliasing
+# [PASS] Two PCs with the same pc[9:2] share one BHT entry
+# [PASS] An update through the alias is visible through the original PC
+# [PASS] BHT reset, FSM saturation and aliasing tests
+# ** Note: $finish    : tb/bht_tb.sv(138)
+#    Time: 398 ns  Iteration: 0  Instance: /tb_bht
+# Break in Module tb_bht at tb/bht_tb.sv line 138
+# Stopped at tb/bht_tb.sv line 138
+# End time: 11:17:47 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_branch_predictor =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_branch_predictor 
+# Start time: 11:17:47 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_branch_predictor
+# Loading work.riscv_core
+# Loading work.controller
+# Loading work.maindec
+# Loading work.aludec
+# Loading work.datapath
+# Loading work.extend
+# Loading work.regfile
+# Loading work.alu
+# Loading work.branch
+# Loading work.hazard_unit
+# Loading work.bht_2bit
+# [TEST 1/2/3/13/14/15] BP_OFF versus BP_ON loop training
+# [PASS] BP_OFF and BP_ON have identical architectural registers
+# [PASS] BP_ON conditional/taken/not-taken event counts are exact
+# [PASS] BP_OFF conditional/taken/not-taken event counts remain active
+# [PASS] Weak-NT loop evolves to 6 correct and 2 mispredictions
+# [PASS] BP_OFF prediction event counters remain zero
+# [PASS] Branch event invariants hold in both builds
+# [PASS] pred_taken_f redirects PC to pred_target_f before EX resolve
+# [PASS] Every correct conditional prediction avoids an EX flush
+# Branch predictions : 8
+# Correct predictions: 6
+# Mispredictions     : 2
+# Accuracy           : 6/8
+# [TEST 3] mostly-not-taken branch trains to strongly NT
+# [PASS] Five not-taken outcomes remain correctly predicted after training
+# [PASS] Mostly-not-taken branch reaches strongly-not-taken state 00
+# [PASS] Mostly-not-taken microprogram completes architecturally
+# [TEST 4/5/6/7] T->NT recovery and wrong-path suppression
+# [PASS] Predicted-taken/actual-not-taken is one misprediction
+# [PASS] T->NT recovery selects branch PC + 4
+# [PASS] Wrong-path store produces no memory side effect
+# [PASS] Wrong-path register write is suppressed
+# [PASS] Correct recovery path retires normally
+# [TEST 9] load-use stall preserves branch prediction metadata
+# [PASS] Exactly one load-use stall is generated
+# [PASS] Stalled branch resolves and updates the BHT exactly once
+# [PASS] Load-use branch flushes stale fall-through and reaches target
+# [TEST 12] interrupt while conditional prediction is active
+# [PASS] Timer interrupt is accepted once with machine-timer cause
+# [PASS] Trap redirect reaches mtvec and handler executes
+# [PASS] mepc records an aligned resumable loop PC
+# [PASS] mret returns from handler to the interrupted program
+# [PASS] Branch predictor recovery test
+# [PASS] Wrong-path store suppression
+# [PASS] BP OFF/ON architectural equivalence
+# [PASS] Branch predictor integration regression
+# ** Note: $finish    : tb/branch_predictor_tb.sv(431)
+#    Time: 2607 ns  Iteration: 0  Instance: /tb_branch_predictor
+# Break in Module tb_branch_predictor at tb/branch_predictor_tb.sv line 431
+# Stopped at tb/branch_predictor_tb.sv line 431
+# End time: 11:17:47 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_alu_zmmul =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_alu_zmmul 
+# Start time: 11:17:47 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_alu_zmmul
+# Loading work.alu
+# [PASS] RV32I ALU directed corner regression (46 checks)
+# [PASS] Zmmul full-width corner regression
+# ** Note: $finish    : tb/alu_zmmul_tb.sv(103)
+#    Time: 46 ns  Iteration: 0  Instance: /tb_alu_zmmul
+# Break in Module tb_alu_zmmul at tb/alu_zmmul_tb.sv line 103
+# Stopped at tb/alu_zmmul_tb.sv line 103
+# End time: 11:17:47 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_icache =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_icache 
+# Start time: 11:17:47 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_icache
+# Loading work.icache
+# Loading work.icache_controller
+# Loading work.icache_tag_ram
+# Loading work.icache_data_ram
+# [PASS] I-cache test 1 - cold miss
+# [PASS] I-cache test 2 - same-address hit
+# [PASS] I-cache test 3 - spatial locality/word offset
+# [PASS] I-cache test 4 - conflict replacement
+# [PASS] I-cache test 5 - request/refill backpressure
+# [PASS] I-cache test 6 - exact counter accounting
+# [PASS] I-cache test 7 - back-to-back requests
+# ----- I-CACHE SUMMARY -----
+# Final access/hit/miss = 3/2/1
+# Final refill req/beats = 1/4
+# [PASS] Direct-mapped 4-word-line I-cache: all 7 tests passed
+# ** Note: $finish    : tb/icache_tb.sv(430)
+#    Time: 1506 ns  Iteration: 0  Instance: /tb_icache
+# Break in Module tb_icache at tb/icache_tb.sv line 430
+# Stopped at tb/icache_tb.sv line 430
+# End time: 11:17:48 on Sep 15,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_dcache =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_dcache 
+# Start time: 11:17:48 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_dcache
+# Loading work.dcache
+# Loading work.dcache_controller
+# Loading work.dcache_tag_ram
+# Loading work.dcache_data_ram
+# ===== D-CACHE SELF-CHECKING TEST =====
+# [TEST 1] Load cold miss
+# [TEST 2] Load hit
+# [TEST 3] Word offset / spatial locality
+# [TEST 4] Load conflict replacement
+# [TEST 5] Store hit / write-through
+# [TEST 6] Store byte merge
+# [TEST 7] Store halfword merge
+# [TEST 8] Store miss / no-write-allocate
+# [TEST 9] Backend write backpressure
+# [TEST 10] Refill backpressure
+# [TEST 11] Exact counter accounting
+# [TEST 12] Back-to-back requests
+# [PASS] D-cache tests 1-12
+# [PASS] Counter invariants and backend handshake stability
+# ** Note: $finish    : tb/dcache_tb.sv(725)
+#    Time: 2736 ns  Iteration: 0  Instance: /tb_dcache
+# Break in Module tb_dcache at tb/dcache_tb.sv line 725
+# Stopped at tb/dcache_tb.sv line 725
+# End time: 11:17:48 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_cache_event_accounting =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_cache_event_accounting 
+# Start time: 11:17:48 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_cache_event_accounting
+# Loading work.icache
+# Loading work.dcache
+# Loading work.icache_controller
+# Loading work.icache_tag_ram
+# Loading work.icache_data_ram
+# Loading work.dcache_controller
+# Loading work.dcache_tag_ram
+# Loading work.dcache_data_ram
+# [TEST 5] I-cache CPU events exclude four refill beats
+# [TEST 6] D-cache CPU read/write events exclude refill/write traffic
+# [PASS] Cache event source/refill exclusion tests
+# ** Note: $finish    : tb/cache_event_accounting_tb.sv(241)
+#    Time: 265 ns  Iteration: 1  Instance: /tb_cache_event_accounting
+# Break in Module tb_cache_event_accounting at tb/cache_event_accounting_tb.sv line 241
+# Stopped at tb/cache_event_accounting_tb.sv line 241
+# End time: 11:17:48 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_set_associative_cache =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_set_associative_cache 
+# Start time: 11:17:48 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_set_associative_cache
+# Loading work.icache
+# Loading work.cache_backend_model
+# Loading work.icache_dse_core
+# Loading work.cache_dse_data_bank
+# [PASS] SA2 A/B coexistence and invalid-way priority
+# [PASS] SA2 one-bit replacement and third conflict
+# [PASS] SA2 AXI-style backpressure and no double accounting
+# [PASS] SA2 cache regression
+# ** Note: $finish    : tb/set_associative_cache_tb.sv(67)
+#    Time: 1066 ns  Iteration: 0  Instance: /tb_set_associative_cache
+# Break in Module tb_set_associative_cache at tb/set_associative_cache_tb.sv line 67
+# Stopped at tb/set_associative_cache_tb.sv line 67
+# End time: 11:17:48 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_victim_cache =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_victim_cache 
+# Start time: 11:17:48 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_victim_cache
+# Loading work.icache
+# Loading work.cache_backend_model
+# Loading work.dcache
+# Loading work.icache_dse_core
+# Loading work.cache_dse_data_bank
+# Loading work.dcache_dse_core
+# [PASS] VC4 A/B rescue, exact swap, and no AXI refill on victim hit
+# [PASS] VC4 invalid-first fill and round-robin replacement
+# [PASS] D-cache VC store swap and SB/SH/SW write-through merge
+# [PASS] D-cache store true miss remains no-write-allocate
+# [PASS] Victim-cache regression
+# ** Note: $finish    : tb/victim_cache_tb.sv(123)
+#    Time: 2456 ns  Iteration: 0  Instance: /tb_victim_cache
+# Break in Module tb_victim_cache at tb/victim_cache_tb.sv line 123
+# Stopped at tb/victim_cache_tb.sv line 123
+# End time: 11:17:48 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_mmio_bypass =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_mmio_bypass 
+# Start time: 11:17:49 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_mmio_bypass
+# Loading work.soc_top
+# Loading work.riscv_core_native
+# Loading work.riscv_core
+# Loading work.controller
+# Loading work.maindec
+# Loading work.aludec
+# Loading work.datapath
+# Loading work.extend
+# Loading work.regfile
+# Loading work.alu
+# Loading work.branch
+# Loading work.hazard_unit
+# Loading work.icache
+# Loading work.soc_address_decoder
+# Loading work.dcache
+# Loading work.cache_axi_master
+# Loading work.axi_ram_32
+# Loading work.native_axi_lite_master
+# Loading work.axi_lite_to_apb
+# Loading work.uart_apb
+# Loading work.uart_core
+# Loading work.baudrate_gen_block
+# Loading work.fifo
+# Loading work.tx_block
+# Loading work.rx_block
+# Loading work.apb_display_regs
+# Loading work.apb_timer
+# Loading work.performance_observability
+# Loading work.perf_counters
+# Loading work.apb_performance_monitor
+# Loading work.hex7seg_decoder
+# Loading work.lcd_1602_hex
+# Loading work.bht_2bit
+# Loading work.icache_controller
+# Loading work.icache_tag_ram
+# Loading work.icache_data_ram
+# Loading work.dcache_controller
+# Loading work.dcache_tag_ram
+# Loading work.dcache_data_ram
+# [PASS] MMIO bypass test
+# [PASS] MMIO generated no D-cache access, refill or write traffic
+# ** Note: $finish    : tb/mmio_bypass_tb.sv(153)
+#    Time: 106 ns  Iteration: 0  Instance: /tb_mmio_bypass
+# Break in Module tb_mmio_bypass at tb/mmio_bypass_tb.sv line 153
+# Stopped at tb/mmio_bypass_tb.sv line 153
+# End time: 11:17:49 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_axi_memory =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_axi_memory 
+# Start time: 11:17:49 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_axi_memory
+# Loading work.icache
+# Loading work.dcache
+# Loading work.cache_axi_master
+# Loading work.axi_ram_32
+# Loading work.icache_controller
+# Loading work.icache_tag_ram
+# Loading work.icache_data_ram
+# Loading work.dcache_controller
+# Loading work.dcache_tag_ram
+# Loading work.dcache_data_ram
+# ===== AXI MEMORY SELF-CHECKING TEST =====
+# [TEST 1] I-cache AXI burst refill
+# [TEST 2] I-cache subsequent hits
+# [TEST 3] D-cache load miss AXI refill
+# [TEST 4] D-cache load hit
+# [TEST 5] Store hit AXI write-through
+# [TEST 6] Store byte
+# [TEST 7] Store halfword
+# [TEST 8] Store miss no-write-allocate
+# [TEST 9] AR backpressure
+# [TEST 10] R channel gaps
+# [TEST 11] AW backpressure
+# [TEST 12] W backpressure
+# [TEST 13] Independent AW/W handshakes
+# [TEST 14] Posted store response precedes delayed B
+# [TEST 15] Simultaneous I/D misses
+# [TEST 19] AXI error propagation
+# [PASS] AXI memory tests 1-15 and 19
+# [PASS] AXI stability, RLAST, B ordering and global outstanding assertions
+# ** Note: $finish    : tb/axi_memory_tb.sv(856)
+#    Time: 5830 ns  Iteration: 1  Instance: /tb_axi_memory
+# Break in Module tb_axi_memory at tb/axi_memory_tb.sv line 856
+# Stopped at tb/axi_memory_tb.sv line 856
+# End time: 11:17:49 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_axi_mmio =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_axi_mmio 
+# Start time: 11:17:49 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_axi_mmio
+# Loading work.native_axi_lite_master
+# Loading work.axi_lite_to_apb
+# ===== AXI-LITE / APB SELF-CHECKING TEST =====
+# [TEST 16] MMIO write via AXI-Lite to APB
+# [TEST 17] MMIO read via AXI-Lite to APB
+# [TEST 18] APB wait states
+# [TEST 19B] AXI-Lite/APB error propagation
+# [PASS] AXI-Lite/APB tests 16-18 and MMIO error propagation
+# [PASS] APB SETUP/ACCESS/wait-state and AXI-Lite stability assertions
+# ** Note: $finish    : tb/axi_mmio_tb.sv(470)
+#    Time: 570 ns  Iteration: 1  Instance: /tb_axi_mmio
+# Break in Module tb_axi_mmio at tb/axi_mmio_tb.sv line 470
+# Stopped at tb/axi_mmio_tb.sv line 470
+# End time: 11:17:49 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_soc_integration =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_soc_integration 
+# Start time: 11:17:49 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_soc_integration
+# Loading work.soc_top
+# Loading work.riscv_core_native
+# Loading work.riscv_core
+# Loading work.controller
+# Loading work.maindec
+# Loading work.aludec
+# Loading work.datapath
+# Loading work.extend
+# Loading work.regfile
+# Loading work.alu
+# Loading work.branch
+# Loading work.hazard_unit
+# Loading work.icache
+# Loading work.soc_address_decoder
+# Loading work.dcache
+# Loading work.cache_axi_master
+# Loading work.axi_ram_32
+# Loading work.native_axi_lite_master
+# Loading work.axi_lite_to_apb
+# Loading work.uart_apb
+# Loading work.uart_core
+# Loading work.baudrate_gen_block
+# Loading work.fifo
+# Loading work.tx_block
+# Loading work.rx_block
+# Loading work.apb_display_regs
+# Loading work.apb_timer
+# Loading work.performance_observability
+# Loading work.perf_counters
+# Loading work.apb_performance_monitor
+# Loading work.hex7seg_decoder
+# Loading work.lcd_1602_hex
+# Loading work.bht_2bit
+# Loading work.icache_controller
+# Loading work.icache_tag_ram
+# Loading work.icache_data_ram
+# Loading work.dcache_controller
+# Loading work.dcache_tag_ram
+# Loading work.dcache_data_ram
+# ----- SOC INTEGRATION SUMMARY -----
+# Native IF accepted / I-cache accesses = 15 / 15
+# Native D accepted / D-cache accesses  = 2 / 2
+# AXI reads/writes                     = 3 / 1
+# RAM[0x1000], x3, x4                  = 00000005/00000005/00000006
+# [PASS] SoC native/cache/AXI integration test
+# ** Note: $finish    : tb/soc_integration_tb.sv(185)
+#    Time: 766 ns  Iteration: 0  Instance: /tb_soc_integration
+# Break in Module tb_soc_integration at tb/soc_integration_tb.sv line 185
+# Stopped at tb/soc_integration_tb.sv line 185
+# End time: 11:17:50 on Sep 15,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_performance_counters =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_performance_counters 
+# Start time: 11:17:50 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_performance_counters
+# Loading work.performance_observability
+# Loading work.perf_counters
+# Loading work.apb_performance_monitor
+# [TEST 1] one-hot classifier and priority overlaps
+# [TEST 2] cache event equations and internal/refill exclusion
+# [TEST 3] atomic snapshot while live counters continue
+# [TEST 4] freeze-snapshot, clear-frozen, and unfreeze
+# [TEST 5] early freeze excludes control-transport latency
+# [PASS] Classifier, counter equations, snapshot/freeze/clear tests
+# ** Note: $finish    : tb/performance_counters_tb.sv(428)
+#    Time: 1066 ns  Iteration: 0  Instance: /tb_performance_counters
+# Break in Module tb_performance_counters at tb/performance_counters_tb.sv line 428
+# Stopped at tb/performance_counters_tb.sv line 428
+# End time: 11:17:50 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_predictor_axi =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_predictor_axi 
+# Start time: 11:17:50 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_predictor_axi
+# Loading work.soc_top
+# Loading work.riscv_core_native
+# Loading work.riscv_core
+# Loading work.controller
+# Loading work.maindec
+# Loading work.aludec
+# Loading work.datapath
+# Loading work.extend
+# Loading work.regfile
+# Loading work.alu
+# Loading work.branch
+# Loading work.hazard_unit
+# Loading work.icache
+# Loading work.soc_address_decoder
+# Loading work.dcache
+# Loading work.cache_axi_master
+# Loading work.axi_ram_32
+# Loading work.native_axi_lite_master
+# Loading work.axi_lite_to_apb
+# Loading work.uart_apb
+# Loading work.uart_core
+# Loading work.baudrate_gen_block
+# Loading work.fifo
+# Loading work.tx_block
+# Loading work.rx_block
+# Loading work.apb_display_regs
+# Loading work.apb_timer
+# Loading work.performance_observability
+# Loading work.perf_counters
+# Loading work.apb_performance_monitor
+# Loading work.hex7seg_decoder
+# Loading work.lcd_1602_hex
+# Loading work.bht_2bit
+# Loading work.icache_controller
+# Loading work.icache_tag_ram
+# Loading work.icache_data_ram
+# Loading work.dcache_controller
+# Loading work.dcache_tag_ram
+# Loading work.dcache_data_ram
+# [PASS] Taken BHT result drives PC to predicted target before EX
+# [PASS] Predicted cold target causes exactly one I-cache refill
+# [PASS] ARREADY delay and RVALID gaps are both observed
+# [PASS] Cache/AXI stalls do not duplicate the branch resolve/update event
+# [PASS] Correct taken resolve updates saturated BHT exactly once
+# [PASS] Sequential wrong-path instruction does not retire
+# [PASS] Architectural result survives I-cache miss and AXI backpressure
+# [PASS] Predicted-target I-cache miss test
+# [PASS] Predictor AXI backpressure test
+# ** Note: $finish    : tb/predictor_axi_tb.sv(216)
+#    Time: 747 ns  Iteration: 0  Instance: /tb_predictor_axi
+# Break in Module tb_predictor_axi at tb/predictor_axi_tb.sv line 216
+# Stopped at tb/predictor_axi_tb.sv line 216
+# End time: 11:17:50 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# ===== FULL REGRESSION tb_directed_isa =====
+# vsim -onfinish stop -voptargs="+acc" work.tb_directed_isa 
+# Start time: 11:17:50 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_directed_isa
+# Loading work.soc_top
+# Loading work.riscv_core_native
+# Loading work.riscv_core
+# Loading work.controller
+# Loading work.maindec
+# Loading work.aludec
+# Loading work.datapath
+# Loading work.extend
+# Loading work.regfile
+# Loading work.alu
+# Loading work.branch
+# Loading work.hazard_unit
+# Loading work.icache
+# Loading work.soc_address_decoder
+# Loading work.dcache
+# Loading work.cache_axi_master
+# Loading work.axi_ram_32
+# Loading work.native_axi_lite_master
+# Loading work.axi_lite_to_apb
+# Loading work.uart_apb
+# Loading work.uart_core
+# Loading work.baudrate_gen_block
+# Loading work.fifo
+# Loading work.tx_block
+# Loading work.rx_block
+# Loading work.apb_display_regs
+# Loading work.apb_timer
+# Loading work.performance_observability
+# Loading work.perf_counters
+# Loading work.apb_performance_monitor
+# Loading work.hex7seg_decoder
+# Loading work.lcd_1602_hex
+# Loading work.core_assertions
+# Loading work.axi_assertions
+# Loading work.cache_assertions
+# Loading work.core_coverage
+# Loading work.bht_2bit
+# Loading work.icache_controller
+# Loading work.icache_tag_ram
+# Loading work.icache_data_ram
+# Loading work.dcache_controller
+# Loading work.dcache_tag_ram
+# Loading work.dcache_data_ram
+# [COVERAGE] Instruction bins R/I/L/S/B/JAL/JALR/LUI/AUIPC/MUL/CSR/FENCE = 111111111111
+# [COVERAGE] Hazard bins EX-a/EX-b/WB-a/WB-b/load-use = 11111
+# [COVERAGE] Branch taken types = 111111 not-taken types = 111111
+# [COVERAGE] Prediction NT/T/correct/miss = 1111
+# [COVERAGE] Cache I-H/I-M/DR-H/DR-M/DW-H/DW-M = 111111
+# [COVERAGE] Bus no-stall/AR-BP/R-gap/AW-first/W-first/AW+W/B-delay = 1100101
+# [COVERAGE] IRQ normal/branch/cache-wait/AXI-wait = 0000
+# [COVERAGE] UNCOVERED: the directed ISA program does not hit every interrupt timing context
+# [COVERAGE] UNCOVERED: specialized AXI ordering/backpressure bins are covered by the bus regression, not this program
+# [PASS] RV32I claimed-subset directed regression (217 retirements)
+# [PASS] Zmmul pipeline execution regression
+# [PASS] Architectural retirement order and payload assertions
+# [PASS] Wrong-path architectural suppression (register/RAM/MMIO)
+# [PASS] Counter and cache accounting invariants
+# [PASS] AXI protocol assertions (1742 sampled cycles)
+# ** Note: $finish    : tb/directed_isa_tb.sv(261)
+#    Time: 17467 ns  Iteration: 0  Instance: /tb_directed_isa
+# Break in Module tb_directed_isa at tb/directed_isa_tb.sv line 261
+# Stopped at tb/directed_isa_tb.sv line 261
+# End time: 11:17:50 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# foreach cfg {0 1 2} {
+#     vsim -onfinish stop -voptargs=+acc -gCACHE_CONFIG=$cfg work.tb_cache_configuration
+#     run -all
+#     quit -sim
+# }
+# vsim -onfinish stop -voptargs="+acc" work.tb_cache_configuration -gCACHE_CONFIG=0 
+# Start time: 11:17:50 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_cache_configuration
+# Loading work.icache
+# Loading work.cache_backend_model
+# Loading work.soc_address_decoder
+# Loading work.icache_controller
+# Loading work.icache_tag_ram
+# Loading work.icache_data_ram
+# [PASS] CACHE_CONFIG=0 request-cycle main-cache hit
+# [PASS] CACHE_CONFIG=0 conflict behavior, architecture, accounting, MMIO bypass
+# ** Note: $finish    : tb/cache_configuration_tb.sv(78)
+#    Time: 465 ns  Iteration: 1  Instance: /tb_cache_configuration
+# Break in Module tb_cache_configuration at tb/cache_configuration_tb.sv line 78
+# Stopped at tb/cache_configuration_tb.sv line 78
+# End time: 11:17:51 on Sep 15,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# vsim -onfinish stop -voptargs="+acc" work.tb_cache_configuration -gCACHE_CONFIG=1 
+# Start time: 11:17:51 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_cache_configuration
+# Loading work.icache
+# Loading work.cache_backend_model
+# Loading work.soc_address_decoder
+# Loading work.icache_dse_core
+# Loading work.cache_dse_data_bank
+# [PASS] CACHE_CONFIG=1 request-cycle main-cache hit
+# [PASS] CACHE_CONFIG=1 conflict behavior, architecture, accounting, MMIO bypass
+# ** Note: $finish    : tb/cache_configuration_tb.sv(78)
+#    Time: 365 ns  Iteration: 1  Instance: /tb_cache_configuration
+# Break in Module tb_cache_configuration at tb/cache_configuration_tb.sv line 78
+# Stopped at tb/cache_configuration_tb.sv line 78
+# End time: 11:17:51 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vsim -onfinish stop -voptargs="+acc" work.tb_cache_configuration -gCACHE_CONFIG=2 
+# Start time: 11:17:51 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_cache_configuration
+# Loading work.icache
+# Loading work.cache_backend_model
+# Loading work.soc_address_decoder
+# Loading work.icache_dse_core
+# Loading work.cache_dse_data_bank
+# [PASS] CACHE_CONFIG=2 request-cycle main-cache hit
+# [PASS] CACHE_CONFIG=2 conflict behavior, architecture, accounting, MMIO bypass
+# ** Note: $finish    : tb/cache_configuration_tb.sv(78)
+#    Time: 605 ns  Iteration: 1  Instance: /tb_cache_configuration
+# Break in Module tb_cache_configuration at tb/cache_configuration_tb.sv line 78
+# Stopped at tb/cache_configuration_tb.sv line 78
+# End time: 11:17:51 on Sep 15,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# vsim -onfinish stop -voptargs=+acc work.tb_cache_architecture_equivalence
+# vsim -onfinish stop -voptargs="+acc" work.tb_cache_architecture_equivalence 
+# Start time: 11:17:51 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_cache_architecture_equivalence
+# Loading work.soc_top
+# Loading work.riscv_core_native
+# Loading work.riscv_core
+# Loading work.controller
+# Loading work.maindec
+# Loading work.aludec
+# Loading work.datapath
+# Loading work.extend
+# Loading work.regfile
+# Loading work.alu
+# Loading work.branch
+# Loading work.hazard_unit
+# Loading work.icache
+# Loading work.soc_address_decoder
+# Loading work.dcache
+# Loading work.cache_axi_master
+# Loading work.axi_ram_32
+# Loading work.native_axi_lite_master
+# Loading work.axi_lite_to_apb
+# Loading work.uart_apb
+# Loading work.uart_core
+# Loading work.baudrate_gen_block
+# Loading work.fifo
+# Loading work.tx_block
+# Loading work.rx_block
+# Loading work.apb_display_regs
+# Loading work.apb_timer
+# Loading work.performance_observability
+# Loading work.perf_counters
+# Loading work.apb_performance_monitor
+# Loading work.hex7seg_decoder
+# Loading work.lcd_1602_hex
+# Loading work.bht_2bit
+# Loading work.icache_controller
+# Loading work.icache_tag_ram
+# Loading work.icache_data_ram
+# Loading work.dcache_controller
+# Loading work.dcache_tag_ram
+# Loading work.dcache_data_ram
+# Loading work.icache_dse_core
+# Loading work.cache_dse_data_bank
+# Loading work.dcache_dse_core
+# run -all
+# [PASS] DM/SA2/DM_VC4 retirement traces identical (217 instructions)
+# [PASS] DM/SA2/DM_VC4 GPR and architectural memory identical
+# ** Note: $finish    : tb/cache_architecture_equivalence_tb.sv(94)
+#    Time: 19817 ns  Iteration: 0  Instance: /tb_cache_architecture_equivalence
+# Break in Module tb_cache_architecture_equivalence at tb/cache_architecture_equivalence_tb.sv line 94
+# Stopped at tb/cache_architecture_equivalence_tb.sv line 94
+# quit -sim
+# End time: 11:17:52 on Sep 15,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# 
+# echo {[PASS] Complete active RTL regression}
+# [PASS] Complete active RTL regression
+#  quit -f

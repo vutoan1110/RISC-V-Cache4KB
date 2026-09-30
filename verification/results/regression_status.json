@@ -1,0 +1,35 @@
+{
+  "date": "2026-08-20",
+  "simulator": "Questa/Intel FPGA ModelSim 2020.1",
+  "step1": "PASS",
+  "step2": "PASS",
+  "step3": "PASS",
+  "step4": "PASS",
+  "step5": "PASS",
+  "step6": "PASS",
+  "step7": "PASS",
+  "step8": "PASS",
+  "step9_directed": "PASS",
+  "step9_assertion_violations": 0,
+  "step9_directed_retirements": 217,
+  "step9_axi_sampled_cycles": 2002,
+  "step9_random": {
+    "seeds": 50,
+    "start_seed": 1,
+    "program_words_before_halt": 160,
+    "reference_retirements": 7105,
+    "passed": 50,
+    "failed": 0
+  },
+  "signature_harness_smoke": "PASS",
+  "quartus": {
+    "version": "20.1.1 Build 720",
+    "device": "EP4CE115F29C7",
+    "bp_off": {"compile": "PASS", "logic_elements": 10783, "registers": 5745, "m9k": 11, "fmax_slow_85c_mhz": 52.93, "setup_slack_50mhz_ns": 1.106},
+    "bp_on": {"compile": "PASS", "logic_elements": 12145, "registers": 6515, "m9k": 11, "fmax_slow_85c_mhz": 49.39, "setup_slack_50mhz_ns": -0.247},
+    "caveat": "not fully constrained; incomplete pin assignments; BP_ON misses 50 MHz at slow 85C"
+  },
+  "act4": "NOT RUN",
+  "riscof": "NOT RUN",
+  "spike": "NOT RUN"
+}

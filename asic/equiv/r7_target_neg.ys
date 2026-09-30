@@ -1,0 +1,5 @@
+read_verilog asic/equiv/r7_target_neg.v
+proc; opt_clean
+miter -equiv -flatten -make_assert r7_old r7_new miter
+hierarchy -top miter
+sat -verify -prove-asserts -set-init-zero -show-inputs miter

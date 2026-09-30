@@ -1,0 +1,9 @@
+# FLOW_JOURNAL Incident 89: N1 = OpenLane's own synthesis state just before `abc -fast` (replayed
+# byte-exactly, synth_replay/), SRAM macros cut like the other sides, flops reduced to $_DFF_P_.
+read_ilang n1_cut.il
+hierarchy -top soc_asic_top
+async2sync
+dffunmap
+opt_clean
+select -assert-none t:$_DFF_PN0_ t:$_DFF_PN1_ t:$_DFFE_* t:$_SDFF* t:$_DFFSR* t:$_DLATCH* t:$dff t:$adff
+write_ilang n1_flat.il

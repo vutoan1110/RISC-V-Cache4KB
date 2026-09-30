@@ -1,0 +1,19 @@
+{
+ "timing__setup__ws": -20.162087681198116,
+ "timing__hold__ws": -1.4355352868300124,
+ "timing__setup__tns": -32031.345650517993,
+ "timing__hold__tns": -59.006667888652174,
+ "clock__skew__worst_setup": -4.127633462966678,
+ "clock__skew__worst_hold": -1.730274861252649,
+ "design__instance__area": 3944670,
+ "power__total": 0.1736537218093872,
+ "design__instance__count": 185356,
+ "timing__setup__ws__corner:nom_tt_025C_1v80": -1.0051693095711554,
+ "timing__hold__ws__corner:nom_tt_025C_1v80": -0.8737877335673387,
+ "route__antenna_violation__count": 429,
+ "antenna__violating__pins": 615,
+ "antenna_diodes_count": 3673,
+ "klayout__drc_error__count": 0,
+ "route__drc_errors": 0,
+ "design__xor_difference__count": 0
+}

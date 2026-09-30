@@ -1,0 +1,4 @@
+config,benchmark,mcycle,minstret,I_access,I_main_hit,I_victim_hit,I_true_miss,D_access,D_main_hit,D_victim_hit,D_true_miss,I_wait_cycles,D_wait_cycles,branch_count,mispredict_count
+DM,cache_conflict_ab,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,0,NOT_RUN,NOT_RUN,NOT_RUN,0,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN
+SA2,cache_conflict_ab,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,0,NOT_RUN,NOT_RUN,NOT_RUN,0,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN
+DM_VC4,cache_conflict_ab,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN

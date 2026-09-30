@@ -1,0 +1,13 @@
+# FLOW_JOURNAL Incident 86, SEC gate: the FINAL netlist of final_B
+# (runs/final_B/54-openroad-fillinsertion/soc_asic_top.nl.v) read exactly as EQY's gate side
+# (sky130 formal cell models, flatten, hide non-RTL names), then the EQY [script] tail up to
+# memory_map. Async resets are kept as $adff here; the miter maps them.
+script gate_front_end_F3B.ys
+hierarchy -top soc_asic_top
+proc
+prep -top soc_asic_top -flatten
+memory -nomap
+memory_map
+opt_clean
+check -assert -initdrv
+write_ilang gate_pre_F3B.il

@@ -1,0 +1,53 @@
+Reading pref.tcl
+
+# 2020.1
+
+# do tb/run_random_trace.do
+# onerror {quit -code 1 -f}
+# 
+# foreach required {VERIFY_HEX VERIFY_TRACE_OFF VERIFY_TRACE_ON VERIFY_SEED} {
+#     if {![info exists ::env($required)]} {
+#         echo "[FAIL] missing required environment variable $required"
+#         quit -code 1 -f
+#     }
+# }
+# 
+# set sim_args [list -onfinish stop -voptargs=+acc work.tb_random_trace]
+# -onfinish stop -voptargs=+acc work.tb_random_trace
+# lappend sim_args "+HEX=$::env(VERIFY_HEX)"
+# -onfinish stop -voptargs=+acc work.tb_random_trace +HEX=verification/results/random/seed_2.hex
+# lappend sim_args "+TRACE_OFF=$::env(VERIFY_TRACE_OFF)"
+# -onfinish stop -voptargs=+acc work.tb_random_trace +HEX=verification/results/random/seed_2.hex +TRACE_OFF=verification/results/random/seed_2.off.csv
+# lappend sim_args "+TRACE_ON=$::env(VERIFY_TRACE_ON)"
+# -onfinish stop -voptargs=+acc work.tb_random_trace +HEX=verification/results/random/seed_2.hex +TRACE_OFF=verification/results/random/seed_2.off.csv +TRACE_ON=verification/results/random/seed_2.on.csv
+# lappend sim_args "+SEED=$::env(VERIFY_SEED)"
+# -onfinish stop -voptargs=+acc work.tb_random_trace +HEX=verification/results/random/seed_2.hex +TRACE_OFF=verification/results/random/seed_2.off.csv +TRACE_ON=verification/results/random/seed_2.on.csv +SEED=2
+# lappend sim_args "+MAX_CYCLES=50000"
+# -onfinish stop -voptargs=+acc work.tb_random_trace +HEX=verification/results/random/seed_2.hex +TRACE_OFF=verification/results/random/seed_2.off.csv +TRACE_ON=verification/results/random/seed_2.on.csv +SEED=2 +MAX_CYCLES=50000
+# eval vsim $sim_args
+# vsim -onfinish stop -voptargs="+acc" work.tb_random_trace "+HEX=verification/results/random/seed_2.hex" "+TRACE_OFF=verification/results/random/seed_2.off.csv" "+TRACE_ON=verification/results/random/seed_2.on.csv" "+SEED=2" "+MAX_CYCLES=50000" 
+# Start time: 11:17:55 on Sep 15,2026
+# Loading sv_std.std
+# Loading work.tb_random_trace
+# Loading work.riscv_core
+# Loading work.controller
+# Loading work.maindec
+# Loading work.aludec
+# Loading work.datapath
+# Loading work.extend
+# Loading work.regfile
+# Loading work.alu
+# Loading work.branch
+# Loading work.hazard_unit
+# Loading work.bht_2bit
+# run -all
+# [PASS] Random retirement traces generated seed=2 OFF=138 ON=138
+# [PASS] BP OFF/ON architectural state equivalent seed=2
+# ** Note: $finish    : tb/random_trace_tb.sv(257)
+#    Time: 1727 ns  Iteration: 0  Instance: /tb_random_trace
+# Break in Module tb_random_trace at tb/random_trace_tb.sv line 257
+# Stopped at tb/random_trace_tb.sv line 257
+# quit -sim
+# End time: 11:17:56 on Sep 15,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+#  quit -f

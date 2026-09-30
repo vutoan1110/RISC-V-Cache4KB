@@ -1,0 +1,8 @@
+# Incident 86: flip-flop output names on each side (register correspondence check)
+read_ilang gold_fsm.il
+select -write gold_ff_named.txt t:$*dff* t:$ff %u %co:+[Q] w:* %i
+select -write gold_ff_all.txt t:$*dff* t:$ff %u
+design -reset
+read_ilang ../../eqy_standalone/fh2/gate.il
+select -write gate_ff_named.txt t:$*dff* t:$ff %u %co:+[Q] w:* %i
+select -write gate_ff_all.txt t:$*dff* t:$ff %u

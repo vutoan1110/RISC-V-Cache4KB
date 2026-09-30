@@ -1,0 +1,8 @@
+name: rv32i-zmmul
+compiler_exe: $HOME/tools/riscv-gcc16/bin/riscv64-unknown-elf-gcc
+objdump_exe: $HOME/tools/riscv-gcc16/bin/riscv64-unknown-elf-objdump
+ref_model_exe: spike_reference
+udb_config: rv32i_zmmul.yaml
+linker_script: link.ld
+dut_include_dir: .
+include_priv_tests: false

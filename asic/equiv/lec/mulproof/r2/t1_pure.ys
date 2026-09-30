@@ -1,0 +1,14 @@
+# FLOW_JOURNAL Incident 89: the multiplier of the t1 snapshot (after the techmap iteration in which maccmap ran, same
+# process state as the real synthesis), finished with a fresh techmap; in its design context (light extraction).
+# Flops and SRAM macros are removed (the multiplier cone is combinational from the operand nets and the
+# extraction stops there); the operand and product nets are exposed for mulsub.py extract.
+read_ilang ../../synth_replay_t1b/t1_iter1.il
+hierarchy -top soc_asic_top
+delete t:$*dff* t:$ff t:$_DFF* t:$_SDFF* t:$_ALDFF* t:$_DLATCH* t:sky130_sram_*
+expose w:u_soc.u_core.u_pipeline.datapath.alu.mul_a w:u_soc.u_core.u_pipeline.datapath.alu.mul_b w:u_soc.u_core.u_pipeline.datapath.alu.product
+setundef -undriven -zero
+techmap
+opt_clean
+aigmap
+opt_clean
+write_aiger -symbols t1_ctx.aig

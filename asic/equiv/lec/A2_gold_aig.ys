@@ -1,0 +1,13 @@
+# FLOW_JOURNAL Incident 89: step A gold with the SAME local $mul rewrite synthesis applied (wreduce + alumacc, proved by mulproof/ &acec)
+read_ilang A_gold.il
+hierarchy -top soc_asic_top
+setundef -undriven -zero
+wreduce t:$mul
+alumacc t:$mul
+opt_clean
+techmap
+opt_clean
+aigmap
+opt_clean
+check -assert
+write_aiger -symbols A2_gold.aig

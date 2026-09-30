@@ -1,0 +1,9 @@
+source quartus/soc_core_common.qsf
+set_global_assignment -name TOP_LEVEL_ENTITY soc_top
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY results/quartus/experiments/output_files_cache_sa2
+set_parameter -name CACHE_CONFIG 1
+set_parameter -name VICTIM_ENTRIES 4
+set_parameter -name ICACHE_LINE_COUNT 64
+set_parameter -name DCACHE_LINE_COUNT 64
+set_parameter -name BRANCH_PREDICT_ENABLE 1
+set_parameter -name BHT_ENTRIES 256

@@ -1,0 +1,17 @@
+# FLOW_JOURNAL Incident 89 negative control for prove_cells.ys: gold fa64 vs techmap of a broken fa64 - must FAIL
+design -reset
+read_rtlil cells.il
+hierarchy -top fa64
+rename fa64 gold_fa64
+design -stash g
+read_rtlil cells_neg.il
+hierarchy -top fa64
+techmap
+opt_clean
+rename fa64 gate_fa64
+design -stash t
+design -copy-from g -as gold_fa64 gold_fa64
+design -copy-from t -as gate_fa64 gate_fa64
+miter -equiv -flatten -make_assert gold_fa64 gate_fa64 miter_fa64
+hierarchy -top miter_fa64
+sat -verify -prove-asserts miter_fa64

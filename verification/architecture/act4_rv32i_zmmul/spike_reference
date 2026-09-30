@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Spike reserves 0x0000-0x0fff for its debug module and 0x1000-0x1fff for
+# its boot ROM. The DUT harness uses both pages as a NOP reset trampoline.
+exec $HOME/tools/riscv/bin/spike -m0x2000:0x80000 "$@"
