@@ -4852,3 +4852,19 @@
 - START `r14_E12` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-30T03:01:24+00:00
 
 - START `r14_E13` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/30-openroad-stamidpnr/state_out.json --from OpenROAD.RepairDesignPostGPL --to OpenROAD.STAPostPNR` at 2026-09-30T03:31:23+00:00
+- DONE `r14_E12` rc=0 last=`final` final/ present
+
+- START `r14_E14` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_E10/06-openroad-stamidpnr-1/state_out.json --from OpenROAD.ResizerTimingPostCTS --to OpenROAD.STAPostPNR` at 2026-09-30T05:35:49+00:00
+
+- START `r14_E15` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/22-odb-addroutingobstructions/state_out.json --from OpenROAD.GlobalPlacementSkipIO --to OpenROAD.STAPostPNR` at 2026-09-30T05:38:50+00:00
+- DONE `r14_E13` rc=0 last=`final` final/ present
+- DONE `r14_E14` rc=0 last=`final` final/ present
+
+- START `f3_H1` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/final3_A/35-openroad-stamidpnr-1/state_out.json --from OpenROAD.ResizerTimingPostCTS --to OpenROAD.STAPostPNR` at 2026-09-30T06:56:06+00:00
+- ODD `f3_H1` rc=1 last=`10-openroad-detailedrouting` empty error.log, suspect a native crash
+
+- START `f3_H1` (soc_dm_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.STAPostPNR` at 2026-09-30T07:53:34+00:00
+- DONE `f3_H1` rc=0 last=`final` final/ present
+- STOP `r14_E15` rc=2 last=`29-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/nix/store/alhgaybdgmv706469rp57ggcyg3750yk-openroad-python3-3.11.9-env/lib/openroad-python3`
+
+- START `r14_E15` (soc_dm_4kb) args: ` --from Odb.RemoveRoutingObstructions --to OpenROAD.STAPostPNR` at 2026-09-30T08:51:07+00:00

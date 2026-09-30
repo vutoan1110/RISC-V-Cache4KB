@@ -5,8 +5,9 @@
 # Run in WSL: bash scripts/build_fw_r14.sh
 set -euo pipefail
 cd "$(dirname "$0")/../sw"
-for k in crc32 depthconv edn fdct huffbench insertsort matmult md5sum mont64 sha256 tarfind wikisort wikisort_trace \
-         cachesweep ramsweep; do
+# The project's own Embench-style kernels were removed on 2026-09-30 (review item A6); the
+# benchmarks are the upstream Embench-IoT images built by scripts/build_upstream_fw.sh.
+for k in cachesweep ramsweep; do
     make clean >/dev/null 2>&1
     make BENCH="$k" > "/tmp/fw_build_$k.log" 2>&1 || { echo "[FAIL] $k (see /tmp/fw_build_$k.log)"; exit 1; }
     cp benchmark_rv32.hex "../fw/$k.hex"

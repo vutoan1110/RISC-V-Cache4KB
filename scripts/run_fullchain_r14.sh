@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# HISTORICAL (2026-09-30): this is the record of the R14 freeze verification (3ea52396). The project's own
+# Embench-style kernels it ran by default were removed afterwards (review item A6), so it is not meant to be
+# rerun as is; the next chain runs the standard (upstream Embench-IoT) kernels only.
 # R14 (RAM16K_CHANGES.md): full verification chain for the 16 KiB unified RAM, 4 KiB caches.
 # Same stages as run_fullchain_rtlfix.sh, every measurement twice (this machine corrupts data silently),
 # plus what R14 adds:

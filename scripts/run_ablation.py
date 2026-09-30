@@ -7,7 +7,7 @@ ten-state icache_dse_core.  CACHE_CONFIG 3 selects neither IS_SA2 nor IS_VC4,
 so the DSE core degenerates to a plain direct-mapped cache.  Comparing 0 with 3
 isolates controller cost; comparing 3 with 1 isolates associativity.
 
-    python scripts/run_ablation.py --configs 0,3 --kernels crc32
+    python scripts/run_ablation.py --configs 0,3 --kernels up_crc32
     python scripts/run_ablation.py --compile
 """
 from __future__ import annotations
@@ -23,8 +23,10 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-KERNELS = ("crc32", "depthconv", "edn", "fdct", "huffbench", "insertsort",
-           "matmult", "md5sum", "mont64", "sha256", "tarfind", "wikisort")
+# The standard benchmark suite: the upstream Embench-IoT kernels that fit the 16 KiB RAM (fw/up_*.hex).
+# The project's own Embench-style kernels were removed on 2026-09-30 (review item A6).
+KERNELS = ("up_aha-mont64", "up_crc32", "up_depthconv", "up_edn", "up_huffbench", "up_matmult-int",
+           "up_md5sum", "up_nettle-sha256", "up_slre", "up_statemate", "up_tarfind", "up_ud")
 CONFIGS = {0: "DM", 1: "SA2", 2: "DM_VC4", 3: "DM_DSE"}
 MAX_CYCLES = 5000000
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -85,6 +87,10 @@ def main() -> int:
     # R14 (RAM16K_CHANGES.md): images from another directory, e.g. the upstream Embench suite or a
     # scale-factor probe; the default keeps the frozen fw/ images.
     ap.add_argument("--fw-dir", default="fw")
+    # A8 (review): branch predictor off (BRANCH_PREDICT_ENABLE=0) at the same cache points.
+    ap.add_argument("--bp", type=int, default=1)
+    # Full-iteration upstream images (fw_board/) need more than the default cycle budget.
+    ap.add_argument("--max-cycles", type=int, default=MAX_CYCLES)
     args = ap.parse_args()
 
     configs = [int(c) for c in args.configs.split(",")]
@@ -111,13 +117,13 @@ def main() -> int:
                 continue
             log = log_dir / ("%s_%s.log" % (kern, name))
             do = ("vsim -onfinish stop -gCACHE_CONFIG=%d -gMEMFILE=%s "
-                  "-gICACHE_LINE_COUNT=%d -gDCACHE_LINE_COUNT=%d -gL0_ENTRIES=%d "
+                  "-gICACHE_LINE_COUNT=%d -gDCACHE_LINE_COUNT=%d -gL0_ENTRIES=%d -gBRANCH_PREDICT_ENABLE=%d "
                   "%s +benchmark=%s +max_cycles=%d; "
                   "run -all; quit -f"
-                  % (cfg, hexfile, args.lines, args.lines, args.l0,
+                  % (cfg, hexfile, args.lines, args.lines, args.l0, args.bp,
                      ("-gVERBOSE=0 %s.tb_benchmark_snapshot %s.asic_view_checker" % (args.asic_lib, args.asic_lib)
                       if args.asic_view else "work.tb_benchmark_snapshot"),
-                     kern, MAX_CYCLES))
+                     kern, args.max_cycles))
             t0 = time.time()
             rc = vsim(do, log)
             row, why = parse_snapshot(log) if rc == 0 else (None, "rc=%d" % rc)

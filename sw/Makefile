@@ -39,23 +39,13 @@ MODE  ?= embench
 # cachesweep is the default so that a bare `make install_hex` reproduces the
 #   MIFs that ship in hdl/. It is the synthetic conflict probe, not a
 #   workload: it measures cache geometry rather than performance.
-# crc32..wikisort_trace: nine project-original acceptance kernels + a wikisort
-#   trace variant (see docs/README.md and docs/guides/05 section 9). These
-#   implement standard published algorithms; they are NOT Embench-IoT source
-#   and their numbers are not an official Embench score.
-# md5sum (MIT), depthconv (Apache-2.0): real Embench-IoT ports, permissively
-#   licensed. Build+guard+ModelSim PASS on DM/SA2/DM_VC4 -- see
-#   docs/guides/05_EXTENDED_EMBENCH_BENCHMARKS.md.
-# insertsort: PROJECT-ORIGINAL store-bound kernel (textbook insertion sort,
-#   own harness, no third-party copyright). It is the permissively-licensed
-#   store-bound workload used as evidence for the posted-write buffer.
-#
-# The GPL-3.0 ports bubblesort (BEEBS) and slre (Embench) were REMOVED so the
-#   whole tree is permissively licensed (Apache-2.0). insertsort replaces
-#   bubblesort's store-bound role; to re-add either, re-port from upstream
-#   (github.com/mageec/beebs, github.com/embench/embench-iot).
+# The project's own Embench-style kernels (crc32, depthconv, edn, fdct, huffbench, insertsort, matmult,
+#   md5sum, mont64, sha256, tarfind, wikisort, wikisort_trace) were REMOVED on 2026-09-30: the review
+#   (danh_gia.txt, A6) asked for standard benchmarks only. The benchmark suite is the upstream
+#   Embench-IoT set in embench_upstream/ (MODE=upstream, below), every kernel of it that fits the RAM.
+#   Their history is in git and in the results/ CSVs written before that date.
 # ramsweep (R14, RAM16K_CHANGES.md): RAM test over every free word of the 16 KiB RAM, not a benchmark.
-BENCHES = crc32 edn fdct huffbench matmult mont64 sha256 tarfind wikisort wikisort_trace md5sum depthconv insertsort cachesweep ramsweep
+BENCHES = cachesweep ramsweep
 # R14 upstream Embench-IoT kernels that fit the 16 KiB RAM (MODE=upstream; GPL-3.0 except md5sum,
 #   tarfind (MIT) and depthconv (Apache-2.0): research tree only, see embench_upstream/README.md).
 #   nettle-aes and sglib-combined do not fit and are not ported.

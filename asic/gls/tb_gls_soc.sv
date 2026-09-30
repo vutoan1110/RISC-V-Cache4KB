@@ -12,9 +12,9 @@
 // same SRAM models, same RTL): a gate netlist that differs from the RTL in
 // any way that matters would change the cycle count or fail the self-check.
 //
-//   vsim -gMEMFILE=fw/crc32.hex work_gls.tb_gls_soc
+//   vsim -gMEMFILE=fw/up_crc32.hex work_gls.tb_gls_soc
 module tb_gls_soc;
-    parameter string  MEMFILE    = "fw/crc32.hex";
+    parameter string  MEMFILE    = "fw/up_crc32.hex";
     parameter integer MAX_CYCLES = 3000000;
     parameter string  VCD_FILE   = "";        // non-empty: dump switching activity
 

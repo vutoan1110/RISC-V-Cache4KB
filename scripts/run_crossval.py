@@ -5,7 +5,7 @@ For each kernel and configuration this runs the harness with +trace_cache,
 replays the resulting access trace through scripts/cache_model.py, and requires
 every counter to agree exactly. A single mismatched event fails the run.
 
-    python scripts/run_crossval.py --kernels crc32,matmult,sha256
+    python scripts/run_crossval.py --kernels up_crc32,up_matmult-int,up_nettle-sha256
 """
 from __future__ import annotations
 
@@ -57,7 +57,7 @@ def model_counts(trace: Path, cfg: int) -> dict | None:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--kernels", default="crc32,matmult,sha256,md5sum,edn")
+    ap.add_argument("--kernels", default="up_crc32,up_matmult-int,up_nettle-sha256,up_md5sum,up_edn")
     ap.add_argument("--configs", default="0,1,2")
     ap.add_argument("--out", default="results/crossval.csv")
     args = ap.parse_args()

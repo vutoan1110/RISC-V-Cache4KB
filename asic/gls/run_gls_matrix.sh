@@ -13,7 +13,7 @@ set -uo pipefail
 # RTL csv the mcycle is compared with (default: the 8 KiB design's results/asic_view_4kb_p1.csv).
 cd "$(dirname "$0")/../.."
 NET=$1; TAG=$2; shift 2
-KERNELS=${*:-"crc32 depthconv edn fdct huffbench insertsort matmult md5sum mont64 sha256 tarfind wikisort"}
+KERNELS=${*:-"up_aha-mont64 up_crc32 up_depthconv up_edn up_huffbench up_matmult-int up_md5sum up_nettle-sha256 up_slre up_statemate up_tarfind up_ud"}
 V=C:/questasim64_2024.1/win64/vsim.exe
 OUT=results/gls_$TAG; mkdir -p "$OUT"
 CSV=results/gls_$TAG.csv
