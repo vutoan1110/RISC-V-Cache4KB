@@ -141,6 +141,23 @@ if(CACHE_CONFIG == 0) begin : g_dm_baseline
     assign main_hit_event=hit_event;
     assign victim_hit_event=1'b0;
     assign true_miss_event=miss_event;
+end else if(CACHE_CONFIG >= 4) begin : g_nway
+    // 4 = SA4 (four ways, tree pseudo-LRU). 5 = the same core at two ways, only to check it against SA2.
+    wire [3:0] hit_way_vec_unused; wire [1:0] replacement_way_unused;
+    icache_nway_core #(.LINE_COUNT(LINE_COUNT),.WAYS((CACHE_CONFIG==5)?2:4),
+                       .LINE_WORDS(LINE_WORDS),.L0_ENTRIES(L0_ENTRIES)) u_core(
+        .clk(clk),.reset_n(reset_n),.req_valid(req_valid),.req_addr(req_addr),
+        .req_ready(req_ready),.rsp_valid(rsp_valid),.rsp_data(rsp_data),.rsp_error(rsp_error),
+        .refill_req_valid(refill_req_valid),.refill_req_addr(refill_req_addr),
+        .refill_req_ready(refill_req_ready),.refill_rsp_valid(refill_rsp_valid),
+        .refill_rsp_data(refill_rsp_data),.refill_rsp_last(refill_rsp_last),
+        .refill_rsp_error(refill_rsp_error),.access_count(access_count),.hit_count(hit_count),
+        .miss_count(miss_count),.main_hit_count(main_hit_count),
+        .victim_hit_count(victim_hit_count),.true_miss_count(true_miss_count),
+        .access_event(access_event),.hit_event(hit_event),.miss_event(miss_event),
+        .main_hit_event(main_hit_event),.victim_hit_event(victim_hit_event),
+        .true_miss_event(true_miss_event),.hit_way_vec_dbg(hit_way_vec_unused),
+        .replacement_way_dbg(replacement_way_unused));
 end else begin : g_dse
     wire hit_way0_unused,hit_way1_unused,replacement_way_unused;
     wire [VICTIM_ENTRIES-1:0] victim_hit_vec_unused;

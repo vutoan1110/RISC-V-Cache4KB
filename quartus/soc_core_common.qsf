@@ -53,11 +53,13 @@ set_global_assignment -name VERILOG_FILE hdl/cache/icache_data_ram.v
 set_global_assignment -name VERILOG_FILE hdl/cache/icache_controller.v
 set_global_assignment -name VERILOG_FILE hdl/cache/cache_dse_data_bank.v
 set_global_assignment -name VERILOG_FILE hdl/cache/icache_dse_core.v
+set_global_assignment -name VERILOG_FILE hdl/cache/icache_nway_core.v
 set_global_assignment -name VERILOG_FILE hdl/cache/icache.v
 set_global_assignment -name VERILOG_FILE hdl/cache/dcache_tag_ram.v
 set_global_assignment -name VERILOG_FILE hdl/cache/dcache_data_ram.v
 set_global_assignment -name VERILOG_FILE hdl/cache/dcache_controller.v
 set_global_assignment -name VERILOG_FILE hdl/cache/dcache_dse_core.v
+set_global_assignment -name VERILOG_FILE hdl/cache/dcache_nway_core.v
 set_global_assignment -name VERILOG_FILE hdl/cache/dcache.v
 
 # AXI4 Full memory and AXI4-Lite/APB bus layers.

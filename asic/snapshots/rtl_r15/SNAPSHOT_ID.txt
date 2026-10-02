@@ -1,0 +1,2 @@
+R15 (2026-09-30): rtl_r14 file set from the working tree + hdl/cache/{d,i}cache_nway_core.v (SA4). Only dcache.v and icache.v differ from rtl_r14 among the shared files.
+2026-10-02: hdl/cache/{d,i}cache_nway_core.v refreshed to the lint-fixed version (2026-09-30 20:49: valid_v indexed by {way,set} concatenation, WAY_ID_32; Verilator WIDTHEXPAND). Same bits: SET_COUNT is a power of two. Not elaborated for CACHE_CONFIG 0-3.

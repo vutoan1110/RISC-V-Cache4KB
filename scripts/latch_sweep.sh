@@ -17,8 +17,8 @@ FILES=$(ls hdl/*.v hdl/cache/*.v hdl/axi/*.v hdl/bus/*.v hdl/predictor/*.v hdl/b
 SVFILES=$(ls hdl/*.sv 2>/dev/null | tr '\n' ' ')
 : > "$OUT"
 total=0
-for LC in ${LINES:-64 256}; do
-for CFG in 0 1 2 3; do
+for LC in ${LINES:-64 256 512}; do
+for CFG in ${CONFIGS:-0 1 2 3 4 5}; do   # 4 = SA4, 5 = the N-way core at two ways (R15)
   log=$(mktemp)
   "$YOSYS" -q -l "$log" -p "
     read_verilog -DSYNTHESIS $FILES

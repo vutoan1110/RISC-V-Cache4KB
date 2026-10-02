@@ -47,6 +47,13 @@ POINTS = {
     "sa2_4kb":   (1, 4, 256, 4, 1, "SA2 at 4 KiB"),
     "vc4_4kb":   (2, 4, 256, 4, 1, "DM+VC4 at 4 KiB"),
     "dse_4kb":   (3, 4, 256, 4, 1, "DM-DSE at 4 KiB"),
+    # R15 / review item M2: four-way set associativity (dcache/icache_nway_core) and the 8 KiB capacity.
+    "sa4_4kb":   (4, 4, 256, 4, 1, "SA4 at 4 KiB"),
+    "dm_8kb":    (0, 4, 512, 4, 1, "DM at 8 KiB"),
+    "sa2_8kb":   (1, 4, 512, 4, 1, "SA2 at 8 KiB"),
+    "vc4_8kb":   (2, 4, 512, 4, 1, "DM+VC4 at 8 KiB"),
+    "dse_8kb":   (3, 4, 512, 4, 1, "DM-DSE at 8 KiB"),
+    "sa4_8kb":   (4, 4, 512, 4, 1, "SA4 at 8 KiB"),
 }
 
 QSF = """set_global_assignment -name TOP_LEVEL_ENTITY de2_115_top

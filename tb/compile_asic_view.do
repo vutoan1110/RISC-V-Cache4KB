@@ -41,10 +41,12 @@ vlog -work work_asic -sv +define+ASIC_VIEW_SIM \
     hdl/cache/icache_controller.v \
     hdl/cache/cache_dse_data_bank.v \
     hdl/cache/icache_dse_core.v \
+    hdl/cache/icache_nway_core.v \
     hdl/cache/icache.v \
     hdl/cache/dcache_tag_ram.v \
     hdl/cache/dcache_controller.v \
     hdl/cache/dcache_dse_core.v \
+    hdl/cache/dcache_nway_core.v \
     hdl/cache/dcache.v
 
 # AXI, APB, performance monitoring, peripherals, and active SoC.

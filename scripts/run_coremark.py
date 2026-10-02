@@ -33,7 +33,8 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CONFIGS = {0: "DM", 1: "SA2", 2: "DM_VC4", 3: "DM_DSE"}
+# 4 = SA4, 5 = the N-way core at two ways (must reproduce SA2); see run_ablation.py (R15).
+CONFIGS = {0: "DM", 1: "SA2", 2: "DM_VC4", 3: "DM_DSE", 4: "SA4", 5: "SA2N"}
 VSIM = "C:/questasim64_2024.1/win64/vsim.exe"
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 # Every field the harness prints, parsed as key=value pairs (zipping raw
@@ -49,6 +50,9 @@ ap.add_argument("--imem", type=int, default=4096)
 ap.add_argument("--dmem", type=int, default=4096)
 ap.add_argument("--max-cycles", type=int, default=200000000)
 ap.add_argument("--out", required=True)
+# The default keeps the four configurations every earlier run used.
+ap.add_argument("--configs", default="0,1,2,3")
+ap.add_argument("--lib", default="work")
 args = ap.parse_args()
 
 # One log directory per output file, so pass 2 keeps pass 1's logs.
@@ -56,15 +60,16 @@ log_dir = ROOT / "results" / "coremark_logs" / Path(args.out).stem
 log_dir.mkdir(parents=True, exist_ok=True)
 rows, failures = [], []
 
-for cfg, name in CONFIGS.items():
+for cfg in [int(c) for c in args.configs.split(",")]:
+    name = CONFIGS[cfg]
     log = log_dir / ("coremark_%s_lc%d.log" % (name, args.lines))
     do = ("vsim -onfinish stop -gCACHE_CONFIG=%d -gMEMFILE=fw/coremark.hex "
           "-gICACHE_LINE_COUNT=%d -gDCACHE_LINE_COUNT=%d -gL0_ENTRIES=%d "
           "-gIMEM_DEPTH=%d -gDMEM_DEPTH=%d "
-          "work.tb_benchmark_snapshot +benchmark=coremark +max_cycles=%d; "
+          "%s.tb_benchmark_snapshot +benchmark=coremark +max_cycles=%d; "
           "run -all; quit -f"
           % (cfg, args.lines, args.lines, args.l0, args.imem, args.dmem,
-             args.max_cycles))
+             args.lib, args.max_cycles))
     t0 = time.time()
     rc = subprocess.call([VSIM, "-c", "-do", do], cwd=str(ROOT),
                          stdout=open(log, "w"), stderr=subprocess.STDOUT)

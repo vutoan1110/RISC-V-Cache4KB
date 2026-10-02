@@ -24,11 +24,49 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
+class DmL0:
+    """The direct-mapped D-cache's two-entry L0 (dcache_controller.v); see the note in Cache."""
+
+    def __init__(self) -> None:
+        self.valid = [False, False]
+        self.block = [None, None]
+        self.replace = 0          # 0: allocate into entry 0 next, 1: entry 1
+
+    def find(self, block):
+        for e in (0, 1):
+            if self.valid[e] and self.block[e] == block:
+                return e
+        return None
+
+    def touch(self, e: int) -> None:
+        self.replace = 1 if e == 0 else 0
+
+    def allocate(self, block) -> None:
+        if not self.valid[0]:
+            e = 0
+        elif not self.valid[1]:
+            e = 1
+        else:
+            e = self.replace
+        self.valid[e], self.block[e] = True, block
+        self.touch(e)
+
+    def invalidate(self, block) -> None:
+        for e in (0, 1):
+            if self.valid[e] and self.block[e] == block:
+                self.valid[e] = False
+
+
 class Cache:
-    """One cache: direct-mapped, two-way, or direct-mapped plus victim."""
+    """One cache: direct-mapped, two-way, four-way, or direct-mapped plus victim.
+
+    Four ways (SA4, R15) follow the stated policy: fill the first invalid way, else the tree pseudo-LRU
+    victim; every hit and fill points each node on the way's path away from it. Bit 0 of the tree picks
+    the pair (0: ways 0/1), bit 1 the way within 0/1 (0: way 0), bit 2 the way within 2/3 (0: way 2).
+    """
 
     def __init__(self, lines: int, line_bytes: int, ways: int,
-                 victim_entries: int, write_allocate: bool):
+                 victim_entries: int, write_allocate: bool, dm_l0: bool = False):
         self.line_bytes = line_bytes
         self.ways = ways
         self.sets = lines // ways
@@ -37,9 +75,12 @@ class Cache:
         self.write_allocate = write_allocate
         self.tag = [[None] * self.sets for _ in range(ways)]
         self.replace = [0] * self.sets            # which way to evict next
+        self.plru = [0] * self.sets               # four ways: the three tree bits
         self.vc_entries = victim_entries
         self.vc = []                              # list of block addresses
         self.vc_ptr = 0
+        # The DM D-cache's L0 is NOT a subset of the main array (see DmL0): it is modelled for config 0 only.
+        self.l0 = DmL0() if dm_l0 else None
         self.reset_counts()
 
     def reset_counts(self) -> None:
@@ -60,11 +101,17 @@ class Cache:
                 self.reads += 1
         block, index, tag = self._split(addr)
 
+        if self.l0 is not None:
+            self._access_dm_l0(block, index, tag, is_write, counted)
+            return
+
         for w in range(self.ways):
             if self.tag[w][index] == tag:
                 if counted:
                     self.main_hit += 1
-                if self.ways > 1:
+                if self.ways == 4:
+                    self._touch(index, w)
+                elif self.ways > 1:
                     self.replace[index] = 1 - w
                 return
 
@@ -87,7 +134,11 @@ class Cache:
         if is_write and not self.write_allocate:
             return                                 # no-write-allocate: no fill
 
-        way = 0 if self.ways == 1 else self.replace[index]
+        if self.ways == 4:
+            invalid = [w for w in range(4) if self.tag[w][index] is None]
+            way = invalid[0] if invalid else self._victim(index)
+        else:
+            way = 0 if self.ways == 1 else self.replace[index]
         old = self.tag[way][index]
         if self.vc_entries and old is not None:
             old_block = (old << self.index_bits) | index
@@ -97,8 +148,56 @@ class Cache:
                 self.vc[self.vc_ptr] = old_block
                 self.vc_ptr = (self.vc_ptr + 1) % self.vc_entries
         self.tag[way][index] = tag
-        if self.ways > 1:
+        if self.ways == 4:
+            self._touch(index, way)
+        elif self.ways > 1:
             self.replace[index] = 1 - way
+
+    def _access_dm_l0(self, block, index, tag, is_write, counted) -> None:
+        if not is_write:
+            e = self.l0.find(block)
+            if e is not None:                      # fast path: an L0 hit, main array untouched
+                if counted:
+                    self.main_hit += 1
+                self.l0.touch(e)
+                return
+            if self.tag[0][index] == tag:
+                if counted:
+                    self.main_hit += 1
+            else:
+                if counted:
+                    self.true_miss += 1
+                self.tag[0][index] = tag           # refill in place
+            self.l0.allocate(block)                # hit or refill, the line goes to L0
+            return
+        if self.tag[0][index] == tag:              # store hit: write-through, then the L0 copy
+            if counted:
+                self.main_hit += 1
+            e = self.l0.find(block)
+            if e is not None:
+                self.l0.touch(e)
+            else:
+                self.l0.allocate(block)
+        else:                                      # store miss: no allocate, drop any L0 copy
+            if counted:
+                self.true_miss += 1
+            self.l0.invalidate(block)
+
+    def _touch(self, index: int, w: int) -> None:
+        b = self.plru[index]
+        if w < 2:
+            b |= 1                                    # victim now in the other pair
+            b = (b & ~2) | ((1 if w == 0 else 0) << 1)
+        else:
+            b &= ~1
+            b = (b & ~4) | ((1 if w == 2 else 0) << 2)
+        self.plru[index] = b
+
+    def _victim(self, index: int) -> int:
+        b = self.plru[index]
+        if b & 1:
+            return 3 if (b >> 2) & 1 else 2
+        return 1 if (b >> 1) & 1 else 0
 
 
 CONFIGS = {
@@ -106,6 +205,8 @@ CONFIGS = {
     1: dict(ways=2, victim=0, name="SA2"),
     2: dict(ways=1, victim=4, name="DM_VC4"),
     3: dict(ways=1, victim=0, name="DM_DSE"),
+    4: dict(ways=4, victim=0, name="SA4"),
+    5: dict(ways=2, victim=0, name="SA2N"),
 }
 
 
@@ -123,7 +224,7 @@ def main() -> int:
     icache = Cache(args.lines, args.line_bytes, spec["ways"], spec["victim"],
                    write_allocate=True)
     dcache = Cache(args.lines, args.line_bytes, spec["ways"], spec["victim"],
-                   write_allocate=False)
+                   write_allocate=False, dm_l0=(args.config == 0))
 
     path = Path(args.trace)
     if not path.is_absolute():

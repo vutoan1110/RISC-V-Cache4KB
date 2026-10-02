@@ -27,7 +27,9 @@ ROOT = Path(__file__).resolve().parents[1]
 # The project's own Embench-style kernels were removed on 2026-09-30 (review item A6).
 KERNELS = ("up_aha-mont64", "up_crc32", "up_depthconv", "up_edn", "up_huffbench", "up_matmult-int",
            "up_md5sum", "up_nettle-sha256", "up_slre", "up_statemate", "up_tarfind", "up_ud")
-CONFIGS = {0: "DM", 1: "SA2", 2: "DM_VC4", 3: "DM_DSE"}
+# 4 = SA4 (dcache/icache_nway_core, four ways); 5 = the same N-way core at two ways, which must reproduce
+# SA2 (config 1) cycle for cycle -- it exists only for that check (R15, review item M2).
+CONFIGS = {0: "DM", 1: "SA2", 2: "DM_VC4", 3: "DM_DSE", 4: "SA4", 5: "SA2N"}
 MAX_CYCLES = 5000000
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 # Every field the harness prints; a run that lacks one is a failed run.
@@ -84,6 +86,10 @@ def main() -> int:
     # FLOW_JOURNAL Incident 93: an experimental RTL copy is compiled by its own script into its own library
     ap.add_argument("--asic-compile", default="tb/compile_asic_view.do")
     ap.add_argument("--asic-lib", default="work_asic")
+    # SA2 / DM_VC4 ASIC builds (2026-09-30): their data banks have a macro wrapper
+    # (asic/dse_sram/, compiled by scripts/metrics/compile_asic_view_dse.do into work_asic_dse),
+    # so the ASIC view can run CACHE_CONFIG 1 and 2 as well. The default keeps the DM-only view.
+    ap.add_argument("--asic-configs", default="0")
     # R14 (RAM16K_CHANGES.md): images from another directory, e.g. the upstream Embench suite or a
     # scale-factor probe; the default keeps the frozen fw/ images.
     ap.add_argument("--fw-dir", default="fw")
@@ -101,8 +107,8 @@ def main() -> int:
     # logs pass 1's CSV was read from.
     log_root = "ablation_logs"
     if args.asic_view:
-        args.configs, args.lines = "0", 256
-        configs = [0]
+        args.configs, args.lines = args.asic_configs, 256
+        configs = [int(c) for c in args.asic_configs.split(",")]
         log_root = "ablation_logs_asic_view"
     log_dir = ROOT / "results" / log_root / Path(args.out).stem
     log_dir.mkdir(parents=True, exist_ok=True)

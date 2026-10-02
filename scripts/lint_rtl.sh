@@ -55,8 +55,8 @@ FILES=$(ls hdl/*.v hdl/cache/*.v hdl/axi/*.v hdl/bus/*.v hdl/predictor/*.v hdl/b
 # 32 - 4 - INDEX_WIDTH -- so every slice and array bound in the cache moves
 # with it. Linting only the 64-line default leaves the 4 KiB configuration,
 # which is the one heading for silicon, entirely unchecked. LINES overrides.
-for LC in ${LINES:-64 256}; do
-for CFG in 0 1 2 3; do
+for LC in ${LINES:-64 256 512}; do
+for CFG in ${CONFIGS:-0 1 2 3 4 5}; do   # 4 = SA4, 5 = the N-way core at two ways (R15)
     echo "=== CACHE_CONFIG=$CFG LINE_COUNT=$LC ===" >> results/verilator_lint.txt
     "$VERILATOR" --lint-only -Wall \
         --timing --top-module "$TOP" -GCACHE_CONFIG="$CFG" \
