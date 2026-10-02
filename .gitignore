@@ -15,6 +15,15 @@
 !/quartus/
 !/asic/
 !/results/
+# metric firmware outside the RTL manifest roots (interrupt latency / context switch, 2026-10-02)
+!/sw_metrics/
+/sw_metrics/**/*.hex
+/sw_metrics/**/*.bin
+/sw_metrics/**/*.dump
+/sw_metrics/**/*.map
+# ACT4: keep the per-test logs, signatures and summaries (review A7); not the build tree or the images
+/verification/results/act4/work/
+/verification/results/act4/images/
 
 # results/: documents only
 /results/*
@@ -33,6 +42,15 @@
 !/asic/equiv/
 /asic/soc_dm_4kb/runs/
 /asic/soc_dm_4kb/macros/
+# SA2 / DM_VC4 ASIC builds (FLOW_JOURNAL Incident 96): the SRAM wrapper and the two design dirs, not their runs
+# or their copies of the macro models
+!/asic/dse_sram/
+!/asic/soc_sa2_4kb/
+!/asic/soc_vc4_4kb/
+/asic/soc_sa2_4kb/runs/
+/asic/soc_vc4_4kb/runs/
+/asic/soc_sa2_4kb/macros/
+/asic/soc_vc4_4kb/macros/
 # pd_exp/ and equiv/ hold experiment outputs next to their scripts: keep the scripts and cut lists only
 /asic/pd_exp/**
 !/asic/pd_exp/**/

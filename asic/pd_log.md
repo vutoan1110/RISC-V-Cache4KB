@@ -4871,3 +4871,36 @@
 - DONE `r14_E15` rc=0 last=`final` final/ present
 
 - START `r14_E16` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14_A/22-odb-addroutingobstructions/state_out.json --from OpenROAD.GlobalPlacementSkipIO --to OpenROAD.STAPostPNR` at 2026-09-30T09:00:35+00:00
+
+- START `f3_H2` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/final3_A/22-odb-addroutingobstructions/state_out.json --from OpenROAD.GlobalPlacementSkipIO --to OpenROAD.STAPostPNR` at 2026-09-30T09:01:58+00:00
+
+- START `r15_synth` (soc_dm_4kb) args: ` --to Yosys.Synthesis` at 2026-09-30T09:26:45+00:00
+- DONE `r15_synth` rc=0 last=`final` final/ present
+- DONE `f3_H2` rc=0 last=`final` final/ present
+- DONE `r14_E16` rc=0 last=`final` final/ present
+
+- START `r14F_A` (soc_dm_4kb) args: `full flow` at 2026-09-30T13:59:52+00:00
+
+- START `sa2_synth` (soc_sa2_4kb) args: ` --to Yosys.Synthesis` at 2026-09-30T14:26:28+00:00
+
+- START `vc4_synth` (soc_vc4_4kb) args: ` --to Yosys.Synthesis` at 2026-09-30T14:26:28+00:00
+- DONE `sa2_synth` rc=0 last=`final` final/ present
+- DONE `vc4_synth` rc=0 last=`final` final/ present
+
+- START `r14F_B` (soc_dm_4kb) args: `full flow` at 2026-09-30T14:44:52+00:00
+
+- START `sa2_synth2` (soc_sa2_4kb) args: ` --to Yosys.Synthesis` at 2026-09-30T14:49:18+00:00
+
+
+- START `vc4_synth2` (soc_vc4_4kb) args: ` --to Yosys.Synthesis` at 2026-09-30T14:49:18+00:00
+- START `r14sat_synth` (soc_dm_4kb) args: ` --to Yosys.Synthesis` at 2026-09-30T14:49:18+00:00
+- DONE `r14sat_synth` rc=0 last=`final` final/ present
+- DONE `sa2_synth2` rc=0 last=`final` final/ present
+- DONE `vc4_synth2` rc=0 last=`final` final/ present
+
+- START `r14F_A` (soc_dm_4kb) args: ` --from Magic.StreamOut` at 2026-10-02T04:33:57+00:00
+
+- START `r14F_B` (soc_dm_4kb) args: ` --from OpenROAD.DetailedRouting` at 2026-10-02T04:34:27+00:00
+- STOP `r14F_A` rc=2 last=`75-yosys-eqy` err: `Subprocess had a non-zero exit. Last 10 line(s): EQY  6:16:07 \[/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/75-yosys-eqy/scratch] run: Running strategy 'sat' on 'soc_asic_top.HEX0'.. EQ`
+
+- START `sa2F_A` (soc_sa2_4kb) args: `full flow` at 2026-10-02T06:16:47+00:00

@@ -142,7 +142,8 @@ def openlane_opt(
 
 
 def openlane_synth(
-    d, top, flatten, report_dir, *, booth=False, abc_dff=False, undriven=True
+    d, top, flatten, report_dir, *, booth=False, abc_dff=False, undriven=True,
+    dff_sat=False,
 ):
     d.run_pass("hierarchy", "-check", "-top", top, "-nokeep_prints", "-nokeep_asserts")
     openlane_proc(d, report_dir)
@@ -166,6 +167,9 @@ def openlane_synth(
     d.run_pass("alumacc")  # Optimize arithmetic logic unitsb
     d.run_pass("share")  # Share logic across the design
     openlane_opt(d)
+    if dff_sat:
+        # Local patch (SYNTH_OPT_DFF_SAT): remove flip-flops SAT proves constant.
+        openlane_opt(d, sat=True)
 
     # Memory optimization
     d.run_pass("memory", "-nomap")  # Analyze memories but don't map them yet
@@ -354,6 +358,7 @@ def synthesize(
         booth=config["SYNTH_MUL_BOOTH"],
         abc_dff=config["SYNTH_ABC_DFF"],
         undriven=config.get("SYNTH_TIE_UNDEFINED") is not None,
+        dff_sat=config.get("SYNTH_OPT_DFF_SAT", False),
     )
 
     d.run_pass("delete", "t:$print")

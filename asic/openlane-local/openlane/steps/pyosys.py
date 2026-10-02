@@ -460,6 +460,12 @@ class SynthesisCommon(VerilogStep):
             default=False,
         ),
         Variable(
+            "SYNTH_OPT_DFF_SAT",
+            bool,
+            "Local research-flow patch (2026-09-30): after `share`, run one more OPT round with `opt_dff -sat`, which removes flip-flops a SAT solver proves can only ever hold their reset value. Off by default, so existing configurations synthesise exactly as before.",
+            default=False,
+        ),
+        Variable(
             "SYNTH_TIE_UNDEFINED",
             Optional[Literal["high", "low"]],
             "Whether to tie undefined values low or high. Explicitly provide null if you wish to simply leave them undriven.",
