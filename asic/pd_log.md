@@ -4904,3 +4904,79 @@
 - STOP `r14F_A` rc=2 last=`75-yosys-eqy` err: `Subprocess had a non-zero exit. Last 10 line(s): EQY  6:16:07 \[/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/75-yosys-eqy/scratch] run: Running strategy 'sat' on 'soc_asic_top.HEX0'.. EQ`
 
 - START `sa2F_A` (soc_sa2_4kb) args: `full flow` at 2026-10-02T06:16:47+00:00
+- STOP `r14F_B` rc=2 last=`75-yosys-eqy` err: `Subprocess had a non-zero exit. Last 10 line(s): EQY  7:16:28 \[/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_B/75-yosys-eqy/scratch] run: Running strategy 'sat' on 'soc_asic_top.HEX0'.. EQ`
+
+- START `vc4F_A` (soc_vc4_4kb) args: `full flow` at 2026-10-02T07:16:48+00:00
+- STOP `vc4F_A` rc=2 last=`15-odb-setpowerconnections` err: `add_global_connections failed to make any connections for 'u_soc.u_dcache.g_dse.u_core.u_data_way1.g_full.g_bank[0].u_bank/vccd1' to LCD_ON. Subprocess had a non-zero exit. Last 10 line(s): [INFO] Mad`
+
+- START `vc4F_A` (soc_vc4_4kb) args: `full flow` at 2026-10-02T07:28:08+00:00
+- STOP `sa2F_A` rc=2 last=`39-openroad-globalrouting` err: `[GRT-0118] Routing congestion too high. Check the congestion heatmap in the GUI. `
+
+- START `sa2F_B` (soc_sa2_4kb) args: `full flow` at 2026-10-02T08:17:49+00:00
+- ODD `sa2F_B` rc=1 last=`37-openroad-resizertimingpostcts` empty error.log, suspect a native crash
+
+- START `vc4F_B` (soc_vc4_4kb) args: `full flow` at 2026-10-02T09:02:49+00:00
+- ODD `vc4F_B` rc=1 last=`06-yosys-synthesis` empty error.log, suspect a native crash
+- STOP `vc4F_A` rc=2 last=`39-openroad-globalrouting` err: `[GRT-0118] Routing congestion too high. Check the congestion heatmap in the GUI. `
+
+- START `sa2F_A` (soc_sa2_4kb) args: ` --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting` at 2026-10-02T11:03:50+00:00
+
+- START `vc4F_A` (soc_vc4_4kb) args: ` --from OpenROAD.GlobalRouting` at 2026-10-02T11:16:04+00:00
+- DONE `sa2F_A` rc=0 last=`final` final/ present
+
+- START `sa2F_A` (soc_sa2_4kb) args: `full flow` at 2026-10-02T11:55:58+00:00
+- STOP `vc4F_A` rc=1 last=`40-openroad-globalrouting` err: `[GRT-0118] Routing congestion too high. Check the congestion heatmap in the GUI. `
+
+- START `vc4F_A` (soc_vc4_4kb) args: `full flow` at 2026-10-02T11:57:32+00:00
+- STOP `sa2F_A` rc=2 last=`39-openroad-globalrouting` err: `[GRT-0118] Routing congestion too high. Check the congestion heatmap in the GUI. `
+
+- START `sa2F_A` (soc_sa2_4kb) args: `full flow` at 2026-10-02T13:07:30+00:00
+- STOP `vc4F_A` rc=2 last=`39-openroad-globalrouting` err: `[GRT-0118] Routing congestion too high. Check the congestion heatmap in the GUI. `
+
+- START `vc4F_A` (soc_vc4_4kb) args: `full flow` at 2026-10-02T13:13:32+00:00
+- ODD `sa2F_A` rc=139 last=`40-openroad-checkantennas` empty error.log, suspect a native crash
+
+- START `sa2F_A` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas` at 2026-10-02T13:40:47+00:00
+- STOP `sa2F_A` rc=2 last=`42-openroad-repairdesignpostgrt` err: `[GRT-0232] Routing congestion too high. Check the congestion heatmap in the GUI. `
+
+- START `sa2F_A` (soc_sa2_4kb) args: ` --from OpenROAD.RepairDesignPostGRT` at 2026-10-02T14:26:13+00:00
+- STOP `vc4F_A` rc=2 last=`39-openroad-globalrouting` err: `[GRT-0118] Routing congestion too high. Check the congestion heatmap in the GUI. `
+
+- START `vc4F_A` (soc_vc4_4kb) args: ` --from OpenROAD.GlobalRouting` at 2026-10-02T15:15:52+00:00
+
+- START `vc4F_A` (soc_vc4_4kb) args: ` --from OpenROAD.GlobalRouting` at 2026-10-02T15:16:47+00:00
+
+- START `vc4Xd36` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.DetailedPlacement` at 2026-10-02T17:10:30+00:00
+- DONE `vc4Xd36` rc=0 last=`final` final/ present
+
+- START `vc4Xd32` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.DetailedPlacement` at 2026-10-02T17:19:30+00:00
+- DONE `vc4Xd32` rc=0 last=`final` final/ present
+
+- START `vc4Xd28` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.DetailedPlacement` at 2026-10-02T17:30:21+00:00
+
+- START `vc4R1` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.DetailedPlacement` at 2026-10-02T17:37:53+00:00
+
+- START `vc4R2` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.DetailedPlacement` at 2026-10-02T17:37:54+00:00
+- DONE `vc4Xd28` rc=0 last=`final` final/ present
+- DONE `vc4R1` rc=0 last=`final` final/ present
+
+- START `vc4R1g` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4R1/22-openroad-detailedplacement/state_out.json --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-02T17:44:06+00:00
+- DONE `vc4R2` rc=0 last=`final` final/ present
+
+- START `vc4R2g` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4R2/22-openroad-detailedplacement/state_out.json --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-02T17:45:32+00:00
+- DONE `vc4R1g` rc=0 last=`final` final/ present
+- DONE `vc4R2g` rc=0 last=`final` final/ present
+
+- START `sa2R1` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.DetailedPlacement` at 2026-10-02T17:54:09+00:00
+- DONE `sa2R1` rc=0 last=`final` final/ present
+
+- START `sa2R1g` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2R1/22-openroad-detailedplacement/state_out.json --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-02T18:00:20+00:00
+- DONE `sa2R1g` rc=0 last=`final` final/ present
+
+- START `dmR1` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.DetailedPlacement` at 2026-10-02T18:07:27+00:00
+- DONE `dmR1` rc=0 last=`final` final/ present
+
+- START `dmR1g` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/dmR1/22-openroad-detailedplacement/state_out.json --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-02T18:12:51+00:00
+- DONE `dmR1g` rc=0 last=`final` final/ present
+
+- START `vc4R1F_A` (soc_vc4_4kb) args: ` --to OpenROAD.ResizerTimingPostGRT` at 2026-10-02T18:19:40+00:00

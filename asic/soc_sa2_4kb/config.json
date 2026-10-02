@@ -63,7 +63,7 @@
         2888
     ],
     "FP_CORE_UTIL": 35,
-    "PL_TARGET_DENSITY_PCT": 55,
+    "PL_TARGET_DENSITY_PCT": 42,
     "MAX_FANOUT_CONSTRAINT": 8,
     "PL_RESIZER_ALLOW_SETUP_VIOS": true,
     "GRT_RESIZER_ALLOW_SETUP_VIOS": true,
@@ -248,5 +248,6 @@
     "PL_RESIZER_HOLD_SLACK_MARGIN": 0.03,
     "CTS_SINK_CLUSTERING_SIZE": 8,
     "//SYNTH_OPT_DFF_SAT": "openlane-local patch (2026-09-30): one extra OPT round with opt_dff -sat. In DM_VC4 the D-cache way-1 data bank is dead (refill_way can only be 0); Quartus removes it (VC4 = DM = 26 M9K), plain Yosys keeps its flop and four 1 KiB macros (vc4_synth: 12 cache macros). Set in both DSE builds so they are synthesised alike; its effect on DM is measured separately (FLOW_JOURNAL).",
-    "SYNTH_OPT_DFF_SAT": true
+    "SYNTH_OPT_DFF_SAT": true,
+    "//PL_TARGET_DENSITY_PCT": "42 instead of DM's 55 (2026-10-02): at 55 sa2F_A / vc4F_A stopped with GRT-0118 (SA2 overflow 67,971; routed wire 16.2 m vs DM 8.2 m). 42 is the value of config_R14 / E10 / FINAL3, which E15 raised for DM."
 }

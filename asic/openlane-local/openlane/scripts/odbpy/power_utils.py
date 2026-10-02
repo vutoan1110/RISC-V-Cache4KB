@@ -271,14 +271,31 @@ class Design(object):
     ),
     required=True,
 )
+@click.option(
+    "--skip-synth-removed",
+    is_flag=True,
+    default=False,
+    help="Skip, with a warning, header instances absent from the netlist (removed by synthesis).",
+)
 @click_odb
-def set_power_connections(input_json, reader: OdbReader):
+def set_power_connections(input_json, reader: OdbReader, skip_synth_removed: bool = False):
     design_str = open(input_json).read()
     yosys_dict = json.loads(design_str)
 
     design = Design(reader, yosys_dict)
     macro_instances = design.extract_instances(design.design_name)
+    skipped = []
     for instance in macro_instances:
+        if skip_synth_removed and reader.block.findInst(
+            reader.escape_verilog_name(instance.name)
+        ) is None:
+            # Local patch (PWR_CONN_SKIP_SYNTH_REMOVED): listed in the pre-synthesis JSON header,
+            # absent from the netlist -- removed by synthesis, so there is nothing to connect.
+            print(
+                f"[WARNING] {instance.name} is in the JSON header but not in the netlist (removed by synthesis): skipped."
+            )
+            skipped.append(instance.name)
+            continue
         for pin in instance.power_connections.keys():
             net_name = instance.power_connections[pin]
             print(f"Connecting power net {net_name} to {instance.name}/{pin}…")
@@ -297,6 +314,8 @@ def set_power_connections(input_json, reader: OdbReader):
                 pin_name=pin,
                 ground=True,
             )
+    if skipped:
+        print(f"[WARNING] {len(skipped)} header instance(s) removed by synthesis were skipped.")
 
 
 cli.add_command(set_power_connections)

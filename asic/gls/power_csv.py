@@ -18,10 +18,14 @@ import re
 import sys
 
 tag = sys.argv[1]
+# FLOW_JOURNAL Incident 96: optional <ref_csv> <config> for the minstret of other designs / kernel sets
+# (R14 upstream kernels: results/upstream_asic_r15_p1.csv DM; SA2 / DM_VC4: results/dse_asic_view_p1.csv).
+ref_csv = sys.argv[2] if len(sys.argv) > 2 else "asic_view_4kb_p1.csv"
+ref_cfg = sys.argv[3] if len(sys.argv) > 3 else "DM"
 R = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 res = os.path.join(R, "results")
 gls = {r["kernel"]: r for r in csv.DictReader(open(os.path.join(res, "gls_power_%s.csv" % tag)))}
-av = {r["kernel"]: r for r in csv.DictReader(open(os.path.join(res, "asic_view_4kb_p1.csv"))) if r["config"] == "DM"}
+av = {r["kernel"]: r for r in csv.DictReader(open(os.path.join(res, os.path.basename(ref_csv)))) if r["config"] == ref_cfg}
 out = []
 for k in sorted(gls):
     g = gls[k]

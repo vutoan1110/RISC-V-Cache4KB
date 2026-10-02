@@ -280,6 +280,15 @@ class SetPowerConnections(OdbpyStep):
     name = "Set Power Connections"
     inputs = [DesignFormat.JSON_HEADER, DesignFormat.ODB]
 
+    config_vars = OdbpyStep.config_vars + [
+        Variable(
+            "PWR_CONN_SKIP_SYNTH_REMOVED",
+            bool,
+            "Local research-flow patch (2026-10-02): skip, with a warning, macro instances that the JSON header lists but the netlist no longer contains because synthesis removed them (e.g. never-written SRAM banks). Off by default: such an instance is an error.",
+            default=False,
+        ),
+    ]
+
     def get_script_path(self):
         return os.path.join(get_script_dir(), "odbpy", "power_utils.py")
 
@@ -288,10 +297,14 @@ class SetPowerConnections(OdbpyStep):
 
     def get_command(self) -> List[str]:
         state_in = self.state_in.result()
-        return super().get_command() + [
-            "--input-json",
-            str(state_in[DesignFormat.JSON_HEADER]),
-        ]
+        return (
+            super().get_command()
+            + [
+                "--input-json",
+                str(state_in[DesignFormat.JSON_HEADER]),
+            ]
+            + (["--skip-synth-removed"] if self.config["PWR_CONN_SKIP_SYNTH_REMOVED"] else [])
+        )
 
 
 @Step.factory.register()

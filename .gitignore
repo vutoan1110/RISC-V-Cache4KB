@@ -53,6 +53,9 @@
 /asic/soc_vc4_4kb/runs/
 /asic/soc_sa2_4kb/macros/
 /asic/soc_vc4_4kb/macros/
+# floorplan analysis tools and their screening results (FLOW_JOURNAL Incident 96, 2026-10-03)
+!/asic/fp_tools/
+!/asic/*_explore_proxy.txt
 # pd_exp/ and equiv/ hold experiment outputs next to their scripts: keep the scripts and cut lists only
 /asic/pd_exp/**
 !/asic/pd_exp/**/

@@ -1,0 +1,12 @@
+# reference placements (fp_tools/route_proxy.py, 150 um tiles): DM routes, SA2-wide routes (0 GRT overflow), VC4-wide fails (34,086)
+dm_d55/34                    tiles  338  util p95  59.7% p99  62.0% max  66.0% (>60%:  12)  pins/100um2 p99 20.02 max 20.90 (>10:  81)  rudy p99  8.933 max 10.169 (>12:   0)  HPWL 5.186 m
+dm_d55/37                    tiles  338  util p95  64.5% p99  69.9% max  70.7% (>60%:  42)  pins/100um2 p99 20.19 max 21.31 (>10:  84)  rudy p99  9.466 max 10.367 (>12:   0)  HPWL 5.431 m
+sa2_wide_ok/34               tiles  480  util p95  49.1% p99  63.8% max  77.4% (>60%:   5)  pins/100um2 p99 17.20 max 19.99 (>10:  94)  rudy p99 12.018 max 13.567 (>12:   5)  HPWL 7.533 m
+sa2_wide_ok/37               tiles  480  util p95  52.2% p99  66.2% max  79.8% (>60%:   7)  pins/100um2 p99 17.38 max 20.16 (>10:  97)  rudy p99 12.399 max 14.021 (>12:   6)  HPWL 7.803 m
+vc4_wide_fail/34             tiles  480  util p95  49.3% p99  67.6% max  79.3% (>60%:   9)  pins/100um2 p99 16.61 max 17.22 (>10: 102)  rudy p99 12.985 max 15.409 (>12:   5)  HPWL 8.036 m
+vc4_wide_fail/37             tiles  480  util p95  52.8% p99  70.5% max  82.6% (>60%:  10)  pins/100um2 p99 16.88 max 17.25 (>10: 103)  rudy p99 13.511 max 15.999 (>12:   6)  HPWL 8.324 m
+vc4Xd36/dpl                  tiles  480  util p95  44.2% p99  61.2% max  78.5% (>60%:   6)  pins/100um2 p99 14.63 max 17.47 (>10: 106)  rudy p99 12.337 max 14.661 (>12:   6)  HPWL 8.459 m
+vc4Xd32/dpl                  tiles  480  util p95  40.4% p99  60.5% max  75.1% (>60%:   6)  pins/100um2 p99 12.99 max 14.72 (>10:  75)  rudy p99 12.506 max 13.847 (>12:   5)  HPWL 8.950 m
+vc4Xd28/dpl                  tiles  480  util p95  37.8% p99  50.2% max  74.9% (>60%:   3)  pins/100um2 p99 12.03 max 14.12 (>10:  31)  rudy p99 12.353 max 12.988 (>12:   5)  HPWL 9.620 m
+vc4R1/dpl                    tiles  313  util p95  51.4% p99  61.7% max  91.7% (>60%:   5)  pins/100um2 p99 17.50 max 18.68 (>10: 104)  rudy p99 11.686 max 14.133 (>12:   3)  HPWL 7.326 m
+vc4R2/dpl                    tiles  402  util p95  49.6% p99  65.6% max  80.8% (>60%:   6)  pins/100um2 p99 16.87 max 18.78 (>10:  92)  rudy p99 12.278 max 13.813 (>12:   5)  HPWL 7.615 m

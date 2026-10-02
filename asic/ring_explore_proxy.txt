@@ -1,0 +1,2 @@
+sa2R1/dpl                    tiles  313  util p95  51.4% p99  63.3% max  71.1% (>60%:   4)  pins/100um2 p99 17.96 max 19.89 (>10:  93)  rudy p99 10.841 max 11.918 (>12:   0)  HPWL 6.922 m
+dmR1/dpl                     tiles  313  util p95  48.7% p99  52.1% max  55.9% (>60%:   0)  pins/100um2 p99 16.20 max 18.14 (>10:  88)  rudy p99  8.696 max 11.348 (>12:   0)  HPWL 5.366 m

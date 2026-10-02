@@ -107,9 +107,23 @@ def main():
             row["asic_view_mcycle_sum_pct_vs_fpga"] = 100.0 * (sum(int(b["mcycle"]) for _, b in av)
                                                                 / sum(int(a["mcycle"]) for a, _ in av) - 1.0)
             row["asic_view_kernels"] = len(av)
-        row["gls_mcycle_match"] = "pending (after PD)"
+        # GLS / activity-based power of the signed-off final netlist (FLOW_JOURNAL Incidents 95-96)
+        tag = {"DM": "r14F_A", "SA2": "sa2F_A", "DM_VC4": "vc4F_A"}.get(cfg)
+        g = rows("gls_power_%s.csv" % tag) if tag else []
+        p = rows("gls_power_%s_power.csv" % tag) if tag else []
+        if g:
+            ok = sum(1 for r in g if r["match"] == "YES")
+            row["gls_mcycle_match"] = "%d/%d kernels = ASIC-view RTL (%s)" % (ok, len(g), tag)
+        else:
+            row["gls_mcycle_match"] = "pending (after PD)" if tag else "N/A (no ASIC build)"
         row["board_mcycle_match"] = "N/A (no board)"
-        row["asic_power_saif"] = "pending (after PD + GLS)"
+        if p:
+            tot = [float(r["total_mw"]) for r in p]
+            epi = [float(r["epi_pj"]) for r in p]
+            row["asic_power_saif"] = "%.1f-%.1f mW (mean %.1f), nom_tt, %d kernels" % (min(tot), max(tot), sum(tot) / len(tot), len(p))
+            row["asic_epi_pj"] = "%.0f-%.0f pJ (GM %.0f)" % (min(epi), max(epi), gm_gsd(epi)[0])
+        else:
+            row["asic_power_saif"] = "pending (after PD + GLS)" if tag else "N/A (no ASIC build)"
         out.append(row)
 
     cols = []
@@ -138,7 +152,8 @@ def main():
               ("fpga_le", "FPGA LE (seed 2)", 0), ("fpga_fmax_mhz", "FPGA Fmax Slow 85C, MHz", 2),
               ("asic_view_mcycle_sum_pct_vs_fpga", "ASIC-view mcycle vs FPGA view, %", 3),
               ("gls_mcycle_match", "GLS mcycle = ASIC-view RTL", 0), ("board_mcycle_match", "board mcycle", 0),
-              ("asic_power_saif", "ASIC power (GLS->SAIF)", 0)]
+              ("asic_power_saif", "ASIC power (GLS->SAIF, OpenSTA nom_tt)", 0),
+              ("asic_epi_pj", "ASIC energy per instruction", 0)]
     byc = {r["config"]: r for r in out}
     for key, lab, nd in labels:
         md.append("| %s | %s |" % (lab, " | ".join(fmt(byc[c].get(key, "-"), nd) for c in CONFIGS)))
