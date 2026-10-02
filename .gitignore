@@ -21,9 +21,11 @@
 /sw_metrics/**/*.bin
 /sw_metrics/**/*.dump
 /sw_metrics/**/*.map
-# ACT4: keep the per-test logs, signatures and summaries (review A7); not the build tree or the images
+# ACT4: keep the per-test logs, the summaries and the signatures' SHA-256 list (review A7); not the
+# build tree, the images or the signature files themselves (6.6 MB per pass, pass 1 = pass 2 byte for byte)
 /verification/results/act4/work/
 /verification/results/act4/images/
+/verification/results/act4/dut_p*/signatures/
 
 # results/: documents only
 /results/*

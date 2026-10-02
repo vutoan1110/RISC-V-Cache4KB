@@ -1,0 +1,10 @@
+2:compiler_exe: /home/toanl/tools/riscv-gcc16/bin/riscv64-unknown-elf-gcc
+3:objdump_exe: /home/toanl/tools/riscv-gcc16/bin/riscv64-unknown-elf-objdump
+4:ref_model_exe: spike_reference
+riscv-arch-test: 2e655961f9edc688c5cf0c0ea129a368a17a5731 (Mon Aug 24 22:43:32 2026 +0000)
+mise trusted ~/tools/src/riscv-arch-test
+WARNING: Using Spike as the reference model (/tmp/act4_cfg/spike_reference). The
+reference model will not be configured to match your DUT and many privileged 
+tests will likely mismatch. Coverage generation is not supported with Spike.
+✓ DUT configs prepared: 1 config in 26.6s
+✓ Build complete: 301 succeeded

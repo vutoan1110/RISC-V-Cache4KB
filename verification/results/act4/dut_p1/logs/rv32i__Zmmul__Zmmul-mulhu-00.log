@@ -1,0 +1,45 @@
+Reading pref.tcl
+
+# 2024.1
+
+# vsim -onfinish stop -voptargs=+acc work_act4.tb_architecture_signature +HEX=E:/Projects/RISCV-research/verification/results/act4/images/rv32i__Zmmul__Zmmul-mulhu-00.hex +SIGNATURE=E:/Projects/RISCV-research/verification/results/act4/dut_p1/signatures/rv32i__Zmmul__Zmmul-mulhu-00.signature +SIG_BEGIN=00011870 +SIG_END=00020930 +TOHOST_ADDR=00081ff0 +MAX_CYCLES=2000000
+# vsim -onfinish stop -voptargs="+acc" work_act4.tb_architecture_signature "+HEX=E:/Projects/RISCV-research/verification/results/act4/images/rv32i__Zmmul__Zmmul-mulhu-00.hex" "+SIGNATURE=E:/Projects/RISCV-research/verification/results/act4/dut_p1/signatures/rv32i__Zmmul__Zmmul-mulhu-00.signature" "+SIG_BEGIN=00011870" "+SIG_END=00020930" "+TOHOST_ADDR=00081ff0" "+MAX_CYCLES=2000000" 
+# Start time: 11:47:44 on Oct 02,2026
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# //  Questa Sim-64
+# //  Version 2024.1 win64 Feb  1 2024
+# //
+# // Unpublished work. Copyright 2024 Siemens
+# //
+# // This material contains trade secrets or otherwise confidential information
+# // owned by Siemens Industry Software Inc. or its affiliates (collectively,
+# // "SISW"), or its licensors. Access to and use of this information is strictly
+# // limited as set forth in the Customer's applicable agreements with SISW.
+# //
+# // This material may not be copied, distributed, or otherwise disclosed outside
+# // of the Customer's facilities without the express written permission of SISW,
+# // and may not be used in any way not expressly authorized by SISW.
+# //
+# Loading sv_std.std
+# Loading work.tb_architecture_signature(fast)
+# Loading work.riscv_core(fast)
+# Loading work.controller(fast)
+# Loading work.maindec(fast)
+# Loading work.aludec(fast)
+# Loading work.datapath(fast)
+# Loading work.bht_2bit(fast)
+# Loading work.extend(fast)
+# Loading work.regfile(fast)
+# Loading work.alu(fast)
+# Loading work.branch(fast)
+# Loading work.hazard_unit(fast)
+#  run -all
+# [PASS] Signature harness                           TOHOST retirements=5422 cycles=6277
+# ** Note: $finish    : tb/architecture_signature_tb.sv(108)
+#    Time: 62825 ns  Iteration: 1  Instance: /tb_architecture_signature
+# Break in Task finish_pass at tb/architecture_signature_tb.sv line 108
+# Stopped at tb/architecture_signature_tb.sv line 108
+#  quit -f
+# R9_EQUIV tb_architecture_signature.dut.datapath: 6277 cycles matched
+# End time: 11:47:44 on Oct 02,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0

@@ -1,0 +1,252 @@
+Reading pref.tcl
+
+# 2024.1
+
+# do scripts/metrics/compile_act4.do
+# onerror {quit -code 1 -f}
+# 
+# if {[file exists work_act4]} {
+#     vdel -lib work_act4 -all
+# }
+# vlib work_act4
+# 
+# Processor core and native request/response wrapper.
+# vlog -work work_act4 -sv \
+#     hdl/alu.v \
+#     hdl/aludec.v \
+#     hdl/branch.v \
+#     hdl/predictor/bht_2bit.v \
+#     hdl/controller.v \
+#     hdl/datapath.v \
+#     hdl/extend.v \
+#     hdl/hazard_unit.v \
+#     hdl/maindec.v \
+#     hdl/regfile.v \
+#     hdl/riscv_core.v \
+#     hdl/riscv_core_native.v
+# QuestaSim-64 vlog 2024.1 Compiler 2024.02 Feb  1 2024
+# Start time: 11:45:54 on Oct 02,2026
+# vlog -work work_act4 -sv hdl/alu.v hdl/aludec.v hdl/branch.v hdl/predictor/bht_2bit.v hdl/controller.v hdl/datapath.v hdl/extend.v hdl/hazard_unit.v hdl/maindec.v hdl/regfile.v hdl/riscv_core.v hdl/riscv_core_native.v 
+# -- Compiling module alu
+# -- Compiling module aludec
+# -- Compiling module branch
+# -- Compiling module bht_2bit
+# -- Compiling module controller
+# -- Compiling module datapath
+# -- Compiling module extend
+# -- Compiling module hazard_unit
+# -- Compiling module maindec
+# -- Compiling module regfile
+# -- Compiling module riscv_core
+# -- Compiling module riscv_core_native
+# 
+# Top level modules:
+# 	riscv_core_native
+# End time: 11:45:54 on Oct 02,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# Active cache hierarchy.
+# vlog -work work_act4 -sv \
+#     hdl/cache/icache_tag_ram.v \
+#     hdl/cache/icache_data_ram.v \
+#     hdl/cache/icache_controller.v \
+#     hdl/cache/cache_dse_data_bank.v \
+#     hdl/cache/icache_dse_core.v \
+#     hdl/cache/icache_nway_core.v \
+#     hdl/cache/icache.v \
+#     hdl/cache/dcache_tag_ram.v \
+#     hdl/cache/dcache_data_ram.v \
+#     hdl/cache/dcache_controller.v \
+#     hdl/cache/dcache_dse_core.v \
+#     hdl/cache/dcache_nway_core.v \
+#     hdl/cache/dcache.v
+# QuestaSim-64 vlog 2024.1 Compiler 2024.02 Feb  1 2024
+# Start time: 11:45:54 on Oct 02,2026
+# vlog -work work_act4 -sv hdl/cache/icache_tag_ram.v hdl/cache/icache_data_ram.v hdl/cache/icache_controller.v hdl/cache/cache_dse_data_bank.v hdl/cache/icache_dse_core.v hdl/cache/icache_nway_core.v hdl/cache/icache.v hdl/cache/dcache_tag_ram.v hdl/cache/dcache_data_ram.v hdl/cache/dcache_controller.v hdl/cache/dcache_dse_core.v hdl/cache/dcache_nway_core.v hdl/cache/dcache.v 
+# -- Compiling module icache_tag_ram
+# -- Compiling module icache_data_ram
+# -- Compiling module icache_controller
+# -- Compiling module cache_dse_data_bank
+# -- Compiling module icache_dse_core
+# -- Compiling module icache_nway_core
+# -- Compiling module icache
+# -- Compiling module dcache_tag_ram
+# -- Compiling module dcache_data_ram
+# -- Compiling module dcache_controller
+# -- Compiling module dcache_dse_core
+# -- Compiling module dcache_nway_core
+# -- Compiling module dcache
+# 
+# Top level modules:
+# 	icache
+# 	dcache
+# End time: 11:45:54 on Oct 02,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# AXI, APB, performance monitoring, peripherals, and active SoC.
+# vlog -work work_act4 -sv \
+#     hdl/axi/cache_axi_master.v \
+#     hdl/axi/axi_ram_32.v \
+#     hdl/axi/native_axi_lite_master.v \
+#     hdl/axi/axi_lite_to_apb.v \
+#     hdl/bus/soc_address_decoder.v \
+#     hdl/apb_display_regs.v \
+#     hdl/apb_timer.v \
+#     hdl/perf_counters.v \
+#     hdl/apb_performance_monitor.v \
+#     hdl/performance_observability.v \
+#     hdl/hex7seg_decoder.v \
+#     hdl/lcd_1602_hex.v \
+#     hdl/fifo.sv \
+#     hdl/baudrate_gen_block.sv \
+#     hdl/rx_block.sv \
+#     hdl/tx_block.sv \
+#     hdl/uart_core.sv \
+#     hdl/uart_apb.v \
+#     hdl/soc_top.v \
+#     hdl/board/de2_115_top.v
+# QuestaSim-64 vlog 2024.1 Compiler 2024.02 Feb  1 2024
+# Start time: 11:45:54 on Oct 02,2026
+# vlog -work work_act4 -sv hdl/axi/cache_axi_master.v hdl/axi/axi_ram_32.v hdl/axi/native_axi_lite_master.v hdl/axi/axi_lite_to_apb.v hdl/bus/soc_address_decoder.v hdl/apb_display_regs.v hdl/apb_timer.v hdl/perf_counters.v hdl/apb_performance_monitor.v hdl/performance_observability.v hdl/hex7seg_decoder.v hdl/lcd_1602_hex.v hdl/fifo.sv hdl/baudrate_gen_block.sv hdl/rx_block.sv hdl/tx_block.sv hdl/uart_core.sv hdl/uart_apb.v hdl/soc_top.v hdl/board/de2_115_top.v 
+# -- Compiling module cache_axi_master
+# -- Compiling module axi_ram_32
+# -- Compiling module native_axi_lite_master
+# -- Compiling module axi_lite_to_apb
+# -- Compiling module soc_address_decoder
+# -- Compiling module apb_display_regs
+# -- Compiling module apb_timer
+# -- Compiling module perf_counters
+# -- Compiling module apb_performance_monitor
+# -- Compiling module performance_observability
+# -- Compiling module hex7seg_decoder
+# -- Compiling module lcd_1602_hex
+# -- Compiling module fifo
+# -- Compiling module baudrate_gen_block
+# -- Compiling module rx_block
+# -- Compiling module tx_block
+# -- Compiling module uart_core
+# -- Compiling module uart_apb
+# -- Compiling module soc_top
+# -- Compiling module de2_115_top
+# 
+# Top level modules:
+# 	de2_115_top
+# End time: 11:45:54 on Oct 02,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# Simulation-only assertions and functional coverage.
+# vlog -work work_act4 -sv \
+#     verification/assertions/core_assertions.sv \
+#     verification/assertions/axi_assertions.sv \
+#     verification/assertions/cache_assertions.sv \
+#     verification/coverage/core_coverage.sv
+# QuestaSim-64 vlog 2024.1 Compiler 2024.02 Feb  1 2024
+# Start time: 11:45:55 on Oct 02,2026
+# vlog -work work_act4 -sv verification/assertions/core_assertions.sv verification/assertions/axi_assertions.sv verification/assertions/cache_assertions.sv verification/coverage/core_coverage.sv 
+# -- Compiling module core_assertions
+# -- Compiling module axi_assertions
+# -- Compiling module cache_assertions
+# -- Compiling module core_coverage
+# 
+# Top level modules:
+# 	core_assertions
+# 	axi_assertions
+# 	cache_assertions
+# 	core_coverage
+# End time: 11:45:55 on Oct 02,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# Active self-checking testbenches and reusable backend model.
+# vlog -work work_act4 -sv \
+#     tb/cache_backend_model.sv \
+#     tb/branch_predictor_core_tb.sv \
+#     tb/valid_irq_tb.sv \
+#     tb/native_interface_tb.sv \
+#     tb/icache_tb.sv \
+#     tb/dcache_tb.sv \
+#     tb/mmio_bypass_tb.sv \
+#     tb/axi_memory_tb.sv \
+#     tb/axi_mmio_tb.sv \
+#     tb/soc_integration_tb.sv \
+#     tb/cache_event_accounting_tb.sv \
+#     tb/performance_counters_tb.sv \
+#     tb/uart_apb_tb.sv \
+#     tb/bht_tb.sv \
+#     tb/branch_predictor_tb.sv \
+#     tb/predictor_axi_tb.sv \
+#     tb/alu_zmmul_tb.sv \
+#     tb/directed_isa_tb.sv \
+#     tb/random_trace_tb.sv \
+#     tb/architecture_signature_tb.sv \
+#     tb/set_associative_cache_tb.sv \
+#     tb/victim_cache_tb.sv \
+#     tb/cache_configuration_tb.sv \
+#     tb/cache_architecture_equivalence_tb.sv \
+#     tb/benchmark_snapshot_tb.sv \
+#     tb/top_wrapper_sync_tb.sv \
+#     tb/cache_conflict_experiment_tb.sv
+# QuestaSim-64 vlog 2024.1 Compiler 2024.02 Feb  1 2024
+# Start time: 11:45:55 on Oct 02,2026
+# vlog -work work_act4 -sv tb/cache_backend_model.sv tb/branch_predictor_core_tb.sv tb/valid_irq_tb.sv tb/native_interface_tb.sv tb/icache_tb.sv tb/dcache_tb.sv tb/mmio_bypass_tb.sv tb/axi_memory_tb.sv tb/axi_mmio_tb.sv tb/soc_integration_tb.sv tb/cache_event_accounting_tb.sv tb/performance_counters_tb.sv tb/uart_apb_tb.sv tb/bht_tb.sv tb/branch_predictor_tb.sv tb/predictor_axi_tb.sv tb/alu_zmmul_tb.sv tb/directed_isa_tb.sv tb/random_trace_tb.sv tb/architecture_signature_tb.sv tb/set_associative_cache_tb.sv tb/victim_cache_tb.sv tb/cache_configuration_tb.sv tb/cache_architecture_equivalence_tb.sv tb/benchmark_snapshot_tb.sv tb/top_wrapper_sync_tb.sv tb/cache_conflict_experiment_tb.sv 
+# -- Compiling module cache_backend_model
+# -- Compiling module tb_branch_predictor_core
+# -- Compiling module tb_valid_irq
+# -- Compiling module tb_native_interface
+# -- Compiling module tb_icache
+# -- Compiling module tb_dcache
+# -- Compiling module tb_mmio_bypass
+# -- Compiling module tb_axi_memory
+# -- Compiling module tb_axi_mmio
+# -- Compiling module tb_soc_integration
+# -- Compiling module tb_cache_event_accounting
+# -- Compiling module tb_performance_counters
+# -- Compiling module tb_uart_apb
+# -- Compiling module tb_bht
+# -- Compiling module tb_branch_predictor
+# -- Compiling module tb_predictor_axi
+# -- Compiling module tb_alu_zmmul
+# -- Compiling module tb_directed_isa
+# -- Compiling module tb_random_trace
+# -- Compiling module tb_architecture_signature
+# -- Compiling module tb_set_associative_cache
+# -- Compiling module tb_victim_cache
+# -- Compiling module tb_cache_configuration
+# -- Compiling module tb_cache_architecture_equivalence
+# -- Compiling module tb_benchmark_snapshot
+# -- Compiling module top_sync_checker
+# -- Compiling module tb_de2_115_top_sync
+# -- Compiling module tb_cache_conflict_experiment
+# 
+# Top level modules:
+# 	tb_branch_predictor_core
+# 	tb_valid_irq
+# 	tb_native_interface
+# 	tb_icache
+# 	tb_dcache
+# 	tb_mmio_bypass
+# 	tb_axi_memory
+# 	tb_axi_mmio
+# 	tb_soc_integration
+# 	tb_cache_event_accounting
+# 	tb_performance_counters
+# 	tb_uart_apb
+# 	tb_bht
+# 	tb_branch_predictor
+# 	tb_predictor_axi
+# 	tb_alu_zmmul
+# 	tb_directed_isa
+# 	tb_random_trace
+# 	tb_architecture_signature
+# 	tb_set_associative_cache
+# 	tb_victim_cache
+# 	tb_cache_configuration
+# 	tb_cache_architecture_equivalence
+# 	tb_benchmark_snapshot
+# 	tb_de2_115_top_sync
+# 	tb_cache_conflict_experiment
+# End time: 11:45:55 on Oct 02,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# 
+# echo {[PASS] Active RTL and verification sources compiled}
+# [PASS] Active RTL and verification sources compiled
+#  quit -f
