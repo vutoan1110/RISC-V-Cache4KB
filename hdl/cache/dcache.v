@@ -3,7 +3,9 @@ module dcache #(
     parameter LINE_COUNT=64,
     parameter CACHE_CONFIG=0,
     parameter LINE_WORDS=4,
-    parameter VICTIM_ENTRIES=4
+    parameter VICTIM_ENTRIES=4,
+    // R16 (review M1): DSE / N-way cores answer a main-array load hit in ST_LOOKUP; the DM controller ignores it.
+    parameter FAST_HIT=0
 )(
     input wire clk,input wire reset_n,
     input wire req_valid,input wire req_write,input wire [31:0] req_addr,
@@ -85,7 +87,7 @@ end else if(CACHE_CONFIG>=4) begin:g_nway
     // 4 = SA4 (four ways, tree pseudo-LRU). 5 = the same core at two ways, only to check it against SA2.
     wire [3:0] hit_way_vec_unused; wire [1:0] replacement_way_unused;
     dcache_nway_core #(.LINE_COUNT(LINE_COUNT),.WAYS((CACHE_CONFIG==5)?2:4),
-                       .LINE_WORDS(LINE_WORDS)) u_core(
+                       .LINE_WORDS(LINE_WORDS),.FAST_HIT(FAST_HIT)) u_core(
         .clk(clk),.reset_n(reset_n),.req_valid(req_valid),.req_write(req_write),.req_addr(req_addr),
         .req_wdata(req_wdata),.req_wstrb(req_wstrb),.req_ready(req_ready),.rsp_valid(rsp_valid),
         .rsp_rdata(rsp_rdata),.rsp_error(rsp_error),.refill_req_valid(refill_req_valid),
@@ -110,7 +112,7 @@ end else begin:g_dse
     wire [VICTIM_ENTRIES-1:0] victim_hit_vec_unused;
     dcache_dse_core #(.LINE_COUNT(LINE_COUNT),.CACHE_CONFIG(CACHE_CONFIG),
                       .LINE_WORDS(LINE_WORDS),
-                      .VICTIM_ENTRIES(VICTIM_ENTRIES)) u_core(
+                      .VICTIM_ENTRIES(VICTIM_ENTRIES),.FAST_HIT(FAST_HIT)) u_core(
         .clk(clk),.reset_n(reset_n),.req_valid(req_valid),.req_write(req_write),.req_addr(req_addr),
         .req_wdata(req_wdata),.req_wstrb(req_wstrb),.req_ready(req_ready),.rsp_valid(rsp_valid),
         .rsp_rdata(rsp_rdata),.rsp_error(rsp_error),.refill_req_valid(refill_req_valid),

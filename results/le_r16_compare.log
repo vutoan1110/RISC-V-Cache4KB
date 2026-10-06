@@ -1,0 +1,14 @@
+##### COMPARE pass 1 vs pass 2 (every field)  2026-10-06T14:12:26+07:00
+
+[VERIFIED]  9 row(s) compared, 9 identical, 0 mismatched, 0 unpaired
+##### FAST_HIT 0 controls vs the R14 / R15 seed-2 rows (every field), and the FAST_HIT cost
+  dm_4kb   R16 vs reference: DIFF 1 fields, e.g. le 15440->15440, setup_s85_slack 0.778->0.778
+  sa2_4kb  R16 vs reference: DIFF 1 fields, e.g. le 19474->19474, setup_s85_slack 1.382->1.382
+  vc4_4kb  R16 vs reference: DIFF 1 fields, e.g. le 19812->19812, setup_s85_slack 1.785->1.785
+  dse_4kb  R16 vs reference: DIFF 1 fields, e.g. le 16989->16989, setup_s85_slack 1.374->1.374
+  sa4_4kb  R16 vs reference: DIFF 1 fields, e.g. le 21821->21821, setup_s85_slack 0.374->0.374
+  sa2_4kb  FAST_HIT 0 -> 1: le 19474 -> 19930, fmax_s85 53.71 -> 51.65, setup_s85_slack 1.382 -> 0.639
+  vc4_4kb  FAST_HIT 0 -> 1: le 19812 -> 19927, fmax_s85 54.9 -> 55.35, setup_s85_slack 1.785 -> 1.934
+  dse_4kb  FAST_HIT 0 -> 1: le 16989 -> 17334, fmax_s85 53.69 -> 52.47, setup_s85_slack 1.374 -> 0.94
+  sa4_4kb  FAST_HIT 0 -> 1: le 21821 -> 22702, fmax_s85 50.95 -> 52.76, setup_s85_slack 0.374 -> 1.047
+##### done 2026-10-06T14:12:27+07:00: 0 failure(s)

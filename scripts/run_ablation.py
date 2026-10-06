@@ -99,6 +99,8 @@ def main() -> int:
     ap.add_argument("--max-cycles", type=int, default=MAX_CYCLES)
     # FPGA-view simulation library (work_b: scripts/metrics/compile_active_design_b.do) for a parallel batch.
     ap.add_argument("--lib", default="work")
+    # R16 (review M1): answer main-array hits in ST_LOOKUP (CACHE_FAST_HIT=1); configurations 1-5 only.
+    ap.add_argument("--fast", action="store_true")
     args = ap.parse_args()
 
     configs = [int(c) for c in args.configs.split(",")]
@@ -124,11 +126,11 @@ def main() -> int:
                 failures.append("%s: missing %s" % (kern, hexfile))
                 continue
             log = log_dir / ("%s_%s.log" % (kern, name))
-            do = ("vsim -onfinish stop -gCACHE_CONFIG=%d -gMEMFILE=%s "
+            do = ("vsim -onfinish stop %s-gCACHE_CONFIG=%d -gMEMFILE=%s "
                   "-gICACHE_LINE_COUNT=%d -gDCACHE_LINE_COUNT=%d -gL0_ENTRIES=%d -gBRANCH_PREDICT_ENABLE=%d "
                   "%s +benchmark=%s +max_cycles=%d; "
                   "run -all; quit -f"
-                  % (cfg, hexfile, args.lines, args.lines, args.l0, args.bp,
+                  % ("-gCACHE_FAST_HIT=1 " if args.fast else "", cfg, hexfile, args.lines, args.lines, args.l0, args.bp,
                      ("-gVERBOSE=0 %s.tb_benchmark_snapshot %s.asic_view_checker" % (args.asic_lib, args.asic_lib)
                       if args.asic_view else "%s.tb_benchmark_snapshot" % args.lib),
                      kern, args.max_cycles))

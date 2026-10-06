@@ -14,6 +14,8 @@ module de2_115_top #(
     parameter integer CACHE_CONFIG            = 1,
     parameter integer VICTIM_ENTRIES          = 4,
     parameter integer CACHE_LINE_WORDS        = 4,
+    // R16 (review M1): see soc_top.v
+    parameter integer CACHE_FAST_HIT          = 0,
     // 1 builds the performance counter bank; 0 removes it so the core's own
     // area can be quoted apart from the instrumentation's.
     parameter integer PERF_COUNTERS_ENABLE    = 1,
@@ -96,6 +98,7 @@ soc_top #(
     .CACHE_CONFIG           (CACHE_CONFIG),
     .VICTIM_ENTRIES         (VICTIM_ENTRIES),
     .CACHE_LINE_WORDS       (CACHE_LINE_WORDS),
+    .CACHE_FAST_HIT         (CACHE_FAST_HIT),
     .PERF_COUNTERS_ENABLE   (PERF_COUNTERS_ENABLE),
     .L0_ENTRIES             (L0_ENTRIES)
 ) u_soc (

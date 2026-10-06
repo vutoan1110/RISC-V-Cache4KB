@@ -11,7 +11,10 @@
 module dcache_nway_core #(
     parameter LINE_COUNT = 64,
     parameter WAYS = 4,
-    parameter LINE_WORDS = 4
+    parameter LINE_WORDS = 4,
+    // R16 (review M1): 1 answers a main-array hit in ST_LOOKUP (one extra cycle, as in the five-state
+    // DM controller) instead of in the following response state (two). 0 = the original core.
+    parameter FAST_HIT = 0
 )(
     input wire clk,
     input wire reset_n,
@@ -263,12 +266,15 @@ wire [LINE_WIDTH-1:0] store_way_line =
     bank_rd_flat[store_way_latched[WAY_BITS-1:0]*LINE_WIDTH +: LINE_WIDTH];
 
 assign req_ready = (state == ST_IDLE);
-assign rsp_valid = fast_load_main_event || (state == ST_CPU_RESP);
+// R16: with FAST_HIT a main-array LOAD hit is answered in ST_LOOKUP (stores keep their write path).
+wire fast_lookup_load_hit = (FAST_HIT != 0) && lookup_active && main_hit && !request_write;
+assign rsp_valid = fast_load_main_event || fast_lookup_load_hit || (state == ST_CPU_RESP);
 assign rsp_rdata = fast_load_main_event ?
                    select_line_word(hot_hit_line, req_addr[OFFSET_BITS-1:2]) :
+                   fast_lookup_load_hit ? select_line_word(hit_way_line, request_word) :
                    (main_read_response ? select_line_word(refill_way_line, request_word)
                                        : rsp_data_reg);
-assign rsp_error = fast_load_main_event ? 1'b0 : rsp_error_reg;
+assign rsp_error = (fast_load_main_event || fast_lookup_load_hit) ? 1'b0 : rsp_error_reg;
 assign refill_req_valid = (state == ST_REFILL_REQ);
 assign refill_req_addr = {request_addr[31:OFFSET_BITS],{OFFSET_BITS{1'b0}}};
 assign mem_wr_valid = (state == ST_WRITE_REQ);
@@ -412,7 +418,40 @@ always @(posedge clk or negedge reset_n) begin
                     end else begin
                         refill_way<=hit_way;
                         main_read_response<=1'b1;
-                        state<=ST_CPU_RESP;
+                        if(FAST_HIT != 0) begin
+                            // R16: the ST_CPU_RESP L0 fill, done here because the response leaves now
+                            if(request_hot_hit0) begin
+                                hot_line0 <= hit_way_line; hot_replace <= 1'b1;
+                                hot_way0 <= hit_way;
+                                hot_epoch0 <= epoch_v[{hit_way[WAY_BITS-1:0], request_index}];
+                            end else if(request_hot_hit1) begin
+                                hot_line1 <= hit_way_line; hot_replace <= 1'b0;
+                                hot_way1 <= hit_way;
+                                hot_epoch1 <= epoch_v[{hit_way[WAY_BITS-1:0], request_index}];
+                            end else if(!hot_valid[0]) begin
+                                hot_valid[0] <= 1'b1; hot_block0 <= request_block;
+                                hot_line0 <= hit_way_line; hot_replace <= 1'b1;
+                                hot_way0 <= hit_way;
+                                hot_epoch0 <= epoch_v[{hit_way[WAY_BITS-1:0], request_index}];
+                            end else if(!hot_valid[1]) begin
+                                hot_valid[1] <= 1'b1; hot_block1 <= request_block;
+                                hot_line1 <= hit_way_line; hot_replace <= 1'b0;
+                                hot_way1 <= hit_way;
+                                hot_epoch1 <= epoch_v[{hit_way[WAY_BITS-1:0], request_index}];
+                            end else if(!hot_replace) begin
+                                hot_block0 <= request_block; hot_line0 <= hit_way_line;
+                                hot_replace <= 1'b1;
+                                hot_way0 <= hit_way;
+                                hot_epoch0 <= epoch_v[{hit_way[WAY_BITS-1:0], request_index}];
+                            end else begin
+                                hot_block1 <= request_block; hot_line1 <= hit_way_line;
+                                hot_replace <= 1'b0;
+                                hot_way1 <= hit_way;
+                                hot_epoch1 <= epoch_v[{hit_way[WAY_BITS-1:0], request_index}];
+                            end
+                            state<=ST_IDLE;
+                        end else
+                            state<=ST_CPU_RESP;
                     end
                 end else begin
                     miss_count<=miss_count+1'b1; true_miss_count<=true_miss_count+1'b1;
@@ -545,5 +584,32 @@ always @(posedge clk or negedge reset_n) begin
     end
 end
 // synthesis translate_on
+
+`ifndef __openlane__
+// synthesis translate_off
+// R16 sim-only per-cycle checker (rule D.3). With FAST_HIT a main hit is answered in ST_LOOKUP from the bank
+// line read in ST_IDLE; the original core answered one cycle later from the line read in ST_LOOKUP at the
+// same index. The next cycle the bank output holds that ST_LOOKUP read: the fast answer must equal its word,
+// and with FAST_HIT no main hit may reach the old response state any more.
+reg r16_pend;
+reg [1:0] r16_way;
+reg [WORD_BITS-1:0] r16_widx;
+reg [31:0] r16_word;
+always @(posedge clk or negedge reset_n) begin
+    if(!reset_n) begin
+        r16_pend <= 1'b0;
+    end else begin
+        if(r16_pend && (select_line_word(bank_rd_flat[r16_way[WAY_BITS-1:0]*LINE_WIDTH +: LINE_WIDTH], r16_widx) !== r16_word))
+            $fatal(1, "R16 FAST_HIT: ST_LOOKUP answer %h is not the word the old response state reads", r16_word);
+        if((FAST_HIT != 0) && (state == ST_CPU_RESP) && main_read_response)
+            $fatal(1, "R16 FAST_HIT: a main hit reached ST_CPU_RESP");
+        r16_pend <= fast_lookup_load_hit;
+        r16_way <= hit_way;
+        r16_widx <= request_word;
+        r16_word <= rsp_rdata;
+    end
+end
+// synthesis translate_on
+`endif
 
 endmodule

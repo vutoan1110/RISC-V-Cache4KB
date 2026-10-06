@@ -1,5 +1,7 @@
 `timescale 1ns/1ps
-module tb_cache_architecture_equivalence;
+// R16 (review M1): FAST_HIT=1 builds SA2 and DM_VC4 with CACHE_FAST_HIT (main-array hits answered in ST_LOOKUP);
+// the retirement traces, GPRs and memory must still equal DM's, which has no such parameter.
+module tb_cache_architecture_equivalence #(parameter integer FAST_HIT=0);
 localparam [31:0] HALT=32'h0000_006f;
 logic clk=0,reset_n=0;always #5 clk=~clk;
 wire [7:0] led_dm,led_sa,led_vc;
@@ -9,11 +11,11 @@ soc_top #(.MEMFILE("verification/directed/directed_isa.hex"),.BRANCH_PREDICT_ENA
  .uart_tx(),.HEX0(),.HEX1(),.HEX2(),.HEX3(),.HEX4(),.HEX5(),.HEX6(),.HEX7(),.LEDR(led_dm),
  .LCD_DATA(),.LCD_EN(),.LCD_RS(),.LCD_RW(),.LCD_ON(),.LCD_BLON());
 soc_top #(.MEMFILE("verification/directed/directed_isa.hex"),.BRANCH_PREDICT_ENABLE(1),
- .CACHE_CONFIG(1),.VICTIM_ENTRIES(4)) sa(.clk(clk),.reset_n(reset_n),.key1_n(1'b1),.uart_rx(1'b1),
+ .CACHE_CONFIG(1),.VICTIM_ENTRIES(4),.CACHE_FAST_HIT(FAST_HIT)) sa(.clk(clk),.reset_n(reset_n),.key1_n(1'b1),.uart_rx(1'b1),
  .uart_tx(),.HEX0(),.HEX1(),.HEX2(),.HEX3(),.HEX4(),.HEX5(),.HEX6(),.HEX7(),.LEDR(led_sa),
  .LCD_DATA(),.LCD_EN(),.LCD_RS(),.LCD_RW(),.LCD_ON(),.LCD_BLON());
 soc_top #(.MEMFILE("verification/directed/directed_isa.hex"),.BRANCH_PREDICT_ENABLE(1),
- .CACHE_CONFIG(2),.VICTIM_ENTRIES(4)) vc(.clk(clk),.reset_n(reset_n),.key1_n(1'b1),.uart_rx(1'b1),
+ .CACHE_CONFIG(2),.VICTIM_ENTRIES(4),.CACHE_FAST_HIT(FAST_HIT)) vc(.clk(clk),.reset_n(reset_n),.key1_n(1'b1),.uart_rx(1'b1),
  .uart_tx(),.HEX0(),.HEX1(),.HEX2(),.HEX3(),.HEX4(),.HEX5(),.HEX6(),.HEX7(),.LEDR(led_vc),
  .LCD_DATA(),.LCD_EN(),.LCD_RS(),.LCD_RW(),.LCD_ON(),.LCD_BLON());
 
@@ -89,7 +91,7 @@ initial begin
    $fatal(1,"architectural memory mismatch word=%0d",i);
  end
  if(regs_dm[31]!==1)$fatal(1,"directed ISA self-check code=%0d",regs_dm[31]);
- $display("[PASS] DM/SA2/DM_VC4 retirement traces identical (%0d instructions)",n_dm);
+ $display("[PASS] DM/SA2/DM_VC4 (FAST_HIT=%0d) retirement traces identical (%0d instructions)",FAST_HIT,n_dm);
  $display("[PASS] DM/SA2/DM_VC4 GPR and architectural memory identical");
  $finish;
 end

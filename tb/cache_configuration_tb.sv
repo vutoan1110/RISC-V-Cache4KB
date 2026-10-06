@@ -2,7 +2,10 @@
 module tb_cache_configuration #(
     parameter integer CACHE_CONFIG=0,
     parameter integer LINE_COUNT=64,
-    parameter integer LINE_WORDS=4
+    parameter integer LINE_WORDS=4,
+    // R16 (review M1): 1 = the DSE / N-way core answers a main-array hit in ST_LOOKUP. Every check below is
+    // latency-independent (fetch waits for rsp_valid), so it must hold unchanged.
+    parameter integer FAST_HIT=0
 );
 // Two addresses collide in the main array when they differ by one way's worth
 // of storage. Deriving that from the geometry keeps the test valid at any line
@@ -16,10 +19,11 @@ logic req_valid;logic[31:0]req_addr;wire req_ready,rsp_valid;wire[31:0]rsp_data;
 wire rr_valid;wire[31:0]rr_addr;wire rr_ready,rd_valid;wire[31:0]rd_data;wire rd_last,rd_error;
 wire[31:0]access_count,hit_count,miss_count,main_hit_count,victim_hit_count,true_miss_count;
 integer ar_delay=0,r_gap=0,read_txns,write_txns;
+integer last_lat;   // cycles fetch() waited after the accepting edge for rsp_valid (R16 latency check)
 logic[31:0]decode_addr;wire sel_cacheable,sel_mmio,sel_uart,sel_display,sel_timer,sel_sysmon,sel_unmapped;
 
 icache #(.LINE_COUNT(LINE_COUNT),.CACHE_CONFIG(CACHE_CONFIG),
-        .VICTIM_ENTRIES(4),.LINE_WORDS(LINE_WORDS)) dut(
+        .VICTIM_ENTRIES(4),.LINE_WORDS(LINE_WORDS),.FAST_HIT(FAST_HIT)) dut(
  .clk(clk),.reset_n(reset_n),.req_valid(req_valid),.req_addr(req_addr),.req_ready(req_ready),
  .rsp_valid(rsp_valid),.rsp_data(rsp_data),.rsp_error(rsp_error),
  .refill_req_valid(rr_valid),.refill_req_addr(rr_addr),.refill_req_ready(rr_ready),
@@ -43,6 +47,7 @@ task automatic fetch(input[31:0]a);
  begin e=be.mem[a[15:2]];g=0;while(!req_ready)begin@(posedge clk);if(g++>500)$fatal(1,"ready timeout");end
   req_addr=a;req_valid=1;@(posedge clk);#1;req_valid=0;g=0;
   while(!rsp_valid)begin@(posedge clk);#1;if(g++>800)$fatal(1,"response timeout");end
+  last_lat=g;
   if(rsp_error||rsp_data!==e)$fatal(1,"architecture mismatch cfg=%0d addr=%h got=%h exp=%h",CACHE_CONFIG,a,rsp_data,e);
   @(posedge clk);#1;end
 endtask
@@ -81,12 +86,17 @@ initial begin
       $fatal(1,"DM-DSE must thrash A/B exactly as DM does");
   default:$fatal(1,"invalid CACHE_CONFIG");
  endcase
+ // R16: for SA2 the last fetch above is a main-array hit that misses the L0 (A and B share an L0 slot, since
+ // LINE_COUNT is a multiple of the 8 L0 entries). The original DSE core answers it one cycle after the accepting
+ // edge (ST_HIT_RESP); FAST_HIT answers in ST_LOOKUP, i.e. one cycle earlier.
+ if(CACHE_CONFIG==1 && last_lat!==(FAST_HIT ? 0 : 1))
+   $fatal(1,"SA2 main-hit latency %0d, expected %0d (FAST_HIT=%0d)",last_lat,FAST_HIT ? 0 : 1,FAST_HIT);
  before_access=access_count;before_main=main_hit_count;before_reads=read_txns;
  fetch_fast(CONFLICT_STRIDE);
  if(access_count!=before_access+1||main_hit_count!=before_main+1||
     read_txns!=before_reads)
    $fatal(1,"fast main hit accounting/refill failure cfg=%0d",CACHE_CONFIG);
- $display("[PASS] CACHE_CONFIG=%0d request-cycle main-cache hit",CACHE_CONFIG);
+ $display("[PASS] CACHE_CONFIG=%0d FAST_HIT=%0d request-cycle main-cache hit",CACHE_CONFIG,FAST_HIT);
  if(access_count!==(main_hit_count+victim_hit_count+true_miss_count)||
     access_count!==(hit_count+miss_count))$fatal(1,"exclusive cache accounting failed");
  before_access=access_count;decode_addr=32'h4000_0034;#1;

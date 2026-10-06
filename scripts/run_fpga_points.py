@@ -55,6 +55,12 @@ POINTS = {
     "dse_8kb":   (3, 4, 512, 4, 1, "DM-DSE at 8 KiB"),
     "sa4_8kb":   (4, 4, 512, 4, 1, "SA4 at 8 KiB"),
 }
+# R16 / review item M1: the DSE and N-way points with CACHE_FAST_HIT 1 (main-array hit answered in ST_LOOKUP).
+# Same tuple as the base point; write_project adds the one parameter line, so every other point's .qsf is unchanged.
+FAST_POINTS = {"sa2_4kb_fast": "sa2_4kb", "vc4_4kb_fast": "vc4_4kb", "dse_4kb_fast": "dse_4kb",
+               "sa4_4kb_fast": "sa4_4kb"}
+for _k, _v in FAST_POINTS.items():
+    POINTS[_k] = POINTS[_v][:5] + (POINTS[_v][5] + ", CACHE_FAST_HIT 1 (R16)",)
 
 QSF = """set_global_assignment -name TOP_LEVEL_ENTITY de2_115_top
 source quartus/soc_core_common.qsf
@@ -115,9 +121,10 @@ def write_project(name: str, seed: int = 2, l0: int = 8) -> str:
         ('QUARTUS_VERSION = "20.1"\nPROJECT_REVISION = "%s"\n' % rev
          ).encode("utf-8"))
     (ROOT / (rev + ".qsf")).write_bytes(
-        QSF.format(name=name, cfg=cfg, victim=victim, perf=perf,
-                   seed=seed, l0=l0,
-                   lines=lines, words=words).encode("utf-8"))
+        (QSF.format(name=name, cfg=cfg, victim=victim, perf=perf,
+                    seed=seed, l0=l0,
+                    lines=lines, words=words)
+         + ("set_parameter -name CACHE_FAST_HIT 1\n" if name in FAST_POINTS else "")).encode("utf-8"))
     return rev
 
 

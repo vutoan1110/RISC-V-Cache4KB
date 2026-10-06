@@ -65,6 +65,8 @@ def main() -> int:
     # Simulation library (work_b lets this run beside a batch that uses work). The testbench writes its trace
     # to the fixed path results/cache_trace.txt, so only ONE cross-validation batch may run at a time.
     ap.add_argument("--lib", default="work")
+    # R16 (review M1): answer main-array hits in ST_LOOKUP (CACHE_FAST_HIT=1); hit/miss must still match the model.
+    ap.add_argument("--fast", action="store_true")
     args = ap.parse_args()
 
     log_dir = ROOT / "results" / "crossval_logs"
@@ -79,12 +81,13 @@ def main() -> int:
             if not (ROOT / hexfile).is_file():
                 bad.append("%s: missing firmware" % kern)
                 continue
-            log = log_dir / ("%s_%s.log" % (kern, name))
-            do = ("vsim -onfinish stop -voptargs=+acc -gCACHE_CONFIG=%d "
+            log = log_dir / ("%s_%s%s.log" % (kern, name, "_fast" if args.fast else ""))
+            do = ("vsim -onfinish stop -voptargs=+acc %s-gCACHE_CONFIG=%d "
                   "-gICACHE_LINE_COUNT=%d -gDCACHE_LINE_COUNT=%d "
                   "-gMEMFILE=%s %s.tb_benchmark_snapshot +benchmark=%s "
                   "+max_cycles=%d +trace_cache; run -all; quit -f"
-                  % (cfg, args.lines, args.lines, hexfile, args.lib, kern, MAX_CYCLES))
+                  % ("-gCACHE_FAST_HIT=1 " if args.fast else "", cfg, args.lines, args.lines, hexfile, args.lib, kern,
+                     MAX_CYCLES))
             t0 = time.time()
             if vsim(do, log) != 0:
                 bad.append("%s/%s: simulation failed" % (kern, name))

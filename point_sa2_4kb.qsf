@@ -4,7 +4,7 @@ source quartus/de2_115/de2_115_common.qsf
 
 # Seed 2 is pinned in the revision .qsf, not only in the sourced common file:
 # a SEED arriving through `source` does not take effect.
-set_global_assignment -name SEED 4
+set_global_assignment -name SEED 2
 
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files_sa2_4kb
 set_parameter -name CACHE_CONFIG 1

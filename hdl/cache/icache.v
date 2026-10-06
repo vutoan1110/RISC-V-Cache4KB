@@ -6,7 +6,9 @@ module icache #(
     parameter LINE_WORDS = 4,
     parameter VICTIM_ENTRIES = 4,
     // Depth of the L0 hot buffer; see icache_controller.v.
-    parameter L0_ENTRIES = 8
+    parameter L0_ENTRIES = 8,
+    // R16 (review M1): DSE / N-way cores answer a main-array hit in ST_LOOKUP; the DM controller ignores it.
+    parameter FAST_HIT = 0
 )(
     input wire clk,
     input wire reset_n,
@@ -145,7 +147,7 @@ end else if(CACHE_CONFIG >= 4) begin : g_nway
     // 4 = SA4 (four ways, tree pseudo-LRU). 5 = the same core at two ways, only to check it against SA2.
     wire [3:0] hit_way_vec_unused; wire [1:0] replacement_way_unused;
     icache_nway_core #(.LINE_COUNT(LINE_COUNT),.WAYS((CACHE_CONFIG==5)?2:4),
-                       .LINE_WORDS(LINE_WORDS),.L0_ENTRIES(L0_ENTRIES)) u_core(
+                       .LINE_WORDS(LINE_WORDS),.L0_ENTRIES(L0_ENTRIES),.FAST_HIT(FAST_HIT)) u_core(
         .clk(clk),.reset_n(reset_n),.req_valid(req_valid),.req_addr(req_addr),
         .req_ready(req_ready),.rsp_valid(rsp_valid),.rsp_data(rsp_data),.rsp_error(rsp_error),
         .refill_req_valid(refill_req_valid),.refill_req_addr(refill_req_addr),
@@ -164,7 +166,7 @@ end else begin : g_dse
     icache_dse_core #(.LINE_COUNT(LINE_COUNT),.CACHE_CONFIG(CACHE_CONFIG),
                       .LINE_WORDS(LINE_WORDS),
                       .VICTIM_ENTRIES(VICTIM_ENTRIES),
-                      .L0_ENTRIES(L0_ENTRIES)) u_core(
+                      .L0_ENTRIES(L0_ENTRIES),.FAST_HIT(FAST_HIT)) u_core(
         .clk(clk),.reset_n(reset_n),.req_valid(req_valid),.req_addr(req_addr),
         .req_ready(req_ready),.rsp_valid(rsp_valid),.rsp_data(rsp_data),.rsp_error(rsp_error),
         .refill_req_valid(refill_req_valid),.refill_req_addr(refill_req_addr),

@@ -7,7 +7,10 @@ module icache_dse_core #(
     parameter VICTIM_ENTRIES  = 4,
     parameter LINE_WORDS      = 4,
     // Depth of the L0 hot buffer; see icache_controller.v.
-    parameter L0_ENTRIES      = 8
+    parameter L0_ENTRIES      = 8,
+    // R16 (review M1): 1 answers a main-array hit in ST_LOOKUP (one extra cycle, as in the five-state
+    // DM controller) instead of in the following response state (two). 0 = the original core.
+    parameter FAST_HIT        = 0
 )(
     input  wire        clk,
     input  wire        reset_n,
@@ -229,6 +232,8 @@ always @(posedge clk) begin
 end
 wire main_hit_accept_event = (state == ST_IDLE) && req_fire && hot_hit;
 wire fast_main_hit_event = main_hit_accept_event;
+// R16: with FAST_HIT a main-array hit is answered in ST_LOOKUP (registered tag and bank line are both there).
+wire fast_lookup_hit = (FAST_HIT != 0) && lookup_active && main_hit;
 wire lookup_victim_hit = lookup_active && !main_hit && IS_VC4 && vc_hit;
 wire lookup_true_miss = lookup_active && !main_hit && !lookup_victim_hit;
 assign access_event = main_hit_accept_event || lookup_active;
@@ -252,14 +257,16 @@ assign victim_hit_vec_dbg = lookup_active
 assign replacement_way_dbg = selected_refill_way;
 
 assign req_ready = (state == ST_IDLE);
-assign rsp_valid = fast_main_hit_event || (state == ST_HIT_RESP) ||
+assign rsp_valid = fast_main_hit_event || fast_lookup_hit || (state == ST_HIT_RESP) ||
                    (state == ST_MISS_RESP);
 assign rsp_data = fast_main_hit_event ?
                   select_line_word(hot_hit_line, req_addr[OFFSET_BITS-1:2]) :
+                  fast_lookup_hit ?
+                  select_line_word(main_hit1 ? bank1_rd_line : bank0_rd_line, request_word) :
                   (main_read_response ?
                    select_line_word(refill_way ? bank1_rd_line : bank0_rd_line,
                                     request_word) : rsp_data_reg);
-assign rsp_error = fast_main_hit_event ? 1'b0 : rsp_error_reg;
+assign rsp_error = (fast_main_hit_event || fast_lookup_hit) ? 1'b0 : rsp_error_reg;
 assign refill_req_valid = (state == ST_REFILL_REQ);
 assign refill_req_addr =
     {request_addr[31:OFFSET_BITS], {OFFSET_BITS{1'b0}}};
@@ -389,7 +396,16 @@ always @(posedge clk or negedge reset_n) begin
                     main_read_response <= 1'b1;
                     if(IS_SA2)
                         replace_way[request_index] <= main_hit0 ? 1'b1 : 1'b0;
-                    state <= ST_HIT_RESP;
+                    if(FAST_HIT != 0) begin
+                        // R16: the ST_HIT_RESP L0 fill, done here because the response leaves now
+                        hot_valid[request_hot_index] <= 1'b1;
+                        hot_tag[request_hot_index] <= request_block[BLOCK_WIDTH-1:L0_IDX_BITS];
+                        hot_line[request_hot_index] <=
+                            main_hit1 ? bank1_rd_line : bank0_rd_line;
+                        hot_way[request_hot_index] <= main_hit1;
+                        state <= ST_IDLE;
+                    end else
+                        state <= ST_HIT_RESP;
                 end else if(IS_VC4 && vc_hit) begin
                     hit_count <= hit_count + 1'b1;
                     victim_hit_count <= victim_hit_count + 1'b1;
@@ -567,5 +583,32 @@ initial begin
         $fatal(1, "icache_dse_core: LINE_WORDS=%0d is unsupported. It must be a power of two from 2 to 16; the bank word selector is four bits, so wider lines would alias their upper words onto the lower ones without any other symptom.", LINE_WORDS);
 end
 // synthesis translate_on
+
+`ifndef __openlane__
+// synthesis translate_off
+// R16 sim-only per-cycle checker (rule D.3). With FAST_HIT a main hit is answered in ST_LOOKUP from the bank
+// line read in ST_IDLE; the original core answered one cycle later from the line read in ST_LOOKUP at the
+// same index. The next cycle the bank output holds that ST_LOOKUP read: the fast answer must equal its word,
+// and with FAST_HIT no main hit may reach the old response state any more.
+reg r16_pend;
+reg [0:0] r16_way;
+reg [WORD_BITS-1:0] r16_widx;
+reg [31:0] r16_word;
+always @(posedge clk or negedge reset_n) begin
+    if(!reset_n) begin
+        r16_pend <= 1'b0;
+    end else begin
+        if(r16_pend && (select_line_word(r16_way[0] ? bank1_rd_line : bank0_rd_line, r16_widx) !== r16_word))
+            $fatal(1, "R16 FAST_HIT: ST_LOOKUP answer %h is not the word the old response state reads", r16_word);
+        if((FAST_HIT != 0) && (state == ST_HIT_RESP) && main_read_response)
+            $fatal(1, "R16 FAST_HIT: a main hit reached ST_HIT_RESP");
+        r16_pend <= fast_lookup_hit;
+        r16_way <= main_hit1;
+        r16_widx <= request_word;
+        r16_word <= rsp_data;
+    end
+end
+// synthesis translate_on
+`endif
 
 endmodule

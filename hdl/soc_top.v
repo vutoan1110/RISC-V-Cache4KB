@@ -11,6 +11,8 @@ module soc_top #(
     parameter integer CACHE_CONFIG = 0,
     parameter integer VICTIM_ENTRIES = 4,
     parameter integer CACHE_LINE_WORDS = 4,
+    // R16 (review M1): 1 = DSE / N-way caches answer main-array hits in ST_LOOKUP (no effect on CACHE_CONFIG 0).
+    parameter integer CACHE_FAST_HIT = 0,
     // 1 builds the performance counter bank and the APB snapshot registers;
     // 0 removes them so the core's own area can be measured on its own.
     parameter integer PERF_COUNTERS_ENABLE = 1,
@@ -221,7 +223,8 @@ icache #(
     .CACHE_CONFIG   (CACHE_CONFIG),
     .LINE_WORDS     (CACHE_LINE_WORDS),
     .VICTIM_ENTRIES (VICTIM_ENTRIES),
-    .L0_ENTRIES     (L0_ENTRIES)
+    .L0_ENTRIES     (L0_ENTRIES),
+    .FAST_HIT       (CACHE_FAST_HIT)
 ) u_icache (
     .clk              (clk),
     .reset_n          (reset_n),
@@ -303,7 +306,8 @@ dcache #(
     .LINE_COUNT     (DCACHE_LINE_COUNT),
     .CACHE_CONFIG   (CACHE_CONFIG),
     .LINE_WORDS     (CACHE_LINE_WORDS),
-    .VICTIM_ENTRIES (VICTIM_ENTRIES)
+    .VICTIM_ENTRIES (VICTIM_ENTRIES),
+    .FAST_HIT       (CACHE_FAST_HIT)
 ) u_dcache (
     .clk                  (clk),
     .reset_n              (reset_n),

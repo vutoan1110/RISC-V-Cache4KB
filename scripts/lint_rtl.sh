@@ -57,11 +57,14 @@ FILES=$(ls hdl/*.v hdl/cache/*.v hdl/axi/*.v hdl/bus/*.v hdl/predictor/*.v hdl/b
 # which is the one heading for silicon, entirely unchecked. LINES overrides.
 for LC in ${LINES:-64 256 512}; do
 for CFG in ${CONFIGS:-0 1 2 3 4 5}; do   # 4 = SA4, 5 = the N-way core at two ways (R15)
-    echo "=== CACHE_CONFIG=$CFG LINE_COUNT=$LC ===" >> results/verilator_lint.txt
+for FH in ${FASTS:-0 1}; do             # R16: CACHE_FAST_HIT, which the CACHE_CONFIG 0 controller does not have
+    [ "$CFG" = 0 ] && [ "$FH" = 1 ] && continue
+    echo "=== CACHE_CONFIG=$CFG LINE_COUNT=$LC FAST_HIT=$FH ===" >> results/verilator_lint.txt
     "$VERILATOR" --lint-only -Wall \
         --timing --top-module "$TOP" -GCACHE_CONFIG="$CFG" \
-        -GICACHE_LINE_COUNT="$LC" -GDCACHE_LINE_COUNT="$LC" $FILES \
+        -GICACHE_LINE_COUNT="$LC" -GDCACHE_LINE_COUNT="$LC" -GCACHE_FAST_HIT="$FH" $FILES \
         >> results/verilator_lint.txt 2>&1
+done
 done
 done
 cat results/verilator_lint.txt

@@ -53,6 +53,8 @@ ap.add_argument("--out", required=True)
 # The default keeps the four configurations every earlier run used.
 ap.add_argument("--configs", default="0,1,2,3")
 ap.add_argument("--lib", default="work")
+# R16 (review M1): answer main-array hits in ST_LOOKUP (CACHE_FAST_HIT=1); configurations 1-5 only.
+ap.add_argument("--fast", action="store_true")
 args = ap.parse_args()
 
 # One log directory per output file, so pass 2 keeps pass 1's logs.
@@ -62,13 +64,13 @@ rows, failures = [], []
 
 for cfg in [int(c) for c in args.configs.split(",")]:
     name = CONFIGS[cfg]
-    log = log_dir / ("coremark_%s_lc%d.log" % (name, args.lines))
-    do = ("vsim -onfinish stop -gCACHE_CONFIG=%d -gMEMFILE=fw/coremark.hex "
+    log = log_dir / ("coremark_%s_lc%d%s.log" % (name, args.lines, "_fast" if args.fast else ""))
+    do = ("vsim -onfinish stop %s-gCACHE_CONFIG=%d -gMEMFILE=fw/coremark.hex "
           "-gICACHE_LINE_COUNT=%d -gDCACHE_LINE_COUNT=%d -gL0_ENTRIES=%d "
           "-gIMEM_DEPTH=%d -gDMEM_DEPTH=%d "
           "%s.tb_benchmark_snapshot +benchmark=coremark +max_cycles=%d; "
           "run -all; quit -f"
-          % (cfg, args.lines, args.lines, args.l0, args.imem, args.dmem,
+          % ("-gCACHE_FAST_HIT=1 " if args.fast else "", cfg, args.lines, args.lines, args.l0, args.imem, args.dmem,
              args.lib, args.max_cycles))
     t0 = time.time()
     rc = subprocess.call([VSIM, "-c", "-do", do], cwd=str(ROOT),

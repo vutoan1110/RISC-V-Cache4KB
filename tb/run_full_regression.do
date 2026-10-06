@@ -65,4 +65,27 @@ vsim -onfinish stop -voptargs=+acc work.tb_cache_architecture_equivalence
 run -all
 quit -sim
 
+# R16 (review M1): FAST_HIT=1 answers a main-array hit in ST_LOOKUP (DSE / N-way cores). The configuration,
+# capacity and line-size checks above must hold unchanged, the SA2 main hit must come one cycle earlier, and
+# SA2 / DM_VC4 built with FAST_HIT must retire exactly what DM retires.
+foreach lc {64 128 256} {
+    foreach cfg {1 2 3} {
+        echo "===== FAST_HIT 1, $lc lines (cfg $cfg) ====="
+        vsim -onfinish stop -voptargs=+acc -gCACHE_CONFIG=$cfg -gLINE_COUNT=$lc -gFAST_HIT=1 work.tb_cache_configuration
+        run -all
+        quit -sim
+    }
+}
+foreach {lw lc} {2 128 8 32 16 16} {
+    foreach cfg {1 3} {
+        echo "===== FAST_HIT 1, LINE_WORDS $lw (cfg $cfg) ====="
+        vsim -onfinish stop -voptargs=+acc -gCACHE_CONFIG=$cfg -gLINE_WORDS=$lw -gLINE_COUNT=$lc -gFAST_HIT=1 work.tb_cache_configuration
+        run -all
+        quit -sim
+    }
+}
+vsim -onfinish stop -voptargs=+acc -gFAST_HIT=1 work.tb_cache_architecture_equivalence
+run -all
+quit -sim
+
 echo {[PASS] Complete active RTL regression}

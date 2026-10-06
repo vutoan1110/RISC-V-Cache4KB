@@ -17,24 +17,32 @@ FILES=$(ls hdl/*.v hdl/cache/*.v hdl/axi/*.v hdl/bus/*.v hdl/predictor/*.v hdl/b
 SVFILES=$(ls hdl/*.sv 2>/dev/null | tr '\n' ' ')
 : > "$OUT"
 total=0
+bad=0
+# R16 (2026-10-06): CACHE_FAST_HIT 0/1 as a third axis (FAST_HIT does not exist in the CACHE_CONFIG 0 controller,
+# so 0/1 there is skipped), and a combination that does not elaborate (rc != 0) now fails the sweep instead of
+# counting as "0 latches".
 for LC in ${LINES:-64 256 512}; do
 for CFG in ${CONFIGS:-0 1 2 3 4 5}; do   # 4 = SA4, 5 = the N-way core at two ways (R15)
+for FH in ${FASTS:-0 1}; do
+  [ "$CFG" = 0 ] && [ "$FH" = 1 ] && continue
   log=$(mktemp)
   "$YOSYS" -q -l "$log" -p "
     read_verilog -DSYNTHESIS $FILES
     read_verilog -sv -DSYNTHESIS $SVFILES
-    hierarchy -check -top $TOP -chparam CACHE_CONFIG $CFG -chparam ICACHE_LINE_COUNT $LC -chparam DCACHE_LINE_COUNT $LC
+    hierarchy -check -top $TOP -chparam CACHE_CONFIG $CFG -chparam ICACHE_LINE_COUNT $LC -chparam DCACHE_LINE_COUNT $LC -chparam CACHE_FAST_HIT $FH
     proc
     tee -o /dev/stdout select -count t:\$dlatch t:\$adlatch t:\$dlatchsr
   " > /dev/null 2>&1
   rc=$?
   n=$(grep -c "Latch inferred for signal" "$log")
   total=$((total+n))
-  echo "=== CACHE_CONFIG=$CFG LINE_COUNT=$LC  rc=$rc  latches=$n" | tee -a "$OUT"
+  [ "$rc" -eq 0 ] || bad=$((bad+1))
+  echo "=== CACHE_CONFIG=$CFG LINE_COUNT=$LC FAST_HIT=$FH  rc=$rc  latches=$n" | tee -a "$OUT"
   grep "Latch inferred for signal" "$log" | sed 's/^/    /' | tee -a "$OUT"
   grep -E "^ERROR|^Error" "$log" | head -3 | sed 's/^/    /' | tee -a "$OUT"
   rm -f "$log"
 done
 done
-echo "TOTAL latch inferences across all combinations: $total" | tee -a "$OUT"
-[ "$total" -eq 0 ]
+done
+echo "TOTAL latch inferences across all combinations: $total; combinations that did not elaborate: $bad" | tee -a "$OUT"
+[ "$total" -eq 0 ] && [ "$bad" -eq 0 ]
