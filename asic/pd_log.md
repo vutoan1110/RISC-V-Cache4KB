@@ -4980,3 +4980,139 @@
 - DONE `dmR1g` rc=0 last=`final` final/ present
 
 - START `vc4R1F_A` (soc_vc4_4kb) args: ` --to OpenROAD.ResizerTimingPostGRT` at 2026-10-02T18:19:40+00:00
+
+- START `vc4S1` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.ResizerTimingPostGRT` at 2026-10-02T19:12:30+00:00
+
+- START `vc4U2a` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-02T22:04:40+00:00
+- DONE `vc4U2a` rc=0 last=`final` final/ present
+- ODD `vc4S1` rc=143 last=`29-openroad-repairdesignpostgrt` empty error.log, suspect a native crash
+- STOP `vc4F_A` rc=143 last=`45-openroad-repairantennas` err: `[GRT-0118] Routing congestion too high. Check the congestion heatmap in the GUI. `
+
+- START `vc4U2b` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-03T00:11:25+00:00
+
+- START `sa2U2a` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-03T00:11:42+00:00
+
+- START `vc4U2r1` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-03T00:12:58+00:00
+- DONE `vc4U2b` rc=0 last=`final` final/ present
+- STOP `vc4U2r1` rc=2 last=`27-openroad-globalrouting` err: `[PSM-0069] Check connectivity failed on VPWR. [PSM-0069] Check connectivity failed on VGND. 12753 power grid violations (as reported by OpenROAD PSM- you may ignore these if LVS passes) found. - defer`
+
+- START `vc4U2s1` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-03T00:46:17+00:00
+- DONE `sa2U2a` rc=0 last=`final` final/ present
+
+- START `dmU2a` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-03T00:48:50+00:00
+
+- START `dmU2a` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-03T01:31:44+00:00
+
+- START `vc4U2s1` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-03T01:31:44+00:00
+- DONE `vc4U2s1` rc=0 last=`final` final/ present
+
+- START `vc4U2s3` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-03T02:04:01+00:00
+- DONE `dmU2a` rc=0 last=`final` final/ present
+
+- START `vc4U2s2` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-03T02:05:48+00:00
+- DONE `vc4U2s2` rc=0 last=`final` final/ present
+- DONE `vc4U2s3` rc=0 last=`final` final/ present
+
+- START `r16_synth` (soc_dm_4kb) args: ` --to Yosys.Synthesis` at 2026-10-06T02:47:26+00:00
+
+- START `vc4U2s4` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-06T02:48:45+00:00
+- DONE `r16_synth` rc=0 last=`final` final/ present
+
+- START `vc4U2s3G50` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4U2s3/26-openroad-stamidpnr-2/state_out.json --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting` at 2026-10-06T03:00:20+00:00
+- DONE `vc4U2s3G50` rc=0 last=`final` final/ present
+
+- START `vc4U2aG50` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4U2a/26-openroad-stamidpnr-2/state_out.json --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting` at 2026-10-06T03:13:27+00:00
+- DONE `vc4U2s4` rc=0 last=`final` final/ present
+
+- START `sa2U2s3` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-06T03:21:37+00:00
+- DONE `vc4U2aG50` rc=0 last=`final` final/ present
+
+- START `sa2U2aG50` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2U2a/26-openroad-stamidpnr-2/state_out.json --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting` at 2026-10-06T03:26:37+00:00
+- DONE `sa2U2aG50` rc=0 last=`final` final/ present
+
+- START `vc4U2s2G50` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4U2s2/26-openroad-stamidpnr-2/state_out.json --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting` at 2026-10-06T03:45:30+00:00
+
+- START `sa2U2f` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T03:59:35+00:00
+- DONE `sa2U2s3` rc=0 last=`final` final/ present
+
+- START `dmU2s3` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-06T04:20:40+00:00
+- DONE `sa2U2f` rc=0 last=`final` final/ present
+
+- START `sa2U2f4` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T04:45:31+00:00
+
+- START `sa2U2fg` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T04:55:00+00:00
+
+- START `sa2U2fh` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T04:55:00+00:00
+- DONE `vc4U2s2G50` rc=0 last=`final` final/ present
+
+- START `vc4U2s1G50` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4U2s1/26-openroad-stamidpnr-2/state_out.json --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting` at 2026-10-06T05:06:46+00:00
+- ODD `vc4U2s1G50` rc=143 last=`01-openroad-globalrouting` empty error.log, suspect a native crash
+
+- START `vc4U2s4G50` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4U2s4/26-openroad-stamidpnr-2/state_out.json --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting` at 2026-10-06T05:08:46+00:00
+- DONE `dmU2s3` rc=0 last=`final` final/ present
+
+- START `sa2U2s4` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-06T05:09:00+00:00
+- DONE `sa2U2fg` rc=0 last=`final` final/ present
+
+- START `sa2U2fg4` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T05:20:53+00:00
+
+- START `vc4U2fg4` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T05:20:53+00:00
+
+- START `dmU2fg4` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T05:20:53+00:00
+
+- START `vc4U2s5` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting -c GRT_OVERFLOW_ITERS=15` at 2026-10-06T05:21:58+00:00
+- DONE `vc4U2s4G50` rc=0 last=`final` final/ present
+- DONE `sa2U2fg4` rc=0 last=`final` final/ present
+
+- START `sa2U2fg3` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T05:48:17+00:00
+- DONE `dmU2fg4` rc=0 last=`final` final/ present
+
+- START `dmU2fg3` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T06:07:55+00:00
+- DONE `sa2U2fg3` rc=0 last=`final` final/ present
+- DONE `vc4U2s5` rc=0 last=`final` final/ present
+- DONE `vc4U2fg4` rc=0 last=`final` final/ present
+
+- START `vc4U2fg3` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T06:22:52+00:00
+
+- START `vc4U2fg35` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T06:24:17+00:00
+- DONE `dmU2fg3` rc=0 last=`final` final/ present
+
+- START `dmU2fg` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T06:57:09+00:00
+- DONE `vc4U2fg3` rc=0 last=`final` final/ present
+
+- START `vc4U2fg` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T07:20:51+00:00
+
+- START `sa2U2ng3` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T07:22:49+00:00
+
+- START `vc4U2ng3` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T07:22:49+00:00
+- DONE `vc4U2fg` rc=0 last=`final` final/ present
+- DONE `vc4U2fg35` rc=0 last=`final` final/ present
+
+- START `sa2U2fg35` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T07:53:35+00:00
+- DONE `dmU2fg` rc=0 last=`final` final/ present
+- DONE `sa2U2ng3` rc=0 last=`final` final/ present
+
+- START `vc4U2ng35` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T08:07:00+00:00
+
+- START `dmU2ng3` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T08:07:00+00:00
+
+- START `sa2U2ng35` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T08:07:00+00:00
+- DONE `vc4U2ng3` rc=0 last=`final` final/ present
+
+- START `vc4U2nm3` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T08:17:13+00:00
+
+- START `sa2U2nm3` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T08:17:13+00:00
+
+- START `vc4U2fg33` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T08:17:13+00:00
+
+- START `dmU2nm3` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T08:17:48+00:00
+- DONE `sa2U2nm3` rc=0 last=`final` final/ present
+- DONE `dmU2nm3` rc=0 last=`final` final/ present
+- DONE `vc4U2fg33` rc=0 last=`final` final/ present
+- DONE `vc4U2nm3` rc=0 last=`final` final/ present
+
+
+- START `dmU2fg33` (soc_dm_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T09:23:39+00:00
+- START `sa2U2fg33` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T09:23:39+00:00
+- DONE `sa2U2fg33` rc=0 last=`final` final/ present
+- DONE `dmU2fg33` rc=0 last=`final` final/ present
