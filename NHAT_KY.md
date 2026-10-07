@@ -1024,6 +1024,7 @@ Danh sach tung file / run da xoa: `results/cleanup_deleted.txt` (mot muc moi lan
 | 2026-10-07 | 77 run PD loi thoi / that bai / sang loc | 198 GB | |
 | 2026-10-07 | goc `asic/`: 68 script mot lan, 178 log console, thu muc thi nghiem | ~5.7 GB | `results/pd_run_archive/asic_{console_logs,experiments}_20261007.tar.gz` |
 | 2026-10-07 | tai lieu trung lap (gop vao `NHAT_KY.md`, `QUY_TRINH.md`, `RESULTS.md`, `REVIEW_RESPONSE.md`, `README.md`) | - | git giu ban goc |
+| 2026-10-07 | 84 config va 45 floorplan cua cac thi nghiem da xoa run (giu 21 config, 14 floorplan dang dung); 3 thu muc thiet ke 1 KiB khong dung (`soc_dm_dse`, `soc_dse_vc1`, `soc_vc4_check`); ghi chu lac `asic/FLOW_JOURNAL.md` trong repo cong bo | 45 MB | git giu config / floorplan; file text 1 KiB trong `results/pd_run_archive/asic_1kb_designs_20261007.tar.gz` |
 
 Luon giu: tai lieu duy tri, log (log cu duoc nen), CSV chuan da chay kep, moc 1 KiB (`asic/soc_dm_control/runs/sync_final`),
 bang chung Magic (`asic/evidence/MAGIC_NAMESPACE_COLLISION.md` va cac file no liet ke), SOF board, cac run ky ten va golden
