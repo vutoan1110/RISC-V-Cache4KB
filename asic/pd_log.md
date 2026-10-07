@@ -5116,3 +5116,54 @@
 - START `sa2U2fg33` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2F_A/12-openroad-staprepnr/state_out.json --from OpenROAD.Floorplan --to OpenROAD.GlobalRouting` at 2026-10-06T09:23:39+00:00
 - DONE `sa2U2fg33` rc=0 last=`final` final/ present
 - DONE `dmU2fg33` rc=0 last=`final` final/ present
+
+- START `vc4uA` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-06T10:48:45+00:00
+
+- START `sa2uA` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-06T11:18:46+00:00
+- DONE `vc4uA` rc=0 last=`final` final/ present
+
+- START `vc4uA` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-06T11:26:12+00:00
+- DONE `sa2uA` rc=0 last=`final` final/ present
+
+- START `sa2uA` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-06T11:43:43+00:00
+
+- START `vc4uB` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-06T11:48:46+00:00
+- DONE `vc4uB` rc=0 last=`final` final/ present
+
+- START `vc4uB` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-06T12:22:37+00:00
+- DONE `sa2uA` rc=0 last=`final` final/ present
+
+- START `sa2uB` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-06T12:35:47+00:00
+- DONE `sa2uB` rc=0 last=`final` final/ present
+
+- START `sa2uB` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-06T13:00:55+00:00
+- DONE `sa2uB` rc=0 last=`final` final/ present
+
+- START `sa2uB` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-06T13:47:33+00:00
+- DONE `sa2uB` rc=143 last=`final` final/ present
+
+- START `dmuA` (soc_dm_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-06T14:10:48+00:00
+- DONE `dmuA` rc=0 last=`final` final/ present
+
+- START `dmuA` (soc_dm_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-06T14:38:45+00:00
+- DONE `dmuA` rc=0 last=`final` final/ present
+
+- START `dmuA` (soc_dm_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-06T15:13:08+00:00
+- DONE `dmuA` rc=0 last=`final` final/ present
+
+- START `dmuB` (soc_dm_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-06T15:40:51+00:00
+
+- START `dmuA` (soc_dm_4kb) args: ` --from OpenROAD.PostRouteHoldECO` at 2026-10-06T15:41:45+00:00
+- DONE `dmuB` rc=0 last=`final` final/ present
+
+- START `dmuB` (soc_dm_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-06T16:38:20+00:00
+- DONE `dmuB` rc=0 last=`final` final/ present
+
+- START `dmuB` (soc_dm_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-06T17:32:10+00:00
+- DONE `dmuB` rc=0 last=`final` final/ present
+
+- START `dmuB` (soc_dm_4kb) args: ` --from OpenROAD.PostRouteHoldECO` at 2026-10-06T18:01:54+00:00
+
+- START `dmuB` (soc_dm_4kb) args: ` --from OpenROAD.STAPostPNR --to Checker.LVS` at 2026-10-07T01:44:42+00:00
+
+- START `sa2uA` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-07T01:44:42+00:00

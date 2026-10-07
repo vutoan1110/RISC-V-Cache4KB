@@ -67,17 +67,45 @@ if gate == "p1":
         ovf, thr("P1_MAX_OVF", 500), su, thr("P1_MIN_SETUP", 0.5), ho)
     out(ovf is not None and ovf <= thr("P1_MAX_OVF", 500) and su >= thr("P1_MIN_SETUP", 0.5) and ho >= 0, msg)
 
+def post_grt_overflows():
+    """Every global-route 'Total' overflow written after OpenROAD.GlobalRouting and before STAMidPNR-3, in flow
+    order (RepairDesignPostGRT, the RepairAntennas sub-steps, ResizerTimingPostGRT ...). The last one is the routing
+    detailed routing starts from. 2026-10-06: G3 first read only RepairDesignPostGRT, whose INCREMENTAL re-route
+    said 68 / 6 for the two DM_VC4 runs, while the from-scratch re-route inside RepairAntennas said 19,114 / 11,485."""
+    g = step_dir("*-openroad-globalrouting")
+    s3 = step_dir("*-openroad-stamidpnr-3")
+    lo = int(os.path.basename(g).split("-")[0]) if g else 0
+    hi = int(os.path.basename(s3).split("-")[0]) if s3 else 10 ** 6
+    steps = sorted((d for d in glob.glob(os.path.join(run, "[0-9]*-*")) if os.path.isdir(d)
+                    and lo < int(os.path.basename(d).split("-")[0]) < hi),
+                   key=lambda p: int(os.path.basename(p).split("-")[0]))
+    vals = []
+    for d in steps:
+        logs = sorted(glob.glob(os.path.join(d, "*.log")) + glob.glob(os.path.join(d, "[0-9]*-*", "*.log")),
+                      key=lambda p: [int(x) if x.isdigit() else x for x in re.split(r"(\d+)", os.path.relpath(p, d))])
+        for lg in logs:
+            for ln in open(lg, errors="replace"):
+                if ln.startswith("Total "):
+                    try:
+                        vals.append(int(ln.split()[-1]))
+                    except ValueError:
+                        pass
+    return vals
+
+
 if gate == "p2":
     r = step_dir("*-openroad-repairdesignpostgrt")
     s3 = step_dir("*-openroad-stamidpnr-3")
     if not r or not s3 or metrics_of(s3) is None:
         print("MISSING p2 data")
         sys.exit(2)
-    ovf = last_total_overflow(os.path.join(r, "openroad-repairdesignpostgrt.log"))
+    allv = post_grt_overflows()
+    ovf = allv[-1] if allv else last_total_overflow(os.path.join(r, "openroad-repairdesignpostgrt.log"))
     m = metrics_of(s3)
     su, ho = m["timing__setup__ws__corner:nom_tt_025C_1v80"], m["timing__hold__ws__corner:nom_tt_025C_1v80"]
-    msg = "post-GRT-repair overflow %s (max %d), STAMidPNR-3 setup nom_tt %.3f (min %.2f), hold nom_tt %.3f" % (
-        ovf, thr("P2_MAX_OVF", 2000), su, thr("P2_MIN_SETUP", 0.3), ho)
+    msg = ("post-GRT-repair overflow %s (last global route before DRT; max %d; all post-GRT reports %s), "
+           "STAMidPNR-3 setup nom_tt %.3f (min %.2f), hold nom_tt %.3f" % (
+               ovf, thr("P2_MAX_OVF", 2000), allv, su, thr("P2_MIN_SETUP", 0.3), ho))
     out(ovf is not None and ovf <= thr("P2_MAX_OVF", 2000) and su >= thr("P2_MIN_SETUP", 0.3) and ho >= 0, msg)
 
 if gate == "final":
