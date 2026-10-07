@@ -1,5 +1,5 @@
 /* Minimal freestanding pieces the upstream Embench sources need on this SoC (no libc for rv32i/ilp32 in
-   the toolchain). Size-measurement harness only (FLOW_JOURNAL / Embench fit study, 2026-09-29). */
+   the toolchain). Size-measurement harness only (NHAT_KY.md, Embench fit study, 2026-09-29). */
 #include <stddef.h>
 void initialise_board(void) {}
 void start_trigger(void) {}

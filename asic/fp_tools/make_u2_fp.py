@@ -1,4 +1,4 @@
-"""U2 floorplans (2026-10-03, FLOW_JOURNAL Incident 96): strata with the cache rows folded into two 2x2 clusters.
+"""U2 floorplans (2026-10-03, NHAT_KY.md section 8): strata with the cache rows folded into two 2x2 clusters.
 
 strata1 (RAM rows, D$ row, I$ row, logic band on top) met timing (DM_VC4 post-CTS repair +1.809 ns nom_tt: the
 half-cycle refill and read paths became short) but global routing overflowed by 233,074: the two full-width cache

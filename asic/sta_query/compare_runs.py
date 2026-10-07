@@ -1,4 +1,4 @@
-"""Side-by-side signoff metrics of PD runs (STAPostPNR state_out.json), FLOW_JOURNAL Incident 76.
+"""Side-by-side signoff metrics of PD runs (STAPostPNR state_out.json), NHAT_KY.md 2026-09-26.
     python compare_runs.py <runs dir> run1 run2 ..."""
 import glob
 import json
@@ -17,7 +17,7 @@ keys = [("timing__setup__ws__corner:nom_tt_025C_1v80", "tt setup WS"), ("timing_
         ("design__max_slew_violation__count", "slew vio"), ("design__max_cap_violation__count", "cap vio"),
         ("design__max_fanout_violation__count", "fanout vio"), ("antenna__violating__nets", "antenna nets"),
         ("antenna__violating__pins", "antenna pins"), ("power__total", "power flow W (max_ff corner!)"),
-        # FLOW_JOURNAL Incident 91: per-corner DRV at nom_tt, antenna cells, hold/setup TNS at tt
+        # NHAT_KY.md 2026-09-27: per-corner DRV at nom_tt, antenna cells, hold/setup TNS at tt
         ("design__max_slew_violation__count__corner:nom_tt_025C_1v80", "nom_tt slew vio"),
         ("design__max_cap_violation__count__corner:nom_tt_025C_1v80", "nom_tt cap vio"),
         ("design__max_fanout_violation__count__corner:nom_tt_025C_1v80", "nom_tt fanout vio"),

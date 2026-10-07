@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 93: transitions along pre-buffer -> pin buffer -> SRAM pin for the worst E5b pins.
+# NHAT_KY.md 2026-09-28: transitions along pre-buffer -> pin buffer -> SRAM pin for the worst E5b pins.
 set out $::env(SQ_OUT)
 set f [open $out/prebuf.txt w]
 foreach n {208 34 33 35 251 0 1} {

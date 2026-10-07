@@ -2,7 +2,7 @@
 """Compare an OpenLane verilator-lint.log with the accepted warning baseline.
 
 ERROR_ON_LINTER_WARNINGS stays False for soc_dm_4kb because 111 warnings are
-by design (NHAT_KY_RTL.md, 2026-09-25). This keeps the gate honest instead:
+by design (NHAT_KY.md, 2026-09-25). This keeps the gate honest instead:
 any warning that is not in asic/soc_dm_4kb/lint_baseline.tsv fails the check.
 
 usage: lint_baseline_check.py <verilator-lint.log> [baseline.tsv]

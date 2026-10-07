@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 96: where do the big flop arrays sit, and how dense is the placement around them?
+# NHAT_KY.md section 8: where do the big flop arrays sit, and how dense is the placement around them?
 # For every flop whose Q net name matches one of the patterns: centroid, 10-90 % x/y range; then the
 # std-cell utilisation of the box spanning that range and of the 150 um tiles inside it (max / mean).
 # Run: openroad -python -exit cluster_where.py <odb> <label> <regex> [<regex> ...]

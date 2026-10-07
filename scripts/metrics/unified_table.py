@@ -22,7 +22,7 @@ result files on disk -- nothing typed in -- and every source named in the output
   MCYCLE match: FPGA view vs ASIC view (results/upstream_asic_r15_p1.csv, results/dse_asic_view_p1.csv)
     -- the documented difference: the RAM macro wrapper ignores the MISS_PENALTY hooks; GLS and board columns
     are filled when those runs exist (board: none, no board available).
-  ASIC area / timing / GLS->SAIF power: pending the R14 / SA2 / DM_VC4 full flows (FLOW_JOURNAL Incident 95-97).
+  ASIC area / timing / GLS->SAIF power: pending the R14 / SA2 / DM_VC4 full flows (NHAT_KY.md 2026-09-30-97).
 
     python scripts/metrics/unified_table.py  -> results/unified_metrics.csv and results/unified_metrics.md
 """
@@ -107,7 +107,7 @@ def main():
             row["asic_view_mcycle_sum_pct_vs_fpga"] = 100.0 * (sum(int(b["mcycle"]) for _, b in av)
                                                                 / sum(int(a["mcycle"]) for a, _ in av) - 1.0)
             row["asic_view_kernels"] = len(av)
-        # GLS / activity-based power of the signed-off final netlist (FLOW_JOURNAL Incidents 95-96)
+        # GLS / activity-based power of the signed-off final netlist (NHAT_KY.md 2026-09-30)
         tag = {"DM": "r14F_A", "SA2": "sa2F_A", "DM_VC4": "vc4F_A"}.get(cfg)
         g = rows("gls_power_%s.csv" % tag) if tag else []
         p = rows("gls_power_%s_power.csv" % tag) if tag else []

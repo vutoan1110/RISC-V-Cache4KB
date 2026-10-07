@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# R16 Quartus chain (review item M1, FAST_HIT; NHAT_KY_RTL 2026-10-06). Seed 2 only (the pinned seed; seed noise was
+# R16 Quartus chain (review item M1, FAST_HIT; NHAT_KY.md 2026-10-06). Seed 2 only (the pinned seed; seed noise was
 # measured on R14: LE <= 109), every fit twice, accepted only when pass 2 reproduces pass 1 on every field. One fit
 # at a time.
 #   dm_4kb sa2_4kb vc4_4kb dse_4kb sa4_4kb   FAST_HIT 0 controls: the RTL is formally equivalent to R15 at these
@@ -13,7 +13,7 @@ TAG=r16
 POINTS="dm_4kb sa2_4kb vc4_4kb dse_4kb sa4_4kb sa2_4kb_fast vc4_4kb_fast dse_4kb_fast sa4_4kb_fast"
 fail=0
 # A fit needs several GB; wait (checking every 2 min) until Windows has >= 6 GB available, so a fit never starts
-# into memory pressure (other jobs and the user's own programs share this machine).
+# into memory pressure (other jobs and other programs share this machine).
 avail () { powershell -NoProfile -Command "[int](Get-Counter '\Memory\Available MBytes').CounterSamples.CookedValue" 2>/dev/null | tr -d '\r'; }
 memgate () { while :; do [ -e results/.abort_fpga_sweep ] && return 0; a=$(avail); [ "${a:-0}" -ge 6000 ] && return 0; sleep 120; done; }
 for PASS in 1 2; do

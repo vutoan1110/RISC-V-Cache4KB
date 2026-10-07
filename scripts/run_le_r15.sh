@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# R15 Quartus chain (review item M2: four-way set associativity and 8 KiB; NHAT_KY_RTL / FLOW_JOURNAL 2026-10-02).
+# R15 Quartus chain (review item M2: four-way set associativity and 8 KiB; NHAT_KY.md 2026-10-02).
 # Seed 2 only -- the project's pinned seed; the 4-seed sweep of R14 already measured seed noise (LE <= 109) --
 # and every fit twice, accepted only when pass 2 reproduces pass 1 on every field. Fits run one at a time.
 #   dm_4kb   control: configurations 0-3 elaborate exactly the R14 modules, so this row must reproduce the R14

@@ -1,4 +1,4 @@
-"""STRATA floorplans (2026-10-03, FLOW_JOURNAL Incident 96).
+"""STRATA floorplans (2026-10-03, NHAT_KY.md section 8).
 
 Why: in the SA2 / DM_VC4 builds the worst setup paths are LONG-WIRE half-cycle paths: the SRAM dout launches on
 the falling clock edge, and the DSE core writes each AXI refill beat straight into the lane macros (DM gathers it
@@ -73,7 +73,7 @@ for i, a in enumerate(boxes):
     for b in boxes[i + 1:]:
         assert (a[3] + HALO <= b[1] - HALO or b[3] + HALO <= a[1] - HALO or
                 a[4] + HALO <= b[2] - HALO or b[4] + HALO <= a[2] - HALO), ("overlap incl. halo", a, b)
-hdr = ("# %s STRATA floorplan %s (2026-10-03, FLOW_JOURNAL Incident 96; fp_tools/make_strata_fp.py %s %s %.0f %.0f %s %.0f %.0f %.0f %.0f):\n"
+hdr = ("# %s STRATA floorplan %s (2026-10-03, NHAT_KY.md section 8; fp_tools/make_strata_fp.py %s %s %.0f %.0f %s %.0f %.0f %.0f %.0f):\n"
        "# die %.0f x %.0f um (%.2f mm2); bottom to top: RAM row A (FS), RAM channel %.0f, RAM row B (N), gap %.0f, D$ row (N),\n"
        "# gap %.0f, I$ row (N), logic band %.0f um; RAM row gap %.1f, cache row gap %.0f.\n"
        % (d, tag, d, tag, W, H, base, e, ram_ch, g_bd, g_di, W, H, W * H / 1e6, ram_ch, g_bd, g_di, band, gR, GC))

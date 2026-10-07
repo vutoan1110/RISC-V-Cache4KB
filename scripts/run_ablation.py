@@ -83,7 +83,7 @@ def main() -> int:
     # macro wrappers) instead of the behavioural RAMs. Only the DM 4 KiB point
     # exists as an ASIC, so this forces CACHE_CONFIG 0 and 256 lines.
     ap.add_argument("--asic-view", action="store_true")
-    # FLOW_JOURNAL Incident 93: an experimental RTL copy is compiled by its own script into its own library
+    # NHAT_KY.md 2026-09-28: an experimental RTL copy is compiled by its own script into its own library
     ap.add_argument("--asic-compile", default="tb/compile_asic_view.do")
     ap.add_argument("--asic-lib", default="work_asic")
     # SA2 / DM_VC4 ASIC builds (2026-09-30): their data banks have a macro wrapper

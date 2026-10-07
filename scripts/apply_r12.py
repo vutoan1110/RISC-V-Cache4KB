@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""R12 (NHAT_KY_RTL 2026-09-26): give back the FPGA logic R9b cost, same function.
+"""R12 (NHAT_KY.md 2026-09-26): give back the FPGA logic R9b cost, same function.
 
-Measured (Quartus 20.1, vc4_4kb, FLOW_JOURNAL Incident 78): after R9 the DM+VC4
+Measured (Quartus 20.1, vc4_4kb, NHAT_KY.md 2026-09-26): after R9 the DM+VC4
 4 KiB point is 20,002-20,077 LE over four seeds, above the specification's
 20,000 LE ("LE over 20,000 ... is still a FAIL against the specification",
 docs/en/guides/01_RTL_QUARTUS_QPF_QSF_SOF.md). A map-only A/B of the old and

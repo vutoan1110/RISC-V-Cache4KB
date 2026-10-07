@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Full verification chain on the frozen RTL (NHAT_KY_RTL.md), 4 KiB only.
+# Full verification chain on the frozen RTL (NHAT_KY.md), 4 KiB only.
 # The 1 KiB design is out of scope from 2026-09-25.
 #
 # Every measurement runs twice and the two passes must agree exactly, because

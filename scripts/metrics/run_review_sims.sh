@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Review follow-up simulations (FLOW_JOURNAL Incident 95, user directive 2026-09-30), FPGA view, R14 frozen RTL
+# Review follow-up simulations (NHAT_KY.md 2026-09-30, requirement of 2026-09-30), FPGA view, R14 frozen RTL
 # 3ea52396, 4 KiB points (256 lines), all four cache configurations, each run twice (pass 1 / pass 2):
 #   A8  branch predictor off (BRANCH_PREDICT_ENABLE=0): 12 project kernels and 12 upstream kernels
 #   board reference: the 12 upstream kernels at their original iteration counts (fw_board/upfull_*.hex), the

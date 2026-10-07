@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 96: who owns the 500+ um std-cell nets? Each long net is attributed to the RTL name of
+# NHAT_KY.md section 8: who owns the 500+ um std-cell nets? Each long net is attributed to the RTL name of
 # the first named flop it touches (driver or sink, via that flop's Q net), or to its own name when it has one;
 # grouped at DEPTH hierarchy levels with array indices folded.
 # Run: openroad -python -exit long_nets.py <odb> <label> [min_um]

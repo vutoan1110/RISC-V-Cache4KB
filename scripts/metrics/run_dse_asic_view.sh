@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SA2 / DM_VC4 ASIC-view verification (2026-09-30, FLOW_JOURNAL: SA2 and DM_VC4 ASIC builds).
+# SA2 / DM_VC4 ASIC-view verification (2026-09-30, NHAT_KY.md: SA2 and DM_VC4 ASIC builds).
 # Library work_asic_dse (scripts/metrics/compile_asic_view_dse.do): the frozen PD RTL
 # asic/snapshots/rtl_r14 with the DSE data bank on OpenRAM macros
 # (asic/dse_sram/cache_dse_data_bank_sram.v). Acceptance, the same rule the DM ASIC view

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""R10 fix 1 (NHAT_KY_RTL 2026-09-26): the R10a CHECKER (simulation only) took
+"""R10 fix 1 (NHAT_KY.md 2026-09-26): the R10a CHECKER (simulation only) took
 the line index of hot entry e as hot_tag[e][INDEX_WIDTH-L0B-1:0] ++ e. With
 INDEX_WIDTH == L0B (8-line caches in tb_cache_event_accounting and three SoC
 testbenches) that part-select is [-1:0] and Questa's vopt refused the design,

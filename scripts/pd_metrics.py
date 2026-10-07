@@ -127,7 +127,7 @@ def main() -> int:
         fm = json.loads(final.read_text())
     elif args.partial:
         # The run stopped before OpenLane wrote final/ (on this host: Yosys.EQY
-        # dying, FLOW_JOURNAL Incident 64). Take the newest completed step's
+        # dying, NHAT_KY.md 2026-09-25). Take the newest completed step's
         # cumulative metrics and say so at the top of every output.
         done = [d for d in run.iterdir() if d.is_dir() and re.match(r"^\d+-", d.name)
                 and (d / "state_out.json").is_file()]
@@ -259,7 +259,7 @@ def main() -> int:
                        ("Floating nets", "timing__drv__floating__nets"),
                        ("Lint errors", "design__lint_error__count"),
                        ("Lint warnings", "design__lint_warning__count"),
-                       ("Inferred latches (Verilator; unreliable, see Incident 54)",
+                       ("Inferred latches (Verilator; unreliable, see NHAT_KY.md 2026-09-24)",
                         "design__inferred_latch__count"),
                        ("Flow errors", "flow__errors__count"),
                        ("Flow warnings", "flow__warnings__count")):

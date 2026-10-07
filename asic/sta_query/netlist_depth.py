@@ -1,4 +1,4 @@
-"""Structural logic depth (cells) on a flat sky130 netlist (FLOW_JOURNAL Incident 76).
+"""Structural logic depth (cells) on a flat sky130 netlist (NHAT_KY.md 2026-09-26).
 
     python netlist_depth.py <netlist.v> <report>
 

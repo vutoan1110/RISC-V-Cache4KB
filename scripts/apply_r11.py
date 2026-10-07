@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""R11 (candidate, NHAT_KY_RTL 2026-09-26): L0 hot hit as compare-then-select.
+"""R11 (candidate, NHAT_KY.md 2026-09-26): L0 hot hit as compare-then-select.
 
-Evidence (FLOW_JOURNAL Incident 77): after R10a the worst max_ss path of r10A is
+Evidence (NHAT_KY.md 2026-09-26): after R10a the worst max_ss path of r10A is
 pc_f[6] -> hot-index decode -> 2.7 ns buffer tree -> AND-OR mux of hot_tag ->
 compare -> or4/or4/or3 -> hit (15.2 ns after pc_f). The hot index bits select
 25 tag bits x L0_ENTRIES before anything is compared, so they carry the

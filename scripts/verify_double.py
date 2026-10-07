@@ -2,7 +2,7 @@
 """Compare two independent runs of the same measurement, field by field.
 
 The Double-Execution Protocol exists because this host corrupts memory (see
-PD_incident_report.md, A1): a run can finish and be quietly wrong. Random
+NHAT_KY.md section 9): a run can finish and be quietly wrong. Random
 corruption cannot repeat itself identically, so two independent runs that agree
 on every digit are trustworthy and two that disagree are not.
 

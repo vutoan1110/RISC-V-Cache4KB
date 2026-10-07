@@ -1,5 +1,5 @@
 // scripts/metrics/directed_isa_dse_tb.sv -- copy of tb/directed_isa_tb.sv for the SA2 / DM_VC4 ASIC view
-// (work_asic_dse, FLOW_JOURNAL Incident 96). ONE difference: cache_assertions' d_tag_write_enable was
+// (work_asic_dse, NHAT_KY.md section 8). ONE difference: cache_assertions' d_tag_write_enable was
 // wired to dut.u_dcache.g_dm_baseline.u_controller.tag_wr_en, which exists only for CACHE_CONFIG 0, so the
 // original cannot elaborate for configurations 1 and 2. Same module name, compiled only into work_asic_dse.
 `timescale 1ns/1ps
@@ -129,7 +129,7 @@ cache_assertions u_cache_assertions (
     .d_write_miss(dut.dcache_write_miss_count),
     .d_write_miss_event(dut.dcache_write_miss_event),
     .d_refill_req_valid(dut.dcache_refill_req_valid),
-    // DSE copy (FLOW_JOURNAL Incident 96): the DSE D-cache core has no single tag-write strobe, so the
+    // DSE copy (NHAT_KY.md section 8): the DSE D-cache core has no single tag-write strobe, so the
     // tag half of 'store miss attempted refill/allocation' is off; the refill half stays.
     .d_tag_write_enable(1'b0),
     .assertion_checks(cache_assertion_checks)

@@ -1,5 +1,5 @@
 # Clock latency (arrival of clk) at every register clock pin, min_ff corner,
-# written as "pin latency_rise" for a histogram (FLOW_JOURNAL Incident 76).
+# written as "pin latency_rise" for a histogram (NHAT_KY.md 2026-09-26).
 puts "SQ_PROPS"
 catch {report_clock_latency -digits 3} e1
 puts "report_clock_latency: $e1"

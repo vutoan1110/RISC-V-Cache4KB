@@ -1,4 +1,4 @@
-"""DM_VC4 placement-density variants on the wide floorplan (2026-10-03, FLOW_JOURNAL Incident 96).
+"""DM_VC4 placement-density variants on the wide floorplan (2026-10-03, NHAT_KY.md section 8).
 vc4F_A (config_wide.json, density 42) overflows global routing by 34,086 even with GRT_ALLOW_CONGESTION. The
 block-traffic analysis (scratchpad block_traffic.py) puts the extra wire inside the two tag-array clusters
 (nets >= 500 um: I$+D$ tag 1,516 mm vs DM 231 mm). Lowering the global-placement density spreads those clusters,

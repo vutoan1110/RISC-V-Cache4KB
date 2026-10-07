@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 93: every violating setup endpoint at one corner with its slack and the RTL name
+# NHAT_KY.md 2026-09-28: every violating setup endpoint at one corner with its slack and the RTL name
 # of the capturing register (the net on its Q pin), so runs can be compared per register group.
 # Output: $::env(SQ_OUT)/endgroups_<corner>.tsv
 set out $::env(SQ_OUT)

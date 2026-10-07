@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""R10 (NHAT_KY_RTL 2026-09-26): cycle-exact timing restructuring for the ss corner.
+"""R10 (NHAT_KY.md 2026-09-26): cycle-exact timing restructuring for the ss corner.
 
     python scripts/apply_r10.py [root]   # apply (fails if any anchor is missing)
 
-Evidence (FLOW_JOURNAL Incidents 75-76, signoff STA of r9_ecf4 at max_ss):
+Evidence (NHAT_KY.md 2026-09-26, signoff STA of r9_ecf4 at max_ss):
   * the worst path is pc_f -> L0 hot-buffer hit -> stall_pipe -> retire_event
     -> csr_minstret; 7 ns of it (11.1 -> 18.1 ns) is the LINE_COUNT:1 mux that
     reads the tag RAM's valid bit at the live index for the hot hit, and the

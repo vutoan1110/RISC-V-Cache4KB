@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 96: where does a timing path physically go? Reads the FIRST path of an OpenSTA max.rpt,
+# NHAT_KY.md section 8: where does a timing path physically go? Reads the FIRST path of an OpenSTA max.rpt,
 # looks up every instance on the data path (from the startpoint's data pin on) in the step's ODB and prints its
 # location, the stage delay, the fanout of the net it drives, and the Manhattan distance from the previous stage.
 # Run: openroad -python -exit path_trace.py <odb> <max.rpt> [path index, 1-based]

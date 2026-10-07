@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 91: design-rule violators (max slew / max cap / max fanout) of a signed-off
+# NHAT_KY.md 2026-09-27: design-rule violators (max slew / max cap / max fanout) of a signed-off
 # run at one corner, with the driver cell of every violating pin, for classification.
 # Output: $::env(SQ_OUT)/drv_<corner>.rpt (raw report) and drv_<corner>.tsv (pin, ref, net, fanout).
 set out $::env(SQ_OUT)

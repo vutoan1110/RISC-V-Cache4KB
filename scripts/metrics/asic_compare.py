@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Side-by-side ASIC comparison of the three 4 KiB cache organisations (FLOW_JOURNAL Incident 96).
+"""Side-by-side ASIC comparison of the three 4 KiB cache organisations (NHAT_KY.md section 8).
 
     python scripts/metrics/asic_compare.py DM=soc_dm_4kb:r14F_A:r14F_B SA2=soc_sa2_4kb:sa2F_A:sa2F_B \
                                            DM_VC4=soc_vc4_4kb:vc4F_A:vc4F_B [--out results/asic_compare.md]

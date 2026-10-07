@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 96: block-to-block wire traffic of a placed design.
+# NHAT_KY.md section 8: block-to-block wire traffic of a placed design.
 # Every flop is labelled with the RTL block of its Q net name (cache tag arrays / victim buffer / rest of the
 # cache, core, RAM controller, other); every other std cell takes the label of the nearest flop in the netlist
 # graph (multi-source BFS over signal nets with <= 64 pins). Macros are labelled by their kind. Each net's

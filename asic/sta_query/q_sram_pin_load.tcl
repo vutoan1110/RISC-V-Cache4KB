@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 93: for every SRAM addr/wmask pin, the driver, the net capacitance (pin + wire, from
+# NHAT_KY.md 2026-09-28: for every SRAM addr/wmask pin, the driver, the net capacitance (pin + wire, from
 # the SPEF) and the transition at the pin, to see why some still exceed 0.04 ns after MacroPinBuffers.
 set out $::env(SQ_OUT)
 set f [open $out/sram_pin_load.tsv w]

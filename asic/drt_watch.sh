@@ -1,23 +1,19 @@
 #!/usr/bin/env bash
-# FLOW_JOURNAL Incident 96 (2026-10-03): gate G5 -- watchdog of ONE run's detailed routing.
+# drt_convergence gate (older logs: G5): watchdog of ONE run's detailed routing (QUY_TRINH.md section D).
 #   bash drt_watch.sh <design dir> <run tag>
 # Every 60 s it reads "Start Nth optimization iteration" / "Number of violations" from the run's
-# *-openroad-detailedrouting log and aborts the run when its convergence cannot reach a clean sign-off:
+# *-openroad-detailedrouting log and stops the run when its convergence cannot reach a clean sign-off:
 #   after optimization iteration  5: violations > ${G5_IT5:-20000}
 #                       iteration 10: violations > ${G5_IT10:-5000}
 #                       iteration 20: violations > ${G5_IT20:-600}
 #                       iteration 30: violations > ${G5_IT30:-150}
 #                       iteration 40: violations > ${G5_IT40:-30}
 #   stall: from iteration 12 on, more than 100 violations left and less than a 10 % drop over the last 4 iterations
-# (reference DM r14F_A: 2,246 at 5, 153 at 10, 0 at the end; SA2 on the wide floorplan: 48,353 at 5.)
-# 2026-10-06 recalibration: the first limits (5000 / 1000 / 200 / 50) were set from that ONE DM run and stopped
-# sa2uB at iteration 6 (9,414 at 5, 6,906 at 6) while it was converging like DM (ratio 0.70-0.73 per iteration,
-# DM 0.58-0.70), about 3-4x DM in absolute terms -- a healthy run, not a doomed one. The limits now sit about 2x
-# above that trajectory projected at 0.75 per iteration (2,200 at 10, ~120 at 20, ~7 at 30) and well below the
-# failed SA2-wide run, and a convergence-stall rule catches a run that stops improving.
-# Abort = SIGTERM to exactly this run's detailed-routing openroad process and its OpenLane python process
-# (matched by the run directory path and by "run-tag <tag>"), as authorised by the user on 2026-10-03 for runs
-# that cannot reach a clean sign-off. Exit 0 when detailed routing finished (runtime.txt written), 1 on abort.
+# Reference trajectories: DM grid3665x2900 2,246 at 5, 153 at 10, 0 at the end; SA2 on the wide grid (failed) 48,353
+# at 5. The limits were recalibrated on 2026-10-06 (the first set, taken from one DM run, stopped a converging SA2
+# run at iteration 6); the window restarts with each detailed_route call (antenna-repair passes renumber from 0).
+# Stop = SIGTERM to exactly this run's detailed-routing openroad process and its OpenLane python process (matched by
+# the run directory path and by "run-tag <tag>"). Exit 0 when detailed routing finished (runtime.txt written), 1 on stop.
 set -u
 A=/mnt/e/Projects/RISCV-research/asic
 des=$1; tag=$2

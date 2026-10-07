@@ -65,7 +65,7 @@ out.append("The last row is the ASIC view of DM (`results/asic_view_4kb_p{1,2}.c
            "of the ASIC netlist, whose memories are the SRAM macros. It retires the same instructions with identical "
            "counts on 40 of 43 fields, but mcycle, I-wait and D-wait are lower (0.2-10.6 %% per kernel), so the "
            "CPI of the chip is the ASIC-view value; the FPGA-view rows are the FPGA/DSE comparison. (Corrected in "
-           "FLOW_JOURNAL Incident 91: an earlier version called the views identical.)\n" % ("==" if same_av else "!= (CHECK)"))
+           "NHAT_KY.md 2026-09-27: an earlier version called the views identical.)\n" % ("==" if same_av else "!= (CHECK)"))
 out.append("| Config | Cycles (sum) | Instr (sum) | CPI (sum) | CPI geomean | I$ hit | D$ read hit | D$ write hit "
            "| Branch mispredict | I-wait | D-wait | Load-use | Control | MMIO |")
 out.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
@@ -149,7 +149,7 @@ if PD:
             out.append("| %s | %s |" % (lab, v))
     else:
         eqy = glob.glob(os.path.join(base, "*-yosys-eqy"))
-        out.append("| EQY (RTL vs final netlist) | %s |" % ("see FLOW_JOURNAL" if eqy else "not run"))
+        out.append("| EQY (RTL vs final netlist) | %s |" % ("see NHAT_KY.md" if eqy else "not run"))
     if PD2:
         m2 = {}
         for so in sorted(glob.glob(os.path.join(R, "asic", "soc_dm_4kb", "runs", PD2, "*", "state_out.json"))):

@@ -1,4 +1,4 @@
-# RUDY wire-demand map of a placed ODB (FLOW_JOURNAL Incident 96: where do SA2 / DM_VC4 congest?).
+# RUDY wire-demand map of a placed ODB (NHAT_KY.md section 8: where do SA2 / DM_VC4 congest?).
 # Each net spreads its HPWL uniformly over its bounding box (width/height floored at one tile), summed on a
 # TILE-um grid; demand density = um of wire per um^2. Prints the grid as a coarse ASCII heat map (macros as #),
 # the hottest tiles, and how much demand falls inside channels between macros vs open core.

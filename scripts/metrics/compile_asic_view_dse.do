@@ -1,7 +1,7 @@
 transcript on
 onerror {quit -code 1 -f}
 
-# ASIC-view compile for the SA2 / DM_VC4 ASIC builds (2026-09-30, FLOW_JOURNAL: SA2 and DM_VC4
+# ASIC-view compile for the SA2 / DM_VC4 ASIC builds (2026-09-30, NHAT_KY.md: SA2 and DM_VC4
 # ASIC builds). Same sources and order as tb/compile_asic_view.do, with three differences:
 #   1. the RTL comes from the frozen PD snapshot asic/snapshots/rtl_r14, the exact files the
 #      OpenLane configs read, not from the live hdl/ tree;

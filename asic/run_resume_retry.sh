@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# FLOW_JOURNAL Incident 93: resume a PD tag from a step, retrying ONLY when the failure looks like this host's
+# NHAT_KY.md 2026-09-28: resume a PD tag from a step, retrying ONLY when the failure looks like this host's
 # random fault (SIGSEGV / "Signal 11" / an odbpy Python traceback). Any other failure stops the loop.
 #   bash run_resume_retry.sh <tag> <config> <from step> [to step]
 # Only the part of error.log written by the current try is judged: OpenLane APPENDS to it across resumes,
 # and the first version of this script retried a run that had already finished because of an old entry.
-# A failure in the last step, Yosys.EQY, is the known stock-EQY verdict (Incident 93), not a crash: done.
+# A failure in the last step, Yosys.EQY, is the known stock-EQY verdict (NHAT_KY.md 2026-09-28), not a crash: done.
 # Cooperative stop: touch asic/.abort_x_exps
 A=/mnt/e/Projects/RISCV-research/asic
 tag=$1 cfg=$2 frm=$3 to=$4

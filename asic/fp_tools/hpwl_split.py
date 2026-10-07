@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 96: split the placed HPWL of a design into nets touching a macro (grouped by macro kind
+# NHAT_KY.md section 8: split the placed HPWL of a design into nets touching a macro (grouped by macro kind
 # and pin group) and nets between std cells only (grouped by HPWL length class), to see where SA2 / DM_VC4 put
 # their extra wire compared with DM.
 # Run: openroad -python -exit hpwl_split.py <odb> <label>

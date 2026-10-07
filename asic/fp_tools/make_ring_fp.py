@@ -1,4 +1,4 @@
-"""Ring floorplans for the DSE builds (2026-10-03, FLOW_JOURNAL Incident 96).
+"""Ring floorplans for the DSE builds (2026-10-03, NHAT_KY.md section 8).
 
 Why: the OpenRAM macros obstruct met1-met4 (LEF OBS), so in the DM-style 4 x 4 macro grid every vertical route
 between logic in different macro rows must squeeze through the narrow vertical gaps between macros, and the
@@ -79,7 +79,7 @@ for i, a in enumerate(boxes):
         assert sep, ("overlap incl. halo", a, b)
 center_w = (x1 - e - CACHE[0] - c) - (x0 + e + CACHE[0] + c)
 center_h = col_hi - col_lo
-hdr = ("# %s RING floorplan %s (2026-10-03, FLOW_JOURNAL Incident 96; fp_tools/make_ring_fp.py %s %s %.0f %.0f %.0f %.0f):\n"
+hdr = ("# %s RING floorplan %s (2026-10-03, NHAT_KY.md section 8; fp_tools/make_ring_fp.py %s %s %.0f %.0f %.0f %.0f):\n"
        "# die %.0f x %.0f um (%.2f mm2); RAM rows bottom (FS) / top (N), I$ column left (N), D$ column right (FN);\n"
        "# core-edge margin %.0f, row/column spacing %.0f, row gap %.1f, column gap %.1f; open middle %.0f x %.0f um.\n"
        % (d, tag, d, tag, W, H, e, c, W, H, W * H / 1e6, e, c, gR, gC, center_w, center_h))

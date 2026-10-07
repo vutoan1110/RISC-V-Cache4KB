@@ -1,5 +1,5 @@
 """Summarise report_checks paths: per SQ_GROUP block, print the arrival at every
-named design net (u_soc.*) plus the first and last cell (FLOW_JOURNAL Incident 76)."""
+named design net (u_soc.*) plus the first and last cell (NHAT_KY.md 2026-09-26)."""
 import re
 import sys
 

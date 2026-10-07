@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 93 (Task B feasibility): "what if a pipeline register were inserted here?"
+# NHAT_KY.md 2026-09-28 (Task B feasibility): "what if a pipeline register were inserted here?"
 # Each line of $::env(SQ_CUTS) names a net; every timing path THROUGH it is removed (set_false_path
 # -through), which is what a register on that net would do to the current single-cycle path. The script
 # reports, after all cuts, the worst setup slack and the worst path (named nets only), so the cuts needed

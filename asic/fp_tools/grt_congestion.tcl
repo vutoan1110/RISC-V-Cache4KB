@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 96 (2026-10-06): where does a floorplan's global routing overflow sit?
+# NHAT_KY.md section 8 (2026-10-06): where does a floorplan's global routing overflow sit?
 # OpenLane's GlobalRouting step writes no congestion map. This replays the step's global_route exactly as
 # openlane-local/openlane/scripts/openroad/common/grt.tcl builds it for these configs (met1-met5, global
 # adjustment 0.2 then GRT_LAYER_ADJUSTMENTS li1 0.99 / met1-5 0, macro extension 1, allow_congestion; the step is

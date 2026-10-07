@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 93 (Task B bound): remove every setup path that STARTS at the registers whose Q nets
+# NHAT_KY.md 2026-09-28 (Task B bound): remove every setup path that STARTS at the registers whose Q nets
 # match the patterns in $::env(SQ_FROM) (one glob per line), then report the worst slack and how many
 # endpoints stay below -1..-8 ns. Removing ALL paths from a register over-cuts (its legitimate data paths go
 # too), so the result is an OPTIMISTIC bound for re-architecting what those registers feed.

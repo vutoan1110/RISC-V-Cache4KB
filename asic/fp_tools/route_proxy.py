@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 96: cheap routability proxies of a placed ODB, to rank floorplan / placement variants
+# NHAT_KY.md section 8: cheap routability proxies of a placed ODB, to rank floorplan / placement variants
 # before paying for global routing. Per TILE x TILE um tile outside macros:
 #   util  = std-cell area / tile area (tap + fill cells excluded)
 #   pins  = signal pins of std cells per 100 um2 (local pin-access pressure: li1/met1 overflow)

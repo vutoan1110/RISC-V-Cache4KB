@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""R9 (NHAT_KY_RTL 2026-09-26): cycle-exact timing restructuring for the ss corner.
+"""R9 (NHAT_KY.md 2026-09-26): cycle-exact timing restructuring for the ss corner.
 
     python scripts/apply_r9.py          # apply (fails if any anchor is missing)
 
@@ -78,7 +78,7 @@ edit("hdl/hazard_unit.v", [
      "    else if(((rs2_e == rd_w) && reg_wr_w) && (rs2_e != 0)) forward_b_e = 2'b01 ;\n"
      "    else                                                   forward_b_e = 2'b00 ;\n"
      "end\n",
-     "// R9 (NHAT_KY_RTL 2026-09-26): the EX forwarding selects are no longer\n"
+     "// R9 (NHAT_KY.md 2026-09-26): the EX forwarding selects are no longer\n"
      "// decoded here in EX; datapath.v registers them one stage early.\n"),
 ])
 
@@ -137,7 +137,7 @@ edit("hdl/datapath.v", [
      "                  ({32{rsel_w[0]}} & alu_result_w)  ;\n"),
 ])
 R9_BLOCK = r"""// ---------------------------------------------------------------------------
-// R9 (NHAT_KY_RTL 2026-09-26): decodes moved off the ss-critical paths.
+// R9 (NHAT_KY.md 2026-09-26): decodes moved off the ss-critical paths.
 // Each register below is loaded under exactly the enable (!stall_pipe), flush
 // and reset of the registers it replaces the decode of, so it holds the same
 // value as the old combinational decode in every cycle; the simulation-only

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""R12b (NHAT_KY_RTL 2026-09-26): keep R12's encoded selects for the FPGA, restore
+"""R12b (NHAT_KY.md 2026-09-26): keep R12's encoded selects for the FPGA, restore
 R9b's one-hot selects for the ASIC netlist only.
 
-Measured (FLOW_JOURNAL Incident 80): OpenLane synthesis of the R12 RTL does not
+Measured (NHAT_KY.md 2026-09-26): OpenLane synthesis of the R12 RTL does not
 finish. ABC (AREA_0 script) stalls in `fraig_restore` on the 136k-node AIG
 (>12 min in a step-timed replay, >70 min inside r12_d40), while the pre-R12
 RTL synthesises in 2 min 14 s end to end. The two forms are proven equal in
@@ -61,7 +61,7 @@ edits = [
      "                  (result_src_w == 2'b01) ? rd_data_final :\n"
      "                                            alu_result_w;\n",
      "// R12b: the ASIC netlist keeps R9b's one-hot AND-OR. On the encoded form above\n"
-     "// OpenLane's ABC stalls in fraig_restore (FLOW_JOURNAL Incident 80); the two\n"
+     "// OpenLane's ABC stalls in fraig_restore (NHAT_KY.md 2026-09-26); the two\n"
      "// forms are proven equal (asic/equiv/r12_fv, k-induction).\n"
      "`ifdef __openlane__\n" + ONEHOT_RESULT + "`else\n"
      "assign result_w = (result_src_w == 2'b11) ? upper_w       :\n"

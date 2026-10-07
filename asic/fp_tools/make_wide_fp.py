@@ -1,4 +1,4 @@
-"""SA2 / DM_VC4 wide floorplan (2026-10-02, FLOW_JOURNAL Incident 96): the DM R14 macro grid scaled by S about the
+"""SA2 / DM_VC4 wide floorplan (2026-10-02, NHAT_KY.md section 8): the DM R14 macro grid scaled by S about the
 core origin (12, 12) -- macro sizes unchanged, so every channel between macros and the top band widen -- and the
 die / core grown by the same factor. Reason: RUDY maps of the density-42 placements put 25-35 % more wire demand
 than DM into the SAME channels (p99 11.1-11.5 vs 8.8 um/um2), and global routing overflows there (GRT-0118).
@@ -32,7 +32,7 @@ for d, tag in (("soc_sa2_4kb", "SA2"), ("soc_vc4_4kb", "DM_VC4")):
         assert a[1] >= 12 and a[2] >= 12 and a[3] <= W - 12 and a[4] <= H - 12, ("outside core", a)
         for b in boxes[i + 1:]:
             assert a[3] <= b[1] or b[3] <= a[1] or a[4] <= b[2] or b[4] <= a[2], ("overlap", a, b)
-    hdr = ("# %s WIDE floorplan (2026-10-02, FLOW_JOURNAL Incident 96): macro_placement.cfg (= the DM R14 grid) with every\n"
+    hdr = ("# %s WIDE floorplan (2026-10-02, NHAT_KY.md section 8): macro_placement.cfg (= the DM R14 grid) with every\n"
            "# coordinate scaled by %.2f about the core origin (12, 12); macro sizes unchanged, so the channels between\n"
            "# macros and the top band are %.0f %% wider; die %d x %d um (DM %d x %d). Reason: at the DM floorplan the\n"
            "# density-42 placement still overflows global routing in the macro channels (RUDY p99 +25-35 %% vs DM).\n"

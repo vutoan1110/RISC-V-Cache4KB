@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""R10 fix 2 (NHAT_KY_RTL 2026-09-26): make the R10b (* keep *) cut points ASIC-only.
+"""R10 fix 2 (NHAT_KY.md 2026-09-26): make the R10b (* keep *) cut points ASIC-only.
 
 Measured: with the unconditional attribute, Quartus kept every increment as its
 own LCELL boundary and the DM 4 KiB fit grew from 15,425 LE (r7r8, seed 2) to

@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 91: the worst setup path into each of the N worst violating endpoints at
+# NHAT_KY.md 2026-09-27: the worst setup path into each of the N worst violating endpoints at
 # one corner, full format with input pins (cell arcs vs net arcs separable), for ss_decompose.py.
 # Output: $::env(SQ_OUT)/ss_paths_<corner>.rpt
 set out $::env(SQ_OUT)

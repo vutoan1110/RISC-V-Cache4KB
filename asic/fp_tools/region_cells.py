@@ -1,4 +1,4 @@
-# FLOW_JOURNAL Incident 96: which logic sits in a congested region of a placed ODB?
+# NHAT_KY.md section 8: which logic sits in a congested region of a placed ODB?
 # Counts the instances whose origin lies in each given box, grouped by hierarchical prefix of the instance
 # name (first DEPTH dot-separated levels; ABC's anonymous cells "_123_" are grouped as <anon>), and the
 # share of the region's std-cell area per group. Also prints, for the whole die, where the named flops of

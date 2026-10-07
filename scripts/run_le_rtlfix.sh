@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Quartus chain on the frozen RTL (NHAT_KY_RTL.md), 4 KiB only.
+# Quartus chain on the frozen RTL (NHAT_KY.md), 4 KiB only.
 #
 #   bash scripts/run_le_rtlfix.sh 1     # pass 1
 #   bash scripts/run_le_rtlfix.sh 2     # pass 2, then compared with pass 1
@@ -17,7 +17,7 @@
 # To stop a running sweep, create results/.abort_fpga_sweep: every fit that
 # has not started yet returns at once. Killing the loop's shell instead left
 # the running python unable to start quartus_sta (three empty-log failures,
-# 2026-09-25, NHAT_KY_RTL.md).
+# 2026-09-25, NHAT_KY.md).
 set -uo pipefail
 cd "$(dirname "$0")/.."
 PASS=${1:-1}

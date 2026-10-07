@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Build every upstream Embench-IoT kernel with the project's compiler flags and report the RAM it needs.
-# FLOW_JOURNAL / NHAT_KY_RTL 2026-09-29: does upstream Embench fit the 8 KiB unified RAM? rv32i_zmmul, project flags,
+# NHAT_KY.md 2026-09-29: does upstream Embench fit the 8 KiB unified RAM? rv32i_zmmul, project flags,
 # no libc (inc/ + shim.c supply the few functions), linked into a 1 MiB fake RAM; the RAM needed is image + bss + stack.
 # Upstream Embench-IoT checkout (commit 09c2ed8c, recovered from the pack in C:/Temp/embench_src).
 E=${EMBENCH:-$(dirname "$0")/../../../embench-iot}

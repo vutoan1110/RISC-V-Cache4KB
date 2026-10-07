@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Golden Snapshot v2 of the workspace (FLOW_JOURNAL Incident 93: the final3 deliverable before the
-experimental phase). Differences from make_golden_snapshot.py (Incident 88), which lost one file:
+"""Golden Snapshot v2 of the workspace (NHAT_KY.md 2026-09-28: the final3 deliverable before the
+experimental phase). Differences from make_golden_snapshot.py (NHAT_KY.md 2026-09-27), which lost one file:
 Questa rewrote the hard-linked `transcript` in place, so the snapshot's copy changed with it.
 
   * HARD-LINK only immutable artifacts: files inside a run's step directories
@@ -82,7 +82,7 @@ if MODE == "--create":
             os.link(s, t)
         out.append((m, size, sha(t), rel))
     with open(MAN, "w", encoding="utf-8", newline="\n") as f:
-        f.write("# Golden Snapshot v2 of %s (FLOW_JOURNAL Incident 93): mode\tbytes\tsha256\tpath\n" % SRC)
+        f.write("# Golden Snapshot v2 of %s (NHAT_KY.md 2026-09-28): mode\tbytes\tsha256\tpath\n" % SRC)
         for r in out:
             f.write("%s\t%d\t%s\t%s\n" % r)
     print("created %s: %d files (%d copied, %d hard-linked), %.2f GB referenced" % (

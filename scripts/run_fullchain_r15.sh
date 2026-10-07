@@ -5,7 +5,7 @@
 # modules they did in R14, so every one of their results must stay byte-identical to the R14 chain's; the new
 # core must reproduce SA2 at two ways and agree with the independent cache model at four. Standard benchmarks
 # only (the project's own Embench-style kernels were removed on 2026-09-30). Every measurement twice.
-# Quartus (x2) and the ASIC netlist identity check are separate steps (scripts/run_le_r15.sh, FLOW_JOURNAL).
+# Quartus (x2) and the ASIC netlist identity check are separate steps (scripts/run_le_r15.sh, NHAT_KY.md).
 # Progress: results/fullchain_r15.log. Run from Git Bash on Windows.
 set -uo pipefail
 cd "$(dirname "$0")/.."
