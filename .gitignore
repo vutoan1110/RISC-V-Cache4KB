@@ -33,6 +33,7 @@
 # results/: documents only
 /results/*
 !/results/*.md
+!/results/cleanup_*_deleted.txt
 
 # asic/: flow sources and configs, not runs or tool outputs
 /asic/*
@@ -58,7 +59,10 @@
 /asic/soc_vc4_4kb/macros/
 # floorplan analysis tools and their screening results (2026-10-03)
 !/asic/fp_tools/
-!/asic/*_explore_proxy.txt
+!/asic/fp_explore/
+/asic/fp_explore/*
+!/asic/fp_explore/*.md
+!/asic/fp_explore/*.txt
 # pd_exp/ and equiv/ hold experiment outputs next to their scripts: keep the scripts and cut lists only
 /asic/pd_exp/**
 !/asic/pd_exp/**/

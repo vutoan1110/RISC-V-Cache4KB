@@ -1,7 +1,8 @@
-"""Floorplan screening table (FLOW_JOURNAL Incident 96) from asic/dse_pd.log + the configs.
+"""Floorplan screening table from asic/dse_pd.log and the configs.
 
-For every screening run (explore_fp2.sh "end <tag> ... midPnR-2 nom_tt setup S hold H; GRT usage U overflow O") and
-every full-iteration GRT check (explore_grt50.sh "end <tag>G50: GRT (50 iterations) usage U overflow O"), prints:
+For every screening run (fp_tools/screen_floorplan.sh, "end <tag> ... midPnR-2 nom_tt setup S hold H; GRT50 usage U
+overflow O"; the first screenings capped global routing at 15 iterations and print "GRT usage") and every
+full-iteration global route (fp_tools/screen_grt.sh, "end <tag>G50: GRT (50 iterations) usage U overflow O"), prints:
 design, floorplan, die, area, corridor / logic band (from the macro_placement header), post-CTS-repair setup/hold
 nom_tt, 15-iteration overflow, 50-iteration overflow. The LAST line of a tag wins (reruns after a crash).
 
@@ -25,7 +26,7 @@ for line in (A / "dse_pd.log").read_text(encoding="utf-8", errors="replace").spl
         continue
     m = re.search(r" end (\w+) last step \S+: midPnR-2 nom_tt setup (\S+) hold (\S+); GRT(50)? usage (\S+) overflow (\d+)", line)
     if m:
-        if m.group(4):          # explore_fp3.sh: the screening itself ran the default 50 iterations
+        if m.group(4):          # screen_floorplan.sh: the screening itself ran the default 50 iterations
             scr[m.group(1)] = (float(m.group(2)), float(m.group(3)), "-", -1)
             g50[m.group(1)] = (m.group(5), int(m.group(6)))
         else:
