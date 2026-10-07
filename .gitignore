@@ -1,4 +1,4 @@
-# Research workspace git (2026-09-30, for /code-review ultra): sources, scripts, configs and documents only.
+# Research workspace (local git since 2026-09-30): sources, scripts, configs and documents only.
 # Everything generated stays out: PD runs (~150 GB), Quartus databases, simulator libraries, waveforms,
 # results. Whitelist: ignore every top-level entry, then re-include the source trees.
 /*
@@ -6,6 +6,9 @@
 !/*.md
 !/*.qsf
 !/*.qpf
+# Quartus revisions written by scripts/run_fpga_points.py before every fit
+/point_*.qsf
+/point_*.qpf
 !/hdl/
 !/sw/
 !/fw/
@@ -44,7 +47,7 @@
 !/asic/equiv/
 /asic/soc_dm_4kb/runs/
 /asic/soc_dm_4kb/macros/
-# SA2 / DM_VC4 ASIC builds (FLOW_JOURNAL Incident 96): the SRAM wrapper and the two design dirs, not their runs
+# SA2 / DM_VC4 ASIC builds: the SRAM bank wrapper and the two design dirs, not their runs
 # or their copies of the macro models
 !/asic/dse_sram/
 !/asic/soc_sa2_4kb/
@@ -53,7 +56,7 @@
 /asic/soc_vc4_4kb/runs/
 /asic/soc_sa2_4kb/macros/
 /asic/soc_vc4_4kb/macros/
-# floorplan analysis tools and their screening results (FLOW_JOURNAL Incident 96, 2026-10-03)
+# floorplan analysis tools and their screening results (2026-10-03)
 !/asic/fp_tools/
 !/asic/*_explore_proxy.txt
 # pd_exp/ and equiv/ hold experiment outputs next to their scripts: keep the scripts and cut lists only
@@ -84,6 +87,7 @@ __pycache__/
 *.wlf
 *.vstf
 transcript
+tr_db.log
 work/
 work_*/
 /verification/uvm/out/
