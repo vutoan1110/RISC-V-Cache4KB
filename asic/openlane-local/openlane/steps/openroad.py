@@ -1662,6 +1662,15 @@ class DetailedRouting(OpenROADStep):
             "Ratio margin (percent) for the post-detailed-route repair_antennas.",
             default=10,
         ),
+        # Local addition (2026-10-07): write the DRC report every N optimization iterations
+        # (detailed_route -drc_report_iter_step), to locate the violations of a run that does not
+        # converge. Reporting only; 0 = off (stock).
+        Variable(
+            "DRT_DRC_REPORT_ITER_STEP",
+            int,
+            "Write the detailed-routing DRC report every N optimization iterations. 0 disables it.",
+            default=0,
+        ),
     ]
 
     def get_script_path(self):

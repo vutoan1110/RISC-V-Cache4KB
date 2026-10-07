@@ -26,13 +26,20 @@ if { [info exists ::env(DRT_MAX_LAYER)] } {
     set max_layer $::env(DRT_MAX_LAYER)
 }
 
+# Local addition (2026-10-07, off unless DRT_DRC_REPORT_ITER_STEP > 0): DRC report every N iterations.
+set drt_extra {}
+if { [info exists ::env(DRT_DRC_REPORT_ITER_STEP)] && $::env(DRT_DRC_REPORT_ITER_STEP) > 0 } {
+    lappend drt_extra -drc_report_iter_step $::env(DRT_DRC_REPORT_ITER_STEP)
+}
+
 detailed_route\
     -bottom_routing_layer $min_layer\
     -top_routing_layer $max_layer\
     -output_drc $::env(STEP_DIR)/$::env(DESIGN_NAME).drc\
     -droute_end_iter $::env(DRT_OPT_ITERS)\
     -or_seed 42\
-    -verbose 1
+    -verbose 1\
+    {*}$drt_extra
 
 # FLOW_JOURNAL Incident 91 (local addition, off unless DRT_ANTENNA_REPAIR_ITERS > 0): post-detailed-
 # route antenna repair as in ORFS. repair_antennas checks the DETAILED routes and inserts diodes at

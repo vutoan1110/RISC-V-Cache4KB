@@ -80,7 +80,7 @@ for i, a in enumerate(boxes):
     for b in boxes[i + 1:]:
         assert (a[3] + HALO <= b[1] - HALO or b[3] + HALO <= a[1] - HALO or
                 a[4] + HALO <= b[2] - HALO or b[4] + HALO <= a[2] - HALO), ("overlap incl. halo", a, b)
-hdr = ("# %s U2 floorplan %s (2026-10-03, FLOW_JOURNAL Incident 96; fp_tools/make_u2_fp.py %s %s %.0f %.0f %s %.0f %.0f %.0f %.0f):\n"
+hdr = ("# %s corridor floorplan %s (fp_tools/make_u2_fp.py %s %s %.0f %.0f %s %.0f %.0f %.0f %.0f):\n"
        "# die %.0f x %.0f um (%.2f mm2); RAM row A (FS) / channel %.0f / RAM row B (N); I$ 2x2 left, D$ 2x2 right (N),\n"
        "# gap %.0f above RAM row B; central corridor %.0f um; logic band %.0f um; RAM row gap %.1f; cache orientation %s.\n"
        % (d, tag, d, tag, W, H, base, e, ram_ch, g1, gin, W, H, W * H / 1e6, ram_ch, g1, corridor, band, gR,
@@ -95,7 +95,7 @@ if d == "soc_dm_4kb":
     cfg["SYNTH_OPT_DFF_SAT"] = True
     cfg["GRT_ALLOW_CONGESTION"] = True
 cfg["//EXPERIMENT"] = cfg.get("//EXPERIMENT", "") + (
-    " U2 floorplan %s (2026-10-03): DIE_AREA %.0f x %.0f (macro_placement_%s.cfg)." % (tag, W, H, tag))
+    " Corridor floorplan %s: DIE_AREA %.0f x %.0f (macro_placement_%s.cfg)." % (tag, W, H, tag))
 cfg["DIE_AREA"] = [0, 0, W, H]
 cfg["CORE_AREA"] = [12, 12, W - 12, H - 12]
 cfg["MACRO_PLACEMENT_CFG"] = "dir::macro_placement_%s.cfg" % tag

@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# FLOW_JOURNAL Incident 96 (2026-10-03): GATED double-executed full flows (user directive 2026-10-03: no flow may run
-# on blindly once it cannot reach a clean sign-off -- 0 DRC, 0 LVS, 0 antenna, positive setup/hold).
-#   FPCFG=<config file> ITEMS="<design dir>:<tag> ..." bash run_gated_pd.sh
-#   ITEMS="<design dir>:<tag>:<config file> ..." bash run_gated_pd.sh     (2026-10-06: per-item config, so the two
-#   floorplan options run in ONE queue under one 3-flow limit; FPCFG is then only the default)
+# Gated full flows: a flow stops as soon as it can no longer reach a clean sign-off (0 DRC, 0 LVS, 0 antenna,
+# setup >= 0 at tt and ff, hold >= 0 at every corner; QUY_TRINH.md section D).
+#   ITEMS="<design dir>:<tag>:<config file> ..." bash run_gated_pd.sh      (FPCFG=<config> sets a default config)
+#   STOP_AFTER=p2 ...   screening: hold every flow after a passed p2 gate (continue it with run_gated_resume.sh ... drt)
 # Each flow runs in four phases in ONE run directory (fresh first phase, then RESUME); a phase starts only if the
 # previous gate passed (fp_tools/gate_check.py, thresholds in its header / environment):
-#   P1  synthesis .. OpenROAD.GlobalRouting                    -> gate p1 (G1 GRT overflow, G2 STAMidPNR-2 tt)
-#   P2  OpenROAD.CheckAntennas .. OpenROAD.STAMidPNR-3          -> gate p2 (G3 post-repair overflow, G4 STAMidPNR-3 tt)
-#   P3  OpenROAD.DetailedRouting, with drt_watch.sh (G5)       -> aborted at once when convergence cannot reach 0 DRC
-#   P4  OpenROAD.PostRouteHoldECO .. sign-off                   -> gate final (G6: DRC/LVS/XOR/overlap/antenna 0,
+#   P1  synthesis .. OpenROAD.GlobalRouting                    -> gate p1 (grt_overflow, cts_tt_slack)
+#   P2  OpenROAD.CheckAntennas .. OpenROAD.STAMidPNR-3          -> gate p2 (grt_repair_overflow, grt_tt_slack)
+#   P3  OpenROAD.DetailedRouting, with drt_watch.sh             -> drt_convergence: stopped when it cannot reach 0 DRC
+#   P4  OpenROAD.PostRouteHoldECO .. sign-off                   -> gate final (signoff: DRC/LVS/XOR/overlap/antenna 0,
 #                                                                 setup >= 0 at tt and ff, hold >= 0 at every corner)
+# (Older log lines name the gates G1 .. G6 in the order above.)
 # No step of the Classic flow is skipped. P3 waits for a detailed-routing slot (at most ONE other detailed routing
 # running, >= 12 GB free; mkdir lock), so three ~10.5 GB detailed routings never coincide. A new flow (P1) starts only
 # with fewer than 3 OpenLane run tags live, >= 10 GB free and >= 30 min after the previous start.
@@ -44,6 +44,7 @@ gated_one () {   # <design dir> <tag> <config file>
     RESUME=1 CONFIG=$CFG bash run_pd_mk.sh "$des" "$tag" --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3 > "$A/${tag}_p2.log" 2>&1
     say "$tag P2 done, last step $(last_step $des $tag)"
     gate "$des" "$tag" p2 || { say "STOP $tag after P2 (gate p2)"; return; }
+    [ "${STOP_AFTER:-}" = p2 ] && { say "HOLD $tag after P2 (STOP_AFTER=p2; continue with run_gated_resume.sh ... drt)"; return; }
     while :; do
         aborted && { say "STOP $tag after P2 (abort flag; resume with --from OpenROAD.DetailedRouting)"; return; }
         if mkdir $LOCK 2>/dev/null; then

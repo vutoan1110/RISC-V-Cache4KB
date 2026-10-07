@@ -1,129 +1,72 @@
-# Cache DSE follow-up experiments
+# RISC-V SoC cache design-space research copy
 
-This directory answers the reviewer objections that the frozen design cannot
-answer about itself. It is a self-contained mirror of the repository layout, so
-every tool here runs against the copies in `research/` and never touches the
-frozen sources or the published build artifacts.
+Research copy of the published RISC-V SoC with configurable caches (`E:/Projects/RISCV-AHB-APB-UART`, read-only). It
+answers the review of the cache design-space paper: the cache controller confound, a real design-space sweep, standard
+benchmarks, and FPGA and ASIC (sky130) implementations of the cache organisations at 4 KiB. The published 1 KiB design
+is not modified; everything here runs on the copies in this directory.
 
-## Why a mirror
+## Documents
 
-The headline result of the paper is that the direct-mapped configuration wins on
-all twelve kernels. That comparison is confounded. `CACHE_CONFIG=0` selects
-`icache_controller.v`, a five-state FSM, while `CACHE_CONFIG=1` and `2` select
-`icache_dse_core.v`, a ten-state FSM with an extra `ST_LOOKUP` state. The
-published comparison therefore varies cache organization and controller depth at
-the same time, and cannot separate them.
-
-## Isolation
-
-`research/hdl`, `research/tb`, `research/sw` and `research/verification` started
-as byte-identical copies of `hdl/`, `tb/`, `sw_baremetal/` and `verification/`.
-The Quartus projects and `quartus/` are copied too, and because the directory
-names match the real ones, every relative path inside the `.qsf` files resolves
-inside `research/`. Quartus writes its `db/`, `incremental_db/` and
-`output_files_de2_115_*` here, not at the repository root.
-
-Three of the four experiments needed no RTL change at all: organization,
-capacity and victim depth are already parameters of the frozen design. Line
-size was not, and parameterising it required editing these files, all of them
-copies inside `research/`:
-
-| File | Change |
+| file | content |
 |---|---|
-| `tb/benchmark_snapshot_tb.sv` | exposed `ICACHE_LINE_COUNT`, `DCACHE_LINE_COUNT`, `VICTIM_ENTRIES`, `CACHE_LINE_WORDS` |
-| `hdl/cache/cache_dse_data_bank.v` | banks generated from `LINE_WORDS` instead of four fixed ones |
-| `hdl/cache/icache_dse_core.v` | 33 sites: widths, beat counters, word select, victim indexing |
-| `hdl/cache/dcache_dse_core.v` | 25 sites, same plus the store path |
-| `hdl/axi/cache_axi_master.v` | burst length, beat counter width, refill address alignment |
-| `hdl/cache/icache.v`, `dcache.v`, `hdl/soc_top.v` | pass `LINE_WORDS` through |
+| `RESULTS.md` | current measured results per configuration (architecture, FPGA, ASIC), with what is not established |
+| `REVIEW_RESPONSE.md` | point-by-point status of the review items (M1-M3, A1-A9, minor) |
+| `NHAT_KY.md` | the single design history (RTL, verification, FPGA, PD), the register of known issues, the cleanup log and the table from old run / revision names to new names (Vietnamese) |
+| `QUY_TRINH.md` | standing rules and run procedures: verification chain for RTL changes, gated PD flow, FPGA runs, power measurement, golden snapshot, naming, cleanup, reporting (Vietnamese) |
+| `asic/evidence/MAGIC_NAMESPACE_COLLISION.md` | frozen evidence of the two Magic fixes for the OpenRAM macros |
+| `results/m2/M1_M2_REPORT.md` | the controller-confound analysis and the design-space sweep |
 
-Every default is the frozen value, so the design is bit-identical in behaviour
-at `CACHE_LINE_WORDS=4`: **all 48 runs reproduce the frozen cycle counts
-exactly**, twelve kernels across four configurations. Nothing in `hdl/` at the
-repository root was touched.
+## Configurations
 
-`icache_controller.v` and `dcache_controller.v`, which serve `CACHE_CONFIG=0`,
-were **not** parameterised. They assume a four-word line, and the shared AXI
-master's burst length follows `LINE_WORDS`, so configuration 0 is valid only at
-the default line size. `scripts/run_linesize.py` refuses to run it otherwise.
-
-## Experiment 1: controller ablation
-
-`CACHE_CONFIG=3` is an unused encoding. `icache_dse_core.v` and
-`dcache_dse_core.v` derive their behaviour from `IS_SA2 = (CACHE_CONFIG == 1)`
-and `IS_VC4 = (CACHE_CONFIG == 2)`, and every use of the second way and of the
-victim buffer is gated on those two flags. At `CACHE_CONFIG=3` both are false,
-so the DSE core degenerates to a plain 64-line direct-mapped cache running on the
-ten-state FSM. That gives a fourth data point the paper does not have:
-
-| Configuration | Organization | Controller |
-|---|---|---|
-| `DM` (0) | direct-mapped | five-state `icache_controller` |
-| `SA2` (1) | two-way set-associative | ten-state `icache_dse_core` |
-| `DM_VC4` (2) | direct-mapped + 4-entry victim | ten-state `icache_dse_core` |
-| `DM_DSE` (3) | direct-mapped | ten-state `icache_dse_core` |
-
-`DM_DSE` minus `DM` is the cost of controller depth with organization held
-fixed. `SA2` minus `DM_DSE` is the effect of associativity with controller held
-fixed. The published `SA2` minus `DM` gap is the sum of the two.
-
-```
-python scripts/run_ablation.py --compile --configs 0,1,2,3
-python scripts/analyse_ablation.py
-```
-
-## Experiment 2: capacity sweep
-
-`soc_top.v` already exposes `ICACHE_LINE_COUNT` and `DCACHE_LINE_COUNT`, so
-capacity sweeps need no RTL change either. At the frozen 16-byte line, 32, 64,
-128 and 256 lines give 512 B, 1 KiB, 2 KiB and 4 KiB.
-
-## Experiment 3: victim-buffer depth
-
-`VICTIM_ENTRIES` is generic throughout the DSE core and the only guard on it is
-a `$display` note, so depth needs no RTL change either. Depth 1 is excluded:
-`VC_INDEX_WIDTH` floors at one bit, so the replacement pointer can leave the
-single valid entry.
-
-```
-python scripts/run_victim.py --compile --victim 2,4,8
-```
-
-## Experiment 4: line size
-
-This one needed the RTL work listed above. Capacity is held at 1 KiB, so line
-size and line count co-vary by construction: 8 B gives 128 lines, 16 B gives 64,
-32 B gives 32 and 64 B gives 16. The axis is therefore line length together with
-the set count it implies, not line length in isolation, and the analysis says so.
-
-```
-python scripts/run_linesize.py --compile --words 2,4,8,16
-```
-
-## Placement-seed sweep
-
-`scripts/run_seed.py` re-fits the three frozen configurations at any seed,
-entirely inside this directory. It exists because the paper reports seeds 1, 2, 3
-and 5, and a reviewer asked why seed 4 was missing.
-
-```
-python scripts/run_seed.py --seeds 4
-```
+CACHE_CONFIG 0 = DM (direct-mapped, five-state controller), 3 = DM_DSE (direct-mapped on the ten-state DSE core), 1 = SA2
+(two-way), 2 = DM_VC4 (direct-mapped with a 4-entry victim buffer), 4 = SA4 (four-way, N-way core). `CACHE_FAST_HIT` = 1
+removes the DSE / N-way cores' extra main-array hit cycle (default 0). Caches 4 KiB, 16 B lines; main RAM 16 KiB.
+Workloads: 12 upstream Embench-IoT kernels (`sw/embench_upstream/`, `fw/up_*.hex`) and CoreMark.
 
 ## Layout
 
 ```
-hdl/            copy of the frozen RTL
-tb/             copy of the testbenches (one file changed, see above)
-sw/             copy of sw_baremetal
-verification/   copy of the assertions and coverage
-quartus/        copy of the shared Quartus settings
-fw/             prebuilt kernel images from results/regression/embench_sim/fw
-scripts/        the runners and the analysis
-results/        CSV summaries and raw tool logs
+hdl/                 RTL (the SoC top hdl/soc_top.v is shared by FPGA, simulation and ASIC)
+tb/, verification/   directed testbenches, UVM, ACT4 architecture tests
+sw/, fw/, fw_board/  firmware sources and images (fw_board: full-length images for a board)
+sw_metrics/          interrupt-latency firmware (outside the RTL manifest)
+scripts/             simulation, Quartus, sweep, metrics and verification-chain runners
+quartus/             shared Quartus settings
+asic/                OpenLane designs (soc_dm_4kb, soc_sa2_4kb, soc_vc4_4kb; 1 KiB baseline soc_dm_control),
+                     openlane-local (patched OpenLane 2.3.10), snapshots (frozen RTL for PD), equiv (formal proofs and
+                     LEC), gls (gate-level simulation and activity power), sta_query, fp_tools / fp_explore (floorplan
+                     generation and screening), evidence, pd_exp (PD experiments)
+results/             CSV results (every measurement in _p1 / _p2 pairs), reports, pd_run_archive (evidence of deleted
+                     runs), cleanup_deleted.txt
 ```
 
-## Requirements
+## Reference designs
 
-Questa Sim 2024.1 (`QUESTA_VSIM` overrides the path) and Quartus Prime Lite
-20.1.1 (`QUARTUS_ROOTDIR` overrides the path).
+- DM, 16 KiB RAM, die 10.63 mm2: signed off 2026-10-02 (runs r14F_A / r14F_B).
+- DM, 8 KiB RAM, die 8.12 mm2: signed off 2026-09-28, the golden snapshot `E:/Projects/RISCV-research_GOLDEN_FINAL3_20260928`
+  (runs final3_A / final3_B).
+- 1 KiB caches: post-route baseline `asic/soc_dm_control/runs/sync_final`.
+- Unified floorplans for DM / SA2 / DM_VC4 (corridor family, 11.305 and 11.56 mm2): in progress, `RESULTS.md` section 4.2.
+
+## Reproducing
+
+- Embench / CoreMark matrix: `python scripts/run_ablation.py --compile --configs 0,1,2,3` (FPGA view), with
+  `--asic-view` for the ASIC view.
+- Design-space sweep: `python scripts/m2/run_m2_sweep.py`, then `python scripts/m2/analyze_m2.py`.
+- Verification chain of the current RTL: `bash scripts/run_fullchain_r16.sh` (every step twice).
+- FPGA fits: `bash scripts/run_le_r16.sh` (Quartus runs one fit at a time).
+- PD: `bash asic/run_pd_mk.sh <design dir> <tag>` (WSL), gated: `ITEMS="<design>:<tag>:<config>" bash asic/run_gated_pd.sh`.
+- Activity power: `asic/gls/run_gls_power_cfg.sh` (gate-level simulation and SAIF), then `asic/gls/power_cfg.ps1`.
+- Host health check (this machine has a hardware fault, `NHAT_KY.md` section 9): `python3 asic/parse_ids_probe.py --synth 300000`.
+
+## Tools
+
+Questa Sim 2024.1, Quartus Prime Lite 20.1.1, OpenLane 2.3.10 (local copy `asic/openlane-local`; its additions are listed
+in `QUY_TRINH.md` section D), OpenROAD 2024-12-08, Yosys 0.46, OpenSTA 2.6, Magic, Netgen, KLayout, sky130A PDK with the
+OpenRAM macros sky130_sram_1kbyte_1rw1r_32x256_8 and sky130_sram_2kbyte_1rw1r_32x512_8. Linux tools run in WSL2 (Ubuntu),
+Questa and Quartus on Windows.
+
+## Licences
+
+The project is Apache-2.0. 9 of the 12 Embench-IoT kernels are GPL-3.0-or-later; they stay in this research copy and
+are not published with the project.

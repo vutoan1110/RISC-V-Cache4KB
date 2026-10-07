@@ -33,12 +33,17 @@
 # results/: documents only
 /results/*
 !/results/*.md
-!/results/cleanup_*_deleted.txt
+!/results/cleanup_deleted.txt
 
 # asic/: flow sources and configs, not runs or tool outputs
 /asic/*
 !/asic/*.md
 !/asic/*.sh
+!/asic/*.py
+!/asic/evidence/
+/asic/evidence/*
+!/asic/evidence/*.md
+!/asic/evidence/magicsafe_*_proof.log
 !/asic/openlane-local/
 !/asic/gls/
 !/asic/sta_query/
