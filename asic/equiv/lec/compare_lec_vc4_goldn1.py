@@ -12,6 +12,8 @@ import re
 import sys
 
 p1, p2, out = sys.argv[1:4]
+# 2026-10-15: DM / SA2 on 6c4ccffd have no SRAM removed by synthesis, hence no NegAlign control (--no-negalign)
+NO_NEGALIGN = "--no-negalign" in sys.argv[4:]
 rounds = [sorted(f for f in os.listdir(p) if re.fullmatch(r"specA_c\d+\.json", f)) for p in (p1, p2)]
 EXACT = ["enc.txt", "replay/n1_pre_abc_fast.il", "replay/soc_asic_top.nl.v", "gold_pre.il", "gold_flat.il", "n1_flat.il",
          "gold_flat_al.il", "n1_flat_al.il",
@@ -33,6 +35,8 @@ VERDICTS = {  # file -> regex whose matches must be identical in both passes
 }
 
 
+if NO_NEGALIGN:
+    VERDICTS.pop("stepNegAlign.out")
 def sha(path):
     h = hashlib.sha256()
     with open(path, "rb") as f:

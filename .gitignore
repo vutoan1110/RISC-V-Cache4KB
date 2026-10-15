@@ -121,3 +121,6 @@ work_*/
 /asic/soc_*_4kb/**/*.log
 /asic/soc_*_4kb/screen_*/
 /asic/soc_*_4kb/diag_*/
+
+# colleague report page source (2026-10-15)
+!/report_page/

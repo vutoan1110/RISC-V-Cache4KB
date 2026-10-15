@@ -1,0 +1,1287 @@
+<title>Báo cáo tiến độ SoC RISC-V</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: technical dossier. Sticky contents rail on wide screens, one column on phones; tables scroll inside their own box. */
+:root {
+  --bg: #f3f6f7;
+  --surface: #ffffff;
+  --ink: #16232b;
+  --muted: #566771;
+  --line: #d4dce0;
+  --accent: #0b6a74;
+  --accent-soft: #dff0f1;
+  --ok: #2b7a4b;
+  --ok-soft: #e2f2e8;
+  --run: #9a5d0c;
+  --run-soft: #fbefdb;
+  --bad: #b0373a;
+  --bad-soft: #f9e3e3;
+  --code: #eaf0f2;
+  --display: "IBM Plex Sans Condensed", "Arial Narrow", "Segoe UI", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1519; --surface: #151e24; --ink: #dae4e9; --muted: #92a3ad; --line: #2a373f;
+    --accent: #5db7bf; --accent-soft: #15333a; --ok: #6dc390; --ok-soft: #15301f;
+    --run: #e2a64b; --run-soft: #382811; --bad: #e57577; --bad-soft: #3a1b1c; --code: #1b262d;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1519; --surface: #151e24; --ink: #dae4e9; --muted: #92a3ad; --line: #2a373f;
+  --accent: #5db7bf; --accent-soft: #15333a; --ok: #6dc390; --ok-soft: #15301f;
+  --run: #e2a64b; --run-soft: #382811; --bad: #e57577; --bad-soft: #3a1b1c; --code: #1b262d;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15.5px; line-height: 1.6; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 64px; }
+header.top { display: grid; gap: 14px; padding-block: 8px 26px; border-bottom: 2px solid var(--ink); margin-bottom: 28px; }
+.eyebrow { font-family: var(--mono); font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 4.6vw, 46px); line-height: 1.05; margin: 0; text-wrap: balance; }
+.lede { font-size: 17px; max-width: 70ch; margin: 0; color: var(--ink); }
+.meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px 24px; font-size: 13.5px; color: var(--muted); }
+.meta b { color: var(--ink); font-weight: 600; display: block; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; }
+.meta code { word-break: break-all; }
+.layout { display: grid; grid-template-columns: 1fr; gap: 28px; }
+@media (min-width: 1000px) { .layout { grid-template-columns: 230px minmax(0, 1fr); gap: 44px; } }
+nav.toc { font-size: 13.5px; }
+@media (min-width: 1000px) { nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; max-height: calc(100vh - 32px); overflow-y: auto; } }
+nav.toc p { font-family: var(--display); font-weight: 600; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 8px; color: var(--muted); }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 14px; counter-reset: s; }
+@media (min-width: 1000px) { nav.toc ol { flex-direction: column; flex-wrap: nowrap; gap: 2px; } }
+nav.toc li { counter-increment: s; }
+nav.toc a { color: var(--ink); text-decoration: none; display: inline-block; padding: 3px 0; border-bottom: 1px solid transparent; }
+nav.toc a::before { content: counter(s) ". "; color: var(--muted); font-family: var(--mono); font-size: 12px; }
+nav.toc a:hover, nav.toc a:focus-visible { border-bottom-color: var(--accent); color: var(--accent); outline: none; }
+main { min-width: 0; display: grid; gap: 44px; }
+section { min-width: 0; display: grid; gap: 14px; scroll-margin-top: 16px; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 27px; line-height: 1.15; margin: 0; text-wrap: balance; display: flex; gap: 12px; align-items: baseline; }
+h2 .n { font-family: var(--mono); font-size: 15px; color: var(--accent); font-weight: 500; }
+h3 { font-family: var(--display); font-weight: 600; font-size: 19.5px; margin: 10px 0 0; text-wrap: balance; }
+p { margin: 0; max-width: 78ch; }
+ul, ol.plain { margin: 0; padding-left: 22px; display: grid; gap: 6px; max-width: 80ch; }
+code, .mono { font-family: var(--mono); font-size: 0.88em; background: var(--code); padding: 1px 5px; border-radius: 3px; }
+.tbl { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { padding: 8px 11px; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+th { font-family: var(--display); font-weight: 600; font-size: 13.5px; letter-spacing: .02em; background: var(--code); white-space: nowrap; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; font-family: var(--mono); font-size: 13px; }
+tr:last-child td { border-bottom: 0; }
+tr.sub td:first-child { padding-left: 26px; color: var(--muted); }
+tr.total td { font-weight: 600; border-top: 2px solid var(--ink); }
+.note { font-size: 13.5px; color: var(--muted); max-width: 86ch; }
+.pill { display: inline-block; font-family: var(--mono); font-size: 11.5px; letter-spacing: .03em; padding: 1px 8px; border-radius: 999px; white-space: nowrap; border: 1px solid currentColor; }
+.ok { color: var(--ok); background: var(--ok-soft); }
+.run { color: var(--run); background: var(--run-soft); }
+.bad { color: var(--bad); background: var(--bad-soft); }
+.open { color: var(--muted); background: var(--code); }
+.better { color: var(--ok); font-weight: 600; }
+.worse { color: var(--bad); font-weight: 600; }
+.callout { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 12px 16px; display: grid; gap: 8px; max-width: 90ch; }
+.callout.warn { border-left-color: var(--run); background: var(--run-soft); }
+.callout.badc { border-left-color: var(--bad); background: var(--bad-soft); }
+.callout strong { font-family: var(--display); font-size: 15.5px; }
+.keys { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.key { background: var(--surface); border: 1px solid var(--line); padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.key .k { font-family: var(--display); font-weight: 600; font-size: 15.5px; }
+.key .v { font-family: var(--mono); font-size: 22px; color: var(--accent); line-height: 1.1; }
+.key p { font-size: 13.5px; color: var(--muted); }
+dl.gloss { display: grid; grid-template-columns: 1fr; gap: 0; margin: 0; border: 1px solid var(--line); background: var(--surface); }
+@media (min-width: 720px) { dl.gloss { grid-template-columns: minmax(150px, 210px) minmax(0, 1fr); } }
+dl.gloss dt, dl.gloss dd { margin: 0; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+dl.gloss dt { font-family: var(--mono); font-size: 13px; font-weight: 500; background: var(--code); }
+dl.gloss dd { font-size: 14px; }
+.small { font-size: 13px; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+h3[id], tr[id] { scroll-margin-top: 16px; }
+tr:target td { background: var(--accent-soft); }
+h4 { font-family: var(--display); font-weight: 600; font-size: 16px; margin: 4px 0 0; text-wrap: balance; }
+dl.gloss.steps dt { font-family: var(--display); font-size: 13.5px; font-weight: 600; letter-spacing: .02em; }
+.tbl td code { overflow-wrap: anywhere; }
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">SoC RISC-V RV32I + Zmmul · Cyclone IV E (DE2-115) · sky130A</div>
+  <h1>Báo cáo tiến độ SoC RISC-V</h1>
+  <p class="lede">So sánh bản nghiên cứu hiện tại với bản đã công bố: lỗi đã sửa, kiểm chứng, FPGA, hiệu năng, ASIC, cách đo từng phần và các phản biện còn mở. Viết cho người tham gia viết bài, để đọc độc lập mà không cần hỏi lại.</p>
+  <div class="meta">
+    <div><b>Cập nhật</b>14/10/2026, 21:30 (giờ máy chạy)</div>
+    <div><b>Bản đã công bố</b><code>E:\Projects\RISCV-AHB-APB-UART</code>, commit <code>a939d6f</code>, GitHub <code>vutoan1110/RISCV-AXI-APB-CACHE</code></div>
+    <div><b>Bản nghiên cứu</b><code>E:\Projects\RISCV-research</code>, nhánh <code>experimental-r14</code>, RTL R16 + register file và BHT trong M9K (manifest <code>6c4ccffd</code>); PD: các bản đã ký đọc snapshot <code>rtl_r14</code> (tương đương R16 với FAST_HIT 0); từ 14/10 21:12, theo quyết định của chủ dự án, mọi run PD đọc snapshot 6c4ccffd (<code>rtl_rfbht</code>)</div>
+    <div><b>Quy ước số</b>Dấu chấm thập phân và dấu phẩy hàng nghìn, giống file nguồn tiếng Anh, để chép thẳng vào bài.</div>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc" aria-label="Mục lục">
+  <p>Mục lục</p>
+  <ol>
+    <li><a href="#tomtat">Tóm tắt</a></li>
+    <li><a href="#thuatngu">Thuật ngữ</a></li>
+    <li><a href="#phienban">Phiên bản và tên gọi</a></li>
+    <li><a href="#phamvi">Phạm vi cũ và mới</a></li>
+    <li><a href="#loi">Lỗi của bản cũ</a></li>
+    <li><a href="#doichieu">Đối chiếu hạn chế</a></li>
+    <li><a href="#rtl">Thay đổi RTL</a></li>
+    <li><a href="#kiemchung">Kiểm chứng</a></li>
+    <li><a href="#fpga">FPGA và LE theo module</a></li>
+    <li><a href="#hieunang">Hiệu năng và kết luận</a></li>
+    <li><a href="#asic">ASIC</a></li>
+    <li><a href="#phuongphap">Đo gì và bằng công cụ gì</a></li>
+    <li><a href="#morong">Mở rộng so với bản 1 KiB</a></li>
+    <li><a href="#phanbien">Phản biện</a></li>
+    <li><a href="#conmo">Còn mở và lưu ý</a></li>
+    <li><a href="#nguon">Nguồn số liệu</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<section id="tomtat">
+  <h2><span class="n">01</span>Tóm tắt</h2>
+  <div class="keys">
+    <div class="key"><div class="k">Dung lượng</div><div class="v">1 → 4 KiB</div><p>Cache mỗi phía; RAM chính 8 → 16 KiB. Thêm một quét không gian thiết kế 256 B đến 8 KiB.</p></div>
+    <div class="key"><div class="k">Lỗi của bản cũ đã sửa</div><div class="v">8</div><p>Gồm wrapper RAM của ASIC ghi sai địa chỉ, và vi phạm hold bị che vì lỗi SDC.</p></div>
+    <div class="key"><div class="k">Kết luận "DM nhanh nhất"</div><div class="v">+9.8 %</div><p>Phần chênh ở 4 KiB đến từ controller, không đến từ cách tổ chức cache. Khi khớp độ trễ hit, set-associative nhanh hơn ở mọi dung lượng.</p></div>
+    <div class="key"><div class="k">FPGA, DM</div><div class="v">−15.6 % LE</div><p>So với bản cũ 1 KiB (seed 2: 15,188 → 12,815 LE) dù cache lớn gấp 4: register file và BHT chuyển vào M9K, CPI không đổi. Mười seed chung × hai lượt: DM 12,800–12,842 LE, Fmax 52.27–56.18 MHz (Slow 85 °C).</p></div>
+    <div class="key"><div class="k">ASIC đã ký: DM và SA2</div><div class="v">2 / 3</div><p>DM 10.63 mm², SA2 11.56 mm²: DRC, LVS, XOR, antenna 0, setup ≥ 0 ở tt và ff, hold ≥ 0 ở 9 góc. DM_VC4 chưa ký.</p></div>
+    <div class="key"><div class="k">Phản biện</div><div class="v">10 / 20</div><p>10 đã giải quyết, 4 một phần (A2, A7, A9, m1), 6 chỉ còn việc viết bài.</p></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Hạng mục</th><th>Trạng thái</th><th>Ghi chú ngắn</th></tr></thead>
+    <tbody>
+      <tr><td>RTL, kiểm chứng, FPGA ở 4 KiB</td><td><span class="pill ok">Đã xong</span></td><td>Chuỗi đầy đủ 0 lỗi, mọi phép đo ×2. Mục 7, 8.</td></tr>
+      <tr><td>Quét không gian thiết kế (M1, M2)</td><td><span class="pill ok">Đã xong</span></td><td>637 + 559 dòng, lần 2 trùng lần 1. Mục 10.2.</td></tr>
+      <tr><td>FPGA 10 seed chung × 2 lượt</td><td><span class="pill ok">Đã xong</span></td><td>40 cặp dòng trùng 115 trường phần cứng. Mục 9.2.</td></tr>
+      <tr><td>Board DE2-115</td><td><span class="pill run">Một phần</span></td><td>42 / 100 ca đo, tất cả khớp hai lượt tham chiếu RTL; còn 58 ca. Mục 12.9.</td></tr>
+      <tr><td>ASIC DM</td><td><span class="pill ok">Đã ký</span></td><td>10.63 mm²; công suất exact-window 119.45 mW; LEC chứng minh, mọi tiền đề đã đóng. Lần chạy trọn nghiệm thu theo quy tắc Q: r3 dừng ở P2 vì crash ngẫu nhiên của tiến trình OpenLane; r4 (bản R14) dừng khi chủ dự án chuyển PD sang RTL 6c4ccffd; lần nghiệm thu DM trên 6c4ccffd chạy từ 14/10 21:12. Mục 11.1, 11.5.</td></tr>
+      <tr><td>ASIC SA2</td><td><span class="pill ok">Đã ký</span></td><td>11.56 mm²; công suất exact-window 129.64 mW; LEC hai lượt trùng nhau + mọi đối chứng âm. Cần lần chạy trọn nghiệm thu trên RTL 6c4ccffd (E1 hoặc E0). Mục 11.3.</td></tr>
+      <tr><td>ASIC DM_VC4</td><td><span class="pill bad">Chưa ký</span></td><td>Route chính về 0 vi phạm nhưng vòng sửa antenna sau route không hội tụ; die 3800 µm (V4) cũng không giúp, đã dừng. Làm sau (chủ dự án) trên RTL 6c4ccffd với floorplan riêng. LEC phần tổng hợp (bản R14) xong hai lượt. Mục 11.4.</td></tr>
+      <tr><td>Viết lại bài (M3, A5, m2, m3, m6, m8)</td><td><span class="pill open">Còn mở</span></td><td>Không thuộc phần đo đạc. Mục 14.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="thuatngu">
+  <h2><span class="n">02</span>Thuật ngữ</h2>
+  <p>Các tên dưới đây xuất hiện trong mọi bảng. Tên cấu hình giữ nguyên như trong code và file kết quả.</p>
+  <dl class="gloss">
+    <dt>DM</dt><dd>Cache ánh xạ trực tiếp, controller 5 trạng thái (<code>CACHE_CONFIG 0</code>).</dd>
+    <dt>SA2 / SA4</dt><dd>Set-associative 2 way / 4 way (<code>1</code> / <code>4</code>). SA2 chạy trên core DSE, SA4 trên core N-way (thay thế PLRU). SA4 chỉ có ở FPGA và mô phỏng.</dd>
+    <dt>DM_VC4</dt><dd>Ánh xạ trực tiếp kèm victim buffer 4 entry, chạy trên core DSE (<code>2</code>). Có một victim buffer ở I-cache và một ở D-cache.</dd>
+    <dt>DM_DSE</dt><dd>Core DSE dùng như cache ánh xạ trực tiếp thường (<code>3</code>). Dùng để tách chi phí controller ra khỏi cách tổ chức cache.</dd>
+    <dt>Core DSE</dt><dd>Controller 10 trạng thái dùng chung cho SA2, DM_VC4, DM_DSE. Mặc định mỗi hit ở mảng chính tốn hơn DM một chu kỳ.</dd>
+    <dt>FAST_HIT</dt><dd>Tham số mới <code>CACHE_FAST_HIT</code> (mặc định 0, tương đương RTL cũ). Bằng 1 thì core DSE và N-way trả lời hit ngay ở <code>ST_LOOKUP</code>, cùng độ trễ với DM.</dd>
+    <dt>L0</dt><dd>Bộ đệm nhỏ 8 entry ở I-cache, giữ các dòng vừa dùng.</dd>
+    <dt>View FPGA / ASIC / GLS</dt><dd>View FPGA: RTL với bộ nhớ FPGA, dùng để so sánh tổ chức cache. View ASIC: RTL với model SRAM OpenRAM, số chu kỳ thật của chip, ít hơn view FPGA 3–4 %. GLS: mô phỏng netlist đã ký tên, khớp view ASIC đến từng chu kỳ.</dd>
+    <dt>Góc tt / ff / ss</dt><dd>Typical 25 °C 1.80 V / fast −40 °C 1.95 V / slow 100 °C 1.60 V. Mỗi góc có 3 mức RC: min, nom, max, tổng 9 góc. Giới hạn ký tên: setup ≥ 0 ở tt và ff, hold ≥ 0 ở cả 9 góc. Góc ss chỉ báo cáo, không làm cổng.</dd>
+    <dt>LE</dt><dd>Logic element của Cyclone IV E. Mức 20,000 LE là mục tiêu mềm tự đặt.</dd>
+    <dt>DRC / LVS / antenna</dt><dd>Kiểm tra luật layout / so layout với netlist / hiệu ứng ăng-ten khi chế tạo. Bản ký tên phải bằng 0 ở cả ba.</dd>
+    <dt>V0–V5, E0 / E1, r14F, final3, ecomaxmin</dt><dd>Tên ngắn của các run PD, xem mục 03 <a href="#phienban">Phiên bản và tên gọi</a>.</dd>
+    <dt>LEC</dt><dd>Chứng minh hình thức rằng netlist cổng (sau tổng hợp và sau route) có cùng chức năng với RTL. Ở đây là LEC ánh xạ thanh ghi: so hàm trạng thái kế của từng flop đã ghép tên và mọi output.</dd>
+    <dt>N1</dt><dd>Netlist trung gian trước bước ABC của Yosys, tái tạo lại tiến trình tổng hợp của OpenLane trùng từng byte. Chuỗi chứng minh là RTL = RTL + fsm = N1 = netlist cuối.</dd>
+    <dt>Công suất theo hoạt động</dt><dd>GLS ghi lại hoạt động chuyển mạch thật (SAIF), rồi OpenSTA tính công suất với ký sinh RCX. Khác với "ước lượng của flow" (giả định tỉ lệ chuyển mạch mặc định).</dd>
+    <dt>SAIF</dt><dd>File hoạt động chuyển mạch (số lần chuyển mạch, thời gian ở 0 / 1 của từng net) ghi từ mô phỏng netlist.</dd>
+    <dt>Exact-window</dt><dd>Cửa sổ ghi SAIF dài đúng mcycle × 20 ns của vòng đo, mở / đóng bằng tín hiệu đóng băng bộ đếm đã chứng minh trên chính netlist.</dd>
+    <dt>EPI</dt><dd>Năng lượng mỗi lệnh = công suất × thời gian / số lệnh (minstret).</dd>
+    <dt>Chạy 2 lần (x2)</dt><dd>Mọi phép đo chạy độc lập hai lần và so từng trường. Lý do: có sai sót ngẫu nhiên không tái hiện; hai lượt độc lập trùng nhau mới dùng số.</dd>
+    <dt>Sàng lọc</dt><dd>Chạy thử một bước hoặc một phần để chọn giả thuyết; không phải kết quả.</dd>
+    <dt>Quy tắc Q</dt><dd>Sửa ngày 14/10/2026. Khi phát triển, được sửa và chạy tiếp từ bước lỗi; kết quả chỉ được nhận sau một lần chạy trọn từ bước 1 (không resume, không tách nhánh, ngưỡng khai báo lúc khởi chạy).</dd>
+  </dl>
+</section>
+
+<section id="phienban">
+  <h2><span class="n">03</span>Phiên bản và tên gọi</h2>
+  <p>Mỗi tầng của dự án (RTL, phần mềm đo, FPGA, board, ASIC, LEC, công suất) có nhiều phiên bản; mỗi phiên bản đổi một điểm và có vấn đề riêng. Bảng dưới là tên thống nhất dùng trong trang, kèm tên gốc trong log / thư mục để tra cứu.</p>
+  <p class="note">Trạng thái: <span class="pill ok">đang dùng / đã ký</span> <span class="pill run">đang chạy</span> <span class="pill bad">trượt / bỏ</span> <span class="pill open">chuẩn bị</span>. Chữ thường "lịch sử" là bản cũ, chỉ để tra cứu.</p>
+
+  <h3>3.1 Quy ước</h3>
+  <ul>
+    <li>Bản RTL gọi bằng 8 ký tự đầu của tổng SHA-256 manifest (<code>scripts/rtl_manifest.py</code>), ví dụ <code>6c4ccffd</code>. R7…R16 là số đợt sửa trong nhật ký; một đợt có thể có nhiều manifest.</li>
+    <li>PD chỉ đọc snapshot RTL đóng băng, không đọc <code>hdl/</code>. Các bản đã ký (r14F, ecomaxmin) và mọi run tới 14/10 đọc <code>asic/snapshots/rtl_r14</code> (manifest 3ea52396). Từ 14/10 21:12 (quyết định của chủ dự án) PD đọc <code>asic/snapshots/rtl_rfbht</code> = manifest 6c4ccffd, đã kiểm trùng từng byte với cây mã hiện tại (44 file, hai lượt); tên run có mảnh <code>rtl6c4c</code>.</li>
+    <li>Tên run PD: <code>&lt;cấu hình&gt;_&lt;floorplan&gt;_&lt;knob…&gt;_r&lt;n&gt;</code>; cấu hình <code>dm</code> / <code>sa2</code> / <code>vc4</code> (= DM_VC4). <code>_r1</code> / <code>_r2</code> = hai lần chạy độc lập cùng công thức (chạy kép); <code>_r3</code> trở lên = chạy lại sau khi lần trước dừng.</li>
+    <li>Tên ngắn: final_A/B, final3_A/B, r14F_A/B (DM); ecomaxmin, E0, E1 (SA2); V0–V5 (DM_VC4). Hậu tố A / B của run cũ = <code>_r1</code> / <code>_r2</code>; "phương án A / B" của floorplan hành lang là 11.305 / 11.56 mm², không liên quan.</li>
+    <li>Thư mục kết quả: <code>results/&lt;nội dung&gt;_&lt;YYYYMMDD&gt;</code>; p1 / p2 = lượt 1 / lượt 2.</li>
+  </ul>
+
+  <h3>3.2 Đọc tên run PD</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Mảnh tên</th><th>Nghĩa</th></tr></thead>
+    <tbody>
+      <tr><td><code>grid3665x2900</code>, <code>grid2800x2900</code></td><td>Floorplan lưới của DM, die rộng × cao (µm)</td></tr>
+      <tr><td><code>ram8k</code></td><td>Bản RAM chính 8 KiB (trước 29/09)</td></tr>
+      <tr><td><code>corr3400x3400</code></td><td>Floorplan hành lang dùng chung cho DM / SA2 / DM_VC4: hai hàng macro RAM ở dưới, macro mỗi cache thành cụm 2 × 2, dải logic ở giữa</td></tr>
+      <tr><td><code>f220</code></td><td>Hàng macro cache phía trên lật (FS), khe 220 µm giữa hai hàng</td></tr>
+      <tr><td><code>capm20</code></td><td>Biên tải khi sửa DRV sau global route 20 % (công thức DM: 50 %)</td></tr>
+      <tr><td><code>fo16</code></td><td><code>MAX_FANOUT</code> 16 (công thức DM: 8)</td></tr>
+      <tr><td><code>pad1</code></td><td>Padding cell 1 site mỗi bên khi đặt cell</td></tr>
+      <tr><td><code>tdp</code></td><td>Đặt cell theo timing (<code>PL_TIME_DRIVEN</code>)</td></tr>
+      <tr><td><code>clkm3</code></td><td>Dây clock chỉ dùng met3 trở lên</td></tr>
+      <tr><td><code>rsztf</code></td><td>Resizer chỉ tối ưu ở góc tt và ff, không đuổi theo ss</td></tr>
+      <tr><td><code>ecomin</code> / <code>ecomaxmin</code></td><td>ECO hold sau route trên ký sinh min_* / hai lượt: max_* rồi min_*</td></tr>
+      <tr><td><code>cts25</code></td><td><code>CTS_SINK_CLUSTERING_SIZE</code> 25 (mặc định OpenLane; DM dùng 8)</td></tr>
+      <tr><td><code>antoff</code></td><td>Tắt sửa antenna ở global route (chỉ sửa sau detailed routing)</td></tr>
+      <tr><td><code>antm10</code>, <code>antgrt10</code></td><td>Sửa antenna ở global route, biên 10 %</td></tr>
+      <tr><td><code>nogrtt</code> / <code>nogrtd</code></td><td>Tắt sửa timing / sửa DRV sau global route</td></tr>
+      <tr><td><code>antcong</code></td><td>Cho phép nghẽn khi route lại trong vòng sửa antenna sau detailed routing; lưu kết quả route chính</td></tr>
+      <tr><td><code>mwl500</code></td><td>Giới hạn dây 500 µm khi sửa DRV (mặc định resizer tự chọn 4,393 µm)</td></tr>
+      <tr><td><code>seco</code> / <code>secott</code></td><td>Thử ECO setup sau route (đã bỏ)</td></tr>
+      <tr><td><code>heurdiode</code> / <code>drtant</code></td><td>Diode chèn theo heuristic (cách cũ) / sửa antenna sau detailed routing</td></tr>
+      <tr><td><code>rtl6c4c</code></td><td>Đầu vào RTL là 6c4ccffd (snapshot <code>rtl_rfbht</code>); run không có mảnh này đọc <code>rtl_r14</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3.3 RTL</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Tên</th><th>Ngày</th><th>Thay đổi</th><th>Vấn đề / kết quả</th><th>Trạng thái</th></tr></thead>
+    <tbody>
+      <tr id="vt-rtl-pub"><td>Bản công bố 1 KiB</td><td>16/09</td><td>Repo công khai RISCV-AXI-APB-CACHE: cache I/D 1 KiB, RAM 8 KiB, chỉ FPGA, kernel tự viết</td><td>8 lỗi (mục 05)</td><td>tham chiếu</td></tr>
+      <tr id="vt-rtl-1k"><td>1 KiB nghiên cứu (tên file cũ dedup / synccache / tagfix / sanitized)</td><td>16–18/09</td><td>Tham số hóa <code>LINE_WORDS</code>, lint Verilator -Wall, tag RAM đồng bộ cho cả 4 cache để đưa vào SRAM, <code>PERF_COUNTERS_ENABLE</code></td><td>Số ablation đầu tiên sai (đã sửa); ASIC 1 KiB lớn hơn và nghẽn global route</td><td>lịch sử</td></tr>
+      <tr id="vt-rtl-4k"><td>4 KiB đầu tiên</td><td>18–24/09</td><td>Cache 4 KiB trên macro OpenRAM 32 × 256, L0 của I$ 8 entry, 12 macro</td><td>2 latch thật trong netlist (Verilator báo 0), lỗi SDC <code>create_clock</code>; run ch4kb_full bị bỏ vì bộ nhớ ASIC còn lỗi</td><td>lịch sử</td></tr>
+      <tr id="vt-rtl-fix"><td><code>aa8e32f9</code> → <code>b82c2717</code> → <code>c235dfb7</code> (rtlfix)</td><td>24–25/09</td><td>Bỏ 2 latch <code>rx_block</code>; read-enable cho bank DSE; lỗi ghi AXI (bresp) ghi nhận sticky; UART RXDATA trả byte cũ nhất; UART tôn trọng pstrb (APB4); một SoC top cho ASIC; view ASIC lần đầu bắt 3 lỗi bộ nhớ ASIC (không biên dịch được trên Questa, sai địa chỉ ghi khi AW và W cùng chu kỳ: 91 / 115 lệnh ghi, SRAM không giữ giá trị đọc)</td><td>PD rtlfix_c235: setup nom_tt −0.272 ns, hold trượt ở ss từ <code>uart_rx</code> / <code>key1_n</code></td><td>lịch sử</td></tr>
+      <tr id="vt-rtl-r8"><td><code>a0c425f8</code> (R8, sau gọi R17)</td><td>25/09</td><td>Đồng bộ 2 flop cho <code>uart_rx</code>, <code>key1_n</code> và nhả reset</td><td>PD r8_a0c4: nom_tt −0.569 ns; tìm ra đường nửa chu kỳ từ SRAM (dout ra ở sườn xuống)</td><td>lịch sử</td></tr>
+      <tr id="vt-rtl-r7r8"><td><code>358cb660</code> (R7a + R7b + R8)</td><td>25/09</td><td>Viết lại bộ cộng fetch, một bộ nhân có dấu 33 × 33 thay ba bộ 32 × 32, chân nguồn macro; CPI không đổi (chứng minh SAT / mô phỏng)</td><td>PD r7r8_358c: lần đầu đạt tt ở 50 MHz (+2.190 ns); ss −11.2 ns</td><td>lịch sử</td></tr>
+      <tr id="vt-rtl-r9"><td><code>ecf4fc03</code> → <code>d030ad12</code> (R9–R11)</td><td>26/09</td><td>Thanh ghi hóa giải mã (forwarding, kiểu load), bit valid riêng cho L0 (<code>hot_mvalid</code>), <code>keep</code> trên bộ đếm hiệu năng (chỉ ASIC); CPI không đổi</td><td>ss vẫn âm; <code>keep</code> làm Quartus +17 % LE nên chỉ giữ cho ASIC</td><td>lịch sử</td></tr>
+      <tr id="vt-rtl-r12"><td><code>e21ef330</code> → <code>8b163675</code> (R12, R12b)</td><td>26/09</td><td>FPGA dùng select mã hóa (−145 LE, DM_VC4 dưới 20,000 LE), ASIC giữ one-hot</td><td>RTL của bản DM RAM 8 KiB đã ký (final3)</td><td>đóng băng cho bản 8 KiB</td></tr>
+      <tr id="vt-rtl-r13"><td>R13a / R13b</td><td>28/09</td><td>Thử RTL cycle-exact cho ss / bộ nhân 2 tầng</td><td>PD xấu hơn (max_ss −9.930 ns) / +1.03 % chu kỳ</td><td><span class="pill bad">bỏ</span></td></tr>
+      <tr id="vt-rtl-r14"><td>R14: <code>535ec0f9</code> → <code>3ea52396</code>, <code>9b868f10</code></td><td>29–30/09</td><td>RAM chính 8 → 16 KiB (ASIC 8 macro RAM, tổng 16 macro), chuyển sang 12 kernel Embench-IoT gốc; <code>9b868f10</code> bỏ kernel tự viết</td><td>Snapshot <code>rtl_r14</code> = đầu vào PD của các bản đã ký (DM 10.63 mm², SA2 11.56 mm²) và mọi run DM_VC4 tới 14/10</td><td>đầu vào PD cũ (tới 14/10)</td></tr>
+      <tr id="vt-rtl-r15"><td>R15 <code>d409b09d</code></td><td>30/09</td><td>Core N-way (SA4, pseudo-LRU dạng cây), <code>CACHE_CONFIG</code> 4 / 5</td><td>SA4 chỉ FPGA / mô phỏng; chip DM chứng minh tương đương R14</td><td>dùng cho quét M2</td></tr>
+      <tr id="vt-rtl-r16"><td>R16 <code>ea3ef852</code> → <code>c09143ea</code></td><td>03/10</td><td>Tham số <code>CACHE_FAST_HIT</code> (mặc định 0 = R15, chứng minh tương đương)</td><td>Dùng cho M1; PD trên <code>rtl_r14</code> vẫn đúng với FAST_HIT 0</td><td>dùng cho M1</td></tr>
+      <tr id="vt-rtl-dcbf"><td><code>dcbf3495</code></td><td>08/10</td><td>Register file và BHT vào M9K (chỉ FPGA), lần đóng băng đầu</td><td>Chuỗi kiểm 46 OK / 1 FAIL (lint_asic SYNCASYNCNET trong checker mô phỏng)</td><td><span class="pill bad">thay bằng 6c4ccffd</span></td></tr>
+      <tr id="vt-rtl-6c4c"><td><code>6c4ccffd</code></td><td>08/10</td><td>Như <code>dcbf3495</code>, sửa checker BHT (chỉ phần translate_off)</td><td>Chuỗi đầy đủ 0 lỗi; −2,630 đến −2,680 LE; netlist ASIC không đổi (tổng hợp DM trùng từng byte R16)</td><td><span class="pill ok">RTL hiện tại</span> 227 file; đầu vào PD từ 14/10 21:12 (snapshot <code>rtl_rfbht</code>)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3.4 Phần mềm đo và kiểm chứng</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Tên</th><th>Thời gian</th><th>Đặc điểm</th><th>Trạng thái</th></tr></thead>
+    <tbody>
+      <tr><td>12 kernel tự viết</td><td>đến 29/09</td><td>Kiểu Embench do dự án viết (bản công bố dùng; phản biện A6)</td><td><span class="pill bad">bỏ 30/09</span></td></tr>
+      <tr><td>12 kernel Embench-IoT gốc (<code>09c2ed8c</code>)</td><td>từ 29/09</td><td>aha-mont64, crc32, depthconv, edn, huffbench, matmult-int, md5sum, nettle-sha256, slre, statemate, tarfind, ud; nguồn giữ nguyên trừ móc chỉnh số vòng; không phải điểm Embench chính thức</td><td><span class="pill ok">đang dùng</span></td></tr>
+      <tr><td>CoreMark quét ngắn</td><td>09–10/10</td><td>-O2, 1 vòng, RAM mô phỏng 32 KiB, 92 điểm có CRC</td><td><span class="pill ok">xong ×2</span></td></tr>
+      <tr><td>CoreMark chuẩn</td><td>11/10</td><td>-Os, 1,100 vòng, &gt; 10 s, timer APB, 4 cấu hình; RAM mô phỏng 32 KiB</td><td><span class="pill ok">xong ×2</span></td></tr>
+      <tr><td>Regression testbench</td><td>24/09 → 08/10</td><td>128 → 129 → 161 → 178 kiểm tra, thêm theo từng bản RTL</td><td><span class="pill ok">178 / 178 ×2</span> trên <code>6c4ccffd</code></td></tr>
+      <tr><td>UVM</td><td>→ 09/10</td><td>5 ca → 48 ca mỗi lượt (thêm AXI stress, UART RX, 4 cấu hình)</td><td><span class="pill ok">xong ×2</span></td></tr>
+      <tr><td>ACT4</td><td>02/10, lặp lại trên <code>6c4ccffd</code></td><td>43 test (39 RV32I + 4 Zmmul)</td><td><span class="pill ok">xong ×2</span></td></tr>
+      <tr><td>Random differential + Spike</td><td>09–11/10</td><td>50 seed; tham chiếu Spike độc lập</td><td><span class="pill ok">xong ×2</span></td></tr>
+      <tr><td>Probe</td><td>–</td><td>cachesweep (điểm gãy độ kết hợp), conflict probe mở rộng, ramsweep (kiểm cả 8 bank RAM)</td><td>công cụ đo</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3.5 FPGA và board</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Tên</th><th>Ngày</th><th>Đặc điểm</th><th>Trạng thái</th></tr></thead>
+    <tbody>
+      <tr id="vt-fpga-4seed"><td>4 seed × 2 lượt</td><td>25/09 → 06/10</td><td>Trên <code>c235dfb7</code> … R16 (DM R16: 15,440 LE)</td><td>lịch sử</td></tr>
+      <tr id="vt-fpga-rfbht"><td>4 seed (rfbht)</td><td>09/10</td><td><code>6c4ccffd</code>; DM 12,810–12,842 LE</td><td>thay bằng 10 seed</td></tr>
+      <tr id="vt-fpga-10seed"><td>10 seed chung × 2 lượt</td><td>09/10</td><td><code>6c4ccffd</code>, seed 1..10 chung cho 4 cấu hình (số ở mục 09)</td><td><span class="pill ok">đang dùng</span></td></tr>
+      <tr id="vt-board36"><td>36 SOF</td><td>16/09</td><td>Thiết kế bản công bố</td><td>lịch sử, không dùng</td></tr>
+      <tr id="vt-board100"><td>100 SOF seed 2</td><td>09/10</td><td><code>6c4ccffd</code>, 25 firmware × 4 cấu hình, bộ đếm kỳ vọng gắn hash từng SOF</td><td><span class="pill run">42 / 100 khớp</span> phiên 13/10, còn 58</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3.6 ASIC DM</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Tên trong trang</th><th>Run / thư mục</th><th>Ngày</th><th>Đặc điểm</th><th>Vấn đề / kết quả</th><th>Trạng thái</th></tr></thead>
+    <tbody>
+      <tr id="vt-dm1k"><td>DM 1 KiB</td><td><code>dm_c1k_baseline</code> (sync_final)</td><td>18/09</td><td>Cache 1 KiB, RAM 8 KiB, die 5.22 mm²</td><td>SDC thiếu clock uncertainty / IO; đo lại hold âm</td><td>mốc lịch sử</td></tr>
+      <tr id="vt-dmprobe"><td>Run thăm dò 4 KiB</td><td><code>ch4kb_full</code>, <code>rtlfix_c235</code>, <code>r8_a0c4</code>, <code>r7r8_358c</code>, <code>r9_ecf4</code>, <code>r10A</code></td><td>19–26/09</td><td>PD trên từng bản RTL của đợt sửa</td><td>Tìm ra đường nửa chu kỳ SRAM và cách đóng tt</td><td>lịch sử</td></tr>
+      <tr id="vt-final"><td>final_A / final_B</td><td><code>dm_ram8k_grid2800x2900_heurdiode_r1</code> / <code>_r2</code> (<code>_r3</code>)</td><td>27/09</td><td>Bản ký tên RAM 8 KiB đầu tiên, diode heuristic</td><td>Antenna còn 140 net / 159 chân</td><td><span class="pill bad">thay bằng final3</span></td></tr>
+      <tr id="vt-final2"><td>final2_A</td><td><code>dm_ram8k_grid2800x2900_drtant_rc2</code></td><td>27/09</td><td>Thêm hiệu chỉnh RC (<code>LAYERS_RC</code>)</td><td>ss và hold xấu hơn</td><td><span class="pill bad">bỏ</span></td></tr>
+      <tr id="vt-final3"><td>final3_A / final3_B</td><td><code>dm_ram8k_grid2800x2900_drtant_r1</code> / <code>_r2</code></td><td>28/09</td><td>Bỏ diode heuristic, sửa antenna sau detailed routing</td><td>Ký tên sạch, die 8.12 mm², 302 metric trùng, LEC chứng minh</td><td><span class="pill ok">golden RAM 8 KiB</span></td></tr>
+      <tr id="vt-f3h"><td>f3_H1 / f3_H2</td><td><code>…_hold002</code> / <code>…_dens55_hold003_cts8</code></td><td>30/09</td><td>Giảm buffer hold / mật độ 55 %</td><td>Cell −13 % nhưng max_ss xấu hơn</td><td><span class="pill bad">không nâng</span></td></tr>
+      <tr id="vt-r14e"><td>r14_A, r14_E7 … E16</td><td><code>dm_grid3665x2900</code> + knob</td><td>29/09</td><td>Quét knob cho RAM 16 KiB</td><td>E16 = công thức ký tên (<code>config_R14_FINAL</code>)</td><td>thí nghiệm</td></tr>
+      <tr id="vt-r14f"><td>r14F_A / r14F_B</td><td><code>dm_grid3665x2900_r1</code> / <code>_r2</code></td><td>02/10</td><td>RAM 16 KiB, 16 macro, die 10.63 mm²</td><td>Ký tên sạch, 319 metric trùng, netlist trùng; bị dừng khi phiên làm việc kết thúc (30/09) và chạy tiếp 02/10 nên chưa đạt quy tắc Q</td><td><span class="pill ok">bản DM hiện tại, khóa</span></td></tr>
+      <tr id="vt-dmu"><td>DM hành lang (dmuA / dmuB)</td><td><code>dm_corr3400x3325_f220_r1</code> / <code>dm_corr3400x3400_f220_r1</code></td><td>06–07/10</td><td>DM trên floorplan chung với SA2 / DM_VC4</td><td>Ký tên sạch</td><td>chỉ để đối chứng cùng die</td></tr>
+      <tr id="vt-r3"><td>r3</td><td><code>dm_grid3665x2900_r3</code></td><td>14/10</td><td>Lần chạy trọn nghiệm thu</td><td>Dừng ở P2: crash ngẫu nhiên của tiến trình OpenLane sau bước 40</td><td><span class="pill bad">thay bằng r4</span></td></tr>
+      <tr id="vt-r4"><td>r4</td><td><code>dm_grid3665x2900_r4</code></td><td>14/10</td><td>Lần chạy trọn nghiệm thu, cùng công thức và cổng</td><td>Qua P1 / P2 (setup nom_tt +1.725, hold +0.186). Netlist và mọi số trùng r14F tới bước 42, nhưng ở bước 41 hai buffer (<code>wire10760</code>, <code>wire10761</code>) đổi hướng S / FS: OpenROAD chọn hướng theo thứ tự phụ thuộc địa chỉ bộ nhớ (hiện tượng đã thấy từ 25/09). Vì vậy bước 43 sửa antenna ra 350 net / 6,249 diode thay vì 322 / 6,262 và layout khác r14F từ đó. Nghiệm thu bằng cổng ký tên và so PPA, không so hash. Dừng ở cổng detailed routing (14/10 21:11) khi chủ dự án chuyển PD sang RTL 6c4ccffd</td><td><span class="pill bad">dừng, thay bằng bản 6c4ccffd</span></td></tr>
+      <tr id="vt-dm6c4c"><td>DM 6c4ccffd</td><td><code>dm_grid3665x2900_rtl6c4c_r1</code></td><td>14/10</td><td>Công thức ký tên DM (<code>config_R14_FINAL_rtl6c4c.json</code>: chỉ đổi danh sách file sang snapshot 6c4ccffd)</td><td>Lần chạy trọn nghiệm thu từ bước 1 (từ 21:12); sau khi ký: GLS, công suất exact-window và LEC trên layout này</td><td><span class="pill run">đang chạy</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3.7 ASIC SA2</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Tên trong trang</th><th>Run / thư mục</th><th>Ngày</th><th>Đặc điểm</th><th>Vấn đề / kết quả</th><th>Trạng thái</th></tr></thead>
+    <tbody>
+      <tr id="vt-sa2f"><td>sa2F_A / sa2F_B</td><td>–</td><td>02/10</td><td>SA2 trên lưới DM</td><td>Không route được (overflow 67,971)</td><td><span class="pill bad">bỏ</span></td></tr>
+      <tr id="vt-sa2fp"><td>Lưới rộng / vòng / tầng</td><td>–</td><td>03/10</td><td>Sàng lọc floorplan</td><td>Lưới rộng route được nhưng nom_tt −17.573 ns (skew clock)</td><td><span class="pill bad">bỏ</span></td></tr>
+      <tr id="vt-sa2u"><td>sa2uA / sa2uB</td><td><code>sa2_corr3400x3325_f220_r1</code> / <code>sa2_corr3400x3400_f220_r1</code></td><td>06–07/10</td><td>Floorplan hành lang, knob của DM</td><td>3325: detailed routing kẹt 173 vi phạm; 3400: hội tụ sau 54 vòng (5 giờ 43 phút), sửa antenna sau route chậm</td><td><span class="pill bad">bỏ</span> chuyển sang knob riêng</td></tr>
+      <tr id="vt-capm20fo16"><td>capm20 + fo16</td><td><code>sa2_corr3400x3400_f220_capm20_fo16_r1</code></td><td>07/10</td><td>Biên tải 20 %, <code>MAX_FANOUT</code> 16</td><td>−27 % buffer sau global route</td><td>giữ trong các bản sau</td></tr>
+      <tr id="vt-sa2-1054"><td>10.54 mm²</td><td><code>sa2_corr3400x3100_…_pad1_tdp_clkm3_r1</code> (+ seco, secott, rsztf)</td><td>08–09/10</td><td>Die nhỏ nhất đã thử</td><td>Route được nhưng max_tt −0.573 ns (đường đọc nửa chu kỳ SRAM way 1 của I$)</td><td><span class="pill bad">trượt</span></td></tr>
+      <tr id="vt-sa2-1105"><td>11.05 mm²</td><td><code>sa2_corr3400x3250_…_rsztf_r1</code> / <code>_r2</code></td><td>10/10</td><td>–</td><td>Trượt P2 cả hai lần (setup −0.332 ns)</td><td><span class="pill bad">trượt</span></td></tr>
+      <tr id="vt-sa2-11305"><td>11.305 mm²</td><td><code>sa2_corr3400x3325_…_rsztf_r1</code></td><td>11–13/10</td><td>–</td><td>Route sau ECO kẹt 24 vi phạm met1 / met2 rồi OpenROAD crash</td><td><span class="pill bad">đóng, trượt</span></td></tr>
+      <tr id="vt-rsztf"><td>rsztf_r1 / _r2</td><td><code>sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1</code> / <code>_r2</code></td><td>09/10</td><td>11.56 mm², resizer chỉ ở tt / ff</td><td>Gần sạch, chỉ hold ff −0.027 ns</td><td>nguồn của ecomaxmin</td></tr>
+      <tr id="vt-ecomin"><td>ecomin</td><td><code>…_rsztf_ecomin_r1</code></td><td>09/10</td><td>ECO hold trên RC min</td><td>Hold ff xấu hơn (−0.116 ns)</td><td><span class="pill bad">bỏ</span></td></tr>
+      <tr id="vt-ecomaxmin"><td>SA2 đã ký (ecomaxmin)</td><td><code>…_rsztf_ecomaxmin_r1</code> / <code>_r2</code></td><td>09/10</td><td>ECO hold hai lượt (max_* rồi min_*), die 11.56 mm²</td><td>Ký tên sạch, 319 metric trùng; tách nhánh sau bước 47 và vượt cổng p2 bằng CONTINUE nên chưa đạt quy tắc Q</td><td><span class="pill ok">bản SA2 hiện tại</span></td></tr>
+      <tr id="vt-e1"><td>E1</td><td><code>…_rsztf_cts25_r1</code> … <code>_r5</code></td><td>13–14/10</td><td>Công thức ecomaxmin + <code>CTS_SINK_CLUSTERING_SIZE</code> 25 (cây clock nhẹ hơn), ECO hai lượt trong một bước</td><td>r1–r4 dừng (ba crash ngẫu nhiên, một lần thiếu RAM); r5: route và ECO xong, sign-off chạy lại từ bước 51</td><td><span class="pill run">đang làm</span></td></tr>
+      <tr id="vt-e0"><td>E0</td><td>(chưa chạy)</td><td>–</td><td>Công thức ecomaxmin trong một flow (ECO hai lượt trong một bước, ngưỡng khai báo lúc khởi chạy)</td><td>Ứng viên nghiệm thu nếu E1 không thắng PPA</td><td><span class="pill open">chuẩn bị</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3.8 ASIC DM_VC4</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Tên trong trang</th><th>Run / thư mục</th><th>Ngày</th><th>Đặc điểm</th><th>Vấn đề / kết quả</th><th>Trạng thái</th></tr></thead>
+    <tbody>
+      <tr id="vt-vc4f"><td>vc4F_A / vc4F_B, vc4R1F_A, vc4S1</td><td>–</td><td>02–03/10</td><td>Lưới DM, lưới rộng, vòng, tầng</td><td>Overflow hoặc timing âm (lưới rộng overflow 34,086; vòng nom_tt −1.093 ns; tầng overflow 233,074)</td><td><span class="pill bad">bỏ</span></td></tr>
+      <tr id="vt-vc4u"><td>vc4uA / vc4uB</td><td><code>vc4_corr3400x3325_f220_r1</code> / <code>vc4_corr3400x3400_f220_r1</code></td><td>06–07/10</td><td>Floorplan hành lang, knob DM</td><td>Route lại trong sửa antenna: overflow 19,114 / 11,485</td><td><span class="pill bad">dừng</span></td></tr>
+      <tr id="vt-vc4wide"><td>3600 / 3800 lần 1</td><td><code>vc4_corr3600x3400_f220_r1</code> / <code>vc4_corr3800x3400_f220_r1</code></td><td>07/10</td><td>Die rộng hơn, knob DM</td><td>Overflow sau global route 5,774 / 10,627</td><td><span class="pill bad">dừng</span></td></tr>
+      <tr id="vt-vc4var"><td>Các biến thể 11.56 / 11.90 mm²</td><td>capm20, capm20_fo16, capm20_antm10, antoff, antoff_rsztf, nogrtt, nogrtt_clkm3, nogrtt_clkm3_pad1, 3500 pad1</td><td>07–09/10</td><td>Mỗi run đổi một knob</td><td>Trượt P1 / P2: cây clock đi vòng sau global route (FastRoute "hard benchmark"), hold âm tới −3.9 ns, overflow</td><td><span class="pill bad">dừng</span></td></tr>
+      <tr id="vt-vc4nogrt"><td>3600 nogrtt / nogrtd</td><td><code>vc4_corr3600x3400_f220_capm20_antoff_nogrtt_r1</code> / <code>_nogrtd_r1</code></td><td>09/10</td><td>Tắt sửa timing / sửa DRV sau global route</td><td>nogrtt: P2 trượt (sửa DRV sau GRT route lại clock); nogrtd: detailed routing dừng ở vòng 10 (5,689 vi phạm)</td><td><span class="pill bad">dừng</span></td></tr>
+      <tr id="vt-v0"><td>V0</td><td><code>vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_r1</code></td><td>10–11/10</td><td>+ padding 1 site</td><td>Route chính 0 vi phạm ở vòng 45 (18.5 giờ); antenna sau route 2,243 net; vòng sửa dừng ở GRT-0232 (global route không cho nghẽn)</td><td><span class="pill bad">trượt</span></td></tr>
+      <tr id="vt-v1"><td>V1</td><td><code>…_pad1_antoff_nogrtt_nogrtd_antcong_r1</code></td><td>13/10</td><td>V0 + cho phép nghẽn trong vòng sửa antenna, lưu route chính</td><td>Route chính 0; vòng sửa 1: 2,270 net, 5,920 diode, route lại 59,810 → 8,323 ở vòng 13, watchdog dừng</td><td><span class="pill bad">trượt</span></td></tr>
+      <tr id="vt-v2"><td>V2</td><td><code>…_pad1_antgrt10_nogrtt_nogrtd_antcong_r1</code></td><td>14/10</td><td>V1 + sửa antenna ở global route, biên 10 %</td><td>Route chính 0 ở vòng 31; antenna sau route 1,031 net; route lại sau 2,295 diode không hội tụ</td><td><span class="pill bad">trượt</span></td></tr>
+      <tr id="vt-v2replay"><td>V2 chạy lại (sàng lọc)</td><td><code>screen_drt_replay_v2_20261014</code></td><td>14/10</td><td>Chỉ bước route của V2, không watchdog</td><td>Trùng V2 từng vòng, đứng ở 225 (vòng 43)</td><td>dừng</td></tr>
+      <tr id="vt-v3"><td>V3</td><td><code>…_antgrt10_nogrtt_nogrtd_antcong_r2</code></td><td>14/10</td><td>V2 + watchdog riêng cho vòng antenna</td><td>Dừng có chủ đích trước detailed routing (sẽ lặp lại V2)</td><td>dừng</td></tr>
+      <tr id="vt-v4"><td>V4</td><td><code>vc4_corr3800x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1</code></td><td>14/10</td><td>Công thức V2 trên die 3800 × 3400 (12.92 mm²)</td><td>P1 / P2 qua; route chính 0 ở vòng 34; antenna sau route 1,098 net (V2 1,031); route lại sau sửa antenna bám đúng V2 (vòng 18: 1,041; bản chạy lại V2: 1,019); chủ dự án dừng 14/10 21:01</td><td><span class="pill bad">dừng</span></td></tr>
+      <tr id="vt-v5"><td>V5</td><td><code>…_antgrt10_nogrtt_nogrtd_antcong_mwl500_r1</code></td><td>14/10</td><td>V2 + giới hạn dây 500 µm</td><td>P2 trượt (23,680 buffer, setup −1.068 / hold −1.882 ns), antenna vẫn 873 net</td><td><span class="pill bad">trượt</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3.9 LEC</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Tên</th><th>Ngày</th><th>Đặc điểm</th><th>Vấn đề / kết quả</th><th>Trạng thái</th></tr></thead>
+    <tbody>
+      <tr id="vt-eqy"><td>EQY (bước có sẵn của OpenLane)</td><td>25–28/09</td><td>So tương đương theo partition</td><td>Không qua trên thiết kế này (795 / 876 partition; FAIL ở LCD_EN do FSM mã hóa lại)</td><td><span class="pill bad">thay bằng LEC tự xây</span></td></tr>
+      <tr id="vt-sec"><td>SEC có giới hạn (ABC)</td><td>27/09</td><td>Kiểm tuần tự</td><td>Tương đương 19 chu kỳ; không giới hạn: UNDECIDED</td><td><span class="pill bad">bỏ</span></td></tr>
+      <tr id="vt-lec8k"><td>LEC DM RAM 8 KiB</td><td>27–28/09</td><td>Chuỗi RTL = RTL + fsm = N1 = netlist cuối, chứng minh đại số bộ nhân</td><td>19,881 output, 0 phản ví dụ</td><td><span class="pill ok">xong</span></td></tr>
+      <tr id="vt-lec16k"><td>LEC DM RAM 16 KiB</td><td>09/10, tiền đề 13/10</td><td>r14F_A / B, hai lượt</td><td>Đối chứng âm: 184 output SAT; tiền đề (reset bất đồng bộ, giá trị không xác định, one-hot, clock) đóng 13/10</td><td><span class="pill ok">xong</span></td></tr>
+      <tr id="vt-lecsa2"><td>LEC SA2</td><td>13–14/10</td><td>ecomaxmin_r1 / _r2, lượt p1 và p2b</td><td>p2 dừng do crash ngẫu nhiên, chạy lại p2b; p1 = p2b; đối chứng and2 → or2: 60 output SAT</td><td><span class="pill ok">xong</span></td></tr>
+      <tr id="vt-lecvc4"><td>LEC DM_VC4 (phần tổng hợp)</td><td>14/10</td><td>Lần a–d</td><td>a: lệch cổng vì 8 macro way 1 bị tổng hợp xóa → thêm <code>sram_align.py</code>; b: thứ tự cổng AIGER → sửa và tự kiểm; c: một kiểm tra phụ đặt quá chặt (lỗi kịch bản) → chỉ còn là thông tin; d: hai lượt trùng nhau</td><td><span class="pill run">đang làm</span> phần N1 = netlist cuối chờ layout</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3.10 Công suất</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Phép đo</th><th>Cách tính</th><th>Số</th><th>Dùng</th></tr></thead>
+    <tbody>
+      <tr id="vt-pw-flow"><td>Metric <code>power__total</code> của flow</td><td>Ước lượng ở góc max_ff</td><td>DM RAM 8 KiB 115.5 mW, SA2 137.0 mW; bản công bố 235.8 mW</td><td>không dùng để so sánh</td></tr>
+      <tr id="vt-pw-vl"><td>Vectorless nom_tt</td><td>OpenSTA, hoạt động mặc định</td><td>DM 109.15 mW, SA2 121.99 mW</td><td>tham khảo</td></tr>
+      <tr id="vt-pw-saif"><td>SAIF cũ</td><td>GLS, cửa sổ (mcycle + 1) × 20 ns</td><td>Lệch ≤ 0.005 mW mỗi kernel so với exact-window</td><td>thay bằng exact-window</td></tr>
+      <tr id="vt-pw-exact"><td>Exact-window</td><td>GLS hai lượt, cửa sổ đúng mcycle × 20 ns, STA hai lượt</td><td>DM 119.45 mW, SA2 129.64 mW</td><td><span class="pill ok">số dùng</span></td></tr>
+      <tr id="vt-pw-fpga"><td>FPGA</td><td>Quartus Power Analyzer, toggle 12.5 %</td><td>Mục 09</td><td>ước lượng, độ tin cậy thấp</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3.11 Tài liệu cũ</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Tên cũ</th><th>Nay là</th></tr></thead>
+    <tbody>
+      <tr><td><code>HANDOVER_CODEX.md</code></td><td><code>PROJECT_STATE.md</code></td></tr>
+      <tr><td><code>FINAL_METRICS.md</code></td><td><code>RESULTS.md</code></td></tr>
+      <tr><td><code>CLAUDE_AUTONOMY_LOG.md</code>, <code>PD_incident_report.md</code>, <code>asic/FLOW_JOURNAL.md</code>, "Incident N"</td><td>Các mục theo ngày trong <code>NHAT_KY.md</code></td></tr>
+      <tr><td>G1–G6</td><td>Tên cổng <code>grt_overflow</code>, <code>cts_tt_slack</code>, <code>grt_repair_overflow</code>, <code>grt_tt_slack</code>, <code>drt_convergence</code>, <code>signoff</code> (pha P1–P4)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="phamvi">
+  <h2><span class="n">04</span>Phạm vi: bản cũ và bản mới</h2>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Bản đã công bố</th><th>Bản nghiên cứu hiện tại</th></tr></thead>
+    <tbody>
+      <tr><td>Cache I và D</td><td>1 KiB mỗi phía, dòng 16 B</td><td>4 KiB mỗi phía, dòng 16 B. Quét 256 B – 8 KiB, dòng 8 / 16 / 32 B, 1 / 2 / 4 way, victim 2 / 4 / 8.</td></tr>
+      <tr><td>RAM chính</td><td>8 KiB</td><td>16 KiB (tăng ngày 29/09: RAM, không phải cache, giới hạn bộ kernel chạy được)</td></tr>
+      <tr><td>Cấu hình</td><td>DM, SA2, DM_VC4</td><td>DM, SA2, DM_VC4, DM_DSE, SA4; tùy chọn FAST_HIT</td></tr>
+      <tr><td>Workload</td><td>12 kernel "kiểu Embench" tự viết</td><td>12 kernel Embench-IoT gốc (commit <code>09c2ed8c</code>, mọi kernel vừa RAM 16 KiB) và CoreMark. Đã bỏ kernel tự viết. Không phải điểm Embench chính thức. <b>CoreMark chạy mô phỏng với RAM 32 KiB</b> (xem 10.1, 10.4).</td></tr>
+      <tr><td>Đo thêm</td><td>Chu kỳ, phân loại chu kỳ, hit rate</td><td>Thêm độ trễ ngắt, thời gian chuyển ngữ cảnh, tác dụng của dự đoán nhánh, năng lượng mỗi lệnh.</td></tr>
+      <tr><td>ASIC</td><td>DM; cache 1 KiB trong flop; RAM 8 KiB trong 4 macro SRAM; die 5.22 mm²</td><td>DM: cache trong 8 macro SRAM, RAM trong 8 macro, 16 macro, die 10.63 mm² (đã ký). SA2: die 11.56 mm² (đã ký). DM_VC4: chưa ký.</td></tr>
+      <tr><td>Lặp lại phép đo</td><td>Một lần</td><td>Mọi phép đo hai lần, so từng trường; RTL đóng băng bằng manifest có mã tổng. LEC và công suất cũng hai lượt độc lập. Riêng board: một lượt vật lý, so với hai lượt mô phỏng RTL tham chiếu.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="loi">
+  <h2><span class="n">05</span>Lỗi của bản đã công bố đã tìm và sửa</h2>
+  <p>Đây là lỗi thật trong RTL hoặc ràng buộc của bản đã công bố (file tương ứng có trong repo đã công bố), không phải điều chỉnh. Mỗi lỗi có test hoặc bằng chứng đi kèm. Lỗi 1 nằm nguyên trong bản ASIC đã công bố: wrapper RAM ghi sai địa chỉ khi kênh địa chỉ và kênh dữ liệu ghi đến cùng chu kỳ.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th>Nơi</th><th>Triệu chứng</th><th>Hậu quả</th><th>Sửa và bằng chứng</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td><code>axi_ram_32_asic_macro.v</code></td><td>Địa chỉ ghi lấy từ thanh ghi cũ, không bypass khi AW và W đến cùng chu kỳ</td><td><span class="pill bad">nặng</span> Mô phỏng với model SRAM: 91 / 115 lệnh ghi đi sai địa chỉ</td><td>Sửa; view ASIC 12 / 12 kernel PASS (trước đó 1 / 12, chỉ crc32 vì không có lệnh ghi)</td></tr>
+      <tr><td class="num">2</td><td><code>axi_ram_32_asic_macro.v</code></td><td>Dùng biến trước khi khai báo</td><td>Questa không biên dịch được, tức file chưa từng được mô phỏng</td><td>Sửa; nay nằm trong chuỗi kiểm chứng</td></tr>
+      <tr><td class="num">3</td><td><code>uart_apb.v</code></td><td><code>RXDATA</code> không bao giờ trả byte vừa nhận</td><td>UART nhận sai</td><td>Trả byte cũ nhất chưa đọc; test mới <code>tb_uart_apb</code> (trước đó không test nào chạm UART ở mức thanh ghi)</td></tr>
+      <tr><td class="num">4</td><td><code>uart_apb.v</code></td><td>Bỏ qua <code>pstrb</code></td><td>Vi phạm APB4: ghi 1 byte vào CFG xóa 3 byte còn lại</td><td>Sửa và thêm test</td></tr>
+      <tr><td class="num">5</td><td>Đường ghi AXI</td><td><code>m_axi_bresp</code> bị bỏ qua</td><td>Lỗi ghi không được báo; test T19 cũ PASS mà không hề tiêm lỗi</td><td>Cờ <code>wr_err</code> và địa chỉ lỗi đầu tiên ở sysmon <code>0xAC</code> / <code>0xB0</code>; viết lại T19</td></tr>
+      <tr><td class="num">6</td><td><code>rx_block</code></td><td>2 latch thật trong netlist (Verilator báo 0)</td><td>Hành vi không xác định</td><td>Nhánh <code>default</code> gán đủ đầu ra; quét latch bằng Yosys ở mọi tổ hợp cấu hình</td></tr>
+      <tr><td class="num">7</td><td>Wrapper FPGA và ASIC</td><td><code>uart_rx</code>, reset, phím không được đồng bộ; false path trên <code>reset_n</code> che recovery/removal</td><td>Metastability</td><td>Bộ đồng bộ 2 flop; test wrapper mới (RTL cũ FAIL 4 và 10 trường hợp)</td></tr>
+      <tr><td class="num">8</td><td><code>soc.sdc</code></td><td><code>set clocks [create_clock ...]</code> trả về rỗng</td><td><span class="pill bad">nặng</span> clock uncertainty, transition và mọi ràng buộc I/O bị bỏ im lặng; 72 / 78 cổng ra không được kiểm</td><td>Sửa. Đo lại layout cũ với SDC đúng: setup tt +2.944 → +2.694 ns; hold ss +0.657 → <span class="worse">−0.231</span>, ff +0.186 → <span class="worse">−0.064</span> ns</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Hai việc khác cùng đợt: bản cũ có hai file top riêng cho FPGA và ASIC phải đồng bộ bằng tay (nay gộp làm một, lint báo lỗi nếu trùng module); và chuỗi kiểm chứng mới bắt được một lỗi trong code mới của chính bản nghiên cứu (bank dữ liệu cache trên SRAM không giữ giá trị đọc) trước khi đưa vào PD.</p>
+  <div class="callout badc"><strong>Ý nghĩa cho bài báo</strong><p>Số liệu ASIC của bản đã công bố không dùng lại được: timing đo với SDC lỗi, hold âm ở ss và ff khi đo đúng, còn 646 vi phạm antenna, và wrapper RAM ghi sai địa chỉ (lỗi 1). Mọi số ASIC trong bài mới lấy từ mục 11.</p></div>
+</section>
+
+<section id="doichieu">
+  <h2><span class="n">06</span>Đối chiếu với các hạn chế của bản gốc</h2>
+  <p>Bản gốc tự ghi 10 hạn chế (<code>docs/en/results/FINAL_RESULTS.md</code> §10), phản biện thêm các góp ý nhỏ và các mục A1, A2. Bảng này cho biết từng mục đã sửa tới đâu trong bản nghiên cứu. Mỗi thay đổi RTL kéo theo toàn bộ chuỗi kiểm chứng; thay đổi chỉ cho FPGA (7.3) được chứng minh không đổi netlist ASIC nên không cần chạy lại PD.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th>Hạn chế hoặc góp ý (nguồn)</th><th>Bản gốc</th><th>Bản nghiên cứu</th><th>Trạng thái</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Tổ chức cache và độ sâu controller chưa tách (§10.1; phản biện M1)</td><td>Chưa làm</td><td>DM_DSE, FAST_HIT, quét 256 B – 8 KiB (mục 10.2)</td><td><span class="pill ok">Đã sửa</span></td></tr>
+      <tr><td class="num">2</td><td>Log CPI chạy trên board không lưu (§10.2.1; A7)</td><td>Chỉ lưu crc32 và 3 lần chạy probe</td><td>Phiên board 13/10: 42 / 100 ca đã đo, mọi bộ đếm khớp cả hai lượt tham chiếu RTL; còn 58 ca</td><td><span class="pill run">Một phần</span></td></tr>
+      <tr><td class="num">3</td><td>Conflict probe chỉ đo một set với truy cập tuần hoàn (§10.2.2)</td><td>–</td><td>Probe mới (10.3): nhiều set, thứ tự ngẫu nhiên, đọc / ghi lẫn, 6 cấu hình, 4 KiB và 1 KiB, khớp mô hình độc lập 390 / 390 cửa sổ, hai lượt trùng nhau</td><td><span class="pill ok">Đã sửa</span></td></tr>
+      <tr><td class="num">4</td><td>Góc ss (§10.2.3)</td><td>max_ss −11.706 ns</td><td>max_ss −7.365 ns (DM RAM 16 KiB), −7.917 ns (SA2). Đóng hẳn cần thêm tầng pipeline, tức đổi CPI; chủ dự án quyết định không đổi CPI, chỉ báo cáo</td><td><span class="pill run">Một phần</span></td></tr>
+      <tr><td class="num">5</td><td>Vi phạm antenna (§10.2.4)</td><td>646</td><td>0 ở DM và SA2 (sửa antenna sau detailed routing), không tốn 18 % diện tích như bản gốc ước tính; DM_VC4 chưa đóng (11.4)</td><td><span class="pill ok">Đã sửa</span></td></tr>
+      <tr><td class="num">6</td><td>Magic DRC không dùng được, không chạy được XOR (§10.2.5)</td><td>Bỏ qua Magic; không có XOR</td><td>Magic DRC trên GDS với macro trừu tượng = 0; XOR = 0</td><td><span class="pill ok">Đã sửa</span></td></tr>
+      <tr><td class="num">7</td><td>Chưa chế tạo (§10.2.6)</td><td>–</td><td>–</td><td><span class="pill open">Bản chất</span></td></tr>
+      <tr><td class="num">8</td><td>Random differential (§10.2.7)</td><td>1 seed</td><td>50 seed × 2 trên mọi revision từ 23/09, có lưu trace; thêm tham chiếu Spike độc lập (100 lần Spike khớp cả 200 trace RTL)</td><td><span class="pill ok">Đã sửa</span></td></tr>
+      <tr><td class="num">9</td><td>ACT4 và RISCOF (§10.2.8)</td><td>Log không lưu; chưa chạy RISCOF</td><td>ACT4 43 / 43 × 2, log và signature đã lưu; RISCOF / Sail chưa chạy</td><td><span class="pill run">Một phần</span></td></tr>
+      <tr><td class="num">10</td><td>Kernel tự viết (§10.2.9; A6)</td><td>10 / 12 tự viết</td><td>12 kernel Embench-IoT gốc + CoreMark (CoreMark mô phỏng với RAM 32 KiB)</td><td><span class="pill ok">Đã sửa</span></td></tr>
+      <tr><td class="num">11</td><td>Biên LE quá sát (§10.2.10)</td><td>DM_VC4 dư 118 LE</td><td>10 seed chung × 2 lượt: DM 12,800–12,842; SA2 16,670–16,739; DM_VC4 17,096–17,148; DM_DSE 14,302–14,364 LE; dư khoảng 2,850 so với mục tiêu mềm 20,000 ở DM_VC4. SA4 và các điểm 8 KiB (chưa fit lại, còn flop) vượt</td><td><span class="pill run">Một phần</span></td></tr>
+      <tr><td class="num">12</td><td>Vi phạm max-slew (góp ý nhỏ)</td><td>8,718</td><td>DM RAM 16 KiB ở nom_tt: slew 142, cap 298, fanout 1,428; SA2 ở nom_tt: slew 1,084, cap 1,036; báo cáo theo loại</td><td><span class="pill ok">Đã sửa</span></td></tr>
+      <tr><td class="num">13</td><td>Bảng seed bỏ seed 4 (góp ý nhỏ)</td><td>Seed 1, 2, 3, 5</td><td>10 seed chung 1 – 10 cho cả bốn cấu hình, ghép cặp theo seed, hai lượt trùng nhau</td><td><span class="pill ok">Đã sửa</span></td></tr>
+      <tr><td class="num">14</td><td>Bảng 6: ở N = 7 chỉ có 1 victim hit (góp ý nhỏ)</td><td>Chưa giải thích</td><td>Có lời giải thích ở dưới và số đo mới (10.3: thứ tự ngẫu nhiên không sụp); chưa đưa vào bài</td><td><span class="pill open">Viết bài</span></td></tr>
+      <tr><td class="num">15</td><td>"Victim cache 59 % trên matmult" ở kết luận nhưng không có trong kết quả</td><td>–</td><td>Bỏ câu này hoặc thêm số liệu vào phần kết quả</td><td><span class="pill open">Viết bài</span></td></tr>
+      <tr><td class="num">16</td><td>"Weighted CPI" chưa định nghĩa</td><td>–</td><td>Σ mcycle / Σ minstret, đã ghi trong RESULTS.md</td><td><span class="pill ok">Đã sửa</span></td></tr>
+      <tr><td class="num">17</td><td>Tiêu đề chỉ ghi "on FPGA"; từ khóa "posted store"</td><td>–</td><td>Sửa tiêu đề và từ khóa</td><td><span class="pill open">Viết bài</span></td></tr>
+      <tr><td class="num">18</td><td>11 mục hạn chế, nhiều mục là ghi chú nội bộ</td><td>–</td><td>Gộp lại; phần lớn đã có cách sửa ở bảng này</td><td><span class="pill open">Viết bài</span></td></tr>
+      <tr><td class="num">19</td><td>Footnote GCC 14.2 và UB tại địa chỉ 0</td><td>–</td><td>Chuyển vào README của artifact</td><td><span class="pill open">Viết bài</span></td></tr>
+      <tr><td class="num">20</td><td>LE cao (A1)</td><td>–</td><td>Bảng theo module (9.3); register file và BHT chuyển vào M9K mà CPI không đổi: DM 15,440 → 12,815 LE (9.5)</td><td><span class="pill ok">Đã sửa</span></td></tr>
+      <tr><td class="num">21</td><td>Fmax khoảng 52 MHz; core trượt ss (A2)</td><td>51.6 – 52.4 MHz</td><td>51.02–56.18 MHz (10 seed × 4 cấu hình, RTL 6c4ccffd); ASIC DM và SA2 đóng tt và ff, ss vẫn âm; DM_VC4 chưa ký</td><td><span class="pill run">Một phần</span></td></tr>
+      <tr><td class="num">22</td><td>Tương đương RTL – netlist</td><td>Không có</td><td>LEC chứng minh cho DM RAM 8 KiB, DM RAM 16 KiB (tiền đề đã đóng 13/10) và SA2 (14/10, hai lượt trùng nhau, đối chứng âm đủ); DM_VC4: phần chỉ phụ thuộc tổng hợp xong hai lượt</td><td><span class="pill ok">Đã sửa</span></td></tr>
+      <tr><td class="num">23</td><td>Related work (M3), caption hình 3 (A5)</td><td>–</td><td>Phần viết bài; xem câu chữ đề xuất ở dưới</td><td><span class="pill open">Viết bài</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Tổng 23 mục: 11 đã sửa, 5 sửa một phần, 6 thuộc phần viết bài, 1 bản chất (chưa chế tạo). Dòng 2 (log trên board) chuyển từ "cần board" sang "một phần" sau phiên board 13/10.</p>
+  <h3>Câu chữ đề xuất cho các mục viết bài</h3>
+  <ul>
+    <li><b>Bảng 6, N = 7.</b> Với truy cập tuần hoàn qua N dòng cùng ánh xạ vào một set, DM_VC4 giữ được tối đa 5 dòng (1 trong set và 4 trong victim buffer). Khi N lớn hơn 5, thay thế vòng tròn luôn đẩy ra đúng dòng sắp được dùng lại, nên victim hit sụp về gần 0; đây là hiện tượng thrash của mọi chính sách kiểu FIFO / LRU với vòng lặp dài hơn dung lượng. Điểm gãy đo được bằng probe: DM 2, SA2 3, DM_VC4 6 dòng.</li>
+    <li><b>Weighted CPI.</b> "CPI có trọng số bằng tổng mcycle chia tổng minstret trên các kernel."</li>
+    <li><b>Caption hình 3 (A5).</b> "Số đếm tuyệt đối của từng loại chu kỳ giống nhau giữa các cấu hình; tỉ lệ phần trăm khác nhau vì tổng số chu kỳ khác nhau."</li>
+    <li><b>Kết luận "DM nhanh nhất".</b> Thay bằng kết quả M1: ở 4 KiB, controller chiếm +9.8 %, tổ chức cache −0.3 %; cùng controller thì set-associative nhanh hơn ở mọi dung lượng.</li>
+    <li><b>Tiêu đề.</b> Bỏ "on FPGA" hoặc thêm phần ASIC vào tiêu đề, vì bài có cả hai.</li>
+  </ul>
+</section>
+
+<section id="rtl">
+  <h2><span class="n">07</span>Thay đổi RTL</h2>
+  <h3>7.1 Tính năng mới</h3>
+  <ul>
+    <li><b>FAST_HIT</b> (R16): trả lời hit mảng chính một chu kỳ sớm hơn ở core DSE và N-way. FAST_HIT 0 được chứng minh tương đương RTL trước đó, cả ở mức module (16 / 16, đối chứng âm phát hiện 8 / 8) lẫn ở mức SoC cho đúng đầu vào PD (DM 35,067 / SA2 36,741 / DM_VC4 37,441 cell, 0 chưa chứng minh).</li>
+    <li><b>Core N-way</b> (R15) cho SA4, thay thế PLRU.</li>
+    <li><b>RAM chính 16 KiB</b> (R14) để chạy được bộ Embench-IoT gốc.</li>
+    <li><b>Tag RAM đồng bộ</b> cho cả bốn cache; tham số hóa <code>LINE_WORDS</code> (dòng 8 / 16 / 32 B).</li>
+    <li><b>Báo lỗi ghi AXI</b> qua sysmon (mục 5, lỗi 5); ident sysmon <code>0x53380001</code> → <code>0x53380002</code>.</li>
+  </ul>
+  <h3>7.2 Sửa để đóng timing ASIC mà không đổi CPI</h3>
+  <p>Ràng buộc: hành vi từng chu kỳ giữ nguyên, nên CPI không đổi. Mọi thay đổi đều có chứng minh hình thức hoặc checker kèm đối chứng âm, và chuỗi Embench / CoreMark trùng tham chiếu.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Thay đổi</th><th>Lý do</th><th>Chứng minh</th><th>Kết quả</th></tr></thead>
+    <tbody>
+      <tr><td>Viết lại bộ cộng <code>pc + imm</code> ở fetch</td><td>SRAM xuất dữ liệu ở sườn xuống, đường fetch chỉ có nửa chu kỳ</td><td>SAT trên mọi <code>pc_f</code> × mọi lệnh, có đối chứng âm</td><td>Sau CTS, nom_tt −0.788 → +2.766 ns; +0.9 % diện tích cell</td></tr>
+      <tr><td>Một bộ nhân có dấu 33×33 thay 3 bộ nhân 32×32</td><td>Diện tích, công suất, timing</td><td>20,025,600 phép so với ALU cũ, 0 sai khác, có đối chứng âm</td><td>FPGA: khối nhân 9 bit 24 → 8; công suất bộ nhân 6.22 → 1.53 mW</td></tr>
+      <tr><td>Thanh ghi hóa giải mã (select forwarding, kiểu load, <code>is_upper</code> / <code>is_link</code>)</td><td>70 % endpoint trượt ở ss xuất phát từ <code>d_req_addr</code></td><td>Checker tương đương trong RTL: 447,858,365 chu kỳ, 0 lệch</td><td>Giảm đường tới hạn ở ss</td></tr>
+      <tr><td><code>hot_mvalid</code> (8 flop)</td><td>Hit L0 khỏi phải đọc mux valid 256:1 (7 ns)</td><td>k-induction (256 và 8 dòng) + đối chứng âm</td><td>Bỏ đường xấu nhất ở ss</td></tr>
+      <tr><td><code>keep</code> trên giá trị tăng của 36 bộ đếm và <code>minstret</code> (chỉ ASIC)</td><td>Chuỗi carry 23 cell trên đường enable</td><td>Equivalence 1,256 / 1,256 và 5,281 / 5,281 cell + đối chứng âm</td><td>23 → 3 cell; netlist ASIC trùng từng byte với bản trước</td></tr>
+      <tr><td>Select mã hóa cho FPGA, one-hot cho ASIC</td><td>One-hot làm DM_VC4 vượt 20,000 LE</td><td>k-induction</td><td>−145 LE ở DM_VC4</td></tr>
+    </tbody>
+  </table></div>
+  <h3>7.3 Register file và BHT vào M9K (chỉ FPGA, phản biện A1, 08/10)</h3>
+  <p>Register file 32 × 32 (1,386 LE) và BHT 256 × 2 (962 LE) nằm trong flip-flop, chiếm 36 % core. M9K chỉ đọc đồng bộ, nên địa chỉ đọc được "đọc trước": tại mỗi sườn, RAM nhận đúng giá trị mà thanh ghi <code>instr_d</code> (trường rs) hoặc <code>pc_f</code> / <code>pc_e</code> sẽ nhận ở sườn đó. Dữ liệu vì vậy sẵn sàng đúng chu kỳ như mảng bất đồng bộ cũ; CPI không đổi. Toàn bộ nằm trong <code>`ifndef __openlane__</code>: ASIC giữ mảng flop.</p>
+  <ul>
+    <li><b>Register file</b>: hai bản M9K (mỗi cổng đọc một bản). M9K trả dữ liệu cũ nếu cùng sườn có ghi; lần ghi đó được bypass từ bản sao đăng ký <code>we / rd / wd</code>; write-through của chu kỳ hiện tại và x0 = 0 giữ nguyên.</li>
+    <li><b>BHT</b>: bộ đếm trong hai bản M9K (đọc ở fetch, đọc ở update); một bit valid mỗi entry trong flop, reset bất đồng bộ, giữ đúng nghĩa "reset đưa mọi entry về 01"; lần update của sườn trước được bypass cho cả hai cổng đọc.</li>
+  </ul>
+  <div class="tbl"><table>
+    <thead><tr><th>Bằng chứng</th><th>Kết quả</th></tr></thead>
+    <tbody>
+      <tr><td>k-induction (Yosys): register file mới = cũ; BHT mới = cũ; giao thức đọc trước trong datapath</td><td>3 / 3 chứng minh; 3 / 3 đối chứng âm (bỏ bypass, bỏ kiểm valid, bỏ flush) có phản ví dụ</td></tr>
+      <tr><td>Checker chỉ mô phỏng (mảng cũ đặt cạnh, dừng ở chu kỳ đầu tiên khác)</td><td>Im lặng trong mọi lần chạy; ép đọc sai thì 2 / 2 checker dừng mô phỏng</td></tr>
+      <tr><td>Testbench mới: <code>tb_regfile</code> (20,073 chu kỳ, đủ ba đường đọc), <code>tb_bht</code> thêm 4 nhóm (RAM, update liên tiếp, fetch đúng entry đang update, reset giữa chừng)</td><td>PASS trên cả mảng cũ (view ASIC) và mảng mới</td></tr>
+      <tr><td>Chuỗi đầy đủ (mục 8) trên manifest <code>6c4ccffd</code></td><td>0 lỗi; Embench, CoreMark, random-diff, view ASIC, ramsweep trùng R16 từng trường</td></tr>
+      <tr><td>ASIC: token sau tiền xử lý của view ASIC; tổng hợp OpenLane từ snapshot mới</td><td>Trùng R16 (có đối chứng âm); netlist trùng từng byte (sha256 <code>da06d38f…</code>); lint baseline 0 cảnh báo mới</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Lần đóng băng đầu (<code>dcbf3495</code>) trượt lint_asic: checker BHT kiểm mức <code>reset_n</code> trong khối đồng bộ (SYNCASYNCNET). Sửa checker (so ở sườn lên, trong cấu trúc reset), đóng băng lại thành <code>6c4ccffd</code> và chạy lại toàn chuỗi.</p>
+</section>
+
+<section id="kiemchung">
+  <h2><span class="n">08</span>Kiểm chứng</h2>
+  <p>Chuỗi đầy đủ chạy lại mỗi khi RTL đổi; lần gần nhất 08/10/2026 cho manifest <code>6c4ccffd</code> (register file và BHT trong M9K): 0 lỗi, 39 phút nhờ chạy song song theo lane (mỗi lane một thư viện Questa), trước đây khoảng 5 giờ. Bảng dưới gồm cả các kiểm tra thêm sau đó: UVM mở rộng, tham chiếu Spike, CoreMark chuẩn, board, GLS exact-window, LEC của SA2. Bản cũ có regression và UVM, nhưng chưa có các mục đánh dấu "mới". Cách làm và công cụ của từng loại ở mục 12.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Kiểm tra</th><th>Phạm vi</th><th>Kết quả</th><th>Bản cũ</th></tr></thead>
+    <tbody>
+      <tr><td>Static check (lint, latch)</td><td>6 cấu hình × 64 / 256 / 512 dòng × FAST_HIT 0 / 1, 33 tổ hợp</td><td><span class="pill ok">PASS</span></td><td>một phần</td></tr>
+      <tr><td>Regression có hướng</td><td>178 kiểm tra (thêm <code>tb_regfile</code>, BHT-7..10), ×2</td><td><span class="pill ok">178 = 178</span></td><td>có</td></tr>
+      <tr><td>UVM</td><td>48 ca mỗi lượt: ISA có hướng ở mức SoC, ngoại vi / IRQ, UART RX hai byte trên DM / SA2 / DM_VC4 / DM_DSE × seed 1 / 2 / 3; AXI stress với dòng 2 / 4 / 8 / 16 word × seed 1 / 2 / 3; ×2</td><td><span class="pill ok">48 / 48</span> Trường scoreboard trùng giữa hai lượt; đối chứng byte sai bị bắt</td><td>có (UVM)</td></tr>
+      <tr><td>Embench-IoT, CoreMark</td><td>Cấu hình 0–5 và FAST_HIT 1–5, ×2</td><td><span class="pill ok">trùng tham chiếu</span></td><td>kernel tự viết</td></tr>
+      <tr><td>CoreMark chuẩn (mô phỏng RAM 32 KiB, Verilator)</td><td>4 cấu hình × hiệu năng / xác nhận × 2</td><td><span class="pill ok">16 / 16 PASS</span> 864 phép so trùng</td><td>mới</td></tr>
+      <tr><td>CoreMark quét ngắn có CRC</td><td>92 điểm, 184 lần mô phỏng</td><td><span class="pill ok">CRC đúng nguồn</span> Kiểm độc lập</td><td>mới</td></tr>
+      <tr><td>ACT4 (riscv-arch-test <code>2e655961</code>, tham chiếu Spike)</td><td>39 RV32I + 4 Zmmul, ×2; adapter 1 MiB đã sửa, có test nửa trên</td><td><span class="pill ok">43 / 43</span></td><td>log không lưu</td></tr>
+      <tr><td>Random differential (BP tắt so với bật) và tham chiếu Spike</td><td>50 seed, ×2, mọi revision từ 23/09; thêm tham chiếu Spike độc lập</td><td><span class="pill ok">50 / 50</span> 100 lần Spike khớp cả 200 trace RTL; 300 đối chứng trace sai bị bắt</td><td>1 seed</td></tr>
+      <tr><td>Mô hình cache độc lập (A3)</td><td>Đếm hit/miss so với mô hình chạy trên trace</td><td><span class="pill ok">khớp tuyệt đối 48 / 48, 24 / 24, 60 / 60</span></td><td>mới</td></tr>
+      <tr><td>Retire so với minstret (A4)</td><td>Monitor phân loại chu kỳ</td><td><span class="pill ok">24 / 24 kernel</span></td><td>mới</td></tr>
+      <tr><td>View ASIC = view FPGA</td><td>33 trường kiến trúc; chỉ mcycle khác</td><td><span class="pill ok">PASS</span></td><td>mới</td></tr>
+      <tr><td>Board DE2-115</td><td>42 / 100 ca; 25 bộ đếm + D_ACCESS; một lượt vật lý</td><td><span class="pill run">42 / 100</span> Khớp cả hai lượt tham chiếu; còn 58 ca</td><td>chỉ crc32 và 3 lần chạy probe</td></tr>
+      <tr><td>GLS netlist ký tên</td><td>12 kernel, DM và SA2</td><td><span class="pill ok">mcycle = view ASIC từng chu kỳ</span></td><td>mới</td></tr>
+      <tr><td>GLS exact-window (DM, SA2)</td><td>12 kernel × 2 lượt, cửa sổ đúng mcycle × 20 ns</td><td><span class="pill ok">mcycle = tham chiếu view ASIC</span></td><td>mới</td></tr>
+      <tr><td>Chứng minh hình thức (R16)</td><td>29 kiểm tra; checker FAST_HIT bị ép sai</td><td><span class="pill ok">0 lỗi; 4 / 4 checker bắt được</span></td><td>mới</td></tr>
+      <tr><td>Chứng minh hình thức (register file / BHT trong M9K)</td><td>3 k-induction + 3 đối chứng âm; 2 checker bị ép sai</td><td><span class="pill ok">3 / 3; 3 / 3 bắt được; 2 / 2</span></td><td>mới</td></tr>
+      <tr><td>LEC RTL – netlist ký tên: DM (r14F_A / r14F_B) và SA2 (ecomaxmin); DM_VC4 phần tổng hợp</td><td>LEC ánh xạ thanh ghi; cụm nhân bằng chứng minh đại số; tiền đề reset bất đồng bộ, giá trị không xác định, clock / sườn, one-hot; đối chứng âm (đổi một cell, đổi mã FSM, spec unsigned)</td><td><span class="pill ok">0 phản ví dụ, ×2, đối chứng âm bị bắt</span></td><td>mới</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="fpga">
+  <h2><span class="n">09</span>FPGA và LE theo module</h2>
+  <p>Cyclone IV E <code>EP4CE115F29C7</code>, Quartus Prime Lite 20.1.1, mục tiêu 50 MHz. Fmax và slack ở góc Slow 1200 mV 85 °C. Cấu hình mới ở bảng dưới là FAST_HIT 0.</p>
+  <h3>9.1 Tổng tài nguyên, seed 2 (RTL <code>6c4ccffd</code>)</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Cấu hình</th><th class="num">LE cũ (1 KiB)</th><th class="num">LE mới (4 KiB)</th><th class="num">Chênh</th><th class="num">Thanh ghi cũ → mới</th><th class="num">Bit bộ nhớ cũ → mới</th><th class="num">Fmax cũ → mới, MHz</th></tr></thead>
+    <tbody>
+      <tr><td>DM</td><td class="num">15,188</td><td class="num">12,815</td><td class="num">−15.6 %</td><td class="num">8,356 → 7,198</td><td class="num">83,328 → 209,664</td><td class="num">51.62 → 52.27</td></tr>
+      <tr><td>SA2</td><td class="num">18,168</td><td class="num">16,689</td><td class="num">−8.1 %</td><td class="num">9,982 → 7,877</td><td class="num">81,920 → 210,176</td><td class="num">52.25 → 52.46</td></tr>
+      <tr><td>DM_VC4</td><td class="num">19,882</td><td class="num">17,130</td><td class="num">−13.8 %</td><td class="num">11,482 → 9,265</td><td class="num">81,920 → 209,664</td><td class="num">52.40 → 54.29</td></tr>
+      <tr><td>DM_DSE</td><td class="num">–</td><td class="num">14,340</td><td class="num"></td><td class="num">→ 7,480</td><td class="num">→ 209,664</td><td class="num">→ 55.21</td></tr>
+      <tr><td>SA4 (chưa fit lại, R16)</td><td class="num">–</td><td class="num">21,821</td><td class="num"></td><td class="num">→ 8,998</td><td class="num">→ 207,872</td><td class="num">→ 50.95</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Fmax ở bảng này là seed 2; dải mười seed ở 9.2. Bit bộ nhớ tăng vì cache và RAM lớn hơn (RAM 16 KiB chiếm 16 M9K); register file và BHT trong M9K thêm 2,816 bit (4 M9K). Trước thay đổi (R16, flop), seed 2: DM 15,440, SA2 19,474, DM_VC4 19,812, DM_DSE 16,989 LE.</p>
+
+  <h3>9.2 Mười seed chung 1..10 × 2 lượt (RTL <code>6c4ccffd</code>)</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Cấu hình</th><th class="num">LE [min, max]</th><th class="num">Thanh ghi</th><th class="num">M9K</th><th class="num">Fmax [min, max], MHz</th><th class="num">Setup slack nhỏ nhất, ns</th><th class="num">Công suất ước lượng [min, max], mW</th></tr></thead>
+    <tbody>
+      <tr><td>DM</td><td class="num">12,800 – 12,842</td><td class="num">7,198</td><td class="num">30</td><td class="num">52.27 – 56.18</td><td class="num">+0.870</td><td class="num">251.64 – 258.93</td></tr>
+      <tr><td>DM_DSE</td><td class="num">14,302 – 14,364</td><td class="num">7,480</td><td class="num">30</td><td class="num">51.02 – 55.21</td><td class="num">+0.399</td><td class="num">262.46 – 270.41</td></tr>
+      <tr><td>SA2</td><td class="num">16,670 – 16,739</td><td class="num">7,877</td><td class="num">40</td><td class="num">51.96 – 54.54</td><td class="num">+0.754</td><td class="num">278.61 – 283.04</td></tr>
+      <tr><td>DM_VC4</td><td class="num">17,096 – 17,148</td><td class="num">9,265</td><td class="num">30</td><td class="num">51.52 – 54.40</td><td class="num">+0.591</td><td class="num">276.31 – 282.35</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Trung bình (độ lệch chuẩn), 10 seed</th><th class="num">LE</th><th class="num">Fmax, MHz</th><th class="num">Công suất ước lượng, mW</th></tr></thead>
+    <tbody>
+      <tr><td>DM</td><td class="num">12,816.00 (12.37)</td><td class="num">54.73 (1.03)</td><td class="num">255.11 (1.80)</td></tr>
+      <tr><td>DM_DSE</td><td class="num">14,332.60 (20.41)</td><td class="num">53.61 (1.38)</td><td class="num">265.97 (2.62)</td></tr>
+      <tr><td>SA2</td><td class="num">16,699.90 (22.60)</td><td class="num">52.92 (0.83)</td><td class="num">281.01 (1.24)</td></tr>
+      <tr><td>DM_VC4</td><td class="num">17,124.00 (15.76)</td><td class="num">53.28 (1.17)</td><td class="num">279.52 (1.72)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Hai lượt fit độc lập: 40 cặp dòng trùng trên 115 trường phần cứng (<code>results/fpga_points_fpga_common_seeds_continued_20261009_p1.csv</code>, <code>_p2.csv</code>). So sánh các cấu hình trong cùng seed; không chọn seed tốt nhất riêng cho từng cấu hình. Góc timing Slow 1200 mV 85 °C; công suất là ước lượng của Quartus Power Analyzer (toggle mặc định 12.5 %, độ tin cậy thấp), không phải đo. Board dùng seed 2 chung cho cả bốn cấu hình.</p>
+  <p class="note">Lần fit đầu cho <code>6c4ccffd</code> dùng bốn seed (<code>results/fpga_points_rfbht_p1.csv</code>, <code>_p2.csv</code>). Trước thay đổi register file / BHT (R16, flop, bốn seed): DM 15,440 – 15,546, DM_DSE 16,989 – 17,063, SA2 19,360 – 19,474, DM_VC4 19,810 – 19,875 LE; thay đổi tiết kiệm 2,630 – 2,680 LE (13.5 – 17.0 %). Cache 8 KiB (R15, flop, chưa fit lại): DM 16,812, DM_DSE 19,364, SA2 23,629, DM_VC4 22,262, SA4 28,891 LE; mọi điểm vẫn đạt 50 MHz.</p>
+
+  <h3>9.3 LE theo module (phản biện A1), RTL <code>6c4ccffd</code>, seed 2</h3>
+  <p>Lấy từ bảng "Fitter Resource Utilization by Entity" của các báo cáo fit đã lưu (<code>results/fpga_points/rfbht_p1</code>, <code>_p2</code>); lượt 1 và lượt 2 trùng mọi dòng. Số của mỗi module đã gồm các module con. SA4 chưa fit lại.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Module</th><th class="num">DM</th><th class="num">SA2</th><th class="num">DM_VC4</th><th class="num">DM_DSE</th></tr></thead>
+    <tbody>
+      <tr><td>Lõi CPU</td><td class="num">3,818</td><td class="num">3,886</td><td class="num">3,889</td><td class="num">3,912</td></tr>
+      <tr class="sub"><td>register file (32 × 32, M9K; R16: 1,386 LE trong flop)</td><td class="num">52</td><td class="num">52</td><td class="num">52</td><td class="num">52</td></tr>
+      <tr class="sub"><td>bảng lịch sử nhánh (256 × 2, M9K + bit valid; R16: 962 LE)</td><td class="num">636</td><td class="num">636</td><td class="num">636</td><td class="num">636</td></tr>
+      <tr class="sub"><td>ALU và bộ nhân (+ 8 DSP)</td><td class="num">555</td><td class="num">544</td><td class="num">541</td><td class="num">547</td></tr>
+      <tr class="sub"><td>datapath còn lại (thanh ghi pipeline, forwarding, CSR)</td><td class="num">2,234</td><td class="num">2,301</td><td class="num">2,305</td><td class="num">2,327</td></tr>
+      <tr class="sub"><td>điều khiển, nhánh, hazard, wrapper</td><td class="num">341</td><td class="num">353</td><td class="num">355</td><td class="num">350</td></tr>
+      <tr><td>I-cache</td><td class="num">2,446</td><td class="num">3,936</td><td class="num">4,108</td><td class="num">2,846</td></tr>
+      <tr><td>D-cache (gồm victim buffer)</td><td class="num">1,893</td><td class="num">4,161</td><td class="num">4,227</td><td class="num">2,949</td></tr>
+      <tr><td>Cache AXI master</td><td class="num">240</td><td class="num">240</td><td class="num">239</td><td class="num">240</td></tr>
+      <tr><td>Observability</td><td class="num">2,350</td><td class="num">2,353</td><td class="num">2,544</td><td class="num">2,352</td></tr>
+      <tr class="sub"><td>system monitor (APB)</td><td class="num">1,313</td><td class="num">1,315</td><td class="num">1,407</td><td class="num">1,314</td></tr>
+      <tr class="sub"><td>bộ đếm hiệu năng</td><td class="num">1,038</td><td class="num">1,038</td><td class="num">1,137</td><td class="num">1,038</td></tr>
+      <tr><td>Controller RAM chính (16 KiB nằm trong 16 M9K)</td><td class="num">144</td><td class="num">141</td><td class="num">144</td><td class="num">141</td></tr>
+      <tr><td>Bus: AXI-Lite master, cầu AXI-Lite → APB, giải mã địa chỉ</td><td class="num">332</td><td class="num">336</td><td class="num">334</td><td class="num">333</td></tr>
+      <tr><td>UART</td><td class="num">622</td><td class="num">628</td><td class="num">625</td><td class="num">620</td></tr>
+      <tr><td>Timer</td><td class="num">177</td><td class="num">173</td><td class="num">177</td><td class="num">179</td></tr>
+      <tr><td>I/O của board: thanh ghi hiển thị, LCD, LED 7 đoạn</td><td class="num">262</td><td class="num">263</td><td class="num">265</td><td class="num">261</td></tr>
+      <tr><td>Logic nối SoC (phần riêng của <code>soc_top</code>)</td><td class="num">660</td><td class="num">716</td><td class="num">730</td><td class="num">662</td></tr>
+      <tr><td>Logic riêng của top board</td><td class="num">7</td><td class="num">7</td><td class="num">6</td><td class="num">7</td></tr>
+      <tr class="total"><td>Tổng (theo fit)</td><td class="num">12,815</td><td class="num">16,689</td><td class="num">17,130</td><td class="num">14,340</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Cộng các nhóm ra nhiều hơn tổng khoảng 1 % (136–162 LE): Quartus tính một logic cell chứa LUT của module này và thanh ghi của module khác vào cả hai.</p>
+  <div class="callout"><strong>Đọc bảng này thế nào</strong>
+    <ul>
+      <li>Lõi CPU còn 3,818 LE, tức 30 % thiết kế DM (R16: 6,451 LE, 42 %). Phần lớn còn lại là cache, observability và ngoại vi.</li>
+      <li>Register file và BHT trong flop từng chiếm 2,348 LE (36 % lõi R16). Trong M9K còn 688 LE: register file 1,386 → 52, BHT 962 → 636 (phần còn lại là bit valid và bypass). Mục 7.3.</li>
+      <li>Phần SA2 và DM_VC4 tăng so với DM nằm ở cache: SA2 +3,758, DM_VC4 +3,996 LE. Riêng controller DSE (DM_DSE so với DM) là +1,456. Victim buffer của DM_VC4 thêm +2,540 so với DM_DSE: mỗi cache một bộ, mỗi bộ khoảng +1,270 LE và +795 thanh ghi (4 dòng 16 B, tag, so sánh 4 đường, đường hoán đổi).</li>
+      <li>Phản biện viết "4,694 LE cho 64 B và 4 bộ so sánh" (bản 1 KiB). Thực ra con số đó gồm controller DSE và hai victim buffer.</li>
+      <li>CPI × LE (12 kernel Embench-IoT, view FPGA, seed 2; CPI không đổi): DM 19,397; DM_DSE 23,824; SA2 27,699; DM_VC4 28,744 (flop: 23,370 / 28,226 / 32,321 / 33,245).</li>
+    </ul>
+  </div>
+  <h3>9.4 Chi phí FAST_HIT trên FPGA (seed 2)</h3>
+  <p>SA2 +456 LE, Fmax 53.71 → 51.65 MHz; DM_VC4 +115 LE; DM_DSE +345 LE; SA4 +881 LE. Mọi điểm vẫn đạt 50 MHz ở Slow 85 °C (slack xấu nhất +0.639 ns).</p>
+</section>
+
+<section id="fpga-m9k">
+  <h3>9.5 Register file và BHT trong M9K, DM, seed 2</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Chỉ số</th><th class="num">R16 (flop)</th><th class="num">M9K</th><th class="num">Chênh</th></tr></thead>
+    <tbody>
+      <tr><td>LE</td><td class="num">15,440</td><td class="num">12,815</td><td class="num">−2,625 (−17.0 %)</td></tr>
+      <tr><td>Logic tổ hợp</td><td class="num">13,903</td><td class="num">11,517</td><td class="num">−2,386</td></tr>
+      <tr><td>Thanh ghi</td><td class="num">8,430</td><td class="num">7,198</td><td class="num">−1,232</td></tr>
+      <tr><td>M9K</td><td class="num">26</td><td class="num">30</td><td class="num">+4 (2 register file, 2 BHT)</td></tr>
+      <tr><td>Setup slack, Slow 85 °C</td><td class="num">+0.778 ns</td><td class="num">+0.870 ns</td><td class="num">+0.092</td></tr>
+      <tr><td>Fmax, Slow 85 °C</td><td class="num">52.02 MHz</td><td class="num">52.27 MHz</td><td class="num">+0.25</td></tr>
+      <tr><td>Công suất tổng (ước lượng Quartus)</td><td class="num">264.05 mW</td><td class="num">255.48 mW</td><td class="num">−8.57</td></tr>
+      <tr><td>Công suất khối CPU core</td><td class="num">39.68 mW</td><td class="num">28.08 mW</td><td class="num">−11.60 (−29 %)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Seed 2, trùng từng trường giữa hai lần đóng băng (<code>dcbf3495</code> và <code>6c4ccffd</code> chỉ khác code chỉ-mô-phỏng) và giữa hai lượt × 4 seed của lần fit đầu (dải 10 seed ở 9.2). Công suất là ước lượng với tỉ lệ chuyển mạch mặc định, không phải đo.</p>
+</section>
+
+<section id="hieunang">
+  <h2><span class="n">10</span>Hiệu năng và kết luận khoa học</h2>
+  <h3>10.1 CPI hai bản (không so trực tiếp được)</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Bộ đo</th><th class="num">DM</th><th class="num">SA2</th><th class="num">DM_VC4</th><th class="num">DM_DSE</th></tr></thead>
+    <tbody>
+      <tr><td>Bản cũ: CPI có trọng số, 12 kernel tự viết, cache 1 KiB</td><td class="num">1.299</td><td class="num">1.416</td><td class="num">1.424</td><td class="num">–</td></tr>
+      <tr><td>Bản mới: CPI, 12 kernel Embench-IoT, cache 4 KiB</td><td class="num">1.5136</td><td class="num">1.6597</td><td class="num">1.6780</td><td class="num">1.6614</td></tr>
+      <tr><td>Hit I$, %</td><td class="num">99.70</td><td class="num">99.65</td><td class="num">99.72</td><td class="num">99.70</td></tr>
+      <tr><td>Hit đọc D$, %</td><td class="num">99.16</td><td class="num">99.59</td><td class="num">99.59</td><td class="num">99.16</td></tr>
+      <tr><td>Dự đoán nhánh sai, %</td><td class="num">10.57</td><td class="num">10.57</td><td class="num">10.57</td><td class="num">10.57</td></tr>
+      <tr><td>Embench tốc độ / MHz, trung bình nhân</td><td class="num">0.809</td><td class="num">0.739</td><td class="num">0.729</td><td class="num">0.737</td></tr>
+      <tr><td>CoreMark 1 vòng, mcycle</td><td class="num">2,520,901</td><td class="num">2,573,624</td><td class="num">2,590,590</td><td class="num">2,586,274</td></tr>
+      <tr><td>Vào ngắt, chu kỳ (ổn định / lần đầu)</td><td class="num">5 / 41</td><td class="num">5 / 41</td><td class="num">5 / 41</td><td class="num">5 / 41</td></tr>
+      <tr><td>Chuyển ngữ cảnh, chu kỳ</td><td class="num">270</td><td class="num">292</td><td class="num">292</td><td class="num">292</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">CPI có trọng số = tổng mcycle / tổng minstret. Workload hai bản khác nhau nên CPI không so được. Tắt dự đoán nhánh làm tăng chu kỳ 6.48 % (DM) đến 6.67 % (DM_VC4), trung bình nhân.</p>
+  <div class="callout warn"><strong>CoreMark dùng RAM 32 KiB, không phải 16 KiB</strong><p>Bản build CoreMark (-O2, rv32i_zmmul, 1 vòng) cần .text 13,952 + .rodata 2,445 + .data 24 + .bss 2,020 byte và stack 1 KiB, khoảng 19.4 KiB, không vừa RAM 16 KiB của SoC. Vì vậy mọi số CoreMark (bảng này, mục 10.2 và 10.4) chạy mô phỏng với RAM 32 KiB (<code>IMEM_DEPTH = DMEM_DEPTH = 4096</code> word; linker script đặt stack ở đỉnh 32 KiB). Cache và mọi tham số khác giống SoC 16 KiB, độ trễ RAM không phụ thuộc độ sâu, nên so sánh giữa các cấu hình vẫn công bằng. Nhưng CoreMark không chạy được trên chip 16 KiB; bài báo phải ghi rõ điều này.</p></div>
+
+  <h3>10.2 M1: phần chênh là của controller, không phải của tổ chức cache</h3>
+  <p>Bản cũ kết luận DM nhanh nhất trên 12 / 12 kernel. Nhưng DM dùng controller 5 trạng thái, còn SA2 và DM_VC4 dùng core DSE 10 trạng thái, mỗi hit ở mảng chính tốn thêm một chu kỳ. Tách hai phần (trung bình nhân chu kỳ trên 12 kernel Embench-IoT; số âm là nhanh hơn):</p>
+  <div class="tbl"><table>
+    <thead><tr><th class="num">Dung lượng</th><th class="num">Controller: DM_DSE / DM</th><th class="num">Tổ chức: SA2 / DM_DSE</th><th class="num">SA4 / DM_DSE</th><th class="num">DM_VC4 / DM_DSE</th><th class="num">So như bài cũ: SA2 / DM</th></tr></thead>
+    <tbody>
+      <tr><td class="num">256 B</td><td class="num">+4.33 %</td><td class="num">−5.29 %</td><td class="num">n/a</td><td class="num">+5.97 %</td><td class="num">−1.19 %</td></tr>
+      <tr><td class="num">512 B</td><td class="num">+5.58 %</td><td class="num">−6.75 %</td><td class="num">−8.64 %</td><td class="num">+4.53 %</td><td class="num">−1.55 %</td></tr>
+      <tr><td class="num">1 KiB</td><td class="num">+6.93 %</td><td class="num">−2.98 %</td><td class="num">−4.78 %</td><td class="num">+3.32 %</td><td class="num">+3.74 %</td></tr>
+      <tr><td class="num">2 KiB</td><td class="num">+8.86 %</td><td class="num">−0.70 %</td><td class="num">−1.44 %</td><td class="num">+2.10 %</td><td class="num">+8.10 %</td></tr>
+      <tr><td class="num">4 KiB</td><td class="num">+9.83 %</td><td class="num">−0.26 %</td><td class="num">−0.07 %</td><td class="num">+1.03 %</td><td class="num">+9.55 %</td></tr>
+      <tr><td class="num">8 KiB</td><td class="num">+10.83 %</td><td class="num">−0.16 %</td><td class="num">−0.17 %</td><td class="num">+0.01 %</td><td class="num">+10.65 %</td></tr>
+    </tbody>
+  </table></div>
+  <p>Khi khớp độ trễ hit bằng FAST_HIT, tổ chức cache trên cùng một controller (X_fast / DM_DSE_fast):</p>
+  <div class="tbl"><table>
+    <thead><tr><th class="num">Dung lượng</th><th class="num">SA2</th><th class="num">SA4</th><th class="num">DM_VC4</th><th class="num">CoreMark SA2</th><th class="num">CoreMark SA4</th><th class="num">CoreMark DM_VC4</th></tr></thead>
+    <tbody>
+      <tr><td class="num">256 B</td><td class="num">−5.74 %</td><td class="num">n/a</td><td class="num">+5.99 %</td><td class="num">−1.01 %</td><td class="num">n/a</td><td class="num">+2.23 %</td></tr>
+      <tr><td class="num">512 B</td><td class="num">−7.43 %</td><td class="num">−9.51 %</td><td class="num">+4.61 %</td><td class="num">−2.72 %</td><td class="num">−3.99 %</td><td class="num">−0.19 %</td></tr>
+      <tr><td class="num">1 KiB</td><td class="num">−3.39 %</td><td class="num">−5.56 %</td><td class="num">+3.29 %</td><td class="num">−1.18 %</td><td class="num">−1.20 %</td><td class="num">+0.31 %</td></tr>
+      <tr><td class="num">2 KiB</td><td class="num">−0.86 %</td><td class="num">−1.70 %</td><td class="num">+2.04 %</td><td class="num">−0.67 %</td><td class="num">−0.71 %</td><td class="num">+0.21 %</td></tr>
+      <tr><td class="num">4 KiB</td><td class="num">−0.28 %</td><td class="num">−0.09 %</td><td class="num">+1.07 %</td><td class="num">−0.53 %</td><td class="num">−0.56 %</td><td class="num">+0.17 %</td></tr>
+      <tr><td class="num">8 KiB</td><td class="num">−0.18 %</td><td class="num">−0.20 %</td><td class="num">−0.01 %</td><td class="num">−0.33 %</td><td class="num">−0.33 %</td><td class="num">+0.12 %</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><strong>Kết luận dùng được cho bài</strong>
+    <ul>
+      <li>Ở 4 KiB, controller chiếm +9.8 %, còn tổ chức cache chỉ −0.3 %. Câu "DM thắng SA2" là kết quả của controller.</li>
+      <li>Cùng controller, set-associative nhanh hơn ánh xạ trực tiếp ở mọi dung lượng (trung bình nhân), trên cả Embench lẫn CoreMark: 3–10 % dưới 2 KiB, 0.1–0.6 % ở 4–8 KiB. Phần chênh còn lại giữa DM_DSE_fast và DM là +1.09 % ở 256 B và 0.00 % ở 8 KiB.</li>
+      <li>DM_VC4 miss ít nhất nhưng chậm nhất, vì core chép dòng bị đẩy ra vào victim buffer trước mỗi lần nạp (I$ khoảng 5, D$ khoảng 8 chu kỳ). Đây là đặc điểm của vi kiến trúc này, không phải của victim cache nói chung.</li>
+      <li>Hiệu ứng từng kernel lớn theo cả hai chiều, nên phát biểu phải theo từng workload. Ở 4 KiB: nettle-sha256 chậm hơn 16.2 % (SA2) / 22.1 % (SA4) vì vòng lệnh bị LRU đẩy ra liên tục; statemate nhanh hơn 8.9 %; matmult-int nhanh hơn 4.5 / 4.7 %.</li>
+      <li>Kích thước dòng (FAST, so với 16 B): 32 B tốt hơn 4.7–5.4 % ở 4 KiB; 8 B tệ hơn 12–13.6 %. Độ sâu victim (so với VC4): VC2 +2.58 % (1 KiB) / +0.23 % (4 KiB); VC8 −1.34 % / −0.45 %.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="probe">
+  <h3>10.3 Conflict probe mở rộng (4 KiB và 1 KiB, dòng 16 B)</h3>
+  <p>Probe cũ chỉ đọc vòng N dòng của một set, và ở 4 KiB bước nhảy 1 KiB của nó không còn đụng nhau. Probe mới (<code>sw_metrics/conflict/</code>, ngoài manifest RTL): dòng (s, k) ở <code>0x0C00 + k·4096 + s·16</code> rơi vào cùng một set ở mọi tổ chức với cùng s; 35 thí nghiệm; mỗi cửa sổ đo chỉ chứa truy cập của probe (firmware tự kiểm). Mọi cửa sổ khớp mô hình cache độc lập: 390 / 390 cửa sổ, 24 run × 2 lượt, lượt 1 = lượt 2. Bảng: tỉ lệ hit D$, %; 4 KiB trừ khi ghi 1 KiB (hình học bảng 6 của bài).</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Mẫu truy cập</th><th class="num">DM</th><th class="num">DM_DSE</th><th class="num">SA2</th><th class="num">SA4</th><th class="num">DM_VC4</th></tr></thead>
+    <tbody>
+      <tr><td>Vòng, 1 set, N = 2</td><td class="num">98.4</td><td class="num">0</td><td class="num">100</td><td class="num">100</td><td class="num">100</td></tr>
+      <tr><td>Vòng, 1 set, N = 3 / 4</td><td class="num">0 / 0</td><td class="num">0 / 0</td><td class="num">0 / 0</td><td class="num">100 / 100</td><td class="num">100 / 100</td></tr>
+      <tr><td>Vòng, N = 2 mỗi set, 4 set</td><td class="num">0</td><td class="num">0</td><td class="num">100</td><td class="num">100</td><td class="num">100</td></tr>
+      <tr><td>Vòng, N = 2 mỗi set, 5 / 32 set</td><td class="num">0 / 0</td><td class="num">0 / 0</td><td class="num">100 / 100</td><td class="num">100 / 100</td><td class="num">50 / 50</td></tr>
+      <tr><td>Vòng, N = 3 mỗi set, 2 / 3 set</td><td class="num">0 / 0</td><td class="num">0 / 0</td><td class="num">0 / 0</td><td class="num">100 / 100</td><td class="num">100 / 33.3</td></tr>
+      <tr><td>Ngẫu nhiên, 1 set, N = 4</td><td class="num">52.7</td><td class="num">25.8</td><td class="num">52.7</td><td class="num">100</td><td class="num">99.6</td></tr>
+      <tr><td>Ngẫu nhiên, N = 2 mỗi set, 5 / 8 / 16 set</td><td class="num">52 / 48 / 53</td><td class="num">51 / 48 / 53</td><td class="num">99 / 100 / 100</td><td class="num">100</td><td class="num">90 / 76 / 65</td></tr>
+      <tr><td>Đọc rồi ghi cùng dòng, N = 2, 5 set</td><td class="num">50</td><td class="num">50</td><td class="num">100</td><td class="num">100</td><td class="num">75</td></tr>
+      <tr><td>Chỉ ghi, N = 2, 4 set</td><td class="num">50</td><td class="num">50</td><td class="num">100</td><td class="num">100</td><td class="num">75</td></tr>
+      <tr><td>1 KiB, vòng, 1 set, N = 5 / 6 / 7</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0.3 / 0 / 0</td><td class="num">100 / 66.7 / 0</td></tr>
+      <tr><td>1 KiB, ngẫu nhiên, 1 set, N = 8</td><td class="num">24.4</td><td class="num">9.6</td><td class="num">24.4</td><td class="num">49.0</td><td class="num">59.0</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><b>Victim buffer dùng chung</b>: DM_VC4 giữ 2 dòng / set chỉ tới 4 set (4 entry), sang set thứ 5 rơi về 50 %; SA2 giữ ở mọi set. Đây là giới hạn cấu trúc mà probe một set không thấy được, và giải thích vì sao DM_VC4 thua trên Embench.</li>
+    <li><b>Sụp đổ ở N lớn là của thứ tự vòng</b> (góp ý bảng 6, N = 7): cùng tập dòng nhưng thứ tự ngẫu nhiên thì DM_VC4 giảm dần 90 → 76 → 65 % thay vì 50 %; SA2 với 1 set, N = 4 cũng từ 0 % (vòng) lên 52.7 %. Ở 1 KiB (đúng hình học bảng 6): DM_VC4 vòng N ≤ 5 → 100 %, N = 6 → 66.7 %, N = 7 → 0 %, nhưng cùng 8 dòng theo thứ tự ngẫu nhiên → 59.0 %; SA4 vòng N = 5 → 0.3 % (PLRU).</li>
+    <li><b>L0 của DM</b>: DM giữ được N = 2 trong một set (98.4 %) nhờ L0 hai entry; DM_DSE (không L0) 0 %. Điểm gãy của DM trên RTL hiện tại là N = 3, không phải 2 như probe cũ.</li>
+    <li><b>Ghi</b>: D$ write-through, không cấp phát khi ghi trượt: ghi trượt không đẩy dòng nào ra, nên dòng đọc vẫn ở lại.</li>
+    <li><b>Giá</b>: hit ở victim buffer tốn khoảng 19–22 chu kỳ mỗi truy cập trong vòng lặp probe, hit mảng chính 10–14, trượt 26–30.</li>
+  </ul>
+</section>
+
+<section id="coremark">
+  <h3>10.4 CoreMark chuẩn (mô phỏng, RAM 32 KiB, 50 MHz)</h3>
+  <p>Ma trận chuẩn bổ sung cho bản CoreMark một vòng ở 10.1; khác cờ biên dịch và số vòng. Thời gian tính từ ticks của timer APB ở 50 MHz.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Cấu hình</th><th class="num">ticks hiệu năng</th><th class="num">giây ở 50 MHz</th><th class="num">iterations/s</th><th class="num">CoreMark/MHz</th><th class="num">ticks xác nhận</th></tr></thead>
+    <tbody>
+      <tr><td>DM</td><td class="num">719,996,901</td><td class="num">14.400</td><td class="num">76.389</td><td class="num">1.528</td><td class="num">722,669,045</td></tr>
+      <tr><td>SA2</td><td class="num">691,866,743</td><td class="num">13.837</td><td class="num">79.495</td><td class="num">1.590</td><td class="num">693,576,231</td></tr>
+      <tr><td>DM_VC4</td><td class="num">747,676,057</td><td class="num">14.954</td><td class="num">73.561</td><td class="num">1.471</td><td class="num">751,155,457</td></tr>
+      <tr><td>DM_DSE</td><td class="num">802,958,516</td><td class="num">16.059</td><td class="num">68.497</td><td class="num">1.370</td><td class="num">806,692,095</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">4 cấu hình × hiệu năng / xác nhận × 2 lượt độc lập: 16 / 16 PASS, 8 cặp trùng 108 trường (864 phép so). Firmware -Os, 1,100 vòng, mọi khoảng đo &gt; 10 s, đếm bằng timer APB; trình biên dịch riscv64-unknown-elf-gcc 14.2.0 (<code>-march=rv32i_zmmul_zicsr -mabi=ilp32</code>); mô phỏng Verilator 5.053. Không phải điểm CoreMark chính thức, không phải đo trên board. Biên nhận: <code>results/coremark_standard_apb_matrix_20261011/receipt.json</code>.</p>
+  <div class="callout warn"><strong>Thứ hạng đổi theo workload và bản build</strong>
+    <p>Trên ma trận CoreMark chuẩn này SA2 nhanh nhất (1.590 CoreMark/MHz), rồi đến DM (1.528), DM_VC4 (1.471), DM_DSE (1.370). Trên trung bình nhân Embench-IoT (10.1) thì DM dẫn đầu (0.809 tốc độ / MHz), và bản CoreMark một vòng -O2 ở 10.1 cũng cho DM ít chu kỳ nhất. Khi đưa vào bài, ghi rõ workload, cờ biên dịch và số vòng; không rút ra một thứ hạng chung.</p>
+  </div>
+</section>
+
+<section id="asic">
+  <h2><span class="n">11</span>ASIC (sky130A, OpenLane 2.3.10, clock 20 ns)</h2>
+  <h3>11.1 DM: bản cũ và bản mới</h3>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Bản đã công bố (<a href="#vt-dm1k">DM 1 KiB</a>)</th><th>Bản mới (<a href="#vt-r14f">r14F_A / r14F_B</a>)</th></tr></thead>
+    <tbody>
+      <tr><td>Bộ nhớ trên chip</td><td>Cache 1 KiB trong flop; RAM 8 KiB trong 4 macro SRAM 2 KiB</td><td>Cache 4 KiB trong 8 macro 1 KiB; RAM 16 KiB trong 8 macro 2 KiB: 16 macro, 3.80 mm²</td></tr>
+      <tr><td>Die</td><td>1800 × 2900 µm = 5.22 mm²</td><td>3665 × 2900 µm = 10.63 mm²</td></tr>
+      <tr><td>Cell chuẩn</td><td>188,326 instance; cell area 2.68 mm² theo báo cáo cũ</td><td>197,878 cell, 1.3696 mm²</td></tr>
+      <tr><td>Dây</td><td>7.99 m</td><td>6.585 m</td></tr>
+      <tr><td>DRC</td><td>TritonRoute 0, KLayout 0; Magic 21 triệu báo sai, bị bỏ qua</td><td><span class="better">Route 0, Magic 0, KLayout 0; XOR 0; overlap 0</span></td></tr>
+      <tr><td>LVS</td><td>Khớp</td><td>Khớp</td></tr>
+      <tr><td>Antenna</td><td><span class="worse">646 vi phạm</span></td><td><span class="better">0</span> (sửa antenna sau detailed routing)</td></tr>
+      <tr><td>Setup tt</td><td>+2.944 ns (SDC lỗi); +2.694 ns khi đo đúng</td><td>nom_tt +1.894, max_tt +1.708 ns</td></tr>
+      <tr><td>Setup ff</td><td>+5.199 ns (SDC lỗi)</td><td>nom_ff +4.611, min_ff +4.811 ns</td></tr>
+      <tr><td>Setup ss (chỉ báo cáo)</td><td>−10.9 đến −11.7 ns; −11.18 ns khi đo đúng</td><td>nom_ss −6.897, max_ss −7.365 ns</td></tr>
+      <tr><td>Hold</td><td><span class="worse">tt +0.052, ss −0.231, ff −0.064 ns</span> (đo với SDC đúng)</td><td><span class="better">≥ 0 ở cả 9 góc; xấu nhất +0.021 ns (min_ff)</span></td></tr>
+      <tr><td>Công suất</td><td>235.8 mW, <a href="#vt-pw-flow">ước lượng của flow</a></td><td><a href="#vt-pw-vl">Vectorless</a> nom_tt 109.15 mW. Theo hoạt động, <a href="#vt-pw-exact">exact-window</a> (GLS → SAIF → OpenSTA, nom_tt, RCX; hai lượt GLS + hai lượt STA, 13/10): 114.81–122.99 mW trên 12 kernel, trung bình 119.45; động trung bình 119.02; rò 0.437 mW; hoạt động không xác định 5.38 %</td></tr>
+      <tr><td>Năng lượng mỗi lệnh (EPI)</td><td>–</td><td>Exact-window: 2,612–6,547 pJ, trung bình nhân 3,608 pJ</td></tr>
+      <tr><td>GLS</td><td>Không có</td><td>12 / 12 kernel, mcycle = view ASIC</td></tr>
+      <tr><td>Lặp lại</td><td>Một lần</td><td>Hai lần, trùng trên 319 metric; netlist cuối trùng từng byte</td></tr>
+      <tr><td>Tương đương RTL – netlist</td><td>–</td><td>Đã chứng minh 09/10 (<a href="#vt-lec16k">LEC DM RAM 16 KiB</a>): RTL = N1 = hai netlist ký tên (LEC ánh xạ thanh ghi, 20,124 / 20,096 output, 0 phản ví dụ; cụm nhân chứng minh đại số); chạy hai lần, mọi hash trùng; đối chứng âm bị bắt. RTL – RTL chứng minh cho mọi revision sau. Tiền đề đã đóng 13/10 (mỗi phép ×2 có đối chứng âm): reset bất đồng bộ (19,087 bit flop của r14F_A và r14F_B ghép tên với gold; 7,519 có reset cùng gốc <code>reset_sync_q</code> và cùng giá trị, 11,568 không có; 0 sai khác); giá trị không xác định (1,401 nguồn x / không nối được thả tự do: 20,124 / 20,124 output UNSAT); bất biến one-hot của 4 FSM mã hóa lại; kiểm clock / sườn</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Hai số công suất khác phương pháp nên không so trực tiếp. Theo quy ước dự án, số công suất tổng của flow OpenLane tính ở góc max_ff; số mới tính ở nom_tt với hoạt động chuyển mạch thật. Setup tt của bản mới thấp hơn vì cache chuyển từ flop sang macro OpenRAM: dữ liệu ra ở sườn xuống, tạo đường nửa chu kỳ. Bù lại, ss tốt hơn khoảng 4 ns và hold sạch ở mọi góc.</p>
+
+  <h3>11.2 Các bản DM đã ký tên</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Bản</th><th>Die</th><th>Setup (nom_tt / max_tt)</th><th>ss xấu nhất</th><th>Hold xấu nhất</th><th>Công suất theo hoạt động</th><th>Ghi chú</th></tr></thead>
+    <tbody>
+      <tr><td>RAM 8 KiB: <a href="#vt-final3">final3_A / final3_B</a> (<code>dm_ram8k_grid2800x2900_drtant_r1</code> / <code>_r2</code>)</td><td class="num">8.12 mm²</td><td class="num">+2.086 / +1.960</td><td class="num">−8.311</td><td class="num">+0.030</td><td class="num">110.61–115.43 mW</td><td>LEC netlist đã chứng minh; kernel tự viết cũ</td></tr>
+      <tr><td>RAM 16 KiB: <a href="#vt-r14f">r14F_A / r14F_B</a> (<code>dm_grid3665x2900_r1</code> / <code>_r2</code>), <b>mốc so sánh cố định</b></td><td class="num">10.63 mm²</td><td class="num">+1.894 / +1.708</td><td class="num">−7.365</td><td class="num">+0.021</td><td class="num">114.8–123.0 mW</td><td>Kernel Embench-IoT gốc</td></tr>
+      <tr><td>RAM 16 KiB, floorplan hành lang: <a href="#vt-dmu">dmuA</a> (<code>dm_corr3400x3325_f220_r1</code>)</td><td class="num">11.305 mm²</td><td class="num">+1.818 / +1.595</td><td class="num">−8.754</td><td class="num">+0.002</td><td class="num">–</td><td>Đối chứng cùng die với SA2 / VC4</td></tr>
+      <tr><td>RAM 16 KiB, floorplan hành lang: dmuB (<code>dm_corr3400x3400_f220_r1</code>)</td><td class="num">11.56 mm²</td><td class="num">+1.755 / +1.481</td><td class="num">−10.043</td><td class="num">+0.018</td><td class="num">–</td><td>Đối chứng cùng die với SA2 / VC4</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>11.3 SA2 đã ký tên (09/10), die 11.56 mm² (3400 × 3400 µm)</h3>
+  <p>Run ký tên <a href="#vt-ecomaxmin">ecomaxmin</a> (<code>_r1</code> / <code>_r2</code>), floorplan hành lang (<code>…_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomaxmin</code>). Mọi giới hạn cứng đạt; ss chỉ báo cáo. Số của DM ghi trong ngoặc để so.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Mục</th><th>Giá trị</th></tr></thead>
+    <tbody>
+      <tr><td>Cổng ký tên</td><td><span class="better">Magic DRC 0, KLayout DRC 0, route DRC 0, LVS 0, XOR 0, overlap 0, antenna 0, hold vi phạm 0</span></td></tr>
+      <tr><td>Setup WNS, ns</td><td>nom_tt +1.118, max_tt +0.838, min_tt +1.331; nom_ff +4.056, min_ff +4.262, max_ff +3.803; nom_ss −7.304, max_ss −7.917 (TNS −13,417), ss chỉ báo cáo</td></tr>
+      <tr><td>Hold WNS, ns</td><td>nom_tt +0.152; xấu nhất +0.020 (min_ff, max_ff)</td></tr>
+      <tr><td>Diện tích</td><td>Die 11.56 mm², cell chuẩn 1.4711 mm² (215,979 cell), 16 macro SRAM 3.80 mm², dây 9.274 m</td></tr>
+      <tr><td>Buffer</td><td>Sửa timing 15,240 (DM 24,448); clock buffer 4,519 + clock inverter 824; hold buffer 139 + 11 (hai lượt ECO); macro-pin buffer 775</td></tr>
+      <tr><td>Công suất <a href="#vt-pw-vl">vectorless</a>, nom_tt</td><td>121.99 mW (DM 109.15)</td></tr>
+      <tr><td>Công suất <a href="#vt-pw-exact">exact-window</a> (14/10)</td><td>127.45–131.75 mW, trung bình 129.64; động 127.02–131.31 (trung bình 129.21); rò 0.437 mW; EPI 2,848–7,354 pJ (trung bình nhân 4,317 pJ); hoạt động không xác định 4.42 %. Hai lượt GLS độc lập + hai lượt STA, lượt 1 = lượt 2 mọi trường; mọi kernel lệch ≤ 0.005 mW so với số SAIF cũ</td></tr>
+      <tr><td>DRV còn lại (báo cáo)</td><td>nom_tt: max slew 1,084, max cap 1,036; góc xấu nhất: slew 7,885, cap 1,827, fanout 383</td></tr>
+      <tr><td>Knob ký tên</td><td>Biên cap sau GRT 20 %, <code>MAX_FANOUT</code> 16, padding cell 1 site mỗi bên, đặt cell theo timing, clock trunk trên met3–met5, resizer chỉ ở tt / ff, ECO hold sau route hai lượt (trích xuất max_* rồi min_*)</td></tr>
+      <tr><td>Lặp lại</td><td>_r1 / _r2 trùng 319 metric; netlist và DEF cuối trùng từng byte; SPEF trùng trừ dòng ngày</td></tr>
+    </tbody>
+  </table></div>
+  <h4><a href="#vt-lecsa2">LEC SA2</a> (13–14/10)</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>Bước</th><th>Kết quả</th></tr></thead>
+    <tbody>
+      <tr><td>RTL = RTL + fsm</td><td>38,300 cell proven, 0 unproven</td></tr>
+      <tr><td>RTL + fsm = N1</td><td>20,803 bit flop ở gold, 20,465 ghép tên; 338 bit chỉ có ở gold = 231 hằng (điểm bất động lớn nhất) + 18 bản sao + 89 tự do; 21,489 output. 34 output còn lại đều nằm sau bộ nhân, đóng bằng chứng minh đại số signed33 × signed33 mod 2<sup>64</sup> + <code>&amp;cec</code></td></tr>
+      <tr><td>N1 = netlist cuối (r1 và r2)</td><td>20,462 cặp, 21,471 output, 0 SAT; 32 output đóng bằng <code>&amp;cec</code></td></tr>
+      <tr><td>Giá trị không xác định</td><td>1,552 nguồn x / không nối thả tự do → 21,489 / 21,489 output UNSAT</td></tr>
+      <tr><td>Reset bất đồng bộ</td><td>20,462 / 20,462 bit (8,074 có reset + 12,388 không), 0 sai khác</td></tr>
+      <tr><td>Đối chứng âm</td><td>Đổi mã FSM: 10 cell unproven, rc 1. Spec unsigned và đột biến tích riêng phần: NOT PROVED. Đổi một cell and2 → or2 trong netlist cuối: 60 output SAT. Mọi đối chứng đều bị bắt</td></tr>
+      <tr><td>Lặp lại</td><td>Hai lượt độc lập (p1 và p2b), <code>PASS1_EQUALS_PASS2</code>: 39 đối tượng trùng từng byte + mọi dòng kết luận</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Die nhỏ nhất của SA2: <a href="#vt-sa2-1054">10.54 mm²</a> trượt max_tt −0.573 ns (đường đọc nửa chu kỳ SRAM way 1 của I$); <a href="#vt-sa2-1105">11.05 mm²</a> trượt pha 2 hai lần; <a href="#vt-sa2-11305">11.305 mm²</a> DRT sau ECO kẹt ở 24 vi phạm met1 / met2 rồi OpenROAD crash; 11.56 mm² ký được. Đang thử knob riêng của SA2 (<a href="#vt-e1">E1</a>: <code>CTS_SINK_CLUSTERING_SIZE</code> 8 → 25): r1–r4 dừng (ba crash ngẫu nhiên, một lần thiếu RAM vì chạy cạnh detailed routing của DM_VC4). r5 qua P1 / P2 trùng số các lần trước (STAMidPNR-3 setup nom_tt +0.959, hold +0.182), detailed routing và ECO hold xong, route DRC 0; bước 51 (Report Disconnected Pins) crash ngẫu nhiên, phần sign-off chạy lại từ bước 51 sau khi <a href="#vt-v4">V4</a> xong (quy tắc Q sửa: run phát triển được chạy tiếp từ bước lỗi).</p>
+  <h4>Cơ sở chọn knob (số đo khi tìm cấu hình, 07–09/10)</h4>
+  <ul>
+    <li><b>Floorplan hành lang.</b> Floorplan lưới của DM không route được SA2 (<a href="#vt-sa2f">sa2F_A / sa2F_B</a>) và DM_VC4: cụm tag DSE (5,120 flop, đọc ở 2 chỉ số) nằm đúng ngã ba kênh, macro OpenRAM chặn met1–met4. Floorplan hành lang (<a href="#vt-sa2u">sa2uA / sa2uB</a>) đặt cụm cache 2×2 hai bên, hành lang giữa rộng ≥ 1,057 µm.</li>
+    <li><b>Biên cap 20 %.</b> Biên cap 50 % cộng RC hiệu chỉnh chèn khoảng 4,650 buffer vào cụm tag, nhu cầu met1 +31 %; với 20 % còn 357–477 buffer.</li>
+    <li><b>Fanout 16.</b> <a href="#vt-capm20fo16">capm20 + fo16</a> so với cap 50 + fanout 8: tổng buffer do resizer chèn tính đến sau GRT −27 %, cell chuẩn sau GRT −3.4 %, setup trước GRT tương đương.</li>
+    <li><b>Resizer chỉ ở tt / ff.</b> Mặc định resizer tối ưu cả tt, ss, ff với biên setup 2 ns; ss không đóng được ở 20 ns (WNS −9 đến −10 ns, khoảng 7,600 endpoint) nên resizer chèn buffer hàng giờ vào cụm tag. ss vẫn được báo cáo trong STA ký tên (<a href="#vt-rsztf">rsztf</a>).</li>
+    <li><b>ECO hold hai lượt.</b> ECO hold sau route gán một trích xuất cho mọi góc: chạy với max_* thì còn nom_ff −0.023, min_ff −0.027 ns; chạy với min_* (<a href="#vt-ecomin">ecomin</a>) thì max_ff −0.116 ns. Lượt max_* rồi min_* đóng hold ở 9 góc (lượt hai chèn 11 buffer hold).</li>
+    <li><b>Hai bẫy STA trong ECO.</b> <code>estimate_parasitics</code> trước <code>read_spef</code> làm phiên dùng ước lượng (thấy tt +1.425 trong khi thật là −0.573 ns). Macro SRAM chỉ có một .lib TT; OpenSTA giữ nó cho góc được đọc đầu tiên (STA-1140). ECO chỉ dùng SPEF; lượt setup chỉ có góc tt.</li>
+    <li><b>Die nhỏ làm timing sụt sau GRT.</b> Setup nom_tt sau GRT: 11.56 mm² +0.671, 11.05 mm² +0.220, 10.54 mm² −1.287 ns (clock bị route vòng, skew 0.74 → 2.09 ns).</li>
+  </ul>
+
+  <h3>11.4 DM_VC4: chưa ký (cập nhật 14/10)</h3>
+  <p>Floorplan hành lang 3600 × 3400 µm (12.24 mm²): route chính hội tụ, nhưng vi phạm antenna sau route không sửa được. Các bước trước đó (<a href="#vt-v0">V0</a>, <a href="#vt-v1">V1</a> và <a href="#vt-vc4var">các biến thể 11.56 / 11.90 mm²</a>) ở mục 3.8. Dòng ghi "sàng lọc" chỉ chạy một bước hoặc một phần để chọn hướng, không phải kết quả.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Thử nghiệm</th><th>Kết quả</th><th>Kết luận</th></tr></thead>
+    <tbody>
+      <tr><td><a href="#vt-v2">V2</a>: die 3600, sửa antenna ở GRT biên 10 %, cho phép nghẽn khi route lại sau sửa antenna</td><td>P1 setup nom_tt +1.518 / hold +0.182; P2 +0.528 / −0.235. Route chính 0 vi phạm ở vòng 31 (42 phút). Kiểm antenna sau route: 1,031 net / 1,453 chân. Vòng sửa 1 chèn 2,295 diode; route lại 78,513 → 1,389 (vòng 16) → 2,063 (vòng 17); watchdog dừng</td><td><span class="pill bad">Không hội tụ</span></td></tr>
+      <tr><td><a href="#vt-v2replay">Chạy lại riêng bước route của V2</a>, không watchdog (sàng lọc)</td><td>Tái hiện V2 trùng từng vòng (flow tất định), rồi 1,019 → 745 → 703 (vòng 20) → 353 (vòng 30) → 235 (vòng 40) → 225 (vòng 43); dừng ở vòng 44 để nhường bộ nhớ</td><td>Xu hướng gần như đứng (1–3 % mỗi vòng), khó về 0 trong 64 vòng; đây là ngoại suy, không phải kết quả cuối</td></tr>
+      <tr><td>Biên antenna ở GRT 10 / 20 / 30 % (sàng lọc)</td><td>9,225 / 11,611 / 15,107 diode nhưng còn 742 / 753 / 641 net vi phạm sau sửa</td><td>Biên không phải đòn bẩy</td></tr>
+      <tr><td><a href="#vt-v5">V5</a>: giới hạn dây 500 µm khi sửa DRV</td><td>23,680 buffer trong 7,038 net; P2 setup nom_tt −1.068 / hold −1.882; antenna vẫn 873 net</td><td><span class="pill bad">Hỏng</span></td></tr>
+      <tr><td><a href="#vt-v4">V4</a>: die 3800 × 3400 µm (12.92 mm², vùng giữa 1,457 thay 1,257 µm)</td><td>P1 +1.263 / +0.182, P2 +0.476; antenna sau sửa GRT 821 net (V2 742). Detailed routing từ 14/10 17:33: route chính về 0 ở vòng 34 (51 phút; V2: vòng 31). Antenna sau route 1,098 net / 1,470 chân (V2 1,031 / 1,453): die rộng hơn không giảm số vi phạm. Vòng sửa 1 chèn 2,233 diode; route lại 76,260 → 4,587 (vòng 10) → 1,041 (vòng 18), bám đúng quỹ đạo của V2 (bản chạy lại V2 ở vòng 18: 1,019, rồi đứng ở khoảng 225). Chủ dự án dừng lúc 14/10 21:01</td><td><span class="pill bad">Dừng</span></td></tr>
+      <tr><td><a href="#vt-v3">V3</a>: công thức V2 + watchdog riêng cho vòng antenna, chạy trọn</td><td>Dừng có chủ đích trước DRT</td><td><span class="pill open">Dừng</span> Sẽ tái hiện y hệt chỗ đứng 225 của bản chạy lại</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout warn"><strong>Nguyên nhân gốc</strong>
+    <p>Vi phạm đều thuộc loại <i>side area</i> (met3 885, met2 307, met1 194, met4 93), trên cổng mux2 / a221o / a22o. 837 / 1,031 net là net do resizer tạo (lá của cây buffer fanout, 538 net có 5–8 chân), dài trung vị 731 µm. 1,020 / 1,453 chân nằm trong vùng logic giữa hai cột macro I$ và D$. Chân đọc dout1 (met4, cạnh trên macro) của cả 4 macro mỗi cache quay vào kênh 220 µm giữa hai hàng macro, nên 128 bit dữ liệu đọc của mỗi cache và mạch mux của bộ đệm victim dồn về vùng giữa.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Vòng sửa antenna sau route</th><th class="num">Net vi phạm</th><th class="num">Diode chèn</th><th class="num">Route lại bắt đầu từ</th><th>Kết quả</th></tr></thead>
+      <tbody>
+        <tr><td>DM</td><td class="num">481</td><td class="num">1,051</td><td class="num">21k</td><td>hội tụ</td></tr>
+        <tr><td>SA2</td><td class="num">653</td><td class="num">1,453</td><td class="num">33k</td><td>hội tụ</td></tr>
+        <tr><td>DM_VC4 (V2)</td><td class="num">1,031</td><td class="num">2,295</td><td class="num">78k</td><td>không hội tụ</td></tr>
+      </tbody>
+    </table></div>
+    <p>Hướng tiếp (chủ dự án: làm sau, trên RTL 6c4ccffd): floorplan riêng cho DM_VC4. DM_VC4 chỉ đọc qua cổng 1 (<code>dout1</code>, cạnh trên macro) và ghi qua cổng 0 (cạnh dưới): đảo hướng hàng macro để <code>dout1</code> quay về phía logic của chính cache đó, tách I$ và D$ sang hai phía để dữ liệu đọc không dồn vào dải giữa (không xoay 90 độ vì làm hỏng lưới nguồn). Mỗi phương án sàng lọc rẻ trước (global route + kiểm antenna, khoảng 1 giờ) rồi mới chạy full flow.</p>
+  </div>
+  <h4><a href="#vt-lecvc4">LEC DM_VC4</a>, phần chỉ phụ thuộc tổng hợp</h4>
+  <p>Mọi run DM_VC4 có cùng netlist tổng hợp, nên phần này không phải chờ layout. Hai lượt chạy trọn trùng nhau (30 đối tượng + 9 nhóm kết luận). Kết quả này là cho netlist tổng hợp từ R14; khi DM_VC4 làm lại trên RTL 6c4ccffd, phần này chạy lại.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Bước</th><th>Kết quả</th></tr></thead>
+    <tbody>
+      <tr><td>RTL = RTL + fsm</td><td>39,000 cell proven</td></tr>
+      <tr><td>RTL + fsm = N1</td><td>Gold 21,828 / N1 21,093 bit flop; 735 bit chỉ có ở gold = 364 hằng + 18 bản sao + 353 tự do; 22,117 output, 0 SAT; 34 nhóm bộ nhân đóng bằng đại số + <code>&amp;cec</code>; one-hot 4 / 4</td></tr>
+      <tr><td>Giá trị không xác định</td><td>1,796 nguồn → 22,117 / 22,117 output UNSAT</td></tr>
+      <tr><td>SRAM bị xóa</td><td>RTL tạo cả way 1 của hai cache DSE (8 macro SRAM) mà DM_VC4 không đọc, và tổng hợp đã xóa chúng. Dữ liệu đọc của các macro này là input tự do trong chứng minh (<code>sram_align.py</code>); đối chứng âm NegAlign (một output phụ thuộc dữ liệu đọc đó) bị bắt</td></tr>
+      <tr><td>N1 = netlist cuối</td><td><span class="pill open">Chờ layout</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>11.5 Quy trình và nghiệm thu</h3>
+  <div class="callout"><strong>Quy tắc Q (chủ dự án, sửa 14/10)</strong>
+    <p>Khi phát triển, được sửa và chạy tiếp từ bước lỗi. Nghiệm thu bằng một lần chạy trọn từ bước 1 với tag mới: không resume, không tách nhánh, không CONTINUE, mọi ngưỡng khai báo lúc khởi chạy.</p>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Cấu hình</th><th>Các run ký tên đã chạy thế nào</th><th>Nghiệm thu theo quy tắc Q</th></tr></thead>
+    <tbody>
+      <tr><td>DM (<a href="#vt-r14f">r14F_A / r14F_B</a>)</td><td>Bị dừng giữa chừng khi phiên làm việc kết thúc ngày 30/09, chạy tiếp ngày 02/10 (A ở bước streamout, B trong detailed routing). Netlist cuối trùng từng byte (sha256 <code>83f38f7e…</code>).</td><td><span class="pill run">Đang chạy</span> Lần chạy trọn nghiệm thu <a href="#vt-r3">r3</a> (<code>dm_grid3665x2900_r3</code>, 14/10 16:09) dừng ở P2: tiến trình OpenLane crash ngẫu nhiên ngay sau bước 40 (không phải lỗi thiết kế). Chạy lại từ bước 1: <a href="#vt-r4">r4</a> (<code>dm_grid3665x2900_r4</code>, từ 18:14), cùng công thức, cổng mặc định; qua P1 / P2. Netlist và mọi số trùng r14F tới bước 42; ở bước 41 hai buffer đổi hướng S / FS (OpenROAD chọn hướng theo thứ tự phụ thuộc địa chỉ bộ nhớ, đã thấy từ 25/09), nên từ bước 43 layout khác r14F (sửa antenna: 350 net / 6,249 diode thay vì 322 / 6,262). Nghiệm thu bằng cổng ký tên và so PPA, không so hash. r4 dừng ở cổng detailed routing (21:11) khi chủ dự án chuyển PD sang RTL 6c4ccffd; lần chạy trọn nghiệm thu mới: <a href="#vt-dm6c4c">DM 6c4ccffd</a> (<code>dm_grid3665x2900_rtl6c4c_r1</code>, từ 21:12).</td></tr>
+      <tr><td>SA2 (<a href="#vt-ecomaxmin">ecomaxmin</a>)</td><td>Hai run nguồn vượt cổng p2 FAIL bằng dòng CONTINUE, rồi tách nhánh sau bước 47 để chạy ECO hold lượt hai. _r1 còn chạy tiếp bước 52 sau một crash Python; _r2 không crash và cho netlist trùng.</td><td><span class="pill open">Chuẩn bị</span> <a href="#vt-e1">E1</a> (nếu thắng PPA) hoặc <a href="#vt-e0">E0</a>: cùng công thức chạy một flow (ECO hai lượt nay chạy trong một bước, đã kiểm trùng từng byte với cách tách nhánh). E1 r5 được chạy tiếp từ bước 51, nên theo quy tắc Q là run phát triển. Lần nghiệm thu chạy trên RTL 6c4ccffd.</td></tr>
+    </tbody>
+  </table></div>
+  <h4>Thứ tự PD hiện tại</h4>
+  <p>Mỗi lúc chỉ một pha nặng vì máy ảo WSL có 24 GB (detailed routing 10–12.4 GB; phần sign-off tới 12–13 GB ở Magic WriteLEF).</p>
+  <ol class="plain">
+    <li><a href="#vt-v4">V4</a>: chủ dự án dừng lúc 14/10 21:01 (vòng route lại sau sửa antenna bám đúng V2).</li>
+    <li>SA2 E1 r5 (RTL R14): sign-off từ bước 51, đang chạy; chỉ dùng để so công thức E1 với ecomaxmin.</li>
+    <li><a href="#vt-dm6c4c">DM 6c4ccffd</a>: P1 / P2 chạy ngay vì nhẹ; detailed routing + sign-off sau khi SA2 r5 xong (khoảng 3 giờ).</li>
+    <li>SA2 nghiệm thu trên 6c4ccffd (E1 hoặc E0), khoảng 5 giờ.</li>
+  </ol>
+  <p><b>Máy:</b> thỉnh thoảng có crash ngẫu nhiên không tái hiện (chạy lại đúng bước đó thì qua); mọi kết quả đều chạy hai lần và so từng trường.</p>
+
+  <h3>11.6 Lưu ý phương pháp</h3>
+  <ul>
+    <li>Mỗi số timing ghi rõ góc. Macro OpenRAM chỉ có Liberty ở góc TT, nên số ss / ff của đường qua SRAM là lạc quan. Trong các phiên resizer nhiều góc, .lib TT của macro chỉ gắn với góc được đọc đầu tiên (STA-1140); STA ký tên chạy mỗi góc một phiên nên không bị.</li>
+    <li>Góc ss không đóng được ở 50 MHz nếu không thêm tầng pipeline, mà như vậy sẽ đổi CPI; nằm ngoài phạm vi. Bài chỉ báo cáo số ss.</li>
+    <li>Vi phạm slew / cap còn lại được báo cáo theo loại (chân SRAM, net có nhiều diode, cell chuẩn), không phải giới hạn cứng.</li>
+    <li>Knob ký tên khác nhau giữa các cấu hình (ví dụ biên cap 50 % ở DM, 20 % ở SA2), nên một phần chênh lệch buffer và công suất đến từ knob, không hoàn toàn từ kiến trúc. Bảng cuối sẽ ghi rõ knob.</li>
+  </ul>
+</section>
+
+<section id="phuongphap">
+  <h2><span class="n">12</span>Đo gì và bằng công cụ gì</h2>
+  <p>Mục này ghi cho từng phần của dự án: đo hoặc kiểm thông số nào, bằng công cụ nào, làm thế nào và khi nào thì đạt, lặp lại và đối chứng ra sao, bằng chứng nằm ở file nào. Phiên bản công cụ chỉ ghi ở nơi đã xác định; các công cụ PD do OpenLane 2.3.10 gọi. Đường dẫn tính từ <code>E:\Projects\RISCV-research</code>.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Phần</th><th>Đo / kiểm chính</th><th>Công cụ chính</th><th>Lặp lại</th></tr></thead>
+    <tbody>
+      <tr><td><a href="#pp-rtl">12.1 RTL và kiểm tĩnh</a></td><td>Lint, latch, elaborate, cảnh báo mới</td><td>Verilator, Yosys</td><td>Mỗi bản RTL</td></tr>
+      <tr><td><a href="#pp-formal">12.2 Chứng minh hình thức</a></td><td>Tương đương cũ / mới, bất biến</td><td>Yosys (SAT, equiv_*, k-induction)</td><td>Đối chứng âm cho mỗi chứng minh</td></tr>
+      <tr><td><a href="#pp-tb">12.3 Regression có hướng</a></td><td>178 kiểm tra</td><td>QuestaSim 2024.1</td><td>×2</td></tr>
+      <tr><td><a href="#pp-uvm">12.4 UVM</a></td><td>Scoreboard 48 ca mỗi lượt</td><td>QuestaSim 2024.1 + UVM</td><td>×2</td></tr>
+      <tr><td><a href="#pp-embench">12.5 Embench-IoT</a></td><td>40 trường bộ đếm, CPI, hit, dự đoán sai</td><td>GCC 14.2.0, QuestaSim 2024.1</td><td>×2</td></tr>
+      <tr><td><a href="#pp-coremark">12.6 CoreMark</a></td><td>CRC, ticks, CoreMark/MHz</td><td>GCC 14.2.0, Verilator 5.053</td><td>×2</td></tr>
+      <tr><td><a href="#pp-isa">12.7 ACT4, random differential, Spike</a></td><td>Signature, trace</td><td>riscv-arch-test, Spike</td><td>×2</td></tr>
+      <tr><td><a href="#pp-fpga">12.8 FPGA</a></td><td>LE, Fmax, slack, công suất ước lượng</td><td>Quartus Prime Lite 20.1.1</td><td>10 seed × 2</td></tr>
+      <tr><td><a href="#pp-board">12.9 Board DE2-115</a></td><td>25 bộ đếm + D_ACCESS</td><td>quartus_pgm, Hercules 3.2.8</td><td>Một lượt vật lý</td></tr>
+      <tr><td><a href="#pp-pd">12.10 Physical design</a></td><td>Diện tích, timing 9 góc, DRV, DRC, LVS, antenna</td><td>OpenLane 2.3.10 (Yosys, OpenROAD, OpenSTA, Magic, KLayout, Netgen)</td><td>Hai run, netlist trùng</td></tr>
+      <tr><td><a href="#pp-gls">12.11 GLS</a></td><td>mcycle từng kernel</td><td>QuestaSim</td><td>×2</td></tr>
+      <tr><td><a href="#pp-power">12.12 Công suất ASIC</a></td><td>Công suất theo hoạt động, EPI</td><td>QuestaSim (SAIF), OpenSTA</td><td>Hai lượt GLS + hai lượt STA</td></tr>
+      <tr><td><a href="#pp-lec">12.13 LEC</a></td><td>Tương đương RTL – netlist</td><td>Yosys, ABC, script riêng</td><td>Hai lượt, so hash</td></tr>
+      <tr><td><a href="#pp-x2">12.14 Chạy hai lần, ghi chép</a></td><td>Trùng từng trường</td><td>Biên nhận SHA-256</td><td>Mọi phép đo</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="pp-rtl">12.1 RTL và kiểm tĩnh</h3>
+  <dl class="gloss steps">
+    <dt>Đo / kiểm</dt><dd>Lỗi cú pháp và lint; latch suy ra; mọi tổ hợp tham số elaborate được; cảnh báo lint mới so với baseline của OpenLane.</dd>
+    <dt>Công cụ</dt><dd>Verilator (lint: <code>scripts/lint_rtl.sh</code>, <code>lint_asic.sh</code>); Yosys (quét latch: <code>scripts/latch_sweep.sh</code>); <code>scripts/lint_baseline_check.py</code>; <code>scripts/rtl_manifest.py</code>.</dd>
+    <dt>Cách làm, tiêu chí đạt</dt><dd>Quét latch trên mọi tổ hợp <code>CACHE_CONFIG</code> × <code>LINE_COUNT</code> × <code>FAST_HIT</code> (33 tổ hợp): không có latch. So cảnh báo lint với baseline của OpenLane: 0 cảnh báo mới. Mỗi bản RTL được đóng băng bằng manifest SHA-256 (bản hiện tại <code>6c4ccffd</code>, 227 file); PD chỉ đọc snapshot đóng băng <code>asic/snapshots/rtl_&lt;bản&gt;/</code>.</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>Chạy lại mỗi khi RTL đổi, nằm trong chuỗi đầy đủ (mục 8). Đã bắt được thật: lần đóng băng <code>dcbf3495</code> trượt <code>lint_asic</code> (SYNCASYNCNET) nên bị thay bằng <code>6c4ccffd</code> (7.3); quét latch bằng Yosys tìm ra 2 latch thật trong <code>rx_block</code> mà Verilator báo 0 (mục 5, lỗi 6).</dd>
+    <dt>Bằng chứng</dt><dd>Log chuỗi đầy đủ <code>results/fullchain_rfbht.log</code> (<code>6c4ccffd</code>); script ở dòng Công cụ.</dd>
+  </dl>
+
+  <h3 id="pp-formal">12.2 Chứng minh hình thức cho các thay đổi RTL</h3>
+  <dl class="gloss steps">
+    <dt>Đo / kiểm</dt><dd>Tương đương giữa RTL cũ và RTL mới; bất biến của cơ chế mới (ví dụ giao thức đọc trước của M9K, <code>hot_mvalid</code>).</dd>
+    <dt>Công cụ</dt><dd>Yosys: SAT, <code>equiv_make</code> / <code>equiv_simple</code> / <code>equiv_induct</code>, k-induction. Checker chỉ mô phỏng đặt trong RTL: mảng cũ chạy cạnh mảng mới, dừng ở chu kỳ đầu tiên khác.</dd>
+    <dt>Cách làm, tiêu chí đạt</dt><dd>Mọi obligation phải được chứng minh, và mọi đối chứng âm (đột biến) phải có phản ví dụ. Đã làm: FAST_HIT 0 = RTL trước (module 16 / 16, đối chứng âm 8 / 8; mức SoC DM 35,067 / SA2 36,741 / DM_VC4 37,441 cell, 0 chưa chứng minh); bộ cộng <code>pc + imm</code> (SAT trên mọi <code>pc_f</code> × mọi lệnh); bộ nhân 33×33 (20,025,600 phép so, 0 sai khác); thanh ghi hóa giải mã (447,858,365 chu kỳ, 0 lệch); <code>hot_mvalid</code> (k-induction 256 và 8 dòng); <code>keep</code> trên bộ đếm (1,256 / 1,256 và 5,281 / 5,281 cell); register file / BHT trong M9K (3 / 3 k-induction). Chi tiết ở 7.1–7.3.</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>Mỗi chứng minh kèm đối chứng âm: M9K 3 / 3 có phản ví dụ (bỏ bypass, bỏ kiểm valid, bỏ flush). Checker bị ép sai phải dừng mô phỏng: 4 / 4 với FAST_HIT (R16), 2 / 2 với M9K.</dd>
+    <dt>Bằng chứng</dt><dd><code>asic/equiv/r16_eq/r16_eq_verdict.txt</code>, <code>asic/equiv/rf_bht_m9k/</code>, <code>asic/rf_bht_m9k_asic_checks.log</code>.</dd>
+  </dl>
+
+  <h3 id="pp-tb">12.3 Testbench regression có hướng</h3>
+  <dl class="gloss steps">
+    <dt>Đo / kiểm</dt><dd>178 kiểm tra ở mức module và SoC: <code>tb_uart_apb</code>, <code>tb_regfile</code>, <code>tb_bht</code>, ISA có hướng ở view ASIC, bộ đồng bộ, wrapper và các test khác.</dd>
+    <dt>Công cụ</dt><dd>QuestaSim 2024.1 (<code>vsim</code>).</dd>
+    <dt>Cách làm, tiêu chí đạt</dt><dd>Chạy song song theo lane, mỗi lane một thư viện Questa (chuỗi đầy đủ 39 phút, trước đây khoảng 5 giờ). Đạt khi 178 / 178 PASS.</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>Mỗi lần ×2, so số kiểm tra và kết quả từng kiểm tra (178 = 178). Một số test được viết để bắt đúng lỗi của bản cũ: test wrapper mới làm RTL cũ FAIL 4 và 10 trường hợp (lỗi 7); T19 được viết lại vì bản cũ PASS mà không hề tiêm lỗi (lỗi 5).</dd>
+    <dt>Bằng chứng</dt><dd><code>results/fullchain_rfbht.log</code> (<code>6c4ccffd</code>), <code>results/fullchain_r16.log</code>.</dd>
+  </dl>
+
+  <h3 id="pp-uvm">12.4 UVM</h3>
+  <dl class="gloss steps">
+    <dt>Đo / kiểm</dt><dd>Scoreboard của 48 ca mỗi lượt: ISA có hướng ở mức SoC, ngoại vi / IRQ, UART RX hai byte, trên DM / SA2 / DM_VC4 / DM_DSE × seed 1 / 2 / 3; AXI stress với dòng 2 / 4 / 8 / 16 word × seed 1 / 2 / 3.</dd>
+    <dt>Công cụ</dt><dd>QuestaSim 2024.1 + UVM.</dd>
+    <dt>Cách làm, tiêu chí đạt</dt><dd>Đạt khi 48 / 48 ca PASS và mọi trường scoreboard của lượt 1 trùng lượt 2.</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>Hai lượt độc lập. Đối chứng âm: byte UART sai phải FAIL, và đã bị bắt.</dd>
+    <dt>Bằng chứng</dt><dd><code>results/uvm_cache_uart_20261009/verification.json</code>.</dd>
+  </dl>
+
+  <h3 id="pp-embench">12.5 Embench-IoT và bộ đếm phần cứng</h3>
+  <dl class="gloss steps">
+    <dt>Đo / kiểm</dt><dd>40 trường bộ đếm phần cứng (sysmon) chụp ở cuối mỗi kernel, liệt kê ở bảng dưới. Chỉ số suy ra: CPI = mcycle / minstret; CPI có trọng số = Σ mcycle / Σ minstret; tỉ lệ hit; tỉ lệ dự đoán sai; Embench tốc độ / MHz (trung bình nhân, số vòng giảm, không phải điểm chính thức).</dd>
+    <dt>Workload</dt><dd>12 kernel Embench-IoT gốc (commit <code>09c2ed8c</code>); nguồn giữ nguyên, trừ móc 5 dòng chỉnh số vòng.</dd>
+    <dt>Công cụ</dt><dd>riscv64-unknown-elf-gcc 14.2.0 (<code>-march=rv32i_zmmul -mabi=ilp32 -O2 -ffreestanding -fno-builtin -nostdlib -nostartfiles</code>); QuestaSim 2024.1 mô phỏng RTL ở view FPGA và view ASIC; <code>snapshot_fields.py</code> kiểm bất biến bộ đếm.</dd>
+    <dt>Cách làm, tiêu chí đạt</dt><dd>Mọi trường trùng tham chiếu trước khi sửa; bất biến bộ đếm đúng; ×2. Thêm các phép đo: bật / tắt dự đoán nhánh; FAST_HIT; quét M1 / M2 (<code>scripts/m2/run_m2_sweep.py</code>).</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>Hai lượt so từng trường. Đối chiếu độc lập: mô hình cache chạy trên trace (<code>scripts/cache_model.py</code>) khớp tuyệt đối mọi bộ đếm hit / miss (48 / 48, 24 / 24, 60 / 60).</dd>
+    <dt>Bằng chứng</dt><dd><code>results/unified_metrics.md</code>, <code>results/m2/M1_M2_REPORT.md</code>, <code>results/m2/M1_M2_analysis.md</code>.</dd>
+  </dl>
+  <div class="tbl"><table>
+    <thead><tr><th>Nhóm</th><th>Trường (40)</th></tr></thead>
+    <tbody>
+      <tr><td>Chu kỳ, lệnh</td><td><code>mcycle</code>, <code>minstret</code></td></tr>
+      <tr><td>Phân loại chu kỳ</td><td><code>cycle_retire</code>, <code>load_use</code>, <code>i_wait</code>, <code>d_wait</code>, <code>control</code>, <code>trap</code>, <code>mmio</code>, <code>fill_drain</code>, <code>other</code></td></tr>
+      <tr><td>I-cache</td><td><code>i_access</code>, <code>i_main</code>, <code>i_victim</code>, <code>i_miss</code></td></tr>
+      <tr><td>D-cache</td><td><code>d_read</code>, <code>d_write</code>, <code>d_main</code>, <code>d_victim</code>, <code>d_miss</code></td></tr>
+      <tr><td>Nhánh</td><td><code>branches</code>, <code>taken</code>, <code>not_taken</code>, <code>predictions</code>, <code>correct</code>, <code>mispredict</code></td></tr>
+      <tr><td>AXI</td><td><code>axi_read</code>, <code>axi_write</code></td></tr>
+      <tr><td>Sự kiện</td><td><code>i_hit_ev</code>, <code>i_miss_ev</code>, <code>d_rd_hit</code>, <code>d_rd_miss</code>, <code>d_wr_hit</code>, <code>d_wr_miss</code>, <code>control_ev</code>, <code>trap_ev</code></td></tr>
+      <tr><td>Trạng thái, tự kiểm</td><td><code>mcause</code>, <code>snap_seq</code>, <code>result_pass</code>, <code>invariant_pass</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="pp-coremark">12.6 CoreMark</h3>
+  <dl class="gloss steps">
+    <dt>Đo / kiểm</dt><dd>(a) Quét ngắn: -O2, một vòng, RAM mô phỏng 32 KiB; 5 giá trị CRC so với giá trị của nguồn CoreMark (<code>e9f5</code> / <code>e714</code> / <code>1fd7</code> / <code>8e3a</code> / <code>e714</code>); 92 điểm, 184 lần mô phỏng. (b) Ma trận chuẩn: -Os, 1,100 vòng, mọi khoảng đo &gt; 10 s, ticks đếm bằng timer APB; 4 cấu hình × hiệu năng / xác nhận; suy ra giây ở 50 MHz, iterations/s, CoreMark/MHz (10.4).</dd>
+    <dt>Công cụ</dt><dd>riscv64-unknown-elf-gcc 14.2.0 (ma trận chuẩn: <code>-march=rv32i_zmmul_zicsr -mabi=ilp32</code>); Verilator 5.053 cho ma trận chuẩn.</dd>
+    <dt>Cách làm, tiêu chí đạt</dt><dd>CRC đúng; lượt 1 trùng lượt 2. Ma trận chuẩn: 16 / 16 PASS, 8 cặp × 108 trường = 864 phép so trùng. Quét ngắn: CRC đúng nguồn, kiểm độc lập.</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>Hai lượt độc lập cho cả hai loại. Giới hạn: chạy mô phỏng với RAM 32 KiB (không vừa RAM 16 KiB của chip, 10.1); không phải điểm CoreMark chính thức.</dd>
+    <dt>Bằng chứng</dt><dd><code>results/coremark_standard_apb_matrix_20261011/receipt.json</code>.</dd>
+  </dl>
+
+  <h3 id="pp-isa">12.7 ACT4, random differential và tham chiếu Spike</h3>
+  <dl class="gloss steps">
+    <dt>Đo / kiểm</dt><dd>ACT4: signature của 43 test (39 RV32I + 4 Zmmul) so với Spike. Random differential: trace của 50 chương trình sinh ngẫu nhiên, so giữa dự đoán nhánh tắt và bật. Tham chiếu Spike độc lập: so PC, lệnh, ghi thanh ghi, địa chỉ / byte / strobe của store.</dd>
+    <dt>Công cụ</dt><dd>riscv-arch-test (ACT4) commit <code>2e655961</code>; Spike làm tham chiếu; mô phỏng RTL.</dd>
+    <dt>Cách làm, tiêu chí đạt</dt><dd>ACT4: 43 / 43 signature khớp; adapter 1 MiB đã sửa, có test nửa trên. Random differential: 50 / 50 trace trùng. Spike: 100 lần Spike khớp cả 200 trace RTL.</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>Mọi phần ×2; log và signature ACT4 đã lưu. Đối chứng âm: 300 trace bị làm sai đều bị bắt.</dd>
+    <dt>Bằng chứng</dt><dd><code>results/spike_random_reference_20261011/receipt.json</code>.</dd>
+  </dl>
+
+  <h3 id="pp-fpga">12.8 FPGA</h3>
+  <dl class="gloss steps">
+    <dt>Đo / kiểm</dt><dd>LE, thanh ghi, M9K, DSP; Fmax và setup slack ở Slow 1200 mV 85 °C; công suất ước lượng; LE theo module (bảng "Fitter Resource Utilization by Entity").</dd>
+    <dt>Công cụ</dt><dd>Quartus Prime Lite 20.1.1, thiết bị <code>EP4CE115F29C7</code>: fitter, TimeQuest (timing), Power Analyzer (toggle mặc định 12.5 %); <code>scripts/le_breakdown.py</code> cho LE theo module.</dd>
+    <dt>Cách làm, tiêu chí đạt</dt><dd>Mục tiêu 50 MHz ở Slow 85 °C; LE dưới mục tiêu mềm 20,000. 10 seed chung 1..10 cho cả 4 cấu hình; so các cấu hình trong cùng seed, không chọn seed tốt nhất riêng.</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>Hai lượt fit độc lập, so 115 trường: 40 cặp dòng trùng. Công suất là ước lượng, độ tin cậy thấp; không gọi là đo.</dd>
+    <dt>Bằng chứng</dt><dd><code>results/fpga_points_fpga_common_seeds_continued_20261009_p1.csv</code>, <code>_p2.csv</code>; <code>results/a1_le_breakdown_rfbht.md</code>.</dd>
+  </dl>
+
+  <h3 id="pp-board">12.9 Board DE2-115</h3>
+  <dl class="gloss steps">
+    <dt>Đo / kiểm</dt><dd>Firmware in qua UART 25 bộ đếm + <code>D_ACCESS</code> + <code>VERIFY_CODE</code> + <code>RESULT</code>; LED 7 đoạn hiện <code>MCYCLE</code>.</dd>
+    <dt>Công cụ</dt><dd>Nạp SOF bằng <code>quartus_pgm</code> qua USB-Blaster. UART qua cổng JP5 GPIO 3.3 V LVTTL (TX = GPIO[0] / AB22, RX = GPIO[1] / AC15) với bộ chuyển USB-TTL; Hercules 3.2.8, 115200 8N1.</dd>
+    <dt>Cách làm, tiêu chí đạt</dt><dd>Ma trận 100 SOF: 25 firmware × 4 cấu hình, seed 2. Giá trị kỳ vọng lấy từ hai lượt mô phỏng RTL tham chiếu, gắn với hash của từng SOF (<code>INDEX.csv</code>). Đạt khi mọi bộ đếm bằng cả hai lượt tham chiếu.</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>Một lượt vật lý cho mỗi ca, theo phạm vi chủ dự án chốt; kiểm độc lập ở <code>results/board_20261013_independent_check/</code>. Phiên 13/10: 42 / 100 ca khớp; còn 58 ca (10 ca ngắn, 48 ca đủ vòng).</dd>
+    <dt>Bằng chứng</dt><dd><code>results/board_20261013/</code>, <code>results/board_20261013_independent_check/</code>.</dd>
+  </dl>
+
+  <h3 id="pp-pd">12.10 Physical design (PD)</h3>
+  <dl class="gloss steps">
+    <dt>Nền tảng</dt><dd>PDK sky130A, thư viện <code>sky130_fd_sc_hd</code>, macro SRAM OpenRAM (Liberty chỉ có góc TT); OpenLane 2.3.10, bản sao có mở rộng (mặc định tắt, mục 13 dòng 30); clock 20 ns. Tên run đọc theo mục 3.2.</dd>
+    <dt>Đo / kiểm</dt><dd>Diện tích die / core; diện tích và số cell chuẩn; buffer theo loại (sửa timing, clock, hold, macro-pin, fanout, max-cap, dây); chiều dài dây; setup / hold WNS và TNS từng góc; DRV (max slew / cap / fanout, phân loại theo chân SRAM / net nhiều diode / cell chuẩn); DRC (route, Magic, KLayout); LVS; XOR; overlap; antenna (net / chân); overflow của global route; công suất vectorless.</dd>
+    <dt>Tiêu chí ký tên</dt><dd>DRC = LVS = XOR = overlap = antenna = 0; setup ≥ 0 ở tt và ff; hold ≥ 0 ở 9 góc; ss chỉ báo cáo.</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>Hai run cùng công thức (<code>_r1</code> / <code>_r2</code>): trùng 319 metric và netlist cuối trùng từng byte. Nghiệm thu theo quy tắc Q (11.5).</dd>
+    <dt>Bằng chứng</dt><dd><code>asic/run_gated_pd.sh</code>, <code>asic/drt_watch.sh</code>, <code>asic/fp_tools/gate_check.py</code>, <code>asic/gated_pd.log</code>.</dd>
+  </dl>
+  <h4>Các bước của flow và công cụ</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>Bước</th><th>Công cụ</th><th>Số đo lấy ra</th></tr></thead>
+    <tbody>
+      <tr><td>Tổng hợp</td><td>Yosys + ABC (chiến lược AREA 0)</td><td>Số cell, diện tích cell</td></tr>
+      <tr><td>Floorplan, PDN, đặt macro theo file cấu hình</td><td>OpenROAD</td><td>Diện tích die / core</td></tr>
+      <tr><td>Đặt cell toàn cục (routability-driven) và chi tiết</td><td>OpenROAD</td><td>–</td></tr>
+      <tr><td>Resizer: sửa DRV, timing, hold</td><td>OpenROAD</td><td>Buffer theo loại</td></tr>
+      <tr><td>CTS</td><td>OpenROAD</td><td>Clock buffer / inverter</td></tr>
+      <tr><td>Global routing</td><td>FastRoute (trong OpenROAD)</td><td>Overflow</td></tr>
+      <tr><td>Sửa antenna: diode ở GRT và sau detailed routing</td><td>OpenROAD</td><td>Antenna (net / chân), số diode</td></tr>
+      <tr><td>Detailed routing</td><td>TritonRoute (trong OpenROAD)</td><td>Vi phạm DRC theo vòng</td></tr>
+      <tr><td>Chèn fill</td><td>OpenROAD</td><td>–</td></tr>
+      <tr><td>Trích ký sinh</td><td>OpenRCX (trong OpenROAD)</td><td>SPEF</td></tr>
+      <tr><td>Phân tích IR drop</td><td>PSM (trong OpenROAD)</td><td>IR drop</td></tr>
+      <tr><td>STA ký tên</td><td>OpenSTA, 9 góc (RC min / nom / max × tt / ss / ff)</td><td>Setup / hold WNS, TNS; DRV; công suất vectorless</td></tr>
+      <tr><td>Xuất GDS, DRC với macro trừu tượng, trích SPICE</td><td>Magic</td><td>DRC Magic</td></tr>
+      <tr><td>Xuất GDS, DRC, XOR</td><td>KLayout</td><td>DRC KLayout, XOR</td></tr>
+      <tr><td>LVS</td><td>Netgen</td><td>LVS</td></tr>
+    </tbody>
+  </table></div>
+  <h4>Driver có cổng <code>run_gated_pd.sh</code></h4>
+  <div class="tbl"><table>
+    <thead><tr><th>Pha</th><th>Cổng</th></tr></thead>
+    <tbody>
+      <tr><td>P1</td><td>Overflow GRT ≤ 500; setup nom_tt ≥ +0.5 ns; hold ≥ 0</td></tr>
+      <tr><td>P2</td><td>Overflow ≤ 2,000; setup nom_tt ≥ +0.3 ns; hold ≥ 0 hoặc ngưỡng khai báo lúc khởi chạy</td></tr>
+      <tr><td>P3</td><td>Watchdog hội tụ detailed routing (<code>drt_watch.sh</code>)</td></tr>
+      <tr><td>P4</td><td>Cổng ký tên (<code>gate_check.py final</code>)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Mặc định run dừng khi trượt một cổng. Có thể vượt cổng bằng dòng CONTINUE, nhưng run đó không dùng để nghiệm thu theo quy tắc Q.</p>
+
+  <h3 id="pp-gls">12.11 GLS (mô phỏng netlist)</h3>
+  <dl class="gloss steps">
+    <dt>Đo / kiểm</dt><dd>mcycle của từng kernel; tự kiểm qua LED / HEX.</dd>
+    <dt>Công cụ</dt><dd>QuestaSim trên netlist ký tên, với model chức năng <code>sky130_fd_sc_hd</code> và model SRAM OpenRAM; testbench <code>tb_gls_soc</code>.</dd>
+    <dt>Cách làm, tiêu chí đạt</dt><dd>mcycle bằng tham chiếu view ASIC từng chu kỳ cho cả 12 kernel.</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>DM và SA2: 12 kernel × 2 lượt (cùng các lượt ghi SAIF exact-window ở 12.12).</dd>
+    <dt>Bằng chứng</dt><dd><code>results/gls_power_r14F_A_power.csv</code> (DM); biên nhận công suất exact-window ở 12.12.</dd>
+  </dl>
+
+  <h3 id="pp-power">12.12 Công suất ASIC theo hoạt động</h3>
+  <dl class="gloss steps">
+    <dt>Đo / kiểm</dt><dd>Công suất internal, switching, leakage theo nhóm (sequential, combinational, clock, macro); tỉ lệ chân không có hoạt động (unknown); EPI.</dd>
+    <dt>Công cụ</dt><dd>QuestaSim (<code>power add</code>, <code>power report -bsaif</code>) ghi SAIF; <code>saif_to_pins.py</code> chuyển SAIF về chân cell; OpenSTA (<code>read_saif</code>, <code>report_power</code>) ở <code>nom_tt_025C_1v80</code> với SPEF từ RCX.</dd>
+    <dt>Cách làm, tiêu chí đạt</dt><dd>Cửa sổ exact-window dài đúng mcycle × 20 ns, mở / đóng bằng tín hiệu đóng băng bộ đếm; tín hiệu này được ánh xạ vào netlist, và phép ánh xạ được chứng minh bằng SAT. EPI = công suất × thời gian cửa sổ / minstret.</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>Hai lượt GLS độc lập + hai lượt STA mỗi kernel (26 lần STA), so mọi trường; STA vectorless phải tái tạo đúng báo cáo của flow. So với số SAIF cũ: lệch ≤ 0.005 mW mỗi kernel.</dd>
+    <dt>Kết quả</dt><dd>DM 119.45 mW (EPI trung bình nhân 3,608 pJ; unknown 5.38 %). SA2 129.64 mW (4,317 pJ; 4.42 %). Không so với 235.8 mW của bản cũ (ước lượng của flow ở max_ff).</dd>
+    <dt>Bằng chứng</dt><dd><code>results/activity_power_exact_dm_20261013/receipt.json</code>, <code>results/activity_power_exact_sa2_20261014/receipt.json</code>.</dd>
+  </dl>
+
+  <h3 id="pp-lec">12.13 LEC: tương đương RTL – netlist</h3>
+  <p>Bước EQY gốc của OpenLane không qua được trên thiết kế này (795 / 876), nên dự án dùng LEC ánh xạ thanh ghi tự xây (mục 3.9).</p>
+  <dl class="gloss steps">
+    <dt>Đo / kiểm</dt><dd>Số output chứng minh (UNSAT), phản ví dụ (SAT), chưa quyết định; số cặp flop, hằng, bản sao.</dd>
+    <dt>Công cụ</dt><dd>Yosys, ABC (<code>&amp;miter</code>, <code>&amp;sat</code>, <code>&amp;cec</code>) và script riêng: <code>evert.py</code>, <code>const_check.py</code>, <code>mk_onehot_spec.py</code>, <code>inv_check.py</code>, <code>macc_alg.py</code>, <code>run_xsens.ps1</code>, <code>arst_audit.py</code>, <code>sram_align.py</code>; driver <code>run_lec_r14.ps1</code>, <code>run_lec_sa2.ps1</code>, <code>run_lec_vc4.ps1</code>.</dd>
+    <dt>Tiêu chí đạt</dt><dd>0 SAT, mọi output đóng, mọi đối chứng âm bị bắt.</dd>
+    <dt>Lặp lại, đối chứng</dt><dd>Hai lượt độc lập, so từng đối tượng (hash) và từng dòng kết luận. Đối chứng âm: đổi mã FSM, spec unsigned, đột biến tích riêng phần, đổi một cell and2 → or2 trong netlist, output phụ thuộc x, output phụ thuộc dữ liệu đọc SRAM đã xóa. Python phía Windows chạy ghim một CPU logic (giảm sai sót ngẫu nhiên khi tiến trình chuyển giữa các lõi).</dd>
+    <dt>Bằng chứng</dt><dd><code>asic/equiv/lec/</code> (driver, <code>runs.log</code>); <code>results/lec_sa2_20261013/pass_comparison.json</code>; <code>results/lec_vc4_20261014d/pass_comparison_goldn1.json</code>; <code>results/lec_arst_audit_20261013/</code>; <code>results/lec_dm_xsens_20261013/</code>.</dd>
+  </dl>
+  <h4>Các bước</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>Bước</th><th>Cách làm</th><th>Công cụ / script</th></tr></thead>
+    <tbody>
+      <tr><td>Đọc RTL và netlist</td><td>Front end cho RTL và netlist; cắt macro SRAM; phẳng hóa</td><td>Yosys</td></tr>
+      <tr><td>RTL = RTL + fsm</td><td>Chứng minh việc mã hóa lại FSM</td><td>Yosys <code>equiv_make -encfile</code>, <code>equiv_induct</code></td></tr>
+      <tr><td>N1</td><td>Replay tổng hợp của OpenLane tới trước ABC, trùng từng byte</td><td>Yosys</td></tr>
+      <tr><td>Ghép flop</td><td>Ghép flop theo tên</td><td><code>evert.py</code></td></tr>
+      <tr><td>Hằng, bản sao</td><td>Hằng số tìm bằng điểm bất động lớn nhất; flop bản sao</td><td><code>const_check.py</code> + ABC <code>&amp;sat</code></td></tr>
+      <tr><td>One-hot</td><td>Nhóm one-hot và chứng minh bất biến</td><td><code>mk_onehot_spec.py</code>, <code>inv_check.py</code></td></tr>
+      <tr><td>Miter</td><td>Miter và SAT từng output</td><td>ABC <code>&amp;miter</code>, <code>&amp;sat</code>, <code>&amp;cec</code></td></tr>
+      <tr><td>Bộ nhân</td><td>Chứng minh đại số: tích = signed33(A) × signed33(B) mod 2<sup>64</sup>, rồi nối bằng <code>&amp;cec</code></td><td><code>macc_alg.py</code></td></tr>
+      <tr><td>Giá trị không xác định</td><td>x và net không nối được thả tự do</td><td><code>run_xsens.ps1</code></td></tr>
+      <tr><td>Reset bất đồng bộ; clock / sườn</td><td>Flop ghép tên phải có cùng gốc reset và cùng giá trị reset; kiểm thêm clock và sườn</td><td><code>arst_audit.py</code> (reset)</td></tr>
+      <tr><td>SRAM bị xóa (DM_VC4)</td><td>Dữ liệu đọc của SRAM mà tổng hợp đã xóa là input tự do</td><td><code>sram_align.py</code></td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Kết quả</th><th>DM (RAM 16 KiB)</th><th>SA2</th><th>DM_VC4 (phần tổng hợp)</th></tr></thead>
+    <tbody>
+      <tr><td>Output chứng minh, RTL = N1</td><td class="num">20,124</td><td class="num">21,489</td><td class="num">22,117</td></tr>
+      <tr><td>Output chứng minh, N1 = netlist cuối</td><td class="num">20,096</td><td class="num">21,471</td><td>chờ layout</td></tr>
+      <tr><td>Phản ví dụ (SAT)</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+      <tr><td>Độc lập giá trị không xác định</td><td>1,401 nguồn → 20,124 / 20,124 UNSAT</td><td>1,552 nguồn → 21,489 / 21,489 UNSAT</td><td>1,796 nguồn → 22,117 / 22,117 UNSAT</td></tr>
+      <tr><td>Reset bất đồng bộ</td><td>19,087 bit, 0 sai khác</td><td>20,462 bit, 0 sai khác</td><td>chờ layout</td></tr>
+      <tr><td>Lặp lại</td><td>Hai lượt, mọi hash trùng</td><td>39 đối tượng + mọi dòng kết luận trùng</td><td>30 đối tượng + 9 nhóm kết luận trùng</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="pp-x2">12.14 Chạy hai lần và ghi chép</h3>
+  <dl class="gloss steps">
+    <dt>Quy tắc</dt><dd>Mọi phép đo chạy hai lượt độc lập, so từng trường; một số chỉ được dùng khi lượt 1 = lượt 2. Ngoại lệ ghi rõ: board (một lượt vật lý, so với hai lượt tham chiếu RTL) và các số sàng lọc.</dd>
+    <dt>Biên nhận</dt><dd>Biên nhận (receipt) chứa SHA-256 của mọi đầu vào, ví dụ <code>receipt.json</code> của CoreMark chuẩn, tham chiếu Spike và công suất exact-window.</dd>
+    <dt>Ghi chép</dt><dd>Một lịch sử duy nhất <code>NHAT_KY.md</code>; một quy trình duy nhất <code>QUY_TRINH.md</code>; kết quả <code>RESULTS.md</code>; phản biện <code>REVIEW_RESPONSE.md</code>.</dd>
+  </dl>
+</section>
+
+<section id="morong">
+  <h2><span class="n">13</span>Mở rộng so với bản 1 KiB đã công bố</h2>
+  <p>38 mục mà bản nghiên cứu có thêm so với bản 1 KiB đã công bố (commit <code>a939d6f</code>), chia 6 nhóm. Danh sách gốc: <code>results/extensions_vs_published_1kib_20261014.md</code>.</p>
+
+  <h3>13.1 Thiết kế (RTL)</h3>
+  <div class="tbl"><table>
+    <thead><tr><th class="num">#</th><th>Mở rộng</th><th>Xem</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Cache I và D 4 KiB (profile nghiên cứu; mặc định trong HDL vẫn 1 KiB).</td><td>Mục 4</td></tr>
+      <tr><td class="num">2</td><td>RAM chính 8 → 16 KiB, để chạy được Embench-IoT gốc.</td><td>Mục 4, 7.1</td></tr>
+      <tr><td class="num">3</td><td>Cấu hình DM_DSE (<code>CACHE_CONFIG 3</code>) để tách chi phí controller (M1).</td><td>Mục 10.2</td></tr>
+      <tr><td class="num">4</td><td>SA4: 4 way, core N-way, PLRU dạng cây; chỉ FPGA / mô phỏng.</td><td>Mục 7.1</td></tr>
+      <tr><td class="num">5</td><td>Tham số <code>CACHE_FAST_HIT</code>. FAST_HIT 0 được chứng minh tương đương RTL trước: module 16 / 16, mức SoC cho đúng đầu vào PD.</td><td><code>asic/equiv/r16_eq/r16_eq_verdict.txt</code></td></tr>
+      <tr><td class="num">6</td><td>Kích thước dòng 8 / 16 / 32 B và độ sâu victim 2 / 4 / 8 tham số hóa.</td><td>Mục 10.2</td></tr>
+      <tr><td class="num">7</td><td>Register file và BHT vào M9K trên FPGA, đúng từng chu kỳ: −2,630 đến −2,680 LE (−13.5 đến −17 %); netlist ASIC không đổi.</td><td>Mục 7.3, 9.5</td></tr>
+      <tr><td class="num">8</td><td>Sửa timing ASIC đúng từng chu kỳ: đường nửa chu kỳ từ dout sườn xuống của OpenRAM; chứng minh SAT; CPI không đổi.</td><td>Mục 7.2</td></tr>
+      <tr><td class="num">9</td><td>Manifest RTL đóng băng (hiện <code>6c4ccffd</code>); PD chỉ đọc snapshot.</td><td>Mục 3.1, 12.1</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>13.2 Workload và đo</h3>
+  <div class="tbl"><table>
+    <thead><tr><th class="num">#</th><th>Mở rộng</th><th>Xem</th></tr></thead>
+    <tbody>
+      <tr><td class="num">10</td><td>12 kernel Embench-IoT gốc (<code>09c2ed8c</code>), bỏ kernel tự viết.</td><td>Mục 12.5</td></tr>
+      <tr><td class="num">11</td><td>CoreMark: quét ngắn 92 điểm có CRC (184 mô phỏng, kiểm độc lập) và ma trận chuẩn (4 cấu hình × hiệu năng / xác nhận × 2, mọi khoảng &gt; 10 s).</td><td>Mục 10.4, 12.6</td></tr>
+      <tr><td class="num">12</td><td>Bảng chỉ số hợp nhất: CPI, hit, dự đoán sai, Embench / MHz, ngắt 5 / 41 chu kỳ, chuyển ngữ cảnh 270 / 292, view ASIC so với FPGA.</td><td>Mục 10.1; <code>results/unified_metrics.md</code></td></tr>
+      <tr><td class="num">13</td><td>Quét không gian thiết kế (M2): 256 B – 8 KiB × {DM, DM_DSE, SA2, DM_VC4, SA4}, dòng 8 / 16 / 32 B, victim 2 / 4 / 8, 13 workload, có / không FAST_HIT, ×2.</td><td>Mục 10.2; <code>results/m2/M1_M2_REPORT.md</code></td></tr>
+      <tr><td class="num">14</td><td>Kết quả tách controller: ở 4 KiB controller +9.8 %, tổ chức −0.3 %; khớp độ trễ hit thì set-associative thắng ở mọi dung lượng (3–10 % dưới 2 KiB).</td><td>Mục 10.2</td></tr>
+      <tr><td class="num">15</td><td>Conflict probe mở rộng: 35 mẫu × 6 cấu hình × 2 dung lượng; 390 cửa sổ khớp mô hình độc lập.</td><td>Mục 10.3</td></tr>
+      <tr><td class="num">16</td><td>Probe độ kết hợp (cachesweep): điểm gãy DM 2, SA2 3, DM_VC4 6.</td><td>Mục 6</td></tr>
+      <tr><td class="num">17</td><td>Bật / tắt dự đoán nhánh: +6.5 đến +6.7 % chu kỳ khi tắt.</td><td>Mục 10.1</td></tr>
+      <tr><td class="num">18</td><td>Retire so với minstret: giải thích và chứng minh trên 24 / 24 kernel (A4).</td><td>Mục 8</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>13.3 Kiểm chứng</h3>
+  <div class="tbl"><table>
+    <thead><tr><th class="num">#</th><th>Mở rộng</th><th>Xem</th></tr></thead>
+    <tbody>
+      <tr><td class="num">19</td><td>Mô hình cache độc lập chạy trên trace: mọi bộ đếm khớp (48 / 48, 24 / 24, 60 / 60).</td><td>Mục 8, 12.5</td></tr>
+      <tr><td class="num">20</td><td>ACT4 43 / 43 ×2, log lưu, adapter 1 MiB đã sửa.</td><td>Mục 12.7</td></tr>
+      <tr><td class="num">21</td><td>Random differential 50 seed ×2 + tham chiếu Spike: 100 lần Spike khớp 200 trace RTL, 300 đối chứng bị bắt.</td><td><code>results/spike_random_reference_20261011/receipt.json</code></td></tr>
+      <tr><td class="num">22</td><td>UVM 48 ca mỗi lượt, gồm AXI stress dòng 2 / 4 / 8 / 16 word và UART RX; đối chứng byte sai.</td><td><code>results/uvm_cache_uart_20261009/verification.json</code></td></tr>
+      <tr><td class="num">23</td><td>Chuỗi kiểm chứng đầy đủ cho mỗi thay đổi RTL, ×2.</td><td>Mục 8</td></tr>
+      <tr><td class="num">24</td><td>Chứng minh hình thức cho mọi tái cấu trúc, mỗi cái có đối chứng âm.</td><td>Mục 7.2, 7.3, 12.2</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>13.4 FPGA</h3>
+  <div class="tbl"><table>
+    <thead><tr><th class="num">#</th><th>Mở rộng</th><th>Xem</th></tr></thead>
+    <tbody>
+      <tr><td class="num">25</td><td>10 seed chung × 2 lượt cho 4 cấu hình (bản cũ: 4 seed, 1 lượt).</td><td>Mục 9.2</td></tr>
+      <tr><td class="num">26</td><td>LE theo module (A1) và CPI × LE.</td><td>Mục 9.3</td></tr>
+      <tr><td class="num">27</td><td>Ước lượng công suất Quartus 10 seed × 2 (A9).</td><td>Mục 9.2</td></tr>
+      <tr><td class="num">28</td><td>Ma trận 100 SOF cho board (25 firmware × 4 cấu hình, seed 2) với bộ đếm kỳ vọng gắn hash; phiên 13/10: 42 / 100 ca khớp, còn 58.</td><td>Mục 12.9</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>13.5 ASIC (không có trong repo đã công bố)</h3>
+  <div class="tbl"><table>
+    <thead><tr><th class="num">#</th><th>Mở rộng</th><th>Xem</th></tr></thead>
+    <tbody>
+      <tr><td class="num">29</td><td>Full flow OpenLane 2 tới ký tên, mỗi bản chạy kép, netlist cuối trùng: DM 10.63 mm², SA2 11.56 mm²; DM_VC4 còn mở.</td><td>Mục 11</td></tr>
+      <tr><td class="num">30</td><td>Mở rộng OpenLane cục bộ (mặc định tắt): ECO hold sau route trên ký sinh trích xuất (hai lượt RC trong một bước), buffer chân macro, sửa antenna sau detailed routing (có tùy chọn cho phép nghẽn), móc hiệu chỉnh RC, lưu route chính, driver bốn pha có cổng và watchdog hội tụ (có luật riêng cho vòng sửa antenna).</td><td>Mục 12.10; <code>asic/run_gated_pd.sh</code>, <code>asic/drt_watch.sh</code></td></tr>
+      <tr><td class="num">31</td><td>Tìm die nhỏ nhất cho SA2: 10.54 / 11.05 / 11.305 mm² hỏng, 11.56 mm² ký được.</td><td>Mục 3.7, 11.3</td></tr>
+      <tr><td class="num">32</td><td>GLS netlist ký tên: 12 / 12 kernel khớp chu kỳ view ASIC.</td><td>Mục 12.11</td></tr>
+      <tr><td class="num">33</td><td>Công suất theo hoạt động exact-window, hai lượt GLS + hai lượt STA: DM 119.45 mW (EPI 3,608 pJ), SA2 129.64 mW (4,317 pJ).</td><td>Mục 12.12</td></tr>
+      <tr><td class="num">34</td><td>Tương đương RTL – netlist sau route (LEC ánh xạ thanh ghi + chứng minh đại số bộ nhân) cho DM và SA2, tiền đề đã đóng (reset bất đồng bộ, độc lập giá trị không xác định, clock / sườn, bất biến one-hot); DM_VC4 phần tổng hợp.</td><td>Mục 12.13</td></tr>
+      <tr><td class="num">35</td><td>Timing từng góc kể cả ss (báo cáo, không làm cổng), phân loại DRV.</td><td>Mục 11.1, 11.3</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>13.6 Phương pháp và ghi chép</h3>
+  <div class="tbl"><table>
+    <thead><tr><th class="num">#</th><th>Mở rộng</th><th>Xem</th></tr></thead>
+    <tbody>
+      <tr><td class="num">36</td><td>Chạy hai lần mọi phép đo, so từng trường, biên nhận SHA-256.</td><td>Mục 12.14</td></tr>
+      <tr><td class="num">37</td><td>Một lịch sử, một file quy trình, một file kết quả, một file trạng thái phản biện.</td><td>Mục 12.14</td></tr>
+      <tr><td class="num">38</td><td>Trả lời phản biện từng điểm.</td><td>Mục 14</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="phanbien">
+  <h2><span class="n">14</span>Phản biện (danh_gia.txt)</h2>
+  <p>Đủ 20 điểm của phản biện. Trạng thái theo <code>results/review_status_20261014.md</code>; trả lời chi tiết ở <code>REVIEW_RESPONSE.md</code>.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Mục</th><th>Phản biện nói</th><th>Trạng thái</th><th>Đã làm / còn lại</th></tr></thead>
+    <tbody>
+      <tr><td>M1</td><td>Kết quả chính là hiện vật của controller</td><td><span class="pill ok">Đã xử lý</span></td><td>DM_DSE + FAST_HIT: ở 4 KiB controller +9.8 %, tổ chức −0.3 %; khớp độ trễ hit thì set-associative thắng ở mọi dung lượng (10.2).</td></tr>
+      <tr><td>M2</td><td>Chỉ 3 điểm, 1 dung lượng, 1 kích thước dòng</td><td><span class="pill ok">Đã xử lý</span></td><td>Quét 256 B – 8 KiB × 5 tổ chức, dòng 8 / 16 / 32 B, victim 2 / 4 / 8, 13 workload, ×2.</td></tr>
+      <tr><td>M3</td><td>Novelty yếu, thiếu related work</td><td><span class="pill open">Viết bài</span></td><td>Kết quả hỗ trợ đã có: độ sâu controller quan trọng hơn độ kết hợp ở cache nhỏ; điểm đảo chiều đã đo (SA2 / DM đổi dấu giữa 512 B và 1 KiB, 10.2).</td></tr>
+      <tr><td>A1</td><td>15–20 nghìn LE trông chưa tối ưu</td><td><span class="pill ok">Đã xử lý</span></td><td>Bảng LE theo module; register file / BHT vào M9K (−13.5 đến −17 %); DM 12.8 nghìn LE với cache gấp 4 (9.3, 9.5).</td></tr>
+      <tr><td>A2</td><td>Fmax khoảng 52 MHz; core trượt 20 ns trên Sky130</td><td><span class="pill run">Một phần</span></td><td>FPGA 51–56 MHz trên 10 seed chung ×2; ASIC DM và SA2 đóng 50 MHz ở tt và ff sau route. Còn DM_VC4; ss chỉ báo cáo (đóng ss sẽ đổi CPI).</td></tr>
+      <tr><td>A3</td><td>Không đối chiếu mô hình độc lập</td><td><span class="pill ok">Đã xử lý</span></td><td>Mô hình chạy trên trace, mọi bộ đếm khớp (48 / 48, 24 / 24, 60 / 60).</td></tr>
+      <tr><td>A4</td><td>Tỉ lệ retire và minstret lệch</td><td><span class="pill ok">Đã xử lý</span></td><td>Giải thích và chứng minh trên 24 / 24 kernel.</td></tr>
+      <tr><td>A5</td><td>Caption hình 3</td><td><span class="pill open">Viết bài</span></td><td>Sửa câu chữ: số đếm tuyệt đối giống nhau, tỉ lệ khác nhau (câu đề xuất ở mục 6).</td></tr>
+      <tr><td>A6</td><td>Kernel "kiểu Embench" tự viết</td><td><span class="pill ok">Đã xử lý</span></td><td>12 kernel Embench-IoT gốc; CoreMark quét có CRC và ma trận chuẩn (mô phỏng).</td></tr>
+      <tr><td>A7</td><td>Bằng chứng board, random differential 1 seed, log ACT4</td><td><span class="pill run">Một phần</span></td><td>ACT4 43 / 43 ×2, random differential 50 seed ×2 + Spike, UVM 48 ca ×2 đã xong; board 42 / 100 ca khớp. Còn 58 ca board.</td></tr>
+      <tr><td>A8</td><td>BP bật / tắt không có số</td><td><span class="pill ok">Đã xử lý</span></td><td>+6.5 đến +6.7 % chu kỳ khi tắt.</td></tr>
+      <tr><td>A9</td><td>Thiếu công suất / năng lượng</td><td><span class="pill run">Một phần</span></td><td>FPGA ước lượng 10 seed ×2; ASIC exact-window DM 119.45 mW (EPI 3,608 pJ) và SA2 129.64 mW (4,317 pJ), mỗi cái hai lượt GLS + hai lượt STA. Còn DM_VC4 sau ký tên.</td></tr>
+      <tr><td>m1</td><td>Phần ASIC: ss −11.7 ns, 646 antenna, 8,718 slew, nhật ký Magic</td><td><span class="pill run">Một phần</span></td><td>DM / SA2: antenna 0, đóng tt / ff, hold đóng ở 9 góc, DRV phân loại, ss báo cáo. Còn DM_VC4; phần viết lại.</td></tr>
+      <tr><td>m2</td><td>11 hạn chế, cần gộp và sửa</td><td><span class="pill open">Viết bài</span></td><td>Phần lớn hạn chế kỹ thuật nay đã sửa bằng số liệu (M1, M2, A6, A7, A9).</td></tr>
+      <tr><td>m3</td><td>Footnote GCC 14.2 / UB chuyển vào README</td><td><span class="pill open">Viết bài</span></td><td>Chuyển footnote vào README của artifact.</td></tr>
+      <tr><td>m4</td><td>Bảng 5 dùng seed 1, 2, 3, 5 (sao bỏ 4)</td><td><span class="pill ok">Đã xử lý</span></td><td>Thay bằng 10 seed chung 1..10, ghép cặp, hai lượt (9.2).</td></tr>
+      <tr><td>m5</td><td>Bảng 6: ở N = 7 chỉ 1 victim hit</td><td><span class="pill ok">Đã xử lý</span></td><td>Đã đo: FIFO / vòng tròn với thứ tự tuần hoàn sụp; cùng các dòng theo thứ tự ngẫu nhiên giữ 59 % (1 KiB, N = 8) (10.3).</td></tr>
+      <tr><td>m6</td><td>"Victim cache 59 % trên matmult" không có trong kết quả</td><td><span class="pill open">Viết bài</span></td><td>59 % trong dữ liệu là conflict probe thứ tự ngẫu nhiên, không phải matmult; sửa câu kết luận.</td></tr>
+      <tr><td>m7</td><td>Định nghĩa "weighted CPI"</td><td><span class="pill ok">Đã xử lý</span></td><td>Σ mcycle / Σ minstret.</td></tr>
+      <tr><td>m8</td><td>Tiêu đề chỉ ghi "on FPGA"; từ khóa</td><td><span class="pill open">Viết bài</span></td><td>Sửa tiêu đề và từ khóa.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Tổng 20 điểm: 10 đã xử lý (M1, M2, A1, A3, A4, A6, A8, m4, m5, m7), 4 một phần (A2, A7, A9, m1), 6 chỉ còn việc viết bài (M3, A5, m2, m3, m6, m8). Bốn điểm một phần chỉ còn chờ hai việc: DM_VC4 ký tên ASIC và 58 ca board.</p>
+</section>
+
+<section id="conmo">
+  <h2><span class="n">15</span>Còn mở và lưu ý khi viết bài</h2>
+  <h3>Còn mở</h3>
+  <ul>
+    <li><b>DM_VC4 ký tên.</b> V4 (die 3800 µm) dừng 14/10 21:01: route chính về 0 nhưng antenna sau route vẫn 1,098 net và vòng route lại bám đúng V2. Làm sau (chủ dự án), trên RTL 6c4ccffd, với floorplan riêng cho DM_VC4 (11.4). Sau khi ký: chạy kép, GLS, công suất exact-window, LEC bước N1 = netlist cuối (11.4).</li>
+    <li><b>Lần chạy trọn nghiệm thu theo quy tắc Q.</b> Chủ dự án chốt 14/10: PD dùng RTL 6c4ccffd. DM: <code>dm_grid3665x2900_rtl6c4c_r1</code> đang chạy từ 14/10 21:12 (r3 dừng vì crash; r4 trên R14 đã dừng). SA2: chạy trên 6c4ccffd với công thức E1 (nếu thắng PPA) hoặc E0. Sau khi ký: GLS, công suất exact-window và LEC trên các layout 6c4ccffd (11.5).</li>
+    <li><b>Thứ tự PD.</b> Mỗi lúc chỉ một pha nặng vì máy ảo WSL có 24 GB (detailed routing 10–12.4 GB; phần sign-off tới 12–13 GB ở Magic WriteLEF). Thứ tự (21:30): SA2 E1 r5 sign-off từ bước 51 (đang chạy, bản R14, chỉ để chọn công thức SA2) → DM 6c4ccffd detailed routing + sign-off (P1 / P2 đang chạy song song vì nhẹ) → SA2 nghiệm thu trên 6c4ccffd. V4 đã dừng.</li>
+    <li><b>58 ca board</b>: 10 ca ngắn, 48 ca đủ vòng (12.9).</li>
+    <li><b>Bảng PPA cuối cho ba cấu hình</b>: diện tích die và core, buffer, dây, công suất động và rò, knob ký tên, CPI và hit rate.</li>
+    <li><b>Phần viết bài</b>: M3, A5, m2, m3, m6, m8 (14).</li>
+  </ul>
+  <h3>Lưu ý khi đưa số vào bài</h3>
+  <ul>
+    <li>Không viết "DM nhanh hơn set-associative". Viết theo controller và theo từng workload (10.2).</li>
+    <li>Thứ hạng phụ thuộc workload và bản build: CoreMark chuẩn (10.4) cho SA2 nhanh nhất, trung bình nhân Embench-IoT (10.1) cho DM nhanh nhất.</li>
+    <li>CPI của bản cũ (kernel tự viết) và bản mới (Embench-IoT) không so với nhau.</li>
+    <li>Số Embench ở đây không phải điểm Embench chính thức.</li>
+    <li>Mọi số CoreMark là mô phỏng với RAM 32 KiB (10.1, 10.4), không phải điểm CoreMark chính thức; không gọi là CoreMark "trên chip".</li>
+    <li>Công suất FPGA là ước lượng của Quartus với tỉ lệ chuyển mạch mặc định. Công suất ASIC mới là đo theo hoạt động ở nom_tt. Số 235.8 mW của bản cũ là ước lượng của flow; không so trực tiếp.</li>
+    <li>Công suất ASIC exact-window và công suất SAIF cũ lệch ≤ 0.005 mW mỗi kernel; dùng số exact-window.</li>
+    <li>Mỗi số timing kèm tên góc; ss chỉ báo cáo.</li>
+    <li>Mọi số trong trang đã chạy hai lần và trùng nhau, trừ số đo trên board (một lượt vật lý theo phạm vi chủ dự án chốt) và các số ghi rõ là sàng lọc.</li>
+  </ul>
+</section>
+
+<section id="nguon">
+  <h2><span class="n">16</span>Nguồn số liệu</h2>
+  <p>Đường dẫn tính từ <code>E:\Projects\RISCV-research</code>, trừ khi ghi khác.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Nội dung</th><th>File</th></tr></thead>
+    <tbody>
+      <tr><td>Tổng hợp kết quả hiện tại</td><td><code>RESULTS.md</code></td></tr>
+      <tr><td>Trả lời phản biện từng mục</td><td><code>REVIEW_RESPONSE.md</code></td></tr>
+      <tr><td>Trạng thái phản biện; danh sách mở rộng</td><td><code>results/review_status_20261014.md</code>; <code>results/extensions_vs_published_1kib_20261014.md</code></td></tr>
+      <tr><td>Quy trình</td><td><code>QUY_TRINH.md</code> (mục B, C, D, E, F, F2)</td></tr>
+      <tr><td>Lịch sử, lý do từng quyết định</td><td><code>NHAT_KY.md</code> (tiếng Việt)</td></tr>
+      <tr><td>Bảng đổi tên đầy đủ</td><td><code>NHAT_KY.md</code> mục 11</td></tr>
+      <tr><td>M1 / M2, quét thiết kế</td><td><code>results/m2/M1_M2_REPORT.md</code>, <code>results/m2/M1_M2_analysis.md</code></td></tr>
+      <tr><td>Bảng kiến trúc (CPI, hit rate, CoreMark, ngắt)</td><td><code>results/unified_metrics.md</code></td></tr>
+      <tr><td>CoreMark chuẩn</td><td><code>results/coremark_standard_apb_matrix_20261011/receipt.json</code></td></tr>
+      <tr><td>Conflict probe mở rộng</td><td><code>sw_metrics/conflict/</code>, <code>results/conflict_probe.csv</code></td></tr>
+      <tr><td>Register file / BHT vào M9K: script áp, chứng minh, chuỗi, ASIC</td><td><code>scripts/apply_rf_bht_m9k.py</code>, <code>asic/equiv/rf_bht_m9k/</code>, <code>results/fullchain_rfbht.log</code>, <code>asic/rf_bht_m9k_asic_checks.log</code>, <code>results/fpga_points_rfbht_p1.csv</code></td></tr>
+      <tr><td>Chuỗi kiểm chứng R16</td><td><code>results/fullchain_r16.log</code></td></tr>
+      <tr><td>UVM</td><td><code>results/uvm_cache_uart_20261009/verification.json</code></td></tr>
+      <tr><td>Random differential, tham chiếu Spike</td><td><code>results/spike_random_reference_20261011/receipt.json</code></td></tr>
+      <tr><td>LE theo module (A1)</td><td><code>results/a1_le_breakdown_rfbht.md</code> (R16: <code>_r16.md</code>), <code>scripts/le_breakdown.py</code></td></tr>
+      <tr><td>FPGA 10 seed chung × 2 lượt</td><td><code>results/fpga_points_fpga_common_seeds_continued_20261009_p{1,2}.csv</code></td></tr>
+      <tr><td>FPGA bốn seed (lần fit đầu), FAST_HIT</td><td><code>results/fpga_seed_summary_rfbht_p1.md</code>, <code>results/fpga_points_rfbht_p{1,2}.csv</code>, <code>results/le_r16_compare.log</code></td></tr>
+      <tr><td>Board DE2-115</td><td><code>results/board_20261013/</code>, <code>results/board_20261013_independent_check/</code></td></tr>
+      <tr><td>ASIC DM RAM 16 KiB</td><td><code>results/asic_compare_dm_r14.md</code>, <code>results/gls_power_r14F_A_power.csv</code></td></tr>
+      <tr><td>Công suất exact-window</td><td><code>results/activity_power_exact_dm_20261013/receipt.json</code>, <code>results/activity_power_exact_sa2_20261014/receipt.json</code></td></tr>
+      <tr><td>LEC DM RAM 16 KiB</td><td><code>asic/equiv/lec/run_lec_r14.ps1</code>, <code>run_lec_r14_mul.ps1</code>, <code>run_lec_r14_pass2.ps1</code>, <code>asic/equiv/lec/runs.log</code></td></tr>
+      <tr><td>Tiền đề LEC (reset bất đồng bộ, giá trị không xác định)</td><td><code>results/lec_arst_audit_20261013/</code>, <code>results/lec_dm_xsens_20261013/</code></td></tr>
+      <tr><td>LEC SA2</td><td><code>asic/equiv/lec/run_lec_sa2.ps1</code>, <code>results/lec_sa2_20261013/pass_comparison.json</code></td></tr>
+      <tr><td>LEC DM_VC4</td><td><code>asic/equiv/lec/run_lec_vc4.ps1</code>, <code>sram_align.py</code>, <code>results/lec_vc4_20261014d/pass_comparison_goldn1.json</code></td></tr>
+      <tr><td>PD có cổng, watchdog và chẩn đoán</td><td><code>asic/run_gated_pd.sh</code>, <code>asic/drt_watch.sh</code>, <code>asic/fp_tools/gate_check.py</code>, <code>asic/gated_pd.log</code>, <code>asic/fp_tools/guide_demand.py</code>, <code>region_cells.py</code>, <code>NHAT_KY.md</code> mục 8</td></tr>
+      <tr><td>DM_VC4 sàng lọc antenna</td><td><code>asic/soc_vc4_4kb/screen_ant_postdrt_v2_20261014/</code>, <code>screen_antgrt{10,20,30}_20261014/</code>, <code>screen_drt_replay_v2_20261014/</code></td></tr>
+      <tr><td>Đo lại SDC của bản cũ</td><td><code>asic/evidence/sdc_recheck_1kb_published/</code></td></tr>
+      <tr><td>Bản đã công bố</td><td><code>E:\Projects\RISCV-AHB-APB-UART\docs\en\results\FINAL_RESULTS.md</code>, <code>docs\en\asic\00_OVERVIEW.md</code>, <code>README.md</code></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+</main>
+</div>
+
+<footer>Số liệu lấy trực tiếp từ các file ở mục 16 ngày 14/10/2026 (bản 21:30). Trang này là bản ghi chung của toàn dự án: phần DM_VC4 ASIC, các lần chạy trọn nghiệm thu và 58 ca board còn lại được cập nhật khi có kết quả.</footer>
+</div>
