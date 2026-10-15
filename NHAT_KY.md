@@ -87,19 +87,33 @@ lam netlist ASIC 1 KiB +2,728 cell (muc 9 "Yosys nhay voi ten").
 2 chu ky, miss them 1; DSE core khong doi. D-cache: noi long dieu kien hit tao duong doc tra du lieu block khac -> chi hot
 buffer tra trong chu ky request; store miss mang chinh nay vo hieu ban sao trong hot buffer (loi tiem an co tu truoc);
 lan do dau +12.045 % CPI la loi cai dat (L0 khong duoc nap) va suite 110/110 van xanh, tuc khong test nao kiem L0.
-Nhan dinh luc do rang thay doi nay "xoa confound controller" la sai (muc 9 "Confound controller").
+48-run (kernel tu viet, RAM 8 KiB): DM 1,463,306 -> 1,463,620 chu ky (CPI 1.2995 -> 1.2998); RTL `c9c96924` luu o
+`results/rtl_state_synccache.md5`. Nhan dinh luc do rang thay doi nay "xoa confound controller" la sai (muc 9 "Confound controller").
+
+**2026-09-18 Cache 4 KiB lan dau (chi doi `LINE_COUNT=256`).** Macro OpenRAM `test_sram_1rw1r_32x256_noperim` (`perimeter_pins False`,
+`check_lvsdrc False`); giu 4 bank, doc line 128 bit mot chu ky, FSM khong doi. 48-run 4 KiB: DM 1,449,098 chu ky (-0.99 %), SA2
+-0.93 %, DM_VC4 -0.85 %, DM_DSE -0.86 %; miss -11.2 / -13.8 / -3.2 / -11.2 %. DM_VC4 loi it nhat vi victim buffer va dung luong
+cung khu mot loai conflict miss. Regression them quet `LINE_COUNT` 128/256 (126 PASS); UVM directed + periph PASS o 64 va 256.
+View ASIC / FPGA cua cung diem: muc 2.4.
 
 **2026-09-19 Bo nho ASIC 4 KiB.** Mang du lieu bang flop o 4 KiB la 65,536 flop: khong kha thi. Moi bank dung mot macro
 1 KiB 32x256 (4 bank / cache, 12 macro tinh ca RAM chinh 8 KiB). Macro 1rw1r de cong 1 khong xac dinh khi cong 0 ghi cung
 dia chi nen wrapper chan doc bank dang ghi; valid cua `icache_tag_ram` doi sang vector packed (BLKLOOPINIT o 256 line).
-Tong hop 4 KiB: 1,036,877 um2 cell, 77,310 instance (1 KiB: 1,386,981 um2).
+Tong hop 4 KiB: 1,036,877 um2 cell, 77,310 instance (1 KiB: 1,386,981 um2). Quyet dinh cung ngay: dua regfile vao MLAB khong
+the tren Cyclone IV E (chi co M9K, doc dong bo) nen khong lam; RF/BHT giu flip-flop cho toi `6c4ccffd` (2026-10-08), ban giai
+rang buoc doc dong bo bang read-ahead + bypass + valid.
 
-**2026-09-24 Dot sua RTL (rtlfix, `aa8e32f9`).** Latch `rx_block` (2 chan `dlxtn_1`; Verilator `--Werror-LATCH` bao 0 vi
+**2026-09-24 Dot sua RTL (rtlfix, `aa8e32f9`).** Snapshot truoc dot: `hdl_pre_rtlfix_20260924T093817Z.tar.gz` (nay trong
+`results/pd_run_archive/asic_experiments_20261007.tar.gz`). Latch `rx_block` (2 chan `dlxtn_1`; Verilator `--Werror-LATCH` bao 0 vi
 khoi `always @(*)`). Read-enable cho `cache_dse_data_bank.v` (giu doc trong IDLE vi store hit D$ ghep byte tu ket qua doc
-do). Loi ghi AXI posted (`m_axi_bresp` bi bo qua): sticky `wr_err` + dia chi loi dau o sysmon `0xAC` / `0xB0`, ident
-`0x53380002`; test T19 cu PASS ma khong tiem loi, da viet lai. UART: STATUS bit 5 `tx_fifo_full`, bit 6 `rx_fifo_empty`;
-test moi `tb_uart_apb` bat `RXDATA` khong tra byte vua nhan. Mot SoC top cho ASIC (ban sao `soc_top_asic.v` da lech 66
-dong). View ASIC lan dau: 1/12 kernel PASS; ba loi RTL bo nho ASIC: (1) bien truoc khai bao (file chua tung qua Questa),
+do; chu ky khong doi). Loi ghi AXI posted (`m_axi_bresp` bi bo qua): sticky `wr_err` + dia chi loi dau o sysmon `0xAC` / `0xB0`
+(ghi 1 vao bit 0 cua `0xAC` de xoa), ident `0x53380001` -> `0x53380002`; test T19 cu PASS ma khong tiem loi, da viet lai. UART:
+STATUS bit 5 `tx_fifo_full`, bit 6 `rx_fifo_empty`; test moi `tb_uart_apb` bat `RXDATA` khong tra byte vua nhan; nay `RXDATA` la
+byte cu nhat chua doc, tu nap truoc tu FIFO (firmware khong nhan UART nen so lieu cu khong doi). Chan nguon macro trong wrapper
+chua lam o dot nay (`PDN_MACRO_CONNECTIONS` noi chung, LVS dat; lam o `358cb660`). Mot SoC top cho ASIC (ban sao `soc_top_asic.v`
+da lech 66 dong); wrapper RAM ASIC doi ten module thanh `axi_ram_32` (thay the theo ten module); `scripts/lint_asic.sh` doc
+`VERILOG_FILES` tu `config.json` va coi MODDUP la loi (glob cu co 3 MODDUP van PASS). View ASIC lan dau: 1/12 kernel PASS; ba
+loi RTL bo nho ASIC: (1) bien truoc khai bao (file chua tung qua Questa),
 (2) dia chi ghi khong bypass khi AW va W cung chu ky (91/115 lenh ghi sai dia chi; netlist ASIC truoc do khong chay duoc
 chuong trinh co store), (3) `cache_data_ram_sram4.v` khong giu gia tri doc (model OpenRAM tra X) -> chot 264 FF. Sau sua:
 12/12 PASS. Ket qua PD cua `ch4kb_full` (RTL con loi) bi bo. Probe chan doan: `tb/diag/`.
@@ -110,22 +124,34 @@ loi that (`uart_apb.v` bo qua `pstrb`; `rd_addr_q` chet); 111 canh bao con lai v
 
 **2026-09-25 Bo dong bo dau vao (`a0c425f8`).** `uart_rx` di thang vao next-state cua `rx_block`; wrapper ASIC khong dong bo
 gi va `set_false_path -from reset_n` lam recovery/removal khong duoc kiem. Them dong bo 2 flop, tach `reset_meta_q` /
-`reset_sync_q` (lint_asic bat SYNCASYNCNET). Test moi `tb/top_wrapper_sync_tb.sv`.
+`reset_sync_q` (lint_asic bat SYNCASYNCNET). SDC false path cho `key1_n` / `uart_rx` chi hop le sau khi da dong bo. Test moi
+`tb/top_wrapper_sync_tb.sv`.
 
-**2026-09-25 Fetch va bo nhan (`358cb660`).** Duong ASIC dout SRAM (suon xuong) -> giai ma -> imm -> bo cong 32 bit -> `pc_next`
-trong nua chu ky. Phan cao cua tong chi co the la `pc_hi`, `pc_hi+1`, `pc_hi-1` (tinh som); chi mot bo cong ngan phu thuoc
-`instr`. Sau CTS nom_tt -0.788 -> +2.766 ns, +0.9 % dien tich cell. Ba bo nhan 32x32 thay bang mot bo nhan co dau 33x33
-(FPGA: 24 -> 8 khoi nhan, cong suat bo nhan 6.22 -> 1.53 mW). Bai hoc: `alu.v` bi sua 9 giay truoc khi mot thi nghiem doc
-no -> khong sua `hdl/` khi con flow co the doc.
+**2026-09-25 Fetch va bo nhan (`358cb660`).** Rang buoc: chi nhan sua RTL khong doi CPI, khong thi quay ve `a0c425f8`. Duong ASIC
+dout SRAM (suon xuong) -> giai ma -> imm -> bo cong 32 bit -> `pc_next` trong nua chu ky. Phan cao cua tong chi co the la `pc_hi`,
+`pc_hi+1`, `pc_hi-1` (tinh som); chi mot bo cong ngan phu thuoc `instr` (12 bit cho B, 12 + carry-select 8 cho J); chon bang AND-OR
+de Yosys `opt_share` khong gop lai thanh bo cong 32 bit. Sau CTS nom_tt -0.788 -> +2.766 ns, +0.9 % dien tich cell. Ba bo nhan
+32x32 thay bang mot bo nhan co dau 33x33 (FPGA: 24 -> 8 khoi nhan, cong suat bo nhan 6.22 -> 1.53 mW). Chan nguon macro trong hai
+wrapper ASIC duoi `ifdef USE_POWER_PINS` (6 PINMISSING -> 0, netlist cong khong doi). Run `r7r8_358c` (timing: muc 7): hold 0 vi
+pham o 9 goc; slew / cap tt 828 / 853; day 6.54 m; Magic DRC 0, KLayout DRC 0, LVS khop; antenna 469 net / 653 pin. Bai hoc:
+`alu.v` bi sua 9 giay truoc khi mot thi nghiem doc no -> khong sua `hdl/` khi con flow co the doc.
 
-**2026-09-26 Sua co trong tam cho goc ss (`ecf4fc03` -> `d030ad12`).** ss: 2,820 endpoint truot, 70 % tu `d_req_addr`.
-Thanh ghi hoa giai ma (`scripts/apply_r9.py`). Duong xau nhat max_ss -7.575 ns: `pc_f` -> mux valid 256:1 cua I$ -> hot_hit ->
-stall -> chuoi 20 AND -> `csr_minstret`. `hot_mvalid` bo mux 256:1; `(* keep *)` dua enable ra khoi chuoi carry (23 -> 3
-cell). Quartus ton trong keep tung bit (+17 % LE) nen keep chi duoi `__openlane__`.
+**2026-09-26 Sua co trong tam cho goc ss (`ecf4fc03` -> `d030ad12`).** ss tren `r7r8_358c`: 2,820 endpoint truot, 70 % tu
+`d_req_addr`; xau nhat -12.26 ns: `result_src_w` -> mux ghi nguoc -> forwarding -> ALU -> `d_req_addr` (ly do cua R9). Thanh ghi
+hoa giai ma (`scripts/apply_r9.py`); cong lint baseline bi bo sot sau lan doi RTL truoc, chay bu (baseline 110). Sau R9
+(`r9_ecf4`) duong xau nhat max_ss -7.575 ns: `pc_f` -> mux valid 256:1 cua I$ -> hot_hit -> stall -> chuoi 20 AND ->
+`csr_minstret`. `hot_mvalid` bo mux 256:1 (checker mo phong `hot_mvalid` hong o cau hinh 8 dong, lat cat [-1:0], chi sua checker);
+`(* keep *)` dua enable ra khoi chuoi carry (23 -> 3 cell). Quartus ton trong keep tung bit (+17 % LE) nen keep chi duoi
+`__openlane__`. Ung vien so sanh hot tag theo tung entry: ABC dung lai sau hon, khong loi, khong ap dung. Bai hoc: o cau hinh
+tong hop nay cau truc RTL chi giu duoc qua diem cat `(* keep *)`.
 
 **2026-09-26 RTL cuoi ban 8 KiB-RAM (`8b163675`).** DM_VC4 vuot 20,000 LE (20,002 .. 20,077) vi one-hot AND-OR khong dong goi
 vao LUT4; FPGA dung select ma hoa (19,834 .. 19,893). ABC `fraig_restore` cham benh ly (~1 gio) tren dang ma hoa, nen ASIC
 giu one-hot; netlist ASIC trung tung byte run r10A.
+
+**2026-09-28 R13a / R13b (thu nghiem tren ban sao, khong vao `hdl/`).** Thu RTL cycle-exact cho goc ss: so sanh hot tag song
+song, ban sao thanh ghi PC cho I-cache, bo so sanh nhanh dang prefix, mux forwarding rieng cho bo so sanh. PD te hon (max_ss
+-9.930, nom_tt +1.194) -> khong port. Bien the nhan 2 tang (R13b, +1.03 % chu ky) khong chay PD. Ket luan: muc 9 "Goc ss".
 
 **2026-09-29 R14: RAM chinh 16 KiB (`3ea52396`).** Gioi han so bai Embench chay duoc la RAM thong nhat (code + du lieu + stack
 1 KiB), khong phai cache: trong 19 kernel Embench-IoT goc (commit `09c2ed8c`) 8 KiB vua 8 bai, 16 KiB 14, 32 KiB 18, 64 KiB 19;
@@ -163,12 +189,17 @@ ky co doi chung dot bien (`r16_word = 32'hdeadbeef`). Latch sweep / lint them tr
 - BHT: hai ban M9K (doc fetch, doc update) dia chi theo dau vao D cua `pc_f` / `pc_e`; bit valid moi entry (flop, reset bat dong
   bo) giu nghia "reset dua entry ve 01"; update cua canh truoc bypass cho ca hai cong.
 - Chung minh (`asic/equiv/rf_bht_m9k/`, Yosys `sat -tempinduct`): RF, BHT, giao thuc read-ahead: 3/3 PROVEN; doi chung am
-  3/3 FAIL (bo bypass RF, bo kiem valid BHT, bo flush trong `instr_d_next`). Checker chi mo phong canh mang moi, liveness bang
+  3/3 FAIL (bo bypass RF, bo kiem valid BHT, bo flush trong `instr_d_next`); mot dot bien bi loai khoi doi chung am vi tuong duong:
+  bo `stall_pipe` khoi `pc_f_next` van chung minh duoc, vi `stall_f` da giu `pc_f` moi khi `stall_pipe` bat (dot bien van PROVEN
+  phai kiem tuong duong truoc khi ket luan chung minh yeu). Checker chi mo phong canh mang moi, liveness bang
   `scripts/rf_bht_m9k/checker_mutation.sh`.
 - TB: 74 truy cap truc tiep mang trong 7 TB + UVM chuyen sang macro `tb/rf_bht_backdoor.svh`; `tb/bht_tb.sv` viet lai (them
   BHT-7..10); `tb/regfile_tb.sv` moi (20,073 chu ky).
-- Dong bang dau `dcbf3495`: 46 OK, 1 FAIL (lint_asic SYNCASYNCNET trong checker BHT o `@(negedge clk)`); sua checker, dong bang
-  lai `6c4ccffd` (chi khac phan translate_off). Chuoi `6c4ccffd` (2026-10-08 21:17-21:56, 39 phut): 0 loi; 178/178 x2; UVM 5/5
+- Dong bang dau `dcbf3495`: 46 OK, 1 FAIL: lint_asic KHONG bo qua translate_off, nen checker chi mo phong cung phai qua lint_asic
+  (checker BHT kiem `reset_n` trong `@(negedge clk)` bi SYNCASYNCNET). Sua: so sanh o canh len trong chinh cau truc reset bat dong
+  bo cua mang tham chieu (doi `apply_rf_bht_m9k.py`, ap lai tu R16); dong bang lai `6c4ccffd` (chi khac `bht_2bit.v`, phan
+  translate_off). Bang chung chuoi `dcbf3495`: `results/fullchain_rfbht_dcbf3495/`.
+  Chuoi `6c4ccffd` (2026-10-08 21:17-21:56, 39 phut): 0 loi; 178/178 x2; UVM 5/5
   x2, AXI 3 kich thuoc line x2; Embench 72 + 72, FAST 60 + 60, CoreMark 6 + 5, random 50 seed, view ASIC, ramsweep deu trung
   R16 tung truong; ACT4 43/43 x2. Driver `scripts/run_fullchain_rfbht.sh` (lane song song, moi lane mot thu vien Questa: ~55 phut
   thay vi ~5 gio). Log: `results/fullchain_rfbht.log`.
@@ -189,7 +220,7 @@ ky co doi chung dot bien (`r16_word = 32'hdeadbeef`). Latch sweep / lint them tr
 | ACT4 | riscv-arch-test `2e655961`, Spike tham chieu; 39 RV32I + 4 Zmmul | 43/43 x2, signature trung | 2026-10-02 (dau), 2026-10-08 (6c4ccffd) | [HT] | `verification/results/act4/` |
 | Cua so kien truc 1 MiB | `scripts/verification/run_architecture_window.py`: ban sao TB index [19:2] + test nua tren (0x81000, thuc thi 0x90000) | 43 ACT4 + 1 test x2; ban cu bi alias (timeout) duoc doi chung bat | 2026-10-09 | [HT] | `results/architecture_window_20261009/verification.json` |
 | Random differential | 50 seed, BP OFF vs ON cung core, hash trace (trace: `results/random_diff/`) | 50/50 x2; runner gate rc/PASS/Fatal/completion, raw rieng moi luot; 43 controls | 2026-10-09 | [HT] | `results/random_diff_checked_20261009/verification.json`, `results/verification_runner_controls_20261009/verification.json` |
-| Spike doc lap | 50 seed x2 tien trinh Spike moi so voi 200 trace RTL da luu | 100 exit 0, 200/200 khop, 7,105 retirement/luot, 300 doi chung trace sai bi bat | 2026-10-11 | [HT] | `results/spike_random_reference_20261011/receipt.json` |
+| Spike doc lap | 50 seed x2 tien trinh Spike moi so voi 200 trace RTL da luu; adapter `processor_t` truc tiep (chi nap memory, PC 0, GPR / du lieu = 0 nhu TB; khong viet ngu nghia ISA), `libriscv.so` da cai (co SHA), isa RV32I_Zmmul; ly do khong dung Spike CLI: muc 2.8 | 100 exit 0, 200/200 khop, 7,105 retirement/luot, 300 doi chung trace sai bi bat | 2026-10-11 | [HT] | `results/spike_random_reference_20261011/receipt.json` |
 | Embench-IoT | 12 kernel goc (`sw/embench_upstream/`, `fw/up_*.hex`) | base 72 + 72 dong, FAST 60 + 60 dong, trung tung truong | 2026-10-08 | [HT] | `results/rfbht_4kb_p{1,2}.csv`, `results/rfbhtf_4kb_p{1,2}.csv` |
 | CoreMark ngan (-O2) | 6 base + 5 FAST, RAM mo phong 32 KiB, CRC tu observer APB TX | 22 mo phong, CRC e9f5/e714/1fd7/8e3a/e714 dung, 40 counter trung | 2026-10-09 | [HT] | `results/coremark_crc_checked_20261009/`, `results/coremark_canonical_checked_20261009/` |
 | CoreMark sweep | 92 diem (49 base + 43 FAST) | 184 mo phong, CRC + 40 counter trung ca hai tham chieu cu; audit doc lap 241 input / 379 artefact | 2026-10-10 | [HT] | `results/coremark_sweep_crc_20261010/verification.json`, `results/coremark_sweep_crc_independent_audit_20261010/receipt.json` |
@@ -200,7 +231,7 @@ ky co doi chung dot bien (`r16_word = 32'hdeadbeef`). Latch sweep / lint them tr
 | Quet M1/M2 | dung luong / line / way / victim, ca hai FAST_HIT | 637 + 559 dong, p1 = p2 | 2026-10-06 | [LS] R15/R16 | `results/m2/` |
 | Cross-validation (A3) | `scripts/cache_model.py`, `scripts/run_crossval.py` | 48/48, 24/24, 60/60 counter EXACT | 2026-10-06 | [LS] R16 | `results/crossval_r16_4cfg.csv`, `results/crossval_r16_fast.csv` |
 | Retire vs minstret (A4) | monitor `scripts/metrics/overlap_mon.sv` | 24/24 kernel | 2026-09-30 | [LS] R14 | `results/a4_overlap/` |
-| IRQ / chuyen ngu canh | `sw_metrics/irq` | vao handler 5 chu ky; toi thieu 39; chuyen ngu canh 270 (DM) / 292 (DSE) | 2026-10-02 | [LS] R14/R15 | `results/irq_metrics.csv` |
+| IRQ / chuyen ngu canh | `sw_metrics/irq`, view FPGA, 4 KiB, x2 | vao handler 5 chu ky; toi thieu 39; chuyen ngu canh 270 (DM) / 292 (DSE): chenh lech la chu ky ST_LOOKUP them cho 62 load/store cua thu tuc chuyen ngu canh | 2026-10-02 | [LS] R14/R15 | `results/irq_metrics.csv` |
 | BP on/off (A8) | 12 kernel, 4 KiB | +6.48 .. +6.67 % chu ky khi tat BP | 2026-09-30 | [LS] R14 | `results/bp0_upstream_r14_4kb_p{1,2}.csv` |
 
 Chay lai cac muc [LS] tren `6c4ccffd` bat dau 2026-10-15 (x2, uu tien thap tren Windows): M1/M2
@@ -292,10 +323,14 @@ vuot gioi han 20M chu ky cua TB (nang 40M); script bi sua khi dang chay nen luot
 | 2026-09-18 | `pd_retry.sh` | sap xep step theo chuoi, chay lai 20 step; `final/` khong phai dau hieu xong | dau hieu xong = `state_out.json` / metric |
 | 2026-09-18 | `verify_double.py` | lap chi muc theo `kernel` (so 12/48 dong) van VERIFIED; pass 2 Quartus VERIFIED khi khong fit nao chay | khoa ghep day du; dem dong `[PASS] 1 fit(s)` |
 | 2026-09-25 | runner | `echo "$(date) ... rc=$?"` in rc cua `date` | lay rc cua chinh cong cu |
-| 2026-10-09 | CSV comparator | chi so cot giao nhau | fail khi thieu schema/field/key/metric (43 controls) |
+| 2026-10-02 | ACT4 (cau hinh chay) | file cau hinh CRLF va `$HOME` khong duoc mo rong: lan chay dau khong chay duoc | chay tu ban sao LF, file trong repo giu nguyen |
+| 2026-10-09 | CSV comparator | chi so cot giao nhau | fail khi thieu schema/field/key/metric (43 controls, gom doi chung mat cot va hai metric rong); du lieu Embench / board cu da so lai full header / field: chua thay ket qua sai |
 | 2026-10-09 | random runner | chi gate hash, ghi de raw; trace bi cat van PASS | gate rc/PASS/Fatal/completion, raw rieng moi luot |
+| 2026-10-09 | manifest hex random differential | generator Windows ghi hex CRLF nhung hash trong manifest tinh tren text LF truoc khi ghi | checker kiem hash text LF, receipt luu them SHA256 byte file thuc; khong so hash byte tren dia voi manifest; khong sua generator / RTL |
 | 2026-10-09 | ACT4 TB | `tb/architecture_signature_tb.sv` cap 1 MiB nhung index [18:2] alias moi 512 KiB | runner sinh ban sua rieng, TB frozen giu nguyen |
+| 2026-10-09 .. 11 | preflight cua harness (CoreMark CRC, GLS pass 2, helper board PowerShell) | regex tim thu vien compile bat nham `vlog -work`; GLS pass 2 sai ten lib `1p80V` thay `1v80`; PowerShell `$Pass:` bi hieu la bien co scope | parse target Tcl thuc; sua ten lib; dung `${Pass}:`. Ca ba bi preflight fail-closed chan truoc khi co output: loi tat dinh cua harness, khong phai loi may hay phep do |
 | 2026-10-10 | `scripts/metrics/build_upfull_fw.sh` | tiep tuc khi `make` loi, co the exit 0 voi hex cu | `set -euo pipefail`, `exit 1` |
+| 2026-10-11 | tham chieu Spike | Spike CLI FAIL vi debug device 0..0x1000 trung chuong trinh RAM o dia chi 0; stdout / stderr gop qua WSL tung mat dong commit dau | adapter `processor_t` truc tiep (muc 2.1); runner tach raw stdout / stderr va kiem HALT + exit 0 |
 
 Quy tac chung: PASS chi tu artefact ma cong cu ghi khi thanh cong; kiem tra kep can hai artefact tao doc lap.
 
@@ -324,6 +359,10 @@ Quy tac chung: PASS chi tu artefact ma cong cu ghi khi thanh cong; kiem tra kep 
 
 A1 sau M9K (`results/a1_le_breakdown_rfbht.md`): RF 1,386 -> 52 LE, BHT 962 -> 636 LE, core 6,451 -> 3,818 LE; uoc luong cong suat
 khoi CPU core 39.68 -> 28.08 mW (DM, seed 2).
+
+**Dinh chinh do FPGA (2026-09-25).** Truoc do cong suat Quartus chi chay mot lan, tren seed chay cuoi (so cong suat cu khong phai
+cua tung seed); tu do chay sau moi fit va luu report rieng tung seed. Report Quartus dung CRLF lam regex khong khop; cong "thieu
+truong la FAIL" bat duoc truoc khi chay that. `scripts/fpga_seed_summary.py`: bang 4 seed, thieu seed hay truong la FAIL.
 
 **Phuong phap seed (2026-10-09 14:23).** Phuong an chon seed tot nhat rieng cho tung cau hinh
 (`results/board_6c4ccffd_20261009_seed_comparison.md`, da xoa 2026-10-15, con trong git) bi rut lai TRUOC khi refit / build SOF nao. Phuong phap moi: cung bo seed
@@ -356,6 +395,10 @@ chay 5 fit con lai tuan tu va hoan tat 23:28; audit doc lap 2026-10-10 (`results
 
 - Thiet bi: DE2-115, USB-Blaster USB-0 (chip ID 020F70DD), CP210x COM3, Hercules 3.2.8 (ban sao `tools/hercules`, nguon cong bo
   khong doi), 115200/8N1/handshake OFF.
+- Noi day: CP2102 RXD -> JP5 chan 1 (TX AB22), RX AC15 = JP5 chan 2, GND = JP5 chan 12. Firmware in boot va full report truoc LEDR
+  A5 roi lap, khong phat lai: mat capture thi can reset tay. Log UART dau (case 1, ramsweep DM) 0 byte vi HideReceived cua Hercules
+  dang bat (tat bang command 38); menu Hercules doi vi tri khi doi NVT, nen doc trang thai checkbox theo command ID trong dung
+  submenu, khong theo index. Hai diem nay can giu cho 58 case con lai.
 - Pham vi (chot 16:10): chi pass 1 cho 100 case = 4 ramsweep + 48 Embench ban ngan + 48 Embench full iteration; pass 2 giu trong
   CSV voi `NOT_SCHEDULED_SINGLE_PASS_SCOPE`. Moi case dung cho xac nhan hien thi truoc case tiep theo. Ngoai le nay chi cho phep do
   vat ly; verification / Quartus / PD / power van chay hai luot. Helper `program_board_case.ps1` / `record_board_case.py` tu choi
@@ -402,6 +445,12 @@ ly; ket qua cung cua cac lan khoi dong lai sau reset tay khong tinh la lan do th
   nhan) dong bang chung minh dai so `macc_alg.py`: tich == signed33(A) x signed33(B) mod 2^64 o ca hai phia, noi bang `&cec`. Moi
   buoc chay hai lan va so hash; doi chung am: ma hoa FSM sai, spec nhan unsigned / tich rieng phan sai, netlist and2 -> or2. Macro
   SRAM la hop den hai phia (GLS phu phan nay). `&acec` tung bao "NOT EQUIVALENT" sai hai lan: chi tin khi bao equivalent.
+- **Bo nhan va flop chi o gold.** SAT tung output khong dong duoc bo nhan vi `maccmap` nhom tich rieng phan theo trang thai tien
+  trinh Yosys (40 % nut ben trong khong co doi tac); cach lam: chup mang o dung cach nhom cua synthesis (`techmap -max_iter 1`),
+  kiem 5 techmap cell bang SAT, roi noi bang `&cec`. 235 flop chi o gold phai chung minh hang bang SAT: lay mau ngau nhien tung
+  xep nham mot flop. Ban sao do `opt_merge` duoc trich tu RTL va tu kiem.
+- **SEC ABC** (`asic/equiv/sec/`): cat 12 SRAM, ep reset o chu ky 0; doi chung am bat duoc o frame 0 va frame 19 (gioi han 19 chu
+  ky, muc 4.2).
 - **Gioi han.** Tuong duong tuan tu khong anh xa thanh ghi khong kha thi o kich thuoc nay voi cong cu mo nguon. Chung minh voi gold
   `rtl_r14` khong phai chung minh cho layout `6c4ccffd`.
 
@@ -457,8 +506,10 @@ lap so cua flow; bao cao ty le "unknown". `power__total` cua flow la goc max_ff,
 | 2026-09-27/28 | DM 8 KiB final_A / final3 | 111.03-116.02 / 110.61-115.43 mW; EPI final3 2,379-3,637 pJ | [LS] |
 | 2026-10-02 | DM r14F_A, STA luot 1 | 114.81-122.99 mW (TB 119.45), unknown 5.38 % | [LS] |
 | 2026-10-09 08:14 UTC | SA2 ecomaxmin_r1 | GLS 12/12 (`results/gls_power_sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomaxmin_r1/`); hai phien OpenSTA doc lap tu cung SAIF: 127.45-131.75 mW (TB 129.64), EPI GM 4,317 pJ, unknown 4.42 % | `_power_p1.csv`, `_power_p2.csv`, `_power_verification.json` [LS] |
+| 2026-10-09 17:03 | DM r14F_A: thieu bang chung luot 2 (dinh chinh) | `results/gls_power_r14F_A/` chi co 12 report power va vectorless luot dau, khong co `.power.p2.rpt` hay receipt chay kep -> RESULTS / REVIEW_RESPONSE danh dau cong suat va EPI DM chua du bang chung | chuan bi Pass 2 (hash 12 pin-SAIF, netlist, SPEF, dau vao): `results/dm_activity_power_second_pass_preparation_20261009.json`; chay xong 2026-10-10 (hang duoi) [LS] |
 | 2026-10-10 02:00 | DM STA luot 2 | 13 phien moi (12 kernel + vectorless), moi nhom/nguon trung luot 1 | `results/dm_activity_power_second_pass_20261010.json` [LS] |
 | 2026-10-10 14:22 | Audit cua so | 24 SAIF DM/SA2 dai `(mcycle+1) x 20 ns`; cot `win_t*_ns` thuc chat la ps; STA van tai lap voi dau vao cu | `results/embench_gls_evidence_audit_20261010/receipt.json` |
+| 2026-10-10 14:29 | Kiem bien bo dem | 2 compile rieng, N=1/2/17 moi luot, 6 doi chung mo phong: observer cu `freeze_q` cho count N nhung wall time (N+1) x 20 ns -> nguyen nhan SAIF cu dai `(mcycle+1) x 20 ns`; observer `counter_freeze` thuc + khoang dong doc lap +1 cho count N, wall time N x 20 ns; nguon `perf_counters` / `apb_performance_monitor` trung byte snapshot PD. Chi la kiem bien nguon, khong phai GLS mapped / cong suat | `results/embench_gls_evidence_audit_20261010/counter_boundary_controls/receipt.json` |
 | 2026-10-10 19:37 | Observer freeze moi | 65 nghia vu/design (DM, SA2) x2; review replay 252 chung chi CNF / 340,338 buoc | `results/mapped_counter_freeze_checked_20261010/` |
 | 2026-10-10 .. 13 | DM exact-window | screening `up_ud` (`results/gls_exact_dm_ud_screen_20261010/receipt.json`, SINGLE_SCREEN_NOT_RESULT); luot 1 12/12 (`results/gls_exact_dm_full_p1_20261011/receipt.json`, 2026-10-11 06:48); luot 2 (`results/gls_exact_dm_full_p2_20261011/receipt.json`): TypeError chuyen doi Windows, retry moi (cap `results/gls_exact_dm_full_pair_retry_20261011.json`; thu muc cong suat du kien `results/activity_power_exact_dm_20261011/`, `results/activity_power_exact_dm_retry_20261011/` khong ra ket qua; cap goc `results/gls_exact_dm_full_pair_20261011.json`), Errno22 doc lib qua UNC, noi tiep tu tien to native (`results/gls_exact_dm_p2_continuation_20261012/`); STA dung o guard bo nho, roi access violation 2026-10-13 05:29; chay ghim CPU 2 xong 14:56: 114.81-122.99 mW (TB 119.45), EPI GM 3,608 pJ, lech <= 0.005 mW so voi SAIF cu | `results/activity_power_exact_dm_20261013/receipt.json` [LS] |
 | 2026-10-14 | SA2 exact-window | hai GLS (`results/gls_exact_sa2_full_p{1,2}_20261014`, cap `results/gls_exact_sa2_full_pair_20261014.json`, 03:25 UTC) + 26 OpenSTA; 127.45-131.75 mW (TB 129.64), EPI GM 4,317 pJ; lech <= 0.005 mW | `results/activity_power_exact_sa2_20261014/receipt.json` [LS] |
@@ -480,7 +531,7 @@ Moi phan them mac dinh tat (tru khi ghi khac) va chi bat qua config; chi sua khi
 | 2026-09-26 | `asic/run_pd_mk.sh` them GNU make, grep vao PATH | shell nix `--pure` khong co make/grep cho EQY |
 | 2026-09-27 | `DRT_ANTENNA_REPAIR_ITERS` / `_MARGIN` (vong sua antenna sau detailed route trong `drt.tcl`) | OpenLane 2.3.10 chi sua antenna tren global route; 140 -> 1 net, roi 0/0 |
 | 2026-09-27/28 | `LAYERS_RC`, `LAYERS_RC_SCOPE` | uoc luong RC thap hon RCX 1.93-2.37x (muc 9) |
-| 2026-09-28 | `OpenROAD.MacroPinBuffers`, `OpenROAD.PostRouteHoldECO` | buffer chan macro; ECO hold tren RCX + DRT tang dan + vong antenna |
+| 2026-09-28 | `OpenROAD.MacroPinBuffers`, `OpenROAD.PostRouteHoldECO` | buffer chan macro; ECO hold tren RCX + DRT tang dan + vong antenna; loi tat dinh da sua khi viet: thieu bien RCX, `global_route -start_incremental` segfault trong tien trinh moi, `detailed_placement` lat lai huong moi cell da route (giu cell cu FIRM), access point cua master cu sau khi doi kich thuoc (chay `pin_access` truoc GRT). Cung dot: clock goc la day 2.5 mm khong buffer vi uoc luong RC thap -> `CTS_CLK_MAX_WIRE_LENGTH 800` (gia tri nay DM 16 KiB-RAM va SA2 con ke thua, muc 8.2) |
 | 2026-09-30 | `SYNTH_OPT_DFF_SAT` | DM_VC4 giu 4 macro chet cua way 1 D$; voi SAT con 8 macro |
 | 2026-10-03 | flow co cong `asic/run_gated_pd.sh`, `asic/drt_watch.sh`, `asic/fp_tools/gate_check.py` | dung som khi that bai; nguong o QUY_TRINH D |
 | 2026-10-06/07 | hieu chinh nguong drt_convergence; `grt_repair_overflow` doc route lai tu dau trong RepairAntennas | nguong dau dung nham run SA2 dang hoi tu |
@@ -513,20 +564,37 @@ Moi phan them mac dinh tat (tru khi ghi khac) va chi bat qua config; chi sua khi
   `ANTENNAGATEAREA 0.126` / `ANTENNADIFFAREA 0.4455`). Ket qua: die 1800 x 2900 = 5.22 mm2, 186,877 cell, DRC 0, 7.30 m day; hold
   +0.0919 ns, setup tt/ff +2.80 .. +5.68, ss -13.26 ns (8,846 path); 196.4 mW nom_tt vectorless. Do lai voi SDC dung: setup tt +3.16,
   hold tt -0.048 / ss -0.123 / ff -0.146 ns (`asic/evidence/sdc_recheck_1kb_research/`).
-- **Floorplan 12 macro 4 KiB (2026-09-19).** GlobalPlacement crash 3/3 trong resizer timing-driven (tat dinh) -> `PL_TIME_DRIVEN
-  false`; DPL-0036 -> `PL_MAX_DISPLACEMENT`. Nguyen nhan that cua nghen: kenh thoat chan (khe 18 / 33.5 / 41.5 um cho 216 / 401 / 175
-  chan); `macro_placement_channels.cfg` chia lai chieu cao trong: kenh xau nhat 49 -> 661 track met3.
+  Chi tiet: dien tich instance 2,720,150 um2 (macro 1,138,150 + cell 1,582,000), util 53.35 % (cell 39.94 %); 27,642 cell tuan tu,
+  6,603 diode; max cap 658, max slew 4,730; 196.4 mW = internal 108.6 + switching 87.7 (to hop 86.3, tuan tu 58.3, clock 40.6, macro
+  11.2); ReportDisconnectedPins 44 chan = 44 tie cell `conb_1`, 0 critical. Moc 1 KiB chua tung dat 0 antenna: 1,848 net / 2,736 pin
+  truoc repair -> 498 / 643 sau (910 diode); `sync_final` 501 net sau repair (cong sign-off hien nay doi 0).
+- **Floorplan 12 macro 4 KiB (2026-09-19).** Phuong an: hai cot (hanh lang 990 um) bo; dai ngang 2600 x 2500 chong lan 26 um;
+  2800 x 2400 sach (6.72 mm2, util 57.2 %). GlobalPlacement crash 3/3 trong resizer timing-driven (tat dinh) -> `PL_TIME_DRIVEN
+  false`; DPL-0036 -> density 48 -> 40 roi `PL_MAX_DISPLACEMENT_Y 100 -> 500`, `X 500 -> 1000` (util cell chi 28 %, gioi han dich
+  chuyen moi la rang buoc). `GRT_OVERFLOW_ITERS 20` va `GRT_ALLOW_CONGESTION` khong tac dung, bo. Die 2800 x 2400 -> 2800 x 2900:
+  +35.6 % tai nguyen met1 sau derate, util 57.2 -> 46.4 %; 12 macro chiem 40 % die nen khong kich thuoc nao dat ca util 60-70 % lan
+  routability. Nguyen nhan that cua nghen: kenh thoat chan (khe 18 / 33.5 / 41.5 um cho 216 / 401 / 175 chan, trong khi dai trong
+  1552 um khong co chan; ban 1 KiB co 138 / 171.5 um cho ~144 chan, ~11 lan track/chan); `macro_placement_channels.cfg` chia lai
+  chieu cao trong (300 / 450 / 450 / 445.4 um): kenh xau nhat 49 -> 661 track met3.
 - **So post-route 4 KiB dau (2026-09-23).** Detailed routing 99,784 -> 0 trong 9 vong, 8.20 m day; setup nom_tt -1.005 ns, hold truot 9
   goc (-1.436, TNS -59.0), skew -4.128 ns; cong suat 173.7 mW (1 KiB 233.7). `MAX_SLEW/CAP_VIOLATION_CORNERS` la `['']` nen checker
   khong kiem goc nao (10,914 slew / 1,744 cap): dat `['*tt*']`. Run thu hai bat cac co che sua nhung duoc tiep tuc tren database
   da detailed route (GRT-0226) nen so khong dung duoc; ba gia thuyet truoc do deu sai.
+  Dien tich instance 4 KiB post-route dau 3,944,670 um2 (1 KiB 2,720,150). Antenna 4 KiB: 2,139 -> 465 net (9,579 diode) sau
+  `set_thread_count 1` (2026-09-22, muc 6.1); 2026-09-23 con 429 net, 94.5 % tren cell thuong.
 - **SDC (2026-09-24).** `set clocks [create_clock ...]`: `create_clock` khong tra ve gi nen uncertainty, transition va moi I/O delay
   bi bo (muc 9). Tu day: thay doi tu tong hop tro di phai chay full flow tu buoc 1.
 - **RTL dong bang dau (2026-09-25):** `rtlfix_c235` nom_tt -0.272 / max_tt -0.477, ss -11.75; `r8_a0c4` (die 8.12 mm2, 195,518 cell)
   nom_tt -0.569 / max_tt -0.827, DRC 0, LVS khop, antenna 578, 102.96 mW (154.34 mW cua run truoc la hien vat cua `reset_n` chua dong
-  bo); GLS 12/12 (`results/gls_r8_a0c4.csv`). Bon thi nghiem PD chi doi resizer / margin / placement: -0.63 .. -1.01 ns; clock 21.5 ns
-  bo (50 MHz bat buoc). Kham pha tong hop: AREA 3 +4.326 ns sau CTS nhung GRT-0118 (`buffer -c -N 8` viet cung) -> chon tong hop
-  phai co tieu chi routability. Sau RTL `358cb660`: `r7r8_358c` nom_tt +2.190 / max_tt +1.974 (lan dau dat tt), ss -11.20 / -12.26.
+  bo); GLS 12/12 (`results/gls_r8_a0c4.csv`). Bon thi nghiem PD chi doi resizer / margin / placement: -0.63 .. -1.01 ns (suy giam
+  GRT -> RCX ~0.65-0.7 ns lon hon moi bien resizer tao duoc, nen chi doi PD khong dong tt); clock 21.5 ns bo (50 MHz bat buoc). Kham
+  pha tong hop (buoc 35, sau CTS): AREA 0 -0.788, AREA 1 -0.177, AREA 2 -0.394, AREA 3 +4.326, DELAY 0..4 +0.13 .. +2.64 ns; AREA 3
+  dung o GRT-0118 (`buffer -c -N 8` viet cung); AREA 3 + `DESIGN_REPAIR_REMOVE_BUFFERS` route duoc (+4.553 ns sau GRT) nhung tren
+  RTL `358cb660` lai nghen GRT; DELAY 1 nghen; gate cloning khong co loi (giu tat) -> chon tong hop phai co tieu chi routability.
+  Sau RTL `358cb660`: `r7r8_358c` nom_tt +2.190 / max_tt +1.974 (lan dau dat tt), ss -11.20 / -12.26.
+- **Driver PD (2026-09-25).** `asic/pd_driver.py` thay `ch4kb_run.sh` (resume tu buoc bi gate tat lam RepairAntennas chay lai tren
+  database da sua, xem muc 9 "Bay trang thai run OpenLane"): danh sach buoc theo gating cua `classic.py`, kiem chuoi
+  `state_in == state_out` cua buoc truoc, cach ly thu muc step do dang, chi thu lai crash native.
 
 ## 8. ASIC theo cau hinh (sky130A, sky130_fd_sc_hd, OpenLane 2.3.10 ban sao `asic/openlane-local`, chu ky 20 ns)
 
@@ -535,18 +603,34 @@ Moi phan them mac dinh tat (tru khi ghi khac) va chi bat qua config; chi sua khi
 | Ngay | Run (ten cu) | Thay doi | Ket qua | Nguyen nhan / ghi chu |
 |---|---|---|---|---|
 | 2026-09-26 | r9_ecf4, r10A | RTL `ecf4fc03`, `d030ad12` | tt +2.878 / +1.721; max_ss -7.575 / -9.518 | bien dong PD giua netlist ~1 ns (tt), vai ns (ss): mot lan chay khong phan dinh duoc mot thay doi RTL ~2 ns |
-| 2026-09-26 | mau mat do 38 / 40 / 42 | RTL `8b163675` | chon 42 (`config_FINAL.json`): max_tt +1.960, max_ss -8.335 | quy tac chon ghi truoc: max_tt, max_ss, dien tich |
-| 2026-09-27 | final_A / final_B (`dm_ram8k_grid2800x2900_heurdiode_r1/_r2`) | ky ten dau 8 KiB-RAM | DRC/LVS/XOR 0, hold 0, IR drop 0.43 mV; antenna 140 net / 159 pin; 1.453 mm2 / 212,196 cell; 102.24 mW vectorless | antenna chi sua tren global route; bi thay the |
+| 2026-09-26 | mau mat do 38 / 40 / 42 | RTL `8b163675`, cung netlist; diode heuristic > 250 um, GRT hold margin 0.1, setup truoc hold, setup margin 2.0 | chon 42 (`config_FINAL.json`): max_tt +1.960, max_ss -8.335; dai bien dong do placement tt 0.25 ns, max_ss 1.26 ns | quy tac chon ghi truoc: max_tt, max_ss, dien tich; dai 0.25 / 1.26 ns la thuoc do de danh gia mot thay doi PD; ba lan chay doc lap (mau 42, final_A, final_B) trung moi chi so STAPostPNR va hash netlist / DEF |
+| 2026-09-27 | final_A / final_B (`dm_ram8k_grid2800x2900_heurdiode_r1/_r2`) | ky ten dau 8 KiB-RAM | DRC/LVS/XOR 0, hold 0, IR drop 0.43 mV; nom_tt +2.112 / max_tt +1.960, nom_ss -7.436 / max_ss -8.335; antenna 140 net / 159 pin; 1.453 mm2 / 212,196 cell; 102.24 mW vectorless (`power__total` flow 115.73 mW la goc max_ff) | antenna chi sua tren global route; bi thay the; golden v1 (ghi chu duoi bang) |
 | 2026-09-27 | final2_A (`..._drtant_rc2`) | + `LAYERS_RC` | nom_ss -8.973 / max_ss -9.518, 3 hold max_ff | loai |
 | 2026-09-28 | **final3_A / final3_B** (`dm_ram8k_grid2800x2900_drtant_r1/_r2`) | `config_FINAL3.json`: bo diode heuristic + sua antenna sau DRT (5 vong, margin 10) | KY TEN, golden: 302 metric trung, netlist `326cc257`, DEF `2f31dfab`; antenna 0/0; 1.400 mm2 / 192,005 cell; nom_tt +2.086 / max_tt +1.960; nom_ss -7.413 / max_ss -8.311 | final3_B chay lai tu buoc 1 mot lan va tiep tuc hai lan sau crash ngau nhien; bang chi tiet `results/FINAL_METRICS.md` trong git truoc 2026-10-07 [LS] |
 | 2026-09-28 .. 30 | x_E1..x_E6, X1..X4, f3_H1/H2 | buffer chan macro, clock goc, hold ECO, AREA 3, gioi han day, hold margin, mat do 55 | khong nang golden (f3_H2: +2.442 / +2.312 tt, max_ss -9.023, cell 1.2835 mm2; max_ss xau hon final3 0.71 ns) | goc ss can pipeline moi (muc 9 "Goc ss") |
 | 2026-09-29 | r14_A, r14_E6 .. E16 | RAM 16 KiB, die 3665 x 2900 (+31 %) | E6: max_tt -0.162 (duong dout RAM -> mux bank -> mux nap D$ ~5 mm trong nua chu ky); bang knob duoi day | E16 = cau hinh ky ten |
-| 2026-09-29 .. 10-02 | **r14F_A / r14F_B** (`dm_grid3665x2900_r1/_r2`) | `config_R14_FINAL.json` | KY TEN 2026-10-02: 319 metric trung, netlist cuoi sha256 `83f38f7e...` ca hai (buoc 55 / 56); so: RESULTS 4.1, `results/asic_compare_dm_r14.md` | phien ket thuc 2026-09-30 ~23:38 UTC giet ca hai; resume 2026-10-02 bang `run_resume_retry.sh` (r14F_A tu Magic streamout, r14F_B tu buoc 47) [LS] |
+| 2026-09-29 .. 10-02 | **r14F_A / r14F_B** (`dm_grid3665x2900_r1/_r2`) | `config_R14_FINAL.json` | KY TEN 2026-10-02: 319 metric trung, netlist cuoi sha256 `83f38f7e...` ca hai (buoc 55 / 56); so: RESULTS 4.1, `results/asic_compare_dm_r14.md` | phien ket thuc 2026-09-30 ~23:38 UTC giet ca hai; resume 2026-10-02 bang `run_resume_retry.sh` (r14F_A tu Magic streamout, r14F_B tu buoc 47); khong nang golden vi la diem thiet ke khac (RAM gap doi), bao cao rieng; khong nam trong golden nao, chi trong workspace (muc 10) [LS] |
 | 2026-10-06/07 | dmuA / dmuB (`dm_corr3400x3325_f220_r1` / `dm_corr3400x3400_f220_r1`) | floorplan hanh lang chung | sign-off sach, mot luot (ss max -8.754 / -10.043) | doi chung cung die; xoa 2026-10-15 sau archive [LS] |
 | 2026-10-14 | `dm_grid3665x2900_r3` | lan chay tron theo quy tac Q (snapshot `rtl_r14`) | OpenLane segfault ngay sau buoc 40 (khong state_out), STAMidPNR-3 khong chay -> STOP after P2 | ngau nhien, khong phai loi thiet ke |
 | 2026-10-14 | `dm_grid3665x2900_r4` | nhu r3 | P1 PASS (+2.164 / +0.184), P2 PASS (overflow 0, +1.725 / +0.186); dung o cong DRT 14:11 UTC (co hop tac) khi PD chuyen sang `6c4ccffd` | netlist/metric trung r14F_A toi buoc 42 (r14F_A STAMidPNR-3 +1.756 / +0.201), nhung DEF buoc 41 co 2 buffer (`wire10760`, `wire10761`) lat S/FS -> RepairAntennas 350 net / 6,249 diode (r14F_A 322 / 6,262), layout tach nhanh |
 | 2026-10-14 | `dm_grid3665x2900_rtl6c4c_r1` | `config_R14_FINAL_rtl6c4c.json` (chi doi `VERILOG_FILES` sang `rtl_rfbht`) | p1 FAIL: STAMidPNR-2 setup nom_tt +0.307 < `P1_MIN_SETUP` 0.5 | 71,006 cell (R14 70,441), tong hop `da06d38f`; duong xau nhat RAM bank[3] -> refill bank du lieu D$ (nua chu ky) |
 | 2026-10-15 | `dm_grid3665x2900_rtl6c4c_r2` | `P1_MIN_SETUP=0 P2_MIN_SETUP=0` khai bao luc khoi dong; gate sign-off giu nguyen | dang chay (`asic/sequence_heavy_20261015g.sh`, 00:18 UTC) | [HT] |
+
+Ghi chu cac hang DM 8 KiB-RAM (2026-09-27 .. 30) [LS]:
+- **Golden.** v1 `E:/Projects/RISCV-research_GOLDEN_20260927` (2026-09-27, final_A / B, 19,373 file) hard-link ca `transcript`
+  va vsim ghi de tai cho -> v2 `E:/Projects/RISCV-research_GOLDEN_FINAL3_20260928` (22,656 file, sha256 tung file, `--diff` /
+  `--restore`) chi hard-link artefact bat bien. Quy tac tu 2026-09-28: chup golden truoc moi thay doi; moi thi nghiem chay tag
+  moi, khong resume vao run da ky ten.
+- **Ket qua tung knob tren final3 (hang x_E / X; STAPostPNR, tu trang thai sau GPL cua final3_A).** Gioi han day 800 um -> slew /
+  cap nom_tt 536 / 439 nhung 1 vi pham hold; buffer chan macro + clock goc + hold ECO: slew 80, hold +0.061 nhung tt giam 0.5 ns
+  (cay clock moi doi skew co loi cua duong nua chu ky); AREA 3 + go buffer: max_ss -8.339 (khong doi), day +22 %, DRV x5, 30 vi
+  pham hold -> AREA 3 khong phai loi giai goc ss; `repair_design` sau route tren SPEF: max_ss -12 .. -13 ns (doi kich thuoc hang
+  nghin cell) -> giu tat; buffer tang truoc: slew 47 (44 chan SRAM).
+- **f3_H1 / f3_H2.** f3_H1 (final3 + bien hold 0.02 + hold ECO tren RCX): cell 1.3996 -> 1.2153 mm2 (-13.2 %), hold sach, nhung
+  max_ss -10.930 (xau 2.6 ns) -> khong nang golden. f3_H2 (final3 + mat do 55 + bien hold 0.03 / ECO 0.02 + cum CTS 8, xong
+  2026-09-30 12:30 UTC) bo sung cho hang tren: nom_ss -8.248, hold +0.021 (0 vi pham), 180,453 cell, slew / cap nom_tt 1,250 / 706,
+  antenna 0, route DRC 0. Cung cong thuc bien 0.03 / ECO 0.02 trong ban 16 KiB-RAM ky ten bo ~172,000 um2 buffer hold (cell
+  1.3696 mm2; muc 9 "Buffer hold").
 
 Quet knob DM 16 KiB-RAM tu trang thai sau global placement (2026-09-29, STAPostPNR, mot lan moi bien the) [LS]:
 
@@ -570,13 +654,13 @@ Thac dien tich (2026-09-30, DEF sau fill + liberty): final3 1,399,590 um2 trong 
 
 | Ngay | Run | Thay doi | Ket qua | Nguyen nhan / ghi chu |
 |---|---|---|---|---|
-| 2026-09-30 | wrapper `asic/dse_sram/cache_dse_data_bank_sram.v` | SA2: 2 lane/macro (128 set/way), 4 macro/cache | view ASIC 12 kernel x2 = view FPGA (33 truong) | tong hop SA2 1,051,715 um2 (+7.6 % so voi DM) |
+| 2026-09-30 | wrapper `asic/dse_sram/cache_dse_data_bank_sram.v` | SA2: 2 lane/macro (128 set/way; lane 2j hang 0-127 doc cong 1, lane 2j+1 hang 128-255 doc cong 0 khi khong ghi), 4 macro/cache | view ASIC 12 kernel x2 = view FPGA (33 truong), shadow 0 lech | tong hop SA2 1,051,715 um2 (+7.6 % so voi DM 977,837 um2). Ca SA2 va DM_VC4: doc trong khi ghi cung chi so chan doc lane do, giu lan doc truoc; shadow chi mo phong so `rd_line` voi mo hinh bank thanh ghi moi chu ky (`$fatal` khi lech) |
 | 2026-10-02 | sa2F_A/B (luoi DM) | knob DM, mat do 55 / 42 | GRT-0118, overflow 67,971 | nhu cau day gap doi DM, HPWL +32 %; nghen o suc chua kenh |
 | 2026-10-02 | luoi rong wide4211x3331 (14.03 mm2) | die x1.15 | route duoc, STAMidPNR-3 nom_tt -17.573 | than clock dai -> skew lon -> 5,884 cell tre hold |
 | 2026-10-06 | sang loc hop nhat | lat hang macro tren (FS), khe 220 um | overflow 3,588 -> 1,530 -> 0 | SA2 dung ca cong 1 (dout1 canh tren) va bus cong 0 (canh duoi) |
 | 2026-10-06/07 | sa2uA (`sa2_corr3400x3325_f220_r1`, 11.305) | floorplan hop nhat | P2 +0.234 (duoi bien +0.3, cho tiep); DRT dung vong 30 (173 > 150) | |
 | 2026-10-06 .. 08 | sa2uB (`sa2_corr3400x3400_f220_r1`, 11.56) | | DRT bi dung vong 23 (luat cu); chay lai 64 vong: 0 o vong 54 (5 h 43 m); antenna sau DRT 833 net -> 1,576 diode -> route lai tu 48,176; dung 2026-10-08 07:06 (136 vi pham, bi ap dao) | tu vong 25 moi vi pham trong o ~640 x 310 um hanh lang: cay buffer fanout + flop `replace_way` D$ |
-| 2026-10-07 | `sa2_corr3400x3400_f220_capm20_fo16_r1` (nhanh) | cap margin 50 -> 20, max fanout 8 -> 16 | buffer sua DRV dau 19,987 -> 13,508; buffer resizer sau GRT 24,304 -> 17,791 (-27 %); cell -1.1 %; P2 +0.671 / +0.159 | |
+| 2026-10-07 | `sa2_corr3400x3400_f220_capm20_fo16_r1` (nhanh) | cap margin 50 -> 20, max fanout 8 -> 16 | buffer sua DRV dau 19,987 -> 13,508; buffer resizer sau GRT 24,304 -> 17,791 (-27 %); cell -1.1 %; P2 +0.671 / +0.159 | qua p2 (11.56 mm2): sua DRV sau GRT chi con 4,208 vi pham cap (11,274 voi cap 50), chen 477 buffer (4,416); GRT 21.25 -> 21.55 % (cap 50 + fanout 8: 22.23 -> 22.95 %); cell chuan STAMidPNR-3 1,473,170 um2 / 213,514 cell so voi 1,524,290 / 223,278 (-3.4 %) |
 | 2026-10-07 | `sa2_corr3400x3100_f220_capm20_fo16_r1` (10.54) | die | P2 FAIL: overflow 17, setup -1.287 (26), hold -0.192 (74) | skew setup 0.737 -> 2.088 ns tu placement sang GRT; `clknet_1_0_1_clk` guide ~4.9 mm |
 | 2026-10-07/08 | `sa2_corr3400x3250_f220_capm20_fo16_r1` (11.05) | die | P2 +0.220; DRT vong 14 (483) khi tat may 2026-10-08 07:57; xoa 16:26 | |
 | 2026-10-08 | `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` (10.54) | padding 1 site/ben, `PL_TIME_DRIVEN`, clock met3-met5 | P2 +0.280 / +0.025; ECO dung DPL-0033 (sua); sign-off max_tt -0.571 (21 endpoint, TNS -6.07) | duong doc nua chu ky SRAM way 1 I$, net slew 1.0-1.3 ns |
@@ -595,34 +679,46 @@ Thac dien tich (2026-09-30, DEF sau fill + liberty): final3 1,399,590 um2 trong 
 Bang die SA2 voi cap 20 + fanout 16 (setup nom_tt STAMidPNR-2 -> STAMidPNR-3): 11.56 +1.754 -> +0.671; 11.05 +1.529 -> +0.220; 10.54
 +1.521 -> -1.287. Phan tich PPA SA2 so voi DM (2026-10-13, doc du lieu da luu, moi phep tinh x2): cong suat theo hoat dong 129.64 vs
 119.45 mW, chenh chu yeu o clock 43.10 vs 33.02 mW va tuan tu 41.50 vs 38.71 mW, macro 37.87 nhu nhau; SA2 co 14,184 diode antenna
-(DM r14F_A 7,360), 12,619 trong do do sua antenna o GRT; CTS ca hai dung clustering 8 va `CTS_CLK_MAX_WIRE_LENGTH` 800 ke thua tu DM.
+(DM r14F_A 7,360), 12,619 trong do do sua antenna o GRT (`RUN_ANTENNA_REPAIR` true, margin 30), sau DRT chi chen them ~1,550.
+Dien tich cell tu DEF cuoi (khong tinh fill / decap / tap): SA2 1.3423 mm2 / 113,040 cell, DM hanh lang dmuB 1.2472 mm2. CTS ca
+hai dung `CTS_SINK_CLUSTERING_SIZE` 8 (mac dinh OpenLane 25) va `CTS_CLK_MAX_WIRE_LENGTH` 800 ke thua tu config DM cu, chua tung
+toi uu; OpenROAD `edf00dff` co `clock_tree_synthesis -dont_use_dummy_load` (`cts.tcl` chua noi). Huong thu cho SA2 ghi 2026-10-13
+(moi lan mot thay doi, full flow + ECO hai luot; tu 2026-10-14 PD tren `6c4ccffd`, muc 8.4): tat sua antenna o GRT; clustering
+8 -> 16 / 25; bo dummy load; bo padding o 11.56; max fanout 16 -> 24. Den 2026-10-15 moi thu clustering 25 (E1).
 
 ### 8.3 DM_VC4
 
 | Ngay | Run | Thay doi | Ket qua | Nguyen nhan / ghi chu |
 |---|---|---|---|---|
-| 2026-09-30 | wrapper DSE SRAM | 1 lane/macro, 4 macro/cache | tong hop 1,077,811 um2 (+10.2 %) | `SYNTH_OPT_DFF_SAT` bo 4 macro chet |
+| 2026-09-30 | wrapper DSE SRAM | 1 lane/macro (cong 1 doc, cong 0 ghi), 4 macro/cache | tong hop 1,077,811 um2 (+10.2 %) | 4 macro chet cua way 1 D$: Yosys khong chung minh duoc flop `refill_way` la hang (Quartus thi bo); `SYNTH_OPT_DFF_SAT` (mot luot `opt` voi SAT sau `share`) bo 4 macro chet, DM / SA2 +0.08 % / +0.22 %; doc khi ghi, shadow va moc DM: muc 8.2 |
 | 2026-10-02 | vc4F (luoi DM), luoi rong | | GRT-0118; luoi rong overflow 34,086 | moi tuyen doc phai qua khe giua hang macro (macro chan met1-met4); hai cum flop tag 5,120 flop o nga ba kenh; day trong cum tag DM 231 / SA2 1,142 / VC4 1,516 mm |
-| 2026-10-03 | vong 3200x3190; tang 3260x3400; hanh lang U2 3400x3400 | floorplan | vong: nom_tt -1.093 (refill nua chu ky, 55 repeater 8.02 ns); tang: +1.809 nhung overflow 233,074; U2: +1.724, overflow 1,560 (15 vong) | core DSE doc valid/tag o hai chi so (`live_index`, `request_index`) - cau truc RTL |
-| 2026-10-06/07 | vc4uA / vc4uB (11.305 / 11.56) | floorplan hop nhat | route lai trong RepairAntennas: overflow 19,114 / 11,485 (gioi han 2,000) | sua DRV sau GRT chen +4,643 buffer |
-| 2026-10-07 | corr3600x3400 (12.24) / corr3800x3400 (12.92) | die rong hon | overflow 5,774 / 10,627; dung 22:42 | buoc sua DRV sau GRT (`LAYERS_RC` + cap margin 50) chen 4,671 buffer vao cum tag (~82 % track); 14,503 buffer fanout tu `MAX_FANOUT_CONSTRAINT` 8 |
+| 2026-10-03 | vong 3200x3190; tang 3260x3400; hanh lang U2 3400x3400 | floorplan | vong: nom_tt -1.093 (refill nua chu ky, 55 repeater 8.02 ns); tang: +1.809 nhung overflow 233,074; U2: +1.724, overflow 1,560 (15 vong); hanh lang hep hon ~1,057 um that bai (957 um: overflow 51,831 sau 50 vong GRT); xoay macro OpenRAM 90 do lam hong luoi nguon (chan nguon macro met4 nam ngang) | core DSE doc valid/tag o hai chi so (`live_index`, `request_index`) - cau truc RTL |
+| 2026-10-06/07 | vc4uA / vc4uB (11.305 / 11.56) | floorplan hop nhat | route lai trong RepairAntennas: overflow 19,114 / 11,485 (gioi han 2,000) | sua DRV sau GRT chen +4,643 buffer. Dien tich o 11.305 mm2 (2026-10-06): core 11.137 mm2, macro 3.802 mm2 (34 %), cell chuan 1.32 / 1.44 / 1.47 mm2 (DM / SA2 / DM_VC4), chi chiem ~20 % phan core ngoai macro: gioi han la dinh tuyen qua hanh lang (macro chan met1-met4), khong phai cho dat cell; nho hon nua phai doi hinh hoc macro / vi tri chan hoac cau truc truy cap tag cua core DSE (RTL), ngoai pham vi PD |
+| 2026-10-07 | corr3600x3400 (12.24) / corr3800x3400 (12.92) | die rong hon | overflow 5,774 / 10,627; dung 22:42 | `guide_demand.py` tren `after_grt.guide` (corr3600x3400_f220): buoc sua DRV sau GRT (`LAYERS_RC` ~2x LEF + `GRT_DESIGN_REPAIR_MAX_CAP_PCT` 50, mac dinh OpenLane 10) gap 1,270 vi pham slew + 11,363 cap, chen 4,671 buffer (wire +2,808, max_cap +1,863) vao hai cum tag (x ~1450-2300, y ~1550-2000 um) da ~82 % track; vung 850 x 450 um co 17,992 cell (3,757 flop, 3,809 mux2, 5,747 buffer resizer); GRT di vong: met1 +31 %, met2 +25 %, met3 +19 %, 6,163 net moi 528,975 track x gcell. Truoc khi sua, DM_VC4 da can nhieu day hon SA2 cung die (corr3400x3400_f220): met1 +24 %, met2 +22 %, met3 +68 %, met4 +20 %. 14,503 buffer fanout tu `MAX_FANOUT_CONSTRAINT` 8 |
 | 2026-10-07 | `vc4_corr3400x3400_f220_capm20_fo16_r1` | fanout 16 | P1 FAIL overflow 1,272 | cay fanout it buffer hon nhung nhanh dai tren met1/met2; DM_VC4 giu fanout 8 |
 | 2026-10-07 | `vc4_corr3400x3400_f220_capm20_r1` | cap 20 | P2 FAIL: 17,135 diode o sua antenna GRT, overflow 3,934, setup -5.329 | |
 | 2026-10-08 | `..._capm20_antm10_r1` | `GRT_ANTENNA_MARGIN` 10 | P2 FAIL: ~11,087 diode, setup -2.099, hold -0.568; ResizerTimingPostGRT ~3 h (1,400 vong duoi theo ss) | |
 | 2026-10-08/09 | `..._capm20_antoff_r1` | tat sua antenna o GRT | P2 FAIL: overflow 66 -> 1,185 o ResizerTimingPostGRT, setup -2.673 | chinh buoc sua timing sau GRT gay tac |
-| 2026-10-09 | `..._antoff_rsztf_r1`, `..._nogrtt_r1` | resizer tt/ff; tat sua timing sau GRT | P1 +2.061; nogrtt: P2 setup -0.896, hold -3.902 | skew hold -1.545 -> -5.460 ns: net clock detour qua met1/met2 nghen |
-| 2026-10-09 | `..._nogrtt_clkm3_r1`, `..._clkm3_pad1_r1` | clock met3; + padding | P2 FAIL (-1.076 / -3.192; -0.190 / -1.157) | `clknet_2_1_1_clk` (HPWL ~670 um) guide ~7.7 mm; moi run 11.56 mm2 chay GRT-0103 "Extra Run for hard benchmark" (SA2/DM khong): diem nong tren hang D$ ~175 / 256 track (SA2 ~5) = victim buffer D$ |
-| 2026-10-09 | `..._pad1_grtit150_grtscr_r1`, `..._clkm4_pad1_grtscr_r1` (sang loc) | 150 vong GRT; clock met4-met5 | GRT-0103 van chay; skew -3.79 | GRT-0103 bat o vong 20 khi overflow > 200 (OpenROAD `edf00dff`). Skew ngay sau GRT dau (`grt_skew_screen.sh`; hold skew / hold nom_tt / so endpoint): SA2 ky ten -1.92 / -0.126; DM_VC4 3600 cu -2.00 / -0.364 / 162; 3800 cu -3.77 / -2.209; 3500 padding -2.66 / -1.250; 3400 padding + clock met4-met5 -3.79 / -2.133 |
+| 2026-10-09 | `..._antoff_rsztf_r1`, `..._nogrtt_r1` | resizer tt/ff; tat sua timing sau GRT | P1 +2.061; nogrtt: route khoe (overflow 22) nhung P2 setup -0.896, hold -3.902 | skew hold -1.545 -> -5.460 ns: net clock detour qua met1/met2 nghen. Cac lan truoc, buoc sua timing sau GRT 'sua' cac vi pham gia do skew nay (hold -7.8 ns, 2,746 buffer) va chinh no lam no overflow |
+| 2026-10-09 | `..._nogrtt_clkm3_r1`, `..._clkm3_pad1_r1` | clock met3; + padding | P2 FAIL (-1.076 / -3.192; -0.190 / -1.157). pad1 (1 site / ben): o nong sau GPL 3,035 -> 2,516 cell; GRT dau VAN hard benchmark (overflow cuoi 11, day +2.6 %); skew hold -4.77 -> -2.69 ns, setup 4.56 -> 2.24 ns (so voi clkm3); overflow sau sua DRV 60 | `clknet_2_1_1_clk` (HPWL ~670 um) guide ~7.7 mm; moi run 11.56 mm2 chay GRT-0103 "Extra Run for hard benchmark" (SA2/DM khong): diem nong tren hang D$ ~175 / 256 track (SA2 ~5) = victim buffer D$. clkm3: `clknet_4_7_0_clk` 1.4 -> 7.1 mm sau sua DRV sau GRT, tre clock dich 7.82 ns so voi nguon 3.49 ns: detour cua router, khong phai chuyen lop. Sau padding cua so nong nhat chuyen sang x 1932-2208, y 1822-1987 um (cum tag D$ o mep hanh lang, 2,277 cell, 806 buffer fanout / max_cap): padding giup nhung chua du o 11.56 mm2 |
+| 2026-10-09 | `..._pad1_grtit150_grtscr_r1`, `..._clkm4_pad1_grtscr_r1` (sang loc) | 150 vong GRT; clock met4-met5 | GRT-0103 van chay; skew -3.79; clock met4-met5 van 22 mm tren met3 (dai lop khong giu chat khi thieu cho) | GRT-0103 bat o vong 20 khi overflow > 200 (OpenROAD `edf00dff`). Ma nguon (`GlobalRouter.cpp` / `FastRoute.cpp`): clock va tin hieu route chung mot luot; net clock non-leaf (`isNonLeafClock`) co dai lop rieng, FastRoute chi cong capacity trong dai do, nen doi lop clock khong phai don bay. Skew ngay sau GRT dau (`grt_skew_screen.sh`; hold skew / hold nom_tt / so endpoint): SA2 ky ten -1.92 / -0.126; DM_VC4 3600 cu -2.00 / -0.364 / 162; 3800 cu -3.77 / -2.209; 3500 padding -2.66 / -1.250; 3400 padding + clock met4-met5 -3.79 / -2.133. Skew khong giam deu theo die: vai net than clock detour quanh khe giua hai hang macro D$ o mep hanh lang |
 | 2026-10-09 | `corr3500x3400` pad1 | die 11.90 | P2 FAIL: +0.548, hold -1.926 (1,675 endpoint) | skew hold -3.37 |
-| 2026-10-09 | `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_r1` | 3600, truoc GRT giong `vc4_corr3600x3400_f220_r1` | GRT dau trung tung byte (khong GRT-0103); P2 FAIL hold -2.030 (1,863) | `RepairDesignPostGRT` chay lai TOAN BO global route; 744 net clock route lai |
+| 2026-10-09 | `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_r1` | 3600, truoc GRT giong `vc4_corr3600x3400_f220_r1`; chon vi hold 162 endpoint -0.364 nam trong tam ECO hai luot (SA2: 112 endpoint -0.38 sau DRT, 139 buffer) | GRT dau trung tung byte (khong GRT-0103; day 11.94 m, P1 +1.168); P2 FAIL hold -2.030 (1,863), skew hold -3.41 ns, setup -0.535 | `OpenROAD.RepairDesignPostGRT` (`repair_design_postgrt.tcl`) chen 368 buffer vao 2,289 net, hop phap hoa roi chay lai TOAN BO global route; 744 net clock route lai, `clknet_2_2_0_clk` 1.1 -> 4.6 mm. Moi lan GRT toan bo la mot lan boc tham cho than clock DM_VC4 -> `RUN_POST_GRT_DESIGN_REPAIR` false (nogrtd, J1) |
 | 2026-10-09 | `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_nogrtd_r1` (J1) | tat sua DRV sau GRT (`config_corr3600x3400_f220_capm20_antoff_nogrtt_nogrtd.json`) | P2 "MISSING p2 data" -> CONTINUE 06:20 UTC; rui ro setup nom_tt sau GRT chi +0.046 (nua chu ky RAM bank[4] dout0 -> I$ bank[2] din0, slew 0.87 ns); DRT 161,333 / 95,248 / 89,365 vi pham sau 3 vong dau (SA2 r2: 103,892 / 48,827 / 45,440 roi 5,822 / 1,289 / 308; DM r14F_A: 114,374 / 62,655 / 58,640 roi 12,993); watchdog dung o vong 10 (5,689 > 5,000) 14:28 | 4,089 marker o x 1500..1600, y 1800..2000 um (`results/vc4_corr3600x3400_drt_diagnosis_20261009.json`, `results/vc4_corr3600x3400_drt_region_20261009.log`) |
-| 2026-10-10/11 | `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_r1` | + padding (`results/vc4_padding_hypothesis_20261009.md`) | SIGSEGV post-CTS (giu `crashed-37`), retry khong doi qua; P1 +1.51761 / +0.181665; screen GRT dau va P2: setup +0.491013, hold -0.202347 (9 endpoint), skew hold -1.719956 -> CONTINUE; DRT chinh DRC 0 o vong 45 (18.5 h); antenna sau DRT 2,243 net / 3,211 pin, 5,978 diode, fatal GRT-0232 (2026-10-11 03:19) | `results/vc4_postcts_crash_20261010.json`, `results/vc4_postdrt_antenna_failure_20261011.json` |
-| 2026-10-13/14 | `..._pad1_antoff_nogrtt_nogrtd_antcong_r1` | `DRT_ANTENNA_REPAIR_ALLOW_CONGESTION`, `DRT_SAVE_MAIN_ROUTE` | DRT chinh 0; vong antenna khong con GRT-0232 nhung route lai 59,810 -> 8,323 o vong 13: watchdog FAIL | 2,916 net vi pham o buoc GRT, tap trung o net dai toi chan SRAM va mux victim |
-| 2026-10-14 | V2 `..._pad1_antgrt10_nogrtt_nogrtd_antcong_r1` | sua antenna o GRT bien 10 (sang loc: 9,225 diode, overflow 0) | DRT chinh 0 o vong 31 (42 phut); antenna sau DRT 1,031 net / 1,453 chan; route lai dinh tre 2,063 (vong 17): watchdog FAIL | moi vi pham la PAR side-area; 1,020/1,453 chan trong vung logic giua cot macro I$ va D$: dout1 cua ca 4 macro moi cache quay vao kenh 220 um |
+| 2026-10-10/11 | `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_r1` | + padding (`results/vc4_padding_hypothesis_20261009.md`) | SIGSEGV post-CTS (giu `crashed-37`), retry khong doi qua; P1 +1.51761 / +0.181665; screen GRT dau va P2: setup +0.491013, hold -0.202347 (9 endpoint), skew hold -1.719956 -> CONTINUE; DRT chinh DRC 0 o vong 45 (18.5 h); antenna sau DRT 2,243 net / 3,211 pin, 5,978 diode, fatal GRT-0232 (2026-10-11 03:19) | `results/vc4_postcts_crash_20261010.json`, `results/vc4_postdrt_antenna_failure_20261011.json`. Pha im lang >10 h sau DRT chinh: probe CPU chi doc 2026-10-10 19:53 (perf_event_open, TID 669, 20 Hz, 98 mau, mat 0, khong ptrace / signal) cho moi PC trong `grt::FastRouteCore::mazeRouteMSMD` = maze route cua GRT trong vong sua antenna, khong phai treo; suy luan 'antenna check im lang' truoc do khong duoc stack / PC ung ho (SA2 ky ten: buoc 46 mat 36m45.497s / 34m32.522s); `results/vc4_cpu_sampling_20261010/receipt.json`, `results/vc4_postdrt_antenna_comparison_20261010.json` |
+| 2026-10-13/14 | `..._pad1_antoff_nogrtt_nogrtd_antcong_r1` | `DRT_ANTENNA_REPAIR_ALLOW_CONGESTION`, `DRT_SAVE_MAIN_ROUTE` | DRT chinh 0; vong antenna khong con GRT-0232 nhung route lai 59,810 -> 8,323 o vong 13: watchdog FAIL | 2,916 net vi pham o buoc GRT (ty le toi 21.5x so voi DM 481 / SA2 653 sau route), tap trung o net dai toi chan SRAM (din0 / csb0) va mux du lieu victim |
+| 2026-10-14 | V2 `..._pad1_antgrt10_nogrtt_nogrtd_antcong_r1` | sua antenna o GRT bien 10 (sang loc tren trang thai sau GRT cua `antcong_r1`, 10 vong, `asic/soc_vc4_4kb/screen_antgrt10_20261014/`: 3,428 -> 1,015 -> 227 -> 54 -> 13 -> 7 -> 6 -> 4, 9,225 diode, overflow 0 (23.3 %), day 12.27 -> 12.45 m) | DRT chinh 0 o vong 31 (42 phut); antenna sau DRT 1,031 net / 1,453 chan; vong sua 1 chen 2,295 diode, route lai 78,513 -> 1,389 (vong 16) -> 2,063 (vong 17): watchdog FAIL | `main_route.odb` (`asic/soc_vc4_4kb/screen_ant_postdrt_v2_20261014/`): moi vi pham la PAR side-area (met3 885, met2 307, met1 194, met4 93); cong mux2 521 / a221o 238 / a22o 230; 837 / 1,031 net do resizer tao; dai trung vi 731 um (p90 1,138); 538 / 1,027 net co 5-8 chan (cay buffer fanout, MAX_FANOUT 8); 1,020/1,453 chan trong vung logic giua cot macro I$ va D$: dout1 cua ca 4 macro moi cache quay vao kenh 220 um |
 | 2026-10-14 | `screen_drt_replay_v2_20261014` (sang loc) | chay lai buoc DRT cua V2 khong watchdog | route chinh trung tung vong (flow tat dinh); route lai 225 o vong 43-44, giam 1-3 %/vong: khong hoi tu trong 64 vong | |
 | 2026-10-14 | V3 (`..._antcong_r2`) | V2 + luat watchdog antenna | P1/P2 trung V2; dung truoc DRT 08:31 UTC (co abort) | tai hien tat dinh se that bai |
 | 2026-10-14 | V4 `vc4_corr3800x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` | die 3800 (12.92) | P1 +1.263, P2 +0.476; antenna sau sua GRT 821 net (V2 742); DRT tu 10:33 UTC; dung boi chu du an 14:01 UTC | be rong die khong phai don bay |
 | 2026-10-14 | V5 `..._antcong_mwl500` | `DESIGN_REPAIR_MAX_WIRE_LENGTH` 500 | P2 FAIL: 23,680 buffer, setup -1.068, hold -1.882; antenna 873 net | chieu dai day khong phai don bay |
+
+Antenna DM_VC4 so voi DM / SA2 (vong sua sau route: net vi pham -> diode -> route lai): DM r14F_A 481 -> 1,051 -> ~21k, hoi tu;
+SA2 653 -> 1,453 -> ~33k, hoi tu; DM_VC4 V2 1,031 -> 2,295 -> 78,513, dinh tre. Sang loc bien antenna o GRT 10 / 20 / 30 %:
+9,225 / 11,611 / 15,107 diode nhung con 742 / 753 / 641 net vi pham sau sua GRT, trong khi GRT tu bao 4 / 6 / 8: sau khi sua,
+vong 'extra iterations to remove overflow' route lai va sinh vi pham moi, nen bien khong phai don bay. Muc tieu cho DM_VC4:
+<= ~650 net vi pham sau route. OpenROAD `edf00dff` chi sua antenna bang diode (khong chen jumper), nen giai phap phai den tu
+floorplan / diode.
 
 Ket luan DM_VC4 (2026-10-14): bien antenna o GRT, be rong die va gioi han chieu dai day deu khong giam duoc vi pham antenna; nguyen
 nhan cau truc la chan doc cua ca hai cache huong vao vung giua. Chu du an hoan DM_VC4 (2026-10-14 21:20); se xay lai tren
@@ -630,6 +726,24 @@ nhan cau truc la chan doc cua ca hai cache huong vao vung giua. Chu du an hoan D
 
 ### 8.4 Quy tac Q va lan chay tron; PD tren `6c4ccffd`
 
+- **Quyet dinh 2026-10-07 (toi, chu du an).** DM khoa o dm_grid3665x2900_r1 / _r2 (10.63 mm2, GRT cap margin 50); SA2 va DM_VC4
+  toi uu rieng theo PPA (die nho nhat con route duoc, it buffer / day nhat; gioi han cung va bang cuoi o QUY_TRINH muc A); DM tren
+  hai floorplan hanh lang (dmuA / dmuB, muc 8.1) chi con la doi chung cung die. Thay ke hoach 2026-10-06 (chay ca hai floorplan
+  hanh lang cho ca ba thiet ke, 6 flow).
+- **Tu danh gia 2026-10-08.** ~10 gio chay 8 run sang loc (5 truot cong); 3 run bo truoc khi chay, 1 bo sai (DM_VC4 fanout 8 +
+  cap 20 bo luc 16:10 do suy tu SA2, chua co so lieu DM_VC4; chay lai la `vc4_corr3400x3400_f220_capm20_r1`, muc 8.3); thu - sai
+  bang knob toan cuc chi doi loi sang cho khac; moi so SA2 / DM_VC4 toi luc do la so sang loc, chua toi uu. Chu du an: hon 100 loi
+  o vong 50 van co the ve 0 o vong 64 (SA2 B 70 o vong 44 -> 0 o vong 54) nen bo gioi han sau vong 40 (cai dat
+  `G5_UNLIMITED_LATE_PHASE=1`, muc 6.1); mot run duoc dung theo GIA TRI (bi bien the khac ap dao, vd. SA2 B cap 50 + fanout 8
+  dung 07:06, muc 8.2), khong theo so vong.
+- **Minimality (2026-10-10).** Cau hinh die nho chi doi 3 truong hinh hoc (`DIE_AREA`, `CORE_AREA`, `MACRO_PLACEMENT_CFG`) tu recipe
+  nguon (SA2 3250 / 3325: recipe ky ten 3400 x 3400; DM_VC4 3500 pad1 moi: recipe 3600 x 3400 pad1). Run VC4 corr3500x3400 pad1 cu
+  (2026-10-09, muc 8.3) doi them 4 knob (antenna margin 30 -> 10, resizer tt/ff, clock toi thieu met3, sua design sau GRT bat) nen
+  KHONG dung lam chung minh die nho nhat. Cap moi chi hop le sau khi recipe nguon duoc chap nhan; luc do chua chay PD. Preflight
+  6 config: 16 macro + halo 10 um vua, 17 doi chung am, 36 kiem cu phap PASS; `results/pd_minimality_preflight_20261010.json`.
+- **Thu tu cong viec 2026-10-13 (chu du an).** Lam TUAN TU, uu tien cho bai viet: (1) kiem lai chuan bi board so voi thiet ke hien
+  tai, chay board (muc 3.3); (2) PD SA2 / DM_VC4 toi uu rieng, KHONG chep thong so / ket qua cua DM (config DM ky ten chi tam chap
+  nhan); (3) LEC SA2 / DM_VC4; (4) bao cao cac muc `danh_gia.txt` da giai quyet; (5) liet ke day du phan mo rong so voi ban 1 KiB.
 - **Quy tac Q.** 2026-10-13: khong chay tiep tu buoc FAIL. 2026-10-14 (chu du an sua): khi phat trien duoc sua va chay tiep tu buoc
   loi; khi moi thu da qua, BAT BUOC mot lan chay tron tu buoc 1 (tag moi, khong resume / nhanh / CONTINUE, nguong khai bao luc khoi
   chay); chi lan chay tron do (va lan chay kep khi can) la ket qua. Kiem toan 2026-10-14: DM r14F_A/B (resume sau ket thuc phien) va
@@ -664,14 +778,27 @@ hash ODB/DEF.
 **OpenRAM suon xuong.** Macro OpenRAM dua `dout` ra o suon xuong (`timing_type falling_edge`), nen moi duong dout -> flop suon len chi co
 nua chu ky (10 ns). DM 8 KiB: vong fetch -0.569 / -0.827 ns, sua RTL cycle-exact cho +2.190. SA2 / DM_VC4: core DSE ghi moi beat refill
 tu dout RAM thang vao macro lane trong cung nua chu ky, nen hang RAM phai sat macro lane; SA2 o die nho truot o duong doc way 1 I$.
+Nguon ngoai (tra cuu 2026-09-26): dynamatic PR #42 (dout suon xuong; doc+ghi cung dia chi khong xac dinh - wrapper du an da chan hoac
+khong the xay ra).
 
 **Uoc luong RC.** Resizer dung dien dung don vi tu tech LEF, khong co thanh phan ghep: tren 2,072 net, uoc luong placement thap hon RCX
-2.37x (trung vi 2.13x), global route 1.93x. He qua: slew / cap song sot qua flow va uoc luong ss lac quan ~4 ns. `LAYERS_RC` k = 2.0
-giam sai so con 1.19x / 0.96x nhung trong full flow doi ca global placement (max_ss -8.311 -> -9.518, 3 hold): khong dung cho sign-off;
-chi trong `repair_design` (`LAYERS_RC_SCOPE`) thi slew/cap 213/402 voi +4.1 % cell.
+2.37x (trung vi 2.13x), global route 1.93x (net dai 2.1-2.2x). He qua: slew / cap song sot qua flow va uoc luong ss lac quan ~4 ns.
+`LAYERS_RC` k = 2.0 (C = 2 x dien tich / canh trong tech LEF, R = RPERSQ / w_min, bang lay tu ORFS sky130hd; OpenLane 2.3.10 doc
+`LAYERS_RC` trong `set_rc.tcl` nhung khong khai bao bien, khai bao trong openlane-local) giam sai so con 1.19x / 0.96x; ca hai lan
+global placement timing-driven doc `set_rc.tcl` nen full flow doi placement tu buoc 23 (max_ss -8.311 -> -9.518, 3 hold): khong dung
+cho sign-off; chi trong `repair_design` (`LAYERS_RC_SCOPE`) thi slew/cap 213/402 voi +4.1 % cell. Thi nghiem tu trang thai final_A
+(2026-09-27; vi pham cap o 738 driver cell chuan va 106 dout SRAM): `LAYERS_RC` k=2: slew 757 -> 201, cap 807 -> 406 nhung tt giam
+0.2 ns, max_ss -8.615, 1 vi pham hold; them cap margin: hold +0.082, tt +1.755; `LAYERS_RC` + GRT hold 0.15: 2 vi pham hold. Vi pham
+cap song sot vi `repair_design` dat repeater theo cay Steiner ngan hon route that, va diode antenna chen sau do. Nguon ngoai (tra cuu
+2026-09-26): ORFS #3969 (uoc luong RC).
 
 **Buffer hold.** Bien hold 0.1 ns o PL / GRT sinh 18-19k `dlygate4sd3_1` trong khi chi ~50 endpoint vi pham that (8 KiB-RAM: 19,019
 buffer = 13.6 % cell). Bien 0.03 + hold ECO 0.02 tren RCX: con 1,032 buffer, hold van sach (cau hinh ky ten 16 KiB-RAM).
+
+**Knob resizer / repair_design.** Do tren r10A (2026-09-26): setup truoc hold (`PL_RESIZER_FIX_HOLD_FIRST` false) +0.25 ns tt / +0.7
+ns ss (README OpenROAD, tra cuu 2026-09-26: setup truoc hold); setup margin 2.0 +0.41 / +0.52 ns; dem day dai giam slew / cap 31 / 58 %
+nhung hai timing. 2026-09-23: `repair_design` khong co tuy chon fanout, cell vi pham fanout la buffer do chinh no chen (fanout 26-31 so
+voi gioi han 8) nen fanout khong giam. Diode heuristic va `HeuristicDiodeInsertion`: muc "Antenna".
 
 **Job nen va ket thuc phien.** Job khoi tu phien terminal chet khi phien ket thuc (WSL2 tat VM khi khong con client `wsl.exe`;
 `setsid` / `nohup` khong giup; tach qua WMI / Task Scheduler bi chinh sach quyen tu choi). Mat mat: 2026-09-26, 2026-09-30 04:50 va
@@ -680,6 +807,8 @@ buffer = 13.6 % cell). Bien 0.03 + hold ECO 0.02 tren RCX: con 1,032 buffer, hol
 **Bo nho WSL 24 GB.** Do thuc te: flow truoc DRT 5-8 GB, DRT ~10.5 GB (VC4 toi 12.4), Magic WriteLEF 12-13 GiB, KLayout 8 GiB, ECO
 ~10 GB. P4 cua mot run canh DRT cua run khac khong vua (SA2 E1 r2 MemoryError 2026-10-14); may ao WSL tat 2026-10-03 08:22 khi chay
 DRT + resizer + 2 sang loc + 2 kiem hinh thuc song song. Kiem hinh thuc muc SoC va EQY (~13 GB) chay mot minh.
+2026-10-08 21:30: chuoi 9 lane + Quartus + 2 flow PD lam RAM trong Windows xuong 1.6 GB, CPU 100 %; dung Quartus bang co abort sau
+fit dang chay, chay lai Quartus x2 sau chuoi. Quy tac: khi 2 flow PD chay, khong chay Quartus cung luc voi chuoi nhieu lane.
 
 **Yosys nhay voi ten.** Ket qua Yosys / ABC phu thuoc ten va thu tu doc (doi ten mot port: +2,728 cell, +2.8 %); chenh lech < ~3 %
 khong quy duoc cho thiet ke. Generate `g_nway` doi ten core DSE thanh `genblk1.g_dse` (kiem muc SoC phai doi ten phia gate; PD can ten
@@ -696,14 +825,24 @@ bi bo im lang (sua 2026-09-24). Do lai: 1 KiB nghien cuu setup tt +3.412 -> +3.1
 +0.104 -> -0.146 ns; 1 KiB cong bo setup tt +2.944 -> +2.694, ss -10.933 -> -11.183, hold tt +0.302 -> +0.052, ss +0.657 -> -0.231, ff
 +0.186 -> -0.064 ns; endpoint khong rang buoc 121 -> 46 (4 KiB: 161 -> 86 -> 84, ca 84 do hang so dieu khien). Bang chung:
 `asic/evidence/sdc_recheck_1kb_{research,published}/`; SDC ban cong bo giu nguyen.
+SDC loi bo 72 / 78 cong ra khong duoc kiem; moi timing ASIC truoc 2026-09-24 lac quan dung bang uncertainty (0.25 ns). Phep do lai
+hop le vi SDC cu chay lai tren netlist 1 KiB da luu tai lap metric da cong bo den 4 chu so.
 
 **Magic namespace collision.** Hai loi doc lap cua cac buoc Magic voi macro OpenRAM va hai ban sua (`read.tcl`; `.magicsafe.gds`),
 chung minh tung hinh: `asic/evidence/MAGIC_NAMESPACE_COLLISION.md`. `MAGIC_CAPTURE_ERRORS` luon true.
+Log XOR KLayout cua `.magicsafe.gds` chua tung la file (phat hien khi don workspace 2026-09-19); bang chung dung lai bang
+`asic/prove_magicsafe_equivalence.py` (so tung hinh: 412 hinh bi bo tren dung 5 layer chu thich, 34 layer con lai giong het).
+2026-09-23: macro 1 KiB chua co `.magicsafe.gds` nen Magic WriteLEF hong 31 lan; tao va chung minh nhu macro 2 KiB, XOR Magic/KLayout
+= 0. Magic DRC tren GDS: 42,198,750 vi pham, mot luat li.3, mau 100 % nam trong vien macro; KLayout DRC 0, TritonRoute 0 -> giu
+`ERROR_ON_MAGIC_DRC` true, Magic DRC chay tren DEF (`MAGIC_DRC_USE_GDS false`), KLayout kiem toan bo GDS ke ca trong macro (2026-09-25
+doi sang GDS cell chuan + macro truu tuong, muc 6.1).
 
-**Liberty OpenRAM.** Macro chi co Liberty TT, nen ss / ff dung timing TT cho macro (lac quan tren duong qua SRAM). Chi `addr0` / `addr1`
-/ `wmask0` co `max_transition` 0.04 ns (do 10-90 %, bang 0.030 ns theo quy uoc 20-80 % cua thu vien cell); buf_8 chi dat khi cach chan
-~8 um, halo cat row 10 um giu buffer >= 12 um nen con 44-70 chan vuot 0.1-5.6 ps. `dout` max_capacitance 0.0276 pF. Bao cao theo loai,
-khong sua bang dien tich lon.
+**Liberty OpenRAM.** Macro chi co Liberty TT, nen ss / ff dung timing TT cho macro; macro OpenRAM cham hon ~10 % o SS 1.8 V so voi TT
+nen STA ss / ff qua SRAM lac quan. Chi `addr0` / `addr1` / `wmask0` co `max_transition` 0.04 ns (OpenRAM issue #298, tra cuu
+2026-09-26; `din` / `csb` / `web` 0.5 ns; do 10-90 %, bang 0.030 ns theo quy uoc 20-80 % cua thu vien cell); buf_8 chi dat khi cach
+chan ~8 um, halo cat row 10 um giu buffer >= 12 um nen con 44-70 chan vuot 0.1-5.6 ps. `dout` max_capacitance 0.0276 pF. Bao cao theo
+loai, khong sua bang dien tich lon. Dinh chinh: cau "khong the dat voi day that" trong bao cao cu da duoc thay bang phan tich buf_8 /
+halo.
 
 **Bay cong suat.** `power__total` cua OpenLane la goc max_ff (8 KiB-RAM: 115.5 mW). Vectorless phu thuoc hoat dong gia dinh cua dau vao
 (`reset_n` chua dong bo lam switching +~37 mW: 154.34 -> 102.96 mW). `read_saif` bo qua net phang; chan trong vong phan hoi khong lan
@@ -713,12 +852,21 @@ truyen; Questa giu DURATION tong khi `power reset`. Cong suat macro SRAM lay tu 
 heuristic 90 um lam te hon (101,367 diode); 250 um giam ~74 % nhung diode bi tinh la tai, gay 3,276 / 3,277 vi pham fanout. Vong sua sau
 DRT (openlane-local) dat 0/0 tren DM va SA2; tren DM_VC4 vong route lai sau sua antenna khong hoi tu (muc 8.3). Tag `antoff` khong co
 nghia sua sau DRT tat. Thong diep abort/crash chung cua driver khong phai nguyen nhan: doc log native.
+final_A (2026-09-27): antenna 140 net la 100 % PAR tren met1-met3. Diode heuristic 90 um them +3.5 % dien tich;
+`HeuristicDiodeInsertion` can `DIODE_ON_PORTS both`, `GPL/DPL_CELL_PADDING 4/2` (ghi trong docstring) - 19 lan hong truoc khi dat
+(2026-09-23).
 
 **Bay trang thai run OpenLane.** (1) Khong xoa thu muc step da xong cua run con resume (`state_in.json` tro bang duong dan tuyet doi);
 (2) resume lay `state_out.json` moi nhat tim de quy (resume qua buoc bi gate tat lam antenna repair chay lai tren database da sua); (3)
 config chi doc luc bat dau; (4) `state_out.json` cua STAMidPNR mang metric ss / ff cu tu STAPrePNR; (5) thu muc step ton tai truoc khi
 step chay va flow bi cat ngan cung ghi `final/`: thanh cong la `state_out.json` hoac metric; (6) step resume duoc danh so sau so lon
-nhat hien co.
+nhat hien co; (7) OpenLane ghi noi `error.log` qua cac lan resume: chi xet phan cua lan thu hien tai; crash "unexpected error" khong ghi
+gi vao `error.log` nen phai xet ma tra ve (`asic/run_resume_retry.sh`); (8) run co buoc cuoi (EQY goc) hong thi khong co `final/`:
+artefact ky ten (netlist, DEF, GDS, SPEF, report) nam trong thu muc step tuong ung; tim o do, khong ket luan run khong co dau ra.
+
+**Bay knob padding.** Padding 1 site moi ben phai dat `GPL_CELL_PADDING` / `DPL_CELL_PADDING` = 2, vi script OpenLane chia doi bang
+phep chia nguyen; gia tri 1 la KHONG padding. Moi run tag pad1 (vd. `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1`, DM_VC4
+pad1) dung gia tri 2 (muc 8.2, 8.3).
 
 **Khong sua script dang chay.** Bash doc script theo offset; file nguon sua trong luc flow doc cung bi doc nua chung (`alu.v`
 2026-09-25). Viet file moi; dung bang co huy hop tac (`asic/.abort_*`, `results/.abort_*`). Runner phai bao ma tra ve cua chinh cong
@@ -729,8 +877,15 @@ ma thoat cua chuong trinh con, phai dung `cmd /v:on /c "start /wait /b /affinity
 
 **Goc ss.** CPI khong doi nen ss duoc bao cao, khong sua: 8 KiB-RAM nom_ss -7.413 / max_ss -8.311 (2,511 endpoint, ~35 MHz); DM
 16 KiB-RAM -6.897 / -7.365 (TNS -11,439); DM hanh lang 11.305 mm2 -8.292 / -8.754. Phan ra 2,557 endpoint max_ss: trung binh 15.8 ns
-logic (22.6 cell) + 7.8 ns repeater + 0.5 ns day; 1,504 endpoint la PC -> hit I$ -> stall -> enable RF/BHT. STA what-if: dong ss can
-pipeline moi (fetch 2 tang, execute 2 tang, stall dang ky, cay reset co pipeline).
+logic (22.6 cell) + 7.8 ns repeater + 0.5 ns day; 1,504 endpoint la PC -> hit I$ -> stall -> enable RF/BHT. STA what-if: moi vong
+toi han bi cat lai lo vong ke o -4 .. -8 ns; cac thay doi cycle-exact (R13a) va AREA 3 khong doi max_ss; dong ss can pipeline moi
+(fetch 2 tang voi du doan o decode, execute 2 tang, stall dang ky, cay reset co pipeline).
+
+**Resizer duoi theo goc ss.** Chan doan 2026-10-09: moi buoc resizer chay o ba goc (tt, ss, ff) voi bien setup 2.0 ns; ss khong cau
+hinh nao dong o 20 ns (WNS -9 .. -10 ns, ~7,600 endpoint), nen resizer chen / phong to buffer hang gio vao cum tag (DM_VC4
+ResizerTimingPostGRT ~3 gio, 1,400 vong), ton dien tich / cong suat, gay tac ma khong giup goc bi gate (tt / ff). Sua: `RSZ_CORNERS` =
+nom_tt, nom_ff cho moi buoc resizer (ke ca ECO sau route); ss van bao cao o sign-off. SA2 10.54 mm2: P1 22 phut (truoc 43), it hon
+~1,100 cell; P2 24 phut (truoc 76) (muc 8.2).
 
 **Verilator va latch.** `--Werror-LATCH` bao 0 voi `always @(*)`; `design__inferred_latch__count` khong phai bang chung. Dung
 `scripts/latch_sweep.sh` va dem cell `dlxtn` / `dlxtp` trong netlist cong.
@@ -760,10 +915,11 @@ log, danh sach buoc): `results/pd_run_archive/<run>/`.
 | 2026-10-07 | goc `asic/`: 68 script mot lan, 178 log console, thu muc thi nghiem | ~5.7 GB | `results/pd_run_archive/asic_{console_logs,experiments}_20261007.tar.gz` |
 | 2026-10-07 | tai lieu trung lap (gop vao NHAT_KY, QUY_TRINH, RESULTS, REVIEW_RESPONSE, README) | - | git giu ban goc |
 | 2026-10-07 | 84 config, 45 floorplan cua thi nghiem da xoa run; 3 thu muc thiet ke 1 KiB khong dung | 45 MB | `results/pd_run_archive/asic_1kb_designs_20261007.tar.gz` |
-| 2026-10-08 | golden v1 `E:/Projects/RISCV-research_GOLDEN_20260927` | ~12 GB | theo yeu cau chu du an; con mot golden FINAL3 |
+| 2026-10-08 | golden v1 `E:/Projects/RISCV-research_GOLDEN_20260927` (final_A / B, muc 8.1) | ~12 GB | theo yeu cau chu du an; ~20 GB khac la hard link chung voi FINAL3; con mot golden `RISCV-research_GOLDEN_FINAL3_20260928` (DM 8 KiB-RAM); moc DM 16 KiB-RAM dang khoa (r14F_A / B = dm_grid3665x2900_r1 / _r2) KHONG nam trong golden nao, chi trong workspace |
 | 2026-10-09 | 17 run PD da archive + 22 thu vien Questa idle | 79.558 GiB logic | giu 2 run co dependency; 20 file nguon/coverage va 6 file goc bi tool review chan, chua xoa; `results/workspace_audit/` |
 | 2026-10-09 | final_B CHUA XOA | 0 | 6 input + 562 file bang chung da kiem, 14 reader doi duong dan; xoa bi chan; `results/final_b_dependency_migration_20261009/cleanup_outcome.json` |
 | 2026-10-14 | 43 thu muc PD that bai / dung / sang loc | ~125 GB | `scripts/maintenance/archive_and_delete_failed_pd_20261014.sh`; archive `results/pd_run_archive/20261014/`, log `results/pd_run_archive/archive_and_delete_20261014.log` |
+| 2026-10-14 | worktree + nhanh `worktree-agent-ae25d606b11a3137d` + thu muc `.claude/` trong repo da cong bo (chi doc): CHUA XOA | 0 | lan goi phien cloud phu dau tien loi khi tao worktree (repo o dia e: / E:) va de lai; lenh go bi bo loc an toan tu choi, da dua lenh go cho chu du an (chua xac nhan da go) |
 | 2026-10-15 | dmuA / dmuB | - | sau khi archive bang chung text (chu du an) |
 
 Luon giu: tai lieu duy tri, log (log cu nen lai), CSV chuan da chay kep, moc 1 KiB `asic/soc_dm_control/runs/sync_final`, bang chung
@@ -816,9 +972,20 @@ trong `state_in` / `resolved.json`); ten moi dung cho tai lieu va run / file moi
 | rfbht (dcbf3495, 6c4ccffd) | RF/BHT trong M9K tren FPGA | ban RTL hien hanh |
 | rtlfix / c235dfb7 (b82c2717, aa8e32f9) | dot sua RTL 2026-09-24 .. 25 | ban RTL |
 | dedup / synccache / tagfix / sanitized | trang thai RTL 2026-09-17 .. 18 | ten file ket qua cu |
-| Entry 1 .. 35 (`CLAUDE_AUTONOMY_LOG.md`) | cac muc 2026-09-16 .. 27 | tieu de cu |
-| `PD_incident_report.md` A, B1-B4, C1-C11, D1-D5, E1-E3, F, G1-G8, Incident 33-38 | muc 7 (2026-09-18 .. 19) | tieu de cu |
-| `asic/FLOW_JOURNAL.md`, Incident 52-97 | muc 7, 8 va muc 9 | tieu de cu |
+| Entry 1 .. 33 (`CLAUDE_AUTONOMY_LOG.md`) | cac muc 2026-09-16 .. 18 (tim theo ngay trong muc 1, 2, 3, 7) | tieu de cu |
+| Entry 34 .. 35, Incident 83-90 | ky ten 8 KiB-RAM dau, final_A / final_B (muc 8.1) | tieu de cu |
+| `PD_incident_report.md` A, B1-B4, C1-C11, D1-D5, E1-E3, F, G1-G8, Incident 33-38 | muc 7 (2026-09-18 .. 19); B3 / B4: ghi chu bang chung Magic (muc 9 "Magic namespace collision") | tieu de cu |
+| `asic/FLOW_JOURNAL.md` log 2026-09-22 .. 24, Incident 52-56 | muc 7 (2026-09-22 .. 24), ha tang muc 6.1 | tieu de cu |
+| Incident 57-61 | PD dau tren RTL dong bang (muc 7, 2026-09-25) | tieu de cu |
+| Incident 62-70 | bo dong bo dau vao (muc 1.2 `a0c425f8`; muc 7 `r8_a0c4`) | tieu de cu |
+| Incident 71-75 | bo cong dich fetch / bo nhan (muc 1.2 `358cb660`; muc 7 `r7r8_358c`) | tieu de cu |
+| Incident 76-81 | sua ss 2026-09-26 va RTL cuoi `8b163675` (muc 1.2; muc 8.1 r9_ecf4, r10A) | tieu de cu |
+| Incident 82 | chon cau hinh PD cho `8b163675` (muc 8.1, mau mat do) | tieu de cu |
+| Incident 91-92 | antenna sau DRT, final3 (muc 8.1; muc 9 "Antenna") | tieu de cu |
+| Incident 93 | thu nghiem tren final3 2026-09-28 (muc 8.1, x_E / X) | tieu de cu |
+| Incident 94-95 | ket qua r14F, thac dien tich (muc 8.1) | tieu de cu |
+| Incident 96 | muc 8 | tieu de cu |
+| Incident 97 | muc 9 "Job nen va ket thuc phien" | tieu de cu |
 | hau to _A / _B cua run | _r1 / _r2 (lan chay kep); A / B trong "phuong an A / B" la floorplan | quy uoc |
 | TAG Quartus / CSV rtlfix, c235dfb7, r7r8, r10, r10f2, r12, r12b, r14, r15, r16, r16f | giu cho file cu; do moi dung ten theo ngay | ten file ket qua |
 
@@ -845,3 +1012,4 @@ trong `state_in` / `resolved.json`); ten moi dung cho tai lieu va run / file moi
 | 2026-10-15 07:46 | `NHAT_KY.md` cap nhat toi trang thai 2026-10-15 (commit `2d4202d`) |
 | 2026-10-15 | viet lai theo chu de (CLOUD_TASKS Task 1, ban nhap `NHAT_KY_v2.md`, commit `45ee690`); bang board 42 case thay 42 muc rieng; danh dau [HT]/[LS]; loi may ghi trung tinh |
 | 2026-10-15 | chu du an: thay han ban theo gio, chi giu mot phien ban; so muc 8 / 8a / 9 / 10 / 11 giu tuong thich voi script va tai lieu cu |
+| 2026-10-15 | ra soat do day du so voi ban theo gio (104 ung vien, 61 muc giu lai sau loc doc lap): bo sung chi tiet so lieu, co che, quyet dinh va bay vao muc 1.2, 2, 3, 4, 5, 6, 7, 8.1-8.4, 9, 10, 11; moi so cua muc de xuat da doi chieu co mat |
