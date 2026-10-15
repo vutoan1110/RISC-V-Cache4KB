@@ -21,8 +21,6 @@ the copies in this directory.
 | `QUY_TRINH.md` | binding rules and run procedures (verification chain, gated PD flow, FPGA, power, LEC, golden, naming, cleanup, reporting) | Vietnamese, ASCII |
 | `NHAT_KY.md` | the single design history, by topic (RTL revisions, verification, FPGA / board, LEC, power, PD infrastructure, ASIC per configuration, new-event log 8a, known issues, cleanup, renames); rewritten 2026-10-15, the hour-by-hour version is in git history | Vietnamese, ASCII |
 | `WORKSPACE_MAP.md` | functional names of RTL revisions, folder / document catalogue, verification boundaries | Vietnamese, ASCII |
-| `CLOUD_TASKS.md` | text-only tasks for cloud sessions | English |
-| `CODEX_PROMPT.md` | historical agent instructions of 2026-10-09; not current rules | English |
 | `asic/evidence/MAGIC_NAMESPACE_COLLISION.md` | frozen evidence of the two Magic fixes for the OpenRAM macros | English |
 | `results/m2/M1_M2_REPORT.md` | controller-confound analysis and design-space sweep | English |
 | `report_page/README.md` | source of the hosted report page (`report_page/soc_report.html`, Version 9, 2026-10-14) | English |

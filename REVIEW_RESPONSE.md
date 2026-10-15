@@ -8,8 +8,10 @@
 | Rule | a result is final only after two independent executions compared field by field; incomplete evidence is marked pending |
 | Manuscript | not edited in this workspace; manuscript-only items are marked as such |
 
-For each item: what the reviewer asked, what was done, the number, the evidence, and what is still open. Per-point status
-counting (20 points, RESOLVED / PARTIAL / OPEN-MS): `results/review_status_20261014.md`.
+For each item: what the reviewer asked, what was done, the number, the evidence, and what is still open. The per-point count
+of all 20 reviewer points, the mapping of the review's revision plan, and the list of extensions over the published 1 KiB
+design are at the end of this file (merged here on 2026-10-15 from `results/review_status_20261014.md` and
+`results/extensions_vs_published_1kib_20261014.md`).
 
 ## Summary
 
@@ -103,8 +105,8 @@ associativity wins at every capacity in the GM, by 3-10 % below 2 KiB.
 The conflict probe is no longer a single-set confirmation of the geometry (`RESULTS.md` section 3.3): over several sets it shows
 that the victim buffer is shared (DM_VC4 keeps two lines per set in at most four sets, SA2 in all), which is what limits DM_VC4 on
 real workloads; with random instead of cyclic order the victim buffer degrades gradually (90 -> 65 % over 5 -> 16 sets) instead of
-collapsing; every one of the 390 windows equals an independent cache model. List of the 38 extensions over the published 1 KiB
-design: `results/extensions_vs_published_1kib_20261014.md`.
+collapsing; every one of the 390 windows equals an independent cache model. The 38 extensions over the published 1 KiB design
+are listed in the appendix at the end of this file.
 
 ## A1: area
 
@@ -244,6 +246,104 @@ BP off vs on, 12 Embench-IoT kernels, 4 KiB, double-executed (`results/bp0_upstr
   eight lines in random order keep 59 % (SA4 with tree PLRU: 0.3 % cyclic at N = 5, 49 % random at N = 8).
 - Limitations list, GCC footnote, title: manuscript work.
 
+## Per-point status of all 20 reviewer points
+
+Counting unit: one reviewer point. Section 2 of the review has 3 critical points (M1-M3), section 3 has 9 major points (A1-A9),
+section 4 has 8 minor points (m1-m8, in the review's order). Status: RESOLVED = the data / evidence the reviewer asked for exists,
+double-executed (the manuscript still has to use it); PARTIAL = resolved for part of the scope; OPEN-MS = manuscript work only.
+
+| Point | Reviewer's request (short) | Status | What exists / what is left |
+|---|---|---|---|
+| M1 | headline result is a controller artifact | RESOLVED | DM_DSE ablation + FAST_HIT: at 4 KiB the controller costs +9.8 %, the organisation -0.3 %; with the hit latency matched, set associativity wins at every capacity |
+| M2 | three points, one capacity, one line size | RESOLVED | sweep 256 B - 8 KiB x 5 organisations, lines 8/16/32 B, victim depth 2/4/8, 13 workloads, x2 |
+| M3 | weak novelty, missing related work | OPEN-MS | supporting result exists (controller depth outweighs associativity in small caches; reversal point quantified); related-work section to be written |
+| A1 | 15-20k LE looks unoptimised | RESOLVED | per-module LE table; RF/BHT moved to M9K (-13.5 to -17 %), DM 12.8k LE with 4x the cache |
+| A2 | Fmax ~52 MHz, Sky130 core misses 20 ns | PARTIAL | FPGA 51-56 MHz over ten common seeds x2; DM and SA2 ASIC close 50 MHz at tt and ff after routing (R14 layouts); left: `6c4ccffd` layouts, DM_VC4 sign-off; ss reported, not closed (closing it would change CPI) |
+| A3 | no cross-validation with an independent model | RESOLVED | trace-driven model, every counter exact (48/48, 24/24, 60/60) |
+| A4 | retire share vs minstret inconsistent | RESOLVED | explained and proved on 24/24 kernels |
+| A5 | Figure 3 caption | OPEN-MS | wording fix (absolute counts identical, shares differ) |
+| A6 | self-written "Embench-style" kernels | RESOLVED | 12 upstream Embench-IoT kernels; CoreMark CRC-verified sweep and standard-duration matrix (simulation; physical scores not claimed) |
+| A7 | board evidence, random differential at one seed, ACT4 logs | PARTIAL | ACT4 43/43 x2, random differential 50 seeds x2 + independent Spike, UVM 48 cases x2: done; board 42 of 100 cases measured and all match; left: 58 board cases |
+| A8 | BP on/off without results | RESOLVED | +6.48 to +6.67 % cycles without the predictor |
+| A9 | no power / energy per configuration | PARTIAL | FPGA estimate ten seeds x2; ASIC exact-window activity power DM (mean 119.45 mW, EPI GM 3,608 pJ) and SA2 (129.64 mW, 4,317 pJ), each two GLS + two STA passes on the R14 layouts; left: `6c4ccffd` layouts, DM_VC4 |
+| m1 | ASIC section: ss -11.7 ns, 646 antenna, 8,718 slew, Magic diary | PARTIAL | DM/SA2: antenna 0, tt/ff closed, hold closed at 9 corners, DRV classified, ss reported; left: DM_VC4; section to be rewritten |
+| m2 | 11 limitations, merge and fix | OPEN-MS | most technical limitations are now fixed in data (M1, M2, A6, A7, A9); list to be rewritten |
+| m3 | GCC 14.2 / UB footnote to the artifact README | OPEN-MS | - |
+| m4 | Table 5 seeds 1, 2, 3, 5 (why not 4) | RESOLVED | replaced by ten common seeds 1..10, paired, two passes |
+| m5 | Table 6 N = 7: one victim hit | RESOLVED | measured: FIFO / round-robin with a cyclic order collapses; the same lines in random order keep 59 % (1 KiB, N = 8) |
+| m6 | "victim cache 59 % on matmult" not in the results | OPEN-MS | the 59 % in the data is the random-order conflict probe, not matmult: the conclusion sentence must be corrected |
+| m7 | define "weighted CPI" | RESOLVED | sum(mcycle) / sum(minstret) |
+| m8 | title says only "on FPGA"; keywords | OPEN-MS | - |
+
+Counts (20 points, 2026-10-14): RESOLVED 10 (M1, M2, A1, A3, A4, A6, A8, m4, m5, m7); PARTIAL 4 (A2, A7, A9, m1); OPEN-MS 6 (M3, A5,
+m2, m3, m6, m8). Every PARTIAL point waits on the ASIC layouts on `6c4ccffd` / DM_VC4 sign-off and on the remaining 58 board cases.
+
+Revision plan of the review (section 5) mapped to the points:
+
+| Plan item | Points | Status |
+|---|---|---|
+| 1 controller ablation | M1 | done |
+| 2 real sweep | M2 | done |
+| 3 cross-validation | A3 | done |
+| 4 Embench-IoT + CoreMark | A6, M2 | done (simulation) |
+| 5 LE breakdown, power, combined metrics | A1, A9 | done for DM / SA2 (R14 layouts); DM_VC4 ASIC power pending |
+| 6 retire vs minstret, Figure 3 | A4, A5 | A4 done; A5 manuscript |
+| 7 board logs, random differential 50 seeds | A7 | random differential done; board 42 / 100 |
+| 8 related work, shorter ASIC section | M3, m1 | manuscript |
+
+Risks of the review's section 6: controller artifact (M1) - removed by the ablation; "engineering report, no novelty" (M3) - the
+reversal result exists, manuscript work; RTL quality doubts (A1, A2) - LE breakdown and M9K arrays; data errors (A4, A5) - A4 proved,
+A5 wording; old references - manuscript.
+
+## Appendix: extensions over the published 1 KiB design
+
+Baseline: the published repository (`E:\Projects\RISCV-AHB-APB-UART`, README and `danh_gia.txt`): five-stage RV32I + Zmmul SoC,
+DM / SA2 / DM_VC4 caches of 1 KiB, 8 KiB main RAM, 12 kernels (10 self-written "Embench-style" + md5sum and depthconv), Quartus fits
+at four seeds (DM 15,188, SA2 18,168, DM_VC4 19,882 LE at seed 2, about 52 MHz), board matrix of 36 SOFs with no archived logs, ASIC
+flow in progress and not published. Everything below is new in the research copy (status 2026-10-14). Numbers are the
+double-executed values of `RESULTS.md`; ASIC items are on the historical R14 layouts.
+
+| # | Area | Extension | Evidence |
+|---:|---|---|---|
+| 1 | design | 4 KiB I and D caches (research profile in wrappers / QSFs; generic HDL default stays 1 KiB) | `RESULTS.md` 1 |
+| 2 | design | main RAM 8 -> 16 KiB, needed to run the upstream Embench-IoT kernels (the RAM, not the cache, limited the runnable set) | `NHAT_KY.md` 1.2 (2026-09-29) |
+| 3 | design | DM_DSE configuration (CACHE_CONFIG 3): the ten-state DSE controller as a plain direct-mapped cache, separating controller cost from organisation | M1 above |
+| 4 | design | SA4 (four-way, N-way core, tree PLRU), FPGA / simulation point of the sweep | `RESULTS.md` 3 |
+| 5 | design | `CACHE_FAST_HIT`: DSE / N-way main-array hit answered in ST_LOOKUP; FAST_HIT 0 proved equivalent to the previous RTL (module 16/16, SoC level for the exact PD inputs) | `asic/equiv/r16_eq/r16_eq_verdict.txt` |
+| 6 | design | parameterised line size (8 / 16 / 32 B) and victim depth (2 / 4 / 8) | `scripts/m2/run_m2_sweep.py` |
+| 7 | design | register file and BHT in M9K on the FPGA, cycle-exact (read-ahead + write bypass; k-induction with negative controls; ASIC view untouched, synthesis identical to R16); -2,630 to -2,680 LE (-13.5 to -17 %); DM 12.8k LE, below the published 1 KiB DM with 4x the cache | `results/a1_le_breakdown_rfbht.md`, `NHAT_KY.md` 1.2 |
+| 8 | design | cycle-exact ASIC timing fixes for the OpenRAM negedge `dout` half-cycle paths (adder split, registered selects; SAT-proved; CPI unchanged) | `NHAT_KY.md` 1.2, 9 "OpenRAM suon xuong" |
+| 9 | design | frozen RTL manifests (current `6c4ccffd`); PD reads frozen snapshots only | `results/rtl_manifest.json` |
+| 10 | workloads | 12 upstream Embench-IoT kernels (commit 09c2ed8c), source byte-identical except a 5-line scale hook | `RESULTS.md` 1 |
+| 11 | workloads | CoreMark: 92-point short sweep with source-known CRCs (184 simulations, independently audited) and a standard-duration matrix (> 10 s intervals) | `RESULTS.md` 2, 3.2 |
+| 12 | workloads | unified metric table (CPI, hit rates, mispredict rate, Embench speed / MHz, IRQ entry 5 / 41 cycles, context switch 270 / 292 cycles, ASIC vs FPGA view) | `results/unified_metrics.md` |
+| 13 | workloads | design-space sweep 256 B - 8 KiB x {DM, DM_DSE, SA2, DM_VC4, SA4}, lines 8 / 16 / 32 B, victim depth 2 / 4 / 8, 13 workloads, with and without FAST_HIT, each twice | `results/m2/M1_M2_REPORT.md` |
+| 14 | workloads | controller ablation result (controller +9.8 %, organisation -0.3 % at 4 KiB; with matched hit latency set associativity wins at every capacity, 3-10 % below 2 KiB) | M1 above |
+| 15 | workloads | extended conflict probe: 35 patterns x 6 configurations x 2 capacities, 390 windows, each equal to an independent model | `results/conflict_probe.csv` |
+| 16 | workloads | associativity probe (cachesweep): break points DM 2, SA2 3, DM_VC4 6 | `sw/` (BENCH=cachesweep) |
+| 17 | workloads | branch predictor on / off: +6.48 to +6.67 % cycles without it | `results/bp0_upstream_r14_4kb_p{1,2}.csv` |
+| 18 | workloads | retire share vs minstret explained and proved on 24 / 24 kernels | `results/a4_overlap/` |
+| 19 | verification | independent trace-driven cache model, every hit / miss counter exact (48/48, 24/24, 60/60) | `scripts/cache_model.py`, `scripts/run_crossval.py` |
+| 20 | verification | ACT4 43/43 twice with archived logs; corrected 1 MiB adapter with an upper-half test | `verification/results/act4/`, `results/architecture_window_20261009/` |
+| 21 | verification | random differential at 50 seeds twice (was one seed) plus an independent Spike reference (200 traces, 300 wrong-trace controls) | `results/random_diff_checked_20261009/`, `results/spike_random_reference_20261011/` |
+| 22 | verification | UVM 48 cases per pass incl. AXI stress at line words 2 / 4 / 8 / 16 and UART RX; wrong-byte controls | `results/uvm_cache_uart_20261009/` |
+| 23 | verification | full verification chain for every RTL change, executed twice | `QUY_TRINH.md` C |
+| 24 | verification | formal proofs for restructurings (SAT / equivalence / k-induction, each with a negative control) | `NHAT_KY.md` 1, 4 |
+| 25 | FPGA | ten common seeds x two independent passes for four configurations (was four seeds, one pass); paired comparison, no best seed | `RESULTS.md` 4 |
+| 26 | FPGA | per-module LE breakdown and CPI x LE | `results/a1_le_breakdown_rfbht.md` |
+| 27 | FPGA | Quartus power estimates for ten seeds x two passes | `RESULTS.md` 4 |
+| 28 | FPGA | 100-SOF board matrix (25 firmware x 4 configurations, current RTL, seed 2) with hash-bound expected counters; session 2026-10-13: 42 of 100 cases measured, all equal to both RTL reference passes (58 open) | `results/board_20261013/`, `results/board_20261013_independent_check/` |
+| 29 | ASIC | full OpenLane flows to sign-off, double-executed with identical final netlists: DM 10.63 mm2, SA2 11.56 mm2 (R14); DM_VC4 open | `RESULTS.md` 5 |
+| 30 | ASIC | local OpenLane extensions (off by default): post-route hold ECO on extracted parasitics (both RC passes in one step), macro-pin buffers, post-DRT antenna repair with an allow-congestion option, RC calibration hooks, main-route save, gated four-phase driver with a convergence watchdog | `QUY_TRINH.md` D |
+| 31 | ASIC | minimum-die search for SA2 (10.54 / 11.05 / 11.305 mm2 fail, 11.56 signs off; minimality not yet proved) | `PROJECT_STATE.md` T4 |
+| 32 | ASIC | gate-level simulation of the signed netlists: 12 / 12 kernels reproduce the ASIC-view cycle counts | `RESULTS.md` 5 |
+| 33 | ASIC | activity-based power (GLS -> SAIF -> OpenSTA, RCX, nom_tt), exact windows, two GLS + two STA passes each: DM 119.45 mW (EPI GM 3,608 pJ), SA2 129.64 mW (4,317 pJ) | `results/activity_power_exact_dm_20261013/`, `results/activity_power_exact_sa2_20261014/` |
+| 34 | ASIC | RTL-to-routed-netlist equivalence (register-mapped LEC + algebraic multiplier proof), DM and SA2, with closed premises (asynchronous reset, undefined values, clock / edge, one-hot invariants) | `RESULTS.md` 5.1, 5.2, `results/lec_sa2_20261013/` |
+| 35 | ASIC | timing per corner incl. the ss corner (reported, not gated), DRV classification | `RESULTS.md` 5, 7 |
+| 36 | method | double execution of every measurement, field-by-field comparison, receipts with SHA-256 of every input | `QUY_TRINH.md` B |
+| 37 | method | one history (`NHAT_KY.md`), one procedure file (`QUY_TRINH.md`), one results file, one review-response file | - |
+| 38 | method | point-by-point response to the review (this file) | - |
+
 ## Revision history
 
 | Date | Change |
@@ -256,3 +356,4 @@ BP off vs on, 12 Embench-IoT kernels, 4 KiB, double-executed (`results/bp0_upstr
 | 2026-10-15 07:46 | state of 2026-10-15 (commit `2d4202d`) |
 | 2026-10-15 | restructured: RTL column in the summary; board count corrected (9 complete kernels; 41 display read-backs); A9 "board NOT_RUN" and "SA2 exact window pending" corrected; A1 synthesis boundary R16 `da06d38f` vs R14 PD `fc555d6b`; historical items marked with their re-run status |
 | 2026-10-15 | references point to the single topic-structured `NHAT_KY.md` |
+| 2026-10-15 | merged `results/review_status_20261014.md` (per-point status, revision-plan map, risks) and `results/extensions_vs_published_1kib_20261014.md` (38 extensions) into this file |

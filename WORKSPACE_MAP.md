@@ -12,7 +12,7 @@
 | Can biet | File can doc |
 |---|---|
 | He thong hien tai la gi, so lieu nao con dung, chay tren RTL nao? | trang nay, `RESULTS.md` (muc 0), `PROJECT_STATE.md` |
-| Moi y phan bien da xu ly toi dau? | `REVIEW_RESPONSE.md`, `results/review_status_20261014.md`, `danh_gia.txt` |
+| Moi y phan bien da xu ly toi dau? | `REVIEW_RESPONSE.md` (gom trang thai 20 diem va 38 muc mo rong), `danh_gia.txt` |
 | Gui dong nghiep tai lieu nao? | `results/colleague_materials_20261010.zip` (README / SOURCE_ORIGINS / SHA trong goi), trang bao cao `report_page/soc_report.html` |
 | Chay / do / ky ten dung quy tac the nao? | `QUY_TRINH.md` |
 | Vi sao chon knob / ung vien, loi cu debug the nao? | `NHAT_KY.md` muc 8, 9 (ha tang flow muc 6); archive run |
@@ -181,8 +181,6 @@ Adapter ASIC: `axi_ram_32_asic_macro.v` dung 8 macro 2 KiB cho RAM; `cache_data_
 | `QUY_TRINH.md` | quy tac rang buoc, moc thoi gian quy tac, thu tu thuc thi | 2026-10-15 |
 | `NHAT_KY.md` | lich su duy nhat theo chu de; ban theo gio con trong git (commit `35ebf92`) | 2026-10-15 |
 | `WORKSPACE_MAP.md` | trang nay | 2026-10-15 |
-| `CLOUD_TASKS.md` | viec chi-van-ban cho phien cloud | 2026-10-15 |
-| `CODEX_PROMPT.md` | instructions cu 2026-10-09; khong la quy tac hien hanh; xoa bi tool review chan | lich su |
 | `report_page/README.md` | nguon trang bao cao | 2026-10-15 |
 | `tb/diag/README.md` | probe view ASIC cu, khong regression | lich su |
 | `sw/embench_upstream/README.md` | nguon upstream / scale / licence | 2026-09-29 |
@@ -192,13 +190,10 @@ Adapter ASIC: `axi_ram_32_asic_macro.v` dung 8 macro 2 KiB cho RAM; `cache_data_
 | `results/m2/M1_M2_REPORT.md`, `M1_M2_analysis.md` | confound controller, DSE, gioi han; phan tich sinh tu sweep | 2026-10-06 (lich su R15/R16) |
 | `results/a1_le_breakdown_r16.md`, `a1_le_breakdown_rfbht.md` | LE theo module truoc / sau M9K | 2026-10-08 |
 | `results/asic_compare_dm_r14.md`, `asic_compare_dm_sa2_20261009.md` | bang generator DM / DM+SA2 (subset) | 2026-10-02, 2026-10-09 |
-| `results/asic_ppa_verified_subset_20261010.md` (`_20261009.md` lich su) | subset PPA du bang chung DM / SA2 | 2026-10-10 |
+| `results/asic_ppa_verified_subset_20261010.md` | subset PPA du bang chung DM / SA2 | 2026-10-10 |
 | `results/unified_metrics.md` | bang hop nhat CPI / hit / PPA | 2026-10-10 |
 | `results/rtl_consistency_audit_20261014.md` | ket qua nao chay tren RTL nao | 2026-10-14 |
-| `results/review_status_20261014.md`, `extensions_vs_published_1kib_20261014.md` | trang thai 20 diem phan bien; 38 muc mo rong | 2026-10-14 |
-| `results/bao_cao_trang_thai_20261010.md` | snapshot bao cao trang thai | 2026-10-10 |
 | `results/fpga_seed_summary_*.md` | bang seed (r12b, r14 lich su; rfbht 4 seed; common seeds) | 2026-10-09 |
-| `results/board_6c4ccffd_20261009_seed_comparison.md` | chon best seed theo cfg: DA RUT LAI (thay bang seed chung) | lich su |
 | `results/vc4_padding_hypothesis_20261009.md`, `pd_minimality_preflight_20261010.md` | ke hoach thi nghiem PD (R14) | lich su |
 | `results/cleanup_proposal_20261009.md` | de xuat truoc don; ket qua o `cleanup_proposal_outcome.json` | lich su |
 | `results/lec_*_20261010.md` va cac receipt LEC | sub-proof LEC DM (Boolean) | 2026-10-10 |

@@ -326,7 +326,7 @@ A1 sau M9K (`results/a1_le_breakdown_rfbht.md`): RF 1,386 -> 52 LE, BHT 962 -> 6
 khoi CPU core 39.68 -> 28.08 mW (DM, seed 2).
 
 **Phuong phap seed (2026-10-09 14:23).** Phuong an chon seed tot nhat rieng cho tung cau hinh
-(`results/board_6c4ccffd_20261009_seed_comparison.md`) bi rut lai TRUOC khi refit / build SOF nao. Phuong phap moi: cung bo seed
+(`results/board_6c4ccffd_20261009_seed_comparison.md`, da xoa 2026-10-15, con trong git) bi rut lai TRUOC khi refit / build SOF nao. Phuong phap moi: cung bo seed
 1..10 cho bon cau hinh, so sanh ghep cap theo seed, hai luot doc lap; board dung seed 2 chung cho ca bon. Ma tran
 `paired10_6c4ccffd_20261009` bat dau 14:33; seed 1/3/4 giu nguon goc rfbht, seed 5..10 va seed 2 refit hai lan. Kiem phuong phap
 5/5 (`results/board_seed_method_validation_20261009.json`). Hai lan ngat: phien Windows dung ~15:33 (khong PID, khong ket luan
@@ -777,7 +777,8 @@ trong `state_in` / `resolved.json`); ten moi dung cho tai lieu va run / file moi
 | ten cu | ten moi / muc | loai |
 |---|---|---|
 | HANDOVER_CODEX.md | PROJECT_STATE.md | tai lieu trang thai (doi 2026-10-09) |
-| CODEX_PROMPT.md | instructions lich su, khong la quy tac hien hanh | da archive; xoa bi tool review chan |
+| CODEX_PROMPT.md | instructions lich su (2026-10-09), thay bang PROJECT_STATE.md + QUY_TRINH.md | da xoa 2026-10-15, con trong git |
+| CLOUD_TASKS.md | PROJECT_STATE.md muc 1 (quy tac phien cloud) va nhat ky trang thai | gop 2026-10-15 |
 | make_golden_snapshot2.py | de xuat golden_snapshot.py | chua doi ten: tool review chan |
 | dmuA / dmuB | dm_corr3400x3325_f220_r1 / dm_corr3400x3400_f220_r1 | run DM hanh lang |
 | sa2uA / sa2uB | sa2_corr3400x3325_f220_r1 / sa2_corr3400x3400_f220_r1 | run SA2 |
@@ -830,9 +831,9 @@ trong `state_in` / `resolved.json`); ten moi dung cho tai lieu va run / file moi
 | 2026-10-09 18:40 | kiem toan workspace (73,861 file, 254.6 GiB), ban do chuc nang | `WORKSPACE_MAP.md`, `results/workspace_audit/` |
 | 2026-10-09 17:57 | bang hop nhat CPI / hit / PPA | `results/unified_metrics.md` (`scripts/metrics/unified_table.py`) |
 | 2026-10-10 07:51 | goi tai lieu viet bao cho dong nghiep (121 file, ZIP kiem CRC / SHA) | `results/colleague_materials_20261010.zip` |
-| 2026-10-10 08:25 | bao cao trang thai de doc | `results/bao_cao_trang_thai_20261010.md` |
+| 2026-10-10 08:25 | bao cao trang thai de doc (snapshot; da xoa 2026-10-15 vi bi PROJECT_STATE / RESULTS thay the, con trong git) | `results/bao_cao_trang_thai_20261010.md` |
 | 2026-10-10 08:39 | figure research (PPA FPGA seed chung, Embench controller) | `results/paper_figures_20261010.zip`, `results/paper_figures_20261010_package_receipt.json` |
-| 2026-10-14 01:00 | ban nhap trang thai phan bien (20 diem) va danh sach 38 muc mo rong so voi ban 1 KiB | `results/review_status_20261014.md`, `results/extensions_vs_published_1kib_20261014.md` |
+| 2026-10-14 01:00 | ban nhap trang thai phan bien (20 diem) va danh sach 38 muc mo rong so voi ban 1 KiB (gop vao `REVIEW_RESPONSE.md` 2026-10-15) | `results/review_status_20261014.md`, `results/extensions_vs_published_1kib_20261014.md` (con trong git) |
 | 2026-10-14 21:30 | trang bao cao Version 9 (tieng Viet) | `report_page/soc_report.html` |
 
 ## Lich su tai lieu
