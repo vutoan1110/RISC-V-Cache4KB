@@ -13,8 +13,7 @@ Time convention: dates YYYY-MM-DD; times are local (+07) unless marked UTC (flow
 
 1. `QUY_TRINH.md` - the binding procedures and rules (Vietnamese, ASCII).
 2. This file - current state, running jobs, ordered task list with exact commands.
-3. `NHAT_KY.md` (topic version `NHAT_KY_v2.md`): why every PD knob exists (v2 section 4, original section 8) and known traps (v2
-   section 7, original section 9).
+3. `NHAT_KY.md`: why every PD knob exists (section 8; PD infrastructure section 6) and known traps (section 9).
 4. `RESULTS.md` (current numbers), `REVIEW_RESPONSE.md` (review items), `README.md` (layout).
 
 ## 1. Binding rules (short form; full text in QUY_TRINH.md)
@@ -74,9 +73,10 @@ Time convention: dates YYYY-MM-DD; times are local (+07) unless marked UTC (flow
 **Naming and records**
 - Run tags: `<cfg>_<floorplan>[_<knob><value>...]_r<N>` (e.g. `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_nogrtd_r1`). No numbered /
   AI-looking names (no R17, E17, final4, _v2, "Incident NN"); content + date names. Shorthand used in this file (E0, E1, V2..V5, J1..J3,
-  T1..T14) is defined in `NHAT_KY_v2.md` section 8.
-- History: ONLY `NHAT_KY.md` (Vietnamese, ASCII); owner 2026-10-14: no new sections until its planned rewrite (`NHAT_KY_v2.md`,
-  2026-10-15). Procedures: `QUY_TRINH.md`. Numbers: `RESULTS.md`. Review status: `REVIEW_RESPONSE.md`. Reader-facing results go to the
+  T1..T14) is defined in `NHAT_KY.md` section 11.
+- History: ONLY `NHAT_KY.md` (Vietnamese, ASCII), structured by topic since 2026-10-15 (one version; the hour-by-hour version is in
+  git, commit `35ebf92`). New events go to its section 8a as `### YYYY-MM-DD HH:MM <subject>` and are merged into the topic sections
+  at the next documentation pass; recurring issues section 9, cleanup section 10, renames section 11. Procedures: `QUY_TRINH.md`. Numbers: `RESULTS.md`. Review status: `REVIEW_RESPONSE.md`. Reader-facing results go to the
   report page (`report_page/soc_report.html`). Do not record the same issue in several places.
 - Cleanup is mandatory, but deleting run folders needs the owner's explicit approval; archive first (`results/pd_run_archive/<run>/`:
   resolved.json, final metrics, error / warning logs, flow log, step list) and list every deletion in `results/cleanup_deleted.txt`.
@@ -168,7 +168,8 @@ Time convention: dates YYYY-MM-DD; times are local (+07) unless marked UTC (flow
     evidence before any action. Pass-2 rows stay marked `NOT_SCHEDULED_SINGLE_PASS_SCOPE`. Each case requires explicit display review
     and confirmation before the next programming, reset or rerun; a planned `next_case` never authorises execution. Repeated boots
     after a manual reset are not another independently programmed pass. Helpers: `hercules_case_ui.py` (configure / flush logging, no
-    board operations), `record_board_case.py` (validates one case offline; `--sync-tracking` updates the records),
+    board operations), `record_board_case.py` (validates one case offline; `--sync-tracking` updates the records and appends one event to `NHAT_KY.md`
+    section 8a, located by the `## 8a.` / `## 9.` headings),
     `program_board_case.ps1` (plan-only unless `-Program`), `check_board_uart.py` (28 numeric UART fields).
   - Earlier preparation folder `results/board_20261012/` (readiness.json, runlist / results templates, README documenting the JP5 UART
     and the immediate boot) is historical.
@@ -221,7 +222,7 @@ Time convention: dates YYYY-MM-DD; times are local (+07) unless marked UTC (flow
 
 ### 3.6 ASIC DM_VC4
 
-- Not signed off on any RTL. Root causes measured (`NHAT_KY_v2.md` section 4.5): (a) on 11.56 mm2 the D$ victim buffer + D$ tag cluster
+- Not signed off on any RTL. Root causes measured (`NHAT_KY.md` section 8.3): (a) on 11.56 mm2 the D$ victim buffer + D$ tag cluster
   congest the corridor at the D$ macro edge; FastRoute runs GRT-0103 "Extra Run for hard benchmark" (fires at congestion iteration 20
   when overflow > 200; OpenROAD `edf00dff`) and clock-tree trunks detour 3-7 mm -> hold skew -2.7 .. -4.8 ns -> 1,675-2,088 hold
   endpoints at p2 (SA2: 19); every full global route (including the one inside `OpenROAD.RepairDesignPostGRT`) re-rolls this clock
@@ -353,7 +354,7 @@ DM_VC4; review status; extension list); 2026-10-14 shorter tasks first, finish P
   `python scripts/metrics/verify_activity_power.py --tag <tag> --design <dir> --step <NN>-openroad-stapostpnr --ref-csv results/dse_asic_view_p1.csv --config <CFG>`.
   The historical SA2 example used tag `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomaxmin_r1`, step 59, fill 56.
 - Paired STA starts only after the complete capture pair passes its strict verification and Windows free >= 7,000 MiB.
-- SAIF -> pin conversion runs in Windows Python (pinned); method notes and traps: `NHAT_KY_v2.md` sections 6 and 7.
+- SAIF -> pin conversion runs in Windows Python (pinned); method notes and traps: `NHAT_KY.md` sections 5 and 9.
 
 **T4. SA2 minimality** (rule: the next smaller die must fail with the same recipe)
 - Historical ladder [R14]: 10.54 mm2 FAILED (max_tt -0.573), 11.05 mm2 failed P2 twice, 11.305 mm2 passed P2 once and failed at the
@@ -410,7 +411,7 @@ GlobalRouting when `RUN_POST_GRT_DESIGN_REPAIR` is false (34 controls, `results/
   of 2026-10-09: 82,819,435,929 logical bytes (77.132 GiB) for the 17 runs.
 - Keep: signed-off runs (r14F_A/B, final3_A/B, SA2 `_ecomaxmin_r1/_r2` and their `_rsztf_r1/_r2` sources), synthesis evidence runs,
   golden snapshot, SOF matrices, logs, double-executed CSVs, `asic/evidence/`. Procedure: archive per run into
-  `results/pd_run_archive/<run>/`, list in `results/cleanup_deleted.txt`, add a row to the NHAT_KY cleanup log.
+  `results/pd_run_archive/<run>/`, list in `results/cleanup_deleted.txt`, add a row to `NHAT_KY.md` section 10.
 
 **T11. Git** - the research state was committed on 2026-10-15 on branch `experimental-r14`. Further commits only when the owner asks;
 English ASCII messages; no Co-Authored-By; never check out another branch while jobs run.
@@ -464,3 +465,4 @@ English ASCII messages; no Co-Authored-By; never check out another branch while 
 | 2026-10-09 .. 2026-10-15 | dated "Update" blocks appended (2026-10-13 05:20, 15:20, 19:20; 2026-10-14 00:55, 08:40, 16:15, 18:30, 21:20, 22:30; 2026-10-15 07:45) |
 | 2026-10-15 07:46 | committed (commit `2d4202d`) |
 | 2026-10-15 | restructured: overview table; per-area state; running-jobs table; the dated update blocks condensed into the state log (section 5); task list re-ordered for the `6c4ccffd` plan (new T13 PD acceptance, T14 re-runs); superseded procedures (branch-based second ECO, two-pass board plan, 2026-10-13 never-resume rule, J1/J2 recovery commands) replaced by the current ones; report page source updated to `report_page/soc_report.html`; git status updated |
+| 2026-10-15 | references point to the single topic-structured `NHAT_KY.md` (rule for new history events: section 8a) |

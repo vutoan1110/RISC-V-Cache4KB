@@ -19,8 +19,7 @@ the copies in this directory.
 | `RESULTS.md` | measured results per configuration (verification, architecture, FPGA, board, ASIC), with RTL provenance and what is not established | English |
 | `REVIEW_RESPONSE.md` | point-by-point status of the review items (M1-M3, A1-A9, minor) | English |
 | `QUY_TRINH.md` | binding rules and run procedures (verification chain, gated PD flow, FPGA, power, LEC, golden, naming, cleanup, reporting) | Vietnamese, ASCII |
-| `NHAT_KY.md` | the single design history, by date (2026-09-16 .. 2026-10-15) | Vietnamese, ASCII |
-| `NHAT_KY_v2.md` | the same history rewritten by topic (RTL revisions, verification, FPGA / board, ASIC per configuration, LEC, power, known issues, renames, cleanup); proposed replacement, 2026-10-15 | Vietnamese, ASCII |
+| `NHAT_KY.md` | the single design history, by topic (RTL revisions, verification, FPGA / board, LEC, power, PD infrastructure, ASIC per configuration, new-event log 8a, known issues, cleanup, renames); rewritten 2026-10-15, the hour-by-hour version is in git history | Vietnamese, ASCII |
 | `WORKSPACE_MAP.md` | functional names of RTL revisions, folder / document catalogue, verification boundaries | Vietnamese, ASCII |
 | `CLOUD_TASKS.md` | text-only tasks for cloud sessions | English |
 | `CODEX_PROMPT.md` | historical agent instructions of 2026-10-09; not current rules | English |
@@ -132,3 +131,4 @@ published with the project.
 | 2026-10-07 | document set consolidated (commit `507c3fb`) |
 | 2026-10-09 .. 15 | CoreMark, UVM, Spike, board, PD notes added; state of 2026-10-15 (commit `2d4202d`) |
 | 2026-10-15 | restructured: document table with languages, configuration table, status at a glance, reference-design table, reproduction table; board wording (42 measured, 41 display read-backs, one scheduled pass, 58 left); synthesis boundary R16 / R14; neutral wording of the host probe |
+| 2026-10-15 | single topic-structured `NHAT_KY.md` (no second version) |

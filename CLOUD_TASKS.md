@@ -12,7 +12,8 @@ Context: research copy of an RV32I + Zmmul SoC, 4 KiB caches, 16 KiB RAM; config
 
 ## Task 1 - NHAT_KY rewrite (owner 2026-10-14: shorter, more scientific, no overlap)
 
-- Write `NHAT_KY_v2.md` next to `NHAT_KY.md`; do not delete or edit the old file.
+- Write `NHAT_KY_v2.md` next to `NHAT_KY.md`; do not delete or edit the old file. (Superseded 2026-10-15: the owner decided to
+  replace `NHAT_KY.md` with the rewrite and keep one version only.)
 - Structure by topic, not by hour:
   1. RTL revisions: one table (manifest, date, change, proof, chain result, status), then one short paragraph each;
   2. verification sets (TB, UVM, ACT4, random / Spike, Embench, CoreMark): what, how, result, on which RTL;
@@ -46,8 +47,8 @@ Fix the wording only:
 
 | Task | Status | Where |
 |---|---|---|
-| Task 1 - NHAT_KY rewrite | delivered as `NHAT_KY_v2.md` (topic structure, [HT]/[LS] labels, 42-case board table, neutral machine-fault wording); `NHAT_KY.md` unchanged | branch `claude/great-gauss-9u48xg` |
-| Task 2 - documentation mismatches | applied in `README.md`, `RESULTS.md`, `REVIEW_RESPONSE.md`, `PROJECT_STATE.md`, `QUY_TRINH.md`, `WORKSPACE_MAP.md` (R16 `da06d38f` vs R14 PD `fc555d6b` boundary; board 42 measured / 41 displays / one scheduled pass / 58 left; 4 ramsweep + 9 kernels x 4 + 2 statemate; SA2 exact-window power done on the R14 layout; snapshot 44 then 47 files; 2026-10-14 process rule; stock EQY vs custom LEC) | same branch |
+| Task 1 - NHAT_KY rewrite | delivered (topic structure, [HT]/[LS] labels, 42-case board table, neutral machine-fault wording); per the owner it now REPLACES `NHAT_KY.md` (one version; old hour-by-hour version in git, commit `35ebf92`); section numbers 8 / 8a / 9 / 10 / 11 kept for script compatibility | `experimental-r14` |
+| Task 2 - documentation mismatches | applied in `README.md`, `RESULTS.md`, `REVIEW_RESPONSE.md`, `PROJECT_STATE.md`, `QUY_TRINH.md`, `WORKSPACE_MAP.md` (R16 `da06d38f` vs R14 PD `fc555d6b` boundary; board 42 measured / 41 displays / one scheduled pass / 58 left; 4 ramsweep + 9 kernels x 4 + 2 statemate; SA2 exact-window power done on the R14 layout; snapshot 44 then 47 files; 2026-10-14 process rule; stock EQY vs custom LEC) | `experimental-r14` |
 
-The cloud session delivered both tasks on its assigned branch instead of separate `cloud/<task>` branches; each document is a separate
-commit so the owner can pick them individually. No script, config, RTL or receipt-derived number was changed.
+Per the owner (2026-10-15) both tasks were committed directly on the working branch `experimental-r14` (no separate branch). No
+script, config, RTL or receipt-derived number was changed.

@@ -5,7 +5,7 @@
 | Scope | research copy of the RISC-V SoC with configurable caches: 4 KiB I/D caches, 16 KiB main RAM |
 | Last updated | 2026-10-15 (data as of 2026-10-15 07:45 +07) |
 | Current RTL | manifest `6c4ccffd` (`results/rtl_manifest.json`, 227 files) |
-| Related | history and reasons: `NHAT_KY.md` (topic version `NHAT_KY_v2.md`); procedures: `QUY_TRINH.md`; review items: `REVIEW_RESPONSE.md`; open work: `PROJECT_STATE.md` |
+| Related | history and reasons: `NHAT_KY.md`; procedures: `QUY_TRINH.md`; review items: `REVIEW_RESPONSE.md`; open work: `PROJECT_STATE.md` |
 
 Rules for every number in this file:
 1. Executed twice and compared field by field; single executions and screenings are labelled as such.
@@ -266,7 +266,7 @@ Equivalence evidence:
 
 ### 5.2 SA2, 16 KiB RAM, corridor floorplan corr3400x3400_f220 (signed off 2026-10-09) [historical]
 
-Knobs (each measured, `NHAT_KY_v2.md` section 4.4): post-GRT cap margin 20, `MAX_FANOUT_CONSTRAINT` 16, cell padding one site per
+Knobs (each measured, `NHAT_KY.md` section 8.2): post-GRT cap margin 20, `MAX_FANOUT_CONSTRAINT` 16, cell padding one site per
 side, timing-driven global placement, clock trunks on met3-met5, resizer on tt / ff only, post-route hold ECO in two passes (max_*
 extraction, then min_*). Runs `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomaxmin_r1` / `_r2` (r2 a full flow from step
 1, branched after its first ECO like r1): identical on 319 flow metrics, final netlist and DEF byte-identical, SPEF identical except
@@ -317,7 +317,7 @@ its date line. Source: `results/asic_compare_dm_sa2_20261009.md`.
 - The padded 3600 x 3400 floorplan (12.24 mm2) routes to 0 DRC (V2: 0 at iteration 31), but the post-route antenna repair does not
   converge: 1,031 violating nets, side-area, 70 % of the pins in the logic band between the I$ and D$ macro columns (both caches'
   read-data pins face the 220 um channel). GRT antenna margin, a 3800 um die (V4: 821 nets after GRT repair, stopped by the owner
-  2026-10-14 14:01 UTC) and a 500 um maximum wire length (V5) did not reduce the violations. History: `NHAT_KY_v2.md` section 4.5.
+  2026-10-14 14:01 UTC) and a 500 um maximum wire length (V5) did not reduce the violations. History: `NHAT_KY.md` section 8.3.
 - Owner decision 2026-10-14: DM_VC4 deferred; to be rebuilt from `6c4ccffd` with its own floorplan (read pins away from the centre).
 - LEC, synthesis-dependent part DONE (every DM_VC4 run has the same synthesis netlist; gold `rtl_r14`): RTL == RTL + fsm (39,000
   cells proven) == N1 (21,828 gold / 21,093 N1 flop bits, 364 constants, 18 duplicates; 22,117 outputs, 0 SAT; 34 multiplier-cone
@@ -399,7 +399,7 @@ eviction copy was gated on the wrong flag. Corrected numbers (old self-written k
 | Area | Gap | Reference |
 |---|---|---|
 | Timing | the ss corner does not close at 50 MHz on any layout (max_ss -7.4 to -10.0 ns); closing it needs a deeper pipeline, which would change CPI | section 5 |
-| SRAM Liberty | OpenRAM macros have TT Liberty only; `addr0` / `addr1` / `wmask0` carry a 0.04 ns max_transition (10-90 %) that buffers cannot meet at the 10 um row halo; reported, not fixed | `NHAT_KY_v2.md` section 7 |
+| SRAM Liberty | OpenRAM macros have TT Liberty only; `addr0` / `addr1` / `wmask0` carry a 0.04 ns max_transition (10-90 %) that buffers cannot meet at the 10 um row halo; reported, not fixed | `NHAT_KY.md` section 9 |
 | DRV | reported by category, not gated: nom_tt_025C_1v80 DM slew 142 / cap 298 / fanout 1,428, SA2 slew 1,084 / cap 1,036 / fanout 383 (violating pin rows; SRAM, then diode-loaded nets, then std cells; blank fanout slack kept as UNKNOWN_REPORTED_BLANK); identical across the two runs of each design at all nine corners | `results/asic_drv_categories_20261010/paired_final_reports/report.md` |
 | PD on current RTL | no `6c4ccffd` layout is signed off yet; all signed layouts are R14 | section 5.7 |
 | DM_VC4 | no signed-off layout; no activity power; LEC N1 == final pending | section 5.3 |
@@ -425,7 +425,7 @@ definedness of BHT / UART baud / I$ hot array / main RAM (`results/lec_source_de
 `results/uart_baud_default_definedness_20261010_verification.json`, `results/uart_baud_definedness_independent_review_20261010.json`,
 `results/icache_hot_default_definedness_20261010_verification.json`, `results/icache_hot_definedness_independent_review_20261010.json`,
 `results/ram_bank_default_definedness_20261010_verification.json`, `results/ram_bank_definedness_independent_review_20261010.json`).
-Details: `NHAT_KY_v2.md` section 5.3.
+Details: `NHAT_KY.md` section 4.3.
 
 ## Appendix: sources
 
@@ -456,3 +456,4 @@ Details: `NHAT_KY_v2.md` section 5.3.
 | 2026-10-14 | SA2 LEC complete; SA2 exact-window power; DM_VC4 LEC synthesis part; RTL consistency audit; PD moves to `6c4ccffd` |
 | 2026-10-15 07:46 | state of 2026-10-15 (commit `2d4202d`) |
 | 2026-10-15 | restructured: provenance table, verification table, [current]/[historical] labels, board count corrected (9 complete kernels, not 10), R16 / R14 synthesis boundary, SA2 exact-window power marked done on the R14 layout, snapshot 44 -> 47 files, process rule of 2026-10-14, EQY vs custom LEC distinction |
+| 2026-10-15 | references point to the single topic-structured `NHAT_KY.md` |

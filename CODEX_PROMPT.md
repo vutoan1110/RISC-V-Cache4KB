@@ -8,7 +8,8 @@
 > - Development may resume from a failed step; acceptance requires one complete clean flow from step 1 (2026-10-14).
 > - FPGA uses ten common seeds 1..10 x two passes (2026-10-09); the board runs one physical pass of 100 cases (2026-10-13).
 > - SA2 LEC is complete (2026-10-14); DM_VC4 is deferred by the owner (2026-10-14).
-> - History is being rewritten by topic (`NHAT_KY_v2.md`, 2026-10-15).
+> - History was rewritten by topic in `NHAT_KY.md` on 2026-10-15 (one version; section numbers 8 / 9 / 10 / 11 keep their old
+>   meaning, new events go to section 8a); the section and entry references below point to the old hour-by-hour version in git.
 > Last reviewed: 2026-10-15.
 
 You are taking over an ongoing hardware research project from another agent. Work carefully, follow the project's

@@ -3,8 +3,8 @@
 Twelve kernels copied from the Embench-IoT repository (github.com/embench/embench-iot, commit
 `09c2ed8c3b7008c95d08b038de4a3f6dc103ed70`, "Remove CPU_MHZ references"), built for this SoC with
 `make MODE=upstream BENCH=<kernel>` and installed as `fw/up_<kernel>.hex` by `scripts/build_upstream_fw.sh`.
-Background and the full change list: `../../NHAT_KY.md`, entry "2026-09-29 RAM chinh 8 -> 16 KiB" (formerly `RAM16K_CHANGES.md`,
-merged into the history on 2026-10-07; topic version `../../NHAT_KY_v2.md` section 1.2).
+Background and the full change list: `../../NHAT_KY.md` section 1.2, "2026-09-29 R14: RAM chinh 16 KiB" (formerly
+`RAM16K_CHANGES.md`, merged into the history on 2026-10-07).
 
 ## Licence
 

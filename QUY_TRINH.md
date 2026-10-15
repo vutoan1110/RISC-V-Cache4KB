@@ -5,7 +5,7 @@
 | Pham vi | moi quy tac dang hieu luc va cach chay tung loai cong viec cua ban nghien cuu `E:/Projects/RISCV-research` |
 | Cap nhat lan cuoi | 2026-10-15 |
 | Uu tien | khi mau thuan voi tai lieu khac, file nay thang (bao chu du an ve mau thuan) |
-| Lien quan | lich su va ly do: `NHAT_KY.md` (ban theo chu de `NHAT_KY_v2.md`); so lieu: `RESULTS.md`; trang thai: `PROJECT_STATE.md` |
+| Lien quan | lich su va ly do: `NHAT_KY.md`; so lieu: `RESULTS.md`; trang thai: `PROJECT_STATE.md` |
 
 Quy tac moi duoc them vao muc tuong ung kem ngay dat; quy tac bi thay the duoc ghi ro ngay thay the.
 
@@ -28,6 +28,7 @@ Quy tac moi duoc them vao muc tuong ung kem ngay dat; quy tac bi thay the duoc g
 | 2026-10-13 | Python phia Windows chay ghim mot CPU; `DRT_SAVE_MAIN_ROUTE`, `DRT_ANTENNA_REPAIR_ALLOW_CONGESTION`; ECO hold hai luot trong mot buoc; `P2_MIN_HOLD`; board chi mot luot vat ly; "khong chay tiep tu buoc fail" (thay the 2026-10-14) | B, D, E |
 | 2026-10-14 | SUA VA CHAY TIEP KHI PHAT TRIEN, NGHIEM THU BANG MOT LAN CHAY TRON TU DAU; hai bay ghim CPU; mot RTL cho moi flow, PD doc `rtl_rfbht`; xong PD truoc khi sua trang bao cao; `G5_ANT_ROUND_RULES` | B, C, D, H |
 | 2026-10-15 | mo phong chay tren RTL cu duoc chay lai x2 tren `6c4ccffd`, song song, uu tien thap tren Windows | C |
+| 2026-10-15 | `NHAT_KY.md` viet lai theo chu de, chi mot phien ban; su kien moi ghi vao muc 8a roi gop vao muc chu de | H |
 
 ## A. Pham vi va muc tieu
 
@@ -54,7 +55,7 @@ Quy tac moi duoc them vao muc tuong ung kem ngay dat; quy tac bi thay the duoc g
 ## B. Ky luat thuc thi
 
 - **Chay kep.** Moi phep do chay hai lan va so tung truong; chay kep la cong quyet dinh ket qua co dung duoc hay khong. Tren may tram
-  da ghi nhan loi Python khong lap lai, nguyen nhan chua xac dinh (`NHAT_KY.md` muc 9 "Loi may", `NHAT_KY_v2.md` muc 7).
+  da ghi nhan loi Python khong lap lai, nguyen nhan chua xac dinh (`NHAT_KY.md` muc 9 "Loi may").
 - **Probe suc khoe.** `python3 asic/parse_ids_probe.py --synth 300000`, 8 lan (WSL va Windows). Day la bo do rat nhay; probe truot KHONG
   du de dung toan bo cong viec: ghi NOTE, de chay kep quyet dinh.
 - **Ghim CPU (2026-10-13, bay 2026-10-14).** Cong cu Python phia Windows (verifier, driver cong suat, script file lon) chay ghim MOT
@@ -120,7 +121,7 @@ Thu tu: lam xong RTL, dong bang, roi moi chay PD. PD khong sua RTL. Logic moi ph
   `OpenROAD.MacroPinBuffers`; `OpenROAD.PostRouteHoldECO` (+ `POST_ROUTE_HOLD_ECO_RCX_CORNER_2`, `POST_ROUTE_ECO_SETUP`,
   `POST_ROUTE_ECO_HOLD`, `POST_ROUTE_ECO_CORNERS`); `SYNTH_OPT_DFF_SAT`; `DRT_SAVE_MAIN_ROUTE`, `DRT_ANTENNA_REPAIR_ALLOW_CONGESTION`;
   `read.tcl` va `drc.tcl` cua Magic (macro truu tuong); `yosys.py` (`@NETLIST@` / `@PDK_FORMAL@` cho EQY). Danh sach co ngay:
-  `NHAT_KY_v2.md` muc 4.1. Sua flow / gate chi khi khong co flow chay, hanh vi moi sau bien moi mac dinh tat.
+  `NHAT_KY.md` muc 6.1. Sua flow / gate chi khi khong co flow chay, hanh vi moi sau bien moi mac dinh tat.
 
 **Flow co cong** (`asic/run_gated_pd.sh`, `ITEMS="<design dir>:<tag>:<config> ..."`, duong dan config tuong doi voi thu muc design),
 bon pha trong cung mot thu muc run:
@@ -293,10 +294,13 @@ tiep tu buoc fail" lam qua trinh qua dai va da bi thay the):
 
 ## H. Ghi chep
 
-- Mot lich su duy nhat: `NHAT_KY.md` (tieu de `### YYYY-MM-DD HH:MM <chu de>`, moi su kien mot lan; van de lap lai vao muc "Van de da
-  biet"). Chu du an 2026-10-14: khong them muc moi cho toi khi viet lai; ban viet lai theo chu de `NHAT_KY_v2.md` (2026-10-15) cho chu du an
-  duyet. Quy tac: file nay. So lieu hien hanh: `RESULTS.md`. Tra loi phan bien: `REVIEW_RESPONSE.md`. Ket qua cho nguoi doc ngoai: trang
-  bao cao (`report_page/soc_report.html`); xong PD truoc khi sua trang (2026-10-14).
+- Mot lich su duy nhat: `NHAT_KY.md`, theo chu de tu 2026-10-15, MOT phien ban (ban theo gio cu chi con trong git, commit
+  `35ebf92`). Su kien moi: ghi vao muc 8a dang `### YYYY-MM-DD HH:MM <chu de>` (moi su kien mot lan; script
+  `scripts/fpga/record_board_case.py --sync-tracking` cung ghi vao day), roi gop vao muc chu de (1-8) o lan ra soat tai lieu ke tiep;
+  van de lap lai vao muc 9, don dep muc 10, ten moi muc 11. Khong doi ten cac tieu de `## 8a.` / `## 9.` (script tim chung) va giu
+  nghia so muc 8 / 9 / 10 / 11 (script, comment va tai lieu cu tham chieu). Quy tac: file nay. So lieu hien hanh: `RESULTS.md`. Tra
+  loi phan bien: `REVIEW_RESPONSE.md`. Ket qua cho nguoi doc ngoai: trang bao cao (`report_page/soc_report.html`); xong PD truoc khi
+  sua trang (2026-10-14).
 - Log flow: `asic/dse_pd.log`, `asic/gated_pd.log`, `asic/pd_log.md` (do launcher ghi). Moi CSV ket qua co cap `_p1` / `_p2`.
 - Danh tinh mot ban RTL la ma manifest (`results/rtl_manifest_<id>.json`) cong ten theo ngay va noi dung.
 - Git: tieng Anh, chi ASCII, khong co dong `Co-Authored-By`, danh tinh git cuc bo. Tai lieu noi bo tieng Viet khong dau; bao cao cho nguoi
@@ -316,13 +320,13 @@ tiep tu buoc fail" lam qua trinh qua dai va da bi thay the):
 - Cong kiem tra dat ten theo cai no kiem (grt_overflow, cts_tt_slack, grt_repair_overflow, grt_tt_slack, drt_convergence, signoff). Muc
   phan bien giu ma cua phan bien (M1, M2, A1 .. A9).
 - Khong doi ten tren dia nhung gi mot run con giu (duong dan tuyet doi trong state / resolved.json). Bang doi ten cu -> moi: `NHAT_KY.md`
-  muc 11 (`NHAT_KY_v2.md` muc 8).
+  muc 11.
 
 ## J. Don dep (bat buoc, 2026-09-26)
 
 - Xoa: run hong / that bai / bi thay the, CSV sai, file rong, script dung mot lan, san pham build tai tao duoc.
 - Truoc khi xoa mot run: luu resolved.json, metric cuoi, log loi / canh bao, flow log, danh sach buoc vao `results/pd_run_archive/<run>/`;
-  ghi tung muc vao `results/cleanup_deleted.txt`; them mot dong vao nhat ky don dep cua NHAT_KY.
+  ghi tung muc vao `results/cleanup_deleted.txt`; them mot dong vao `NHAT_KY.md` muc 10.
 - Giu: tai lieu duy tri, log (log cu nen lai), CSV chuan da chay kep, moc 1 KiB (`asic/soc_dm_control/runs/sync_final`), bang chung Magic
   (`asic/evidence/MAGIC_NAMESPACE_COLLISION.md` va cac file no liet ke), SOF board, run ky ten, golden snapshot.
 - Xoa thu muc run can chu du an dong y; run dang chay hoac con resume khong dong vao.
@@ -347,3 +351,4 @@ tiep tu buoc fail" lam qua trinh qua dai va da bi thay the):
 | 2026-10-08 .. 14 | them quy tac ECO, seed chung, cac bien gate, board, ghim CPU, quy tac phat trien / nghiem thu |
 | 2026-10-15 07:46 | trang thai 2026-10-15 (commit `2d4202d`) |
 | 2026-10-15 | sap xep lai: bang moc thoi gian quy tac (muc 0), bang bien opt-in co ngay, tach cac doan dai muc D thanh nhom, sua cac cho bi dinh chu, bo tham chieu toi quy tac 2026-10-13 da bi thay the, them quy tac "mot RTL cho moi flow", snapshot `rtl_rfbht`, LEC DM_VC4 / `6c4ccffd`, ghi chep trung tinh ve loi may |
+| 2026-10-15 | quy tac ghi lich su cho `NHAT_KY.md` mot phien ban (muc 8a, so muc tuong thich) |

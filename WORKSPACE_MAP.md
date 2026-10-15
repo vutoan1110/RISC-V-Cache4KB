@@ -5,7 +5,7 @@
 | Muc dich | trang vao de hieu du an theo chuc nang thay vi so phien ban |
 | Pham vi | ban nghien cuu `E:/Projects/RISCV-research`; ban cong bo 1 KiB o thu muc khac chi doc; khong sua manuscript |
 | Cap nhat lan cuoi | 2026-10-15 (kiem toan workspace goc: 2026-10-09) |
-| Lien quan | quy tac `QUY_TRINH.md`; trang thai `PROJECT_STATE.md`; so lieu `RESULTS.md`; lich su `NHAT_KY.md` / `NHAT_KY_v2.md` |
+| Lien quan | quy tac `QUY_TRINH.md`; trang thai `PROJECT_STATE.md`; so lieu `RESULTS.md`; lich su `NHAT_KY.md` |
 
 ## 1. Doc theo nhu cau
 
@@ -15,7 +15,7 @@
 | Moi y phan bien da xu ly toi dau? | `REVIEW_RESPONSE.md`, `results/review_status_20261014.md`, `danh_gia.txt` |
 | Gui dong nghiep tai lieu nao? | `results/colleague_materials_20261010.zip` (README / SOURCE_ORIGINS / SHA trong goi), trang bao cao `report_page/soc_report.html` |
 | Chay / do / ky ten dung quy tac the nao? | `QUY_TRINH.md` |
-| Vi sao chon knob / ung vien, loi cu debug the nao? | `NHAT_KY_v2.md` muc 4, 7 (ban goc `NHAT_KY.md` muc 8, 9); archive run |
+| Vi sao chon knob / ung vien, loi cu debug the nao? | `NHAT_KY.md` muc 8, 9 (ha tang flow muc 6); archive run |
 | Chuc nang tung file nguon / script / Markdown? | `results/workspace_audit/SOURCE_CATALOG.md`, `source_catalog.json` |
 | Moi file (ke ca ignored / build / binary) nam dau? | `results/workspace_audit/paths.jsonl`, `inventory.json` |
 | Da xoa chinh xac gi va bang chung o dau? | `results/cleanup_deleted.txt`, `cleanup_execution.json`, `cache_cleanup.json`, `results/pd_run_archive/` |
@@ -96,7 +96,7 @@ dong bang trong snapshot `rtl_rfbht` (47 file). Hash quan sat khong tu chung min
 Embench harness: warm-up ngoai cua so, chi do `benchmark()`, `verify_benchmark(result)` AND voi counter invariant, report / UART ngoai cua
 so. Firmware mo phong thuong giam iteration; `fw_board/upfull_*` la iteration goc. Khong build canonical voi `BENCHMARK_FAST_UART`.
 Coverage tong trong `verification/uvm/out/` ngay 2026-09-18 la lich su; bang chung hien tai la `results/uvm_rfbht*` va
-`results/uvm_cache_uart_20261009/`. Loi runner / CRC / memory index / manifest: `NHAT_KY_v2.md` muc 2.8 va 7.
+`results/uvm_cache_uart_20261009/`. Loi runner / CRC / memory index / manifest: `NHAT_KY.md` muc 2.8 va 9.
 
 ## 5. Chuc nang thu muc
 
@@ -179,8 +179,7 @@ Adapter ASIC: `axi_ram_32_asic_macro.v` dung 8 macro 2 KiB cho RAM; `cache_data_
 | `RESULTS.md` | so lieu da kiem chung va dang cho, nguon goc RTL, goc / phuong phap | 2026-10-15 |
 | `REVIEW_RESPONSE.md` | phan bien M1..M3 / A1..A9 va phan con lai | 2026-10-15 |
 | `QUY_TRINH.md` | quy tac rang buoc, moc thoi gian quy tac, thu tu thuc thi | 2026-10-15 |
-| `NHAT_KY.md` | lich su duy nhat theo ngay | 2026-10-15 07:46 |
-| `NHAT_KY_v2.md` | lich su viet lai theo chu de (de xuat thay the) | 2026-10-15 |
+| `NHAT_KY.md` | lich su duy nhat theo chu de; ban theo gio con trong git (commit `35ebf92`) | 2026-10-15 |
 | `WORKSPACE_MAP.md` | trang nay | 2026-10-15 |
 | `CLOUD_TASKS.md` | viec chi-van-ban cho phien cloud | 2026-10-15 |
 | `CODEX_PROMPT.md` | instructions cu 2026-10-09; khong la quy tac hien hanh; xoa bi tool review chan | lich su |
@@ -232,3 +231,4 @@ con 58 ca board.
 | 2026-10-10 | cap nhat trang thai VC4 / LEC |
 | 2026-10-15 07:46 | commit `2d4202d` |
 | 2026-10-15 | viet lai: muc 3 / 4 cap nhat theo trang thai 2026-10-15 (LEC SA2 xong, Spike, board 42 ca, PD tren `6c4ccffd`); muc 7 them cot cap nhat va cac tai lieu moi; muc 9 thay doan trang thai cu 2026-10-10 bang tro toi PROJECT_STATE |
+| 2026-10-15 | `NHAT_KY.md` mot phien ban duy nhat (theo chu de) |

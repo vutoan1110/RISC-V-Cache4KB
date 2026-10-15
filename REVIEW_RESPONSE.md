@@ -168,7 +168,7 @@ Manuscript fix: absolute counts are identical between configurations; shares dif
 - 12 upstream Embench-IoT kernels (commit `09c2ed8c`; every kernel of that commit that fits a 16 KiB RAM with the result-reporting
   frame) and CoreMark. The source is byte-identical to upstream except a 5-line `LOCAL_SCALE_FACTOR` override hook. The 12
   self-written kernels were removed. The main RAM was raised from 8 to 16 KiB for this (the RAM, not the cache, limited the runnable
-  set); change list and verification: `NHAT_KY_v2.md` section 1.2 (2026-09-29). Not official Embench scores.
+  set); change list and verification: `NHAT_KY.md` section 1.2 (2026-09-29). Not official Embench scores.
 - CoreMark memory: the preserved -O2 firmware needs 19,465 bytes including its 1 KiB stack (> 16 KiB), so preserved CoreMark results
   use simulation RAM 32 KiB with the same cache parameters and memory latency. The isolated -Os integer port has a smaller static
   footprint (15,056 bytes); runtime execution in 16 KiB and board scores are not established.
@@ -255,3 +255,4 @@ BP off vs on, 12 Embench-IoT kernels, 4 KiB, double-executed (`results/bp0_upstr
 | 2026-10-14 | A9 SA2 exact window; per-point status draft `results/review_status_20261014.md` |
 | 2026-10-15 07:46 | state of 2026-10-15 (commit `2d4202d`) |
 | 2026-10-15 | restructured: RTL column in the summary; board count corrected (9 complete kernels; 41 display read-backs); A9 "board NOT_RUN" and "SA2 exact window pending" corrected; A1 synthesis boundary R16 `da06d38f` vs R14 PD `fc555d6b`; historical items marked with their re-run status |
+| 2026-10-15 | references point to the single topic-structured `NHAT_KY.md` |
