@@ -1,3 +1,16 @@
+> **HISTORICAL DOCUMENT - not current rules.** Agent instructions written on 2026-10-09 (state of 2026-10-09 06:40 UTC). Kept
+> unchanged below as a record; its archival copy exists and its deletion was blocked by tool review (`WORKSPACE_MAP.md` section 8).
+> Current sources: rules `QUY_TRINH.md`; state and tasks `PROJECT_STATE.md` (formerly `HANDOVER_CODEX.md`, which no longer exists).
+> Superseded since 2026-10-09 (non-exhaustive):
+> - PD reads snapshot `asic/snapshots/rtl_rfbht` (RTL `6c4ccffd`) since 2026-10-14, not `rtl_r14`; R14 layouts are historical.
+> - The two-pass hold ECO runs in one step (`POST_ROUTE_HOLD_ECO_RCX_CORNER_2`, 2026-10-13); the branch + `_ecomin` procedure and
+>   CONTINUE past a failed p2 gate are no longer used (`P2_MIN_HOLD` is declared at launch).
+> - Development may resume from a failed step; acceptance requires one complete clean flow from step 1 (2026-10-14).
+> - FPGA uses ten common seeds 1..10 x two passes (2026-10-09); the board runs one physical pass of 100 cases (2026-10-13).
+> - SA2 LEC is complete (2026-10-14); DM_VC4 is deferred by the owner (2026-10-14).
+> - History is being rewritten by topic (`NHAT_KY_v2.md`, 2026-10-15).
+> Last reviewed: 2026-10-15.
+
 You are taking over an ongoing hardware research project from another agent. Work carefully, follow the project's
 written rules exactly, and prefer asking over guessing. The project owner supervises you. Reply to the owner in
 Vietnamese; write project files in the language each file already uses (see section 8).

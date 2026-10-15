@@ -41,3 +41,13 @@ Fix the wording only:
   (development may resume from the failing step; acceptance = one complete clean flow from step 1).
 - Distinguish the stock Yosys EQY failures from the completed custom register-mapped LEC proofs; a proof against R14
   gold is not a proof of a 6c4ccffd layout.
+
+## Status (2026-10-15)
+
+| Task | Status | Where |
+|---|---|---|
+| Task 1 - NHAT_KY rewrite | delivered as `NHAT_KY_v2.md` (topic structure, [HT]/[LS] labels, 42-case board table, neutral machine-fault wording); `NHAT_KY.md` unchanged | branch `claude/great-gauss-9u48xg` |
+| Task 2 - documentation mismatches | applied in `README.md`, `RESULTS.md`, `REVIEW_RESPONSE.md`, `PROJECT_STATE.md`, `QUY_TRINH.md`, `WORKSPACE_MAP.md` (R16 `da06d38f` vs R14 PD `fc555d6b` boundary; board 42 measured / 41 displays / one scheduled pass / 58 left; 4 ramsweep + 9 kernels x 4 + 2 statemate; SA2 exact-window power done on the R14 layout; snapshot 44 then 47 files; 2026-10-14 process rule; stock EQY vs custom LEC) | same branch |
+
+The cloud session delivered both tasks on its assigned branch instead of separate `cloud/<task>` branches; each document is a separate
+commit so the owner can pick them individually. No script, config, RTL or receipt-derived number was changed.
