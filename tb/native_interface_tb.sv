@@ -1,4 +1,5 @@
 `timescale 1ns/1ps
+`include "tb/rf_bht_backdoor.svh"
 
 module tb_native_interface;
 
@@ -332,7 +333,7 @@ initial begin
     @(negedge clk);
     reset_n = 1'b1;
 
-    while(dut.u_pipeline.datapath.regfile.regs[6] !== 32'h0000_0007) begin
+    while(`RF_GET(dut.u_pipeline.datapath.regfile, 6) !== 32'h0000_0007) begin
         @(posedge clk);
         #1;
         timeout_count = timeout_count + 1;
@@ -347,16 +348,16 @@ initial begin
         $display("[ERROR] final memory expected=00000605 got=%08h", dmem[0]);
         errors = errors + 1;
     end
-    if(dut.u_pipeline.datapath.regfile.regs[3] !== 32'h0000_0005) begin
-        $display("[ERROR] x3 load result=%08h", dut.u_pipeline.datapath.regfile.regs[3]);
+    if(`RF_GET(dut.u_pipeline.datapath.regfile, 3) !== 32'h0000_0005) begin
+        $display("[ERROR] x3 load result=%08h", `RF_GET(dut.u_pipeline.datapath.regfile, 3));
         errors = errors + 1;
     end
-    if(dut.u_pipeline.datapath.regfile.regs[4] !== 32'h0000_0006) begin
-        $display("[ERROR] x4 dependent result=%08h", dut.u_pipeline.datapath.regfile.regs[4]);
+    if(`RF_GET(dut.u_pipeline.datapath.regfile, 4) !== 32'h0000_0006) begin
+        $display("[ERROR] x4 dependent result=%08h", `RF_GET(dut.u_pipeline.datapath.regfile, 4));
         errors = errors + 1;
     end
-    if(dut.u_pipeline.datapath.regfile.regs[5] !== 32'h0000_0006) begin
-        $display("[ERROR] x5 byte-load result=%08h", dut.u_pipeline.datapath.regfile.regs[5]);
+    if(`RF_GET(dut.u_pipeline.datapath.regfile, 5) !== 32'h0000_0006) begin
+        $display("[ERROR] x5 byte-load result=%08h", `RF_GET(dut.u_pipeline.datapath.regfile, 5));
         errors = errors + 1;
     end
     if((d_accept_count != 4) || (d_response_count != 4) ||
@@ -375,10 +376,10 @@ initial begin
     $display("D accepted/responses  = %0d/%0d", d_accept_count, d_response_count);
     $display("Final RAM[0]          = 0x%08h", dmem[0]);
     $display("x3/x4/x5/x6           = %0d/%0d/%0d/%0d",
-             dut.u_pipeline.datapath.regfile.regs[3],
-             dut.u_pipeline.datapath.regfile.regs[4],
-             dut.u_pipeline.datapath.regfile.regs[5],
-             dut.u_pipeline.datapath.regfile.regs[6]);
+             `RF_GET(dut.u_pipeline.datapath.regfile, 3),
+             `RF_GET(dut.u_pipeline.datapath.regfile, 4),
+             `RF_GET(dut.u_pipeline.datapath.regfile, 5),
+             `RF_GET(dut.u_pipeline.datapath.regfile, 6));
 
     if(errors != 0)
         $fatal(1, "native-interface test failed with %0d error(s)", errors);

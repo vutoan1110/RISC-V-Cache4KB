@@ -1,4 +1,5 @@
 `timescale 1ns/1ps
+`include "tb/rf_bht_backdoor.svh"
 
 // Full active-architecture test: core -> native IF -> I-cache -> AXI master ->
 // AXI RAM.  A trained taken prediction targets a cold cache line while the AXI
@@ -178,11 +179,11 @@ initial begin
     repeat (4) @(posedge clk);
     @(negedge clk);
     for (i = 0; i < 32; i = i + 1)
-        dut.u_core.u_pipeline.datapath.regfile.regs[i] = 32'h0000_0000;
-    dut.u_core.u_pipeline.datapath.g_bp_on.u_bht.bht_mem[1] = 2'b11;
+        `RF_SET(dut.u_core.u_pipeline.datapath.regfile, i, 32'h0000_0000);
+    `BHT_SET(dut.u_core.u_pipeline.datapath.g_bp_on.u_bht, 1, 2'b11);
     reset_n = 1'b1;
 
-    while (dut.u_core.u_pipeline.datapath.regfile.regs[3] !== 32'd7) begin
+    while (`RF_GET(dut.u_core.u_pipeline.datapath.regfile, 3) !== 32'd7) begin
         @(posedge clk); #1;
         timeout_cycles = timeout_cycles + 1;
         if (timeout_cycles > 1000)
@@ -199,11 +200,11 @@ initial begin
     check(branch_events == 1 && prediction_events == 1 &&
           correct_events == 1 && mispredict_events == 0,
           "Cache/AXI stalls do not duplicate the branch resolve/update event");
-    check(dut.u_core.u_pipeline.datapath.g_bp_on.u_bht.bht_mem[1] == 2'b11,
+    check(`BHT_GET(dut.u_core.u_pipeline.datapath.g_bp_on.u_bht, 1) == 2'b11,
           "Correct taken resolve updates saturated BHT exactly once");
-    check(dut.u_core.u_pipeline.datapath.regfile.regs[20] == 32'h0,
+    check(`RF_GET(dut.u_core.u_pipeline.datapath.regfile, 20) == 32'h0,
           "Sequential wrong-path instruction does not retire");
-    check(dut.u_core.u_pipeline.datapath.regfile.regs[3] == 32'd7,
+    check(`RF_GET(dut.u_core.u_pipeline.datapath.regfile, 3) == 32'd7,
           "Architectural result survives I-cache miss and AXI backpressure");
 
     release dut.axi_test_ar_stall_cycles;

@@ -1,4 +1,5 @@
 `timescale 1ns/1ps
+`include "tb/rf_bht_backdoor.svh"
 
 // UVM top level for riscv_core_native. Clock and reset are generated here;
 // everything else is driven from the environment through the two native
@@ -149,7 +150,7 @@ module tb_core_top;
     initial begin
         reset_n = 1'b0;
         for (int r = 0; r < 32; r++)
-            dut.u_pipeline.datapath.regfile.regs[r] = 32'h0;
+            `RF_SET(dut.u_pipeline.datapath.regfile, r, 32'h0);
         repeat (RESET_CYCLES) @(posedge clk);
         @(negedge clk);
         reset_n = 1'b1;

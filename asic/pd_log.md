@@ -5167,3 +5167,360 @@
 - START `dmuB` (soc_dm_4kb) args: ` --from OpenROAD.STAPostPNR --to Checker.LVS` at 2026-10-07T01:44:42+00:00
 
 - START `sa2uA` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-07T01:44:42+00:00
+
+- START `sa2uB` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-07T01:50:43+00:00
+- DONE `sa2uB` rc=143 last=`final` final/ present
+- DONE `dmuB` rc=0 last=`final` final/ present
+- DONE `sa2uA` rc=143 last=`final` final/ present
+
+- START `sa2uB` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-07T09:21:22+00:00
+
+- START `vc4_corr3600x3400_f220_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-07T09:22:42+00:00
+
+- START `vc4_corr3800x3400_f220_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-07T09:52:43+00:00
+- DONE `vc4_corr3600x3400_f220_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-07T10:20:29+00:00
+- DONE `vc4_corr3800x3400_f220_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3800x3400_f220_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-07T10:26:52+00:00
+- DONE `vc4_corr3800x3400_f220_r1` rc=143 last=`final` final/ present
+- DONE `vc4_corr3600x3400_f220_r1` rc=143 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_r1` (soc_sa2_4kb) args: ` --from OpenROAD.RepairDesignPostGPL --to OpenROAD.GlobalRouting` at 2026-10-07T15:42:46+00:00
+
+- START `vc4_corr3400x3400_f220_capm20_fo16_r1` (soc_vc4_4kb) args: ` --from OpenROAD.RepairDesignPostGPL --to OpenROAD.GlobalRouting` at 2026-10-07T15:45:20+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_r1` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-07T16:07:52+00:00
+- DONE `vc4_corr3400x3400_f220_capm20_fo16_r1` rc=0 last=`final` final/ present
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_r1` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-07T16:59:57+00:00
+
+- START `vc4_corr3400x3400_f220_capm20_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-07T17:03:08+00:00
+- DONE `sa2_corr3400x3100_f220_capm20_fo16_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_r1` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-07T17:58:47+00:00
+- DONE `sa2_corr3400x3100_f220_capm20_fo16_r1` rc=0 last=`final` final/ present
+- DONE `vc4_corr3400x3400_f220_capm20_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3250_f220_capm20_fo16_r1` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-07T22:03:02+00:00
+- DONE `sa2_corr3400x3250_f220_capm20_fo16_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3250_f220_capm20_fo16_r1` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-07T22:25:59+00:00
+- DONE `sa2_corr3400x3250_f220_capm20_fo16_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3400x3400_f220_capm20_antm10_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-07T23:01:54+00:00
+- DONE `sa2uB` rc=143 last=`final` final/ present
+
+- START `sa2_corr3400x3250_f220_capm20_fo16_r1` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-08T00:07:11+00:00
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-08T00:07:13+00:00
+- DONE `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-08T00:50:32+00:00
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-08T09:26:54+00:00
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_r1` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-08T09:43:22+00:00
+
+- START `vc4_corr3600x3400_f220_capm20_antm10_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-08T09:43:32+00:00
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-08T10:00:24+00:00
+
+- START `vc4_corr3400x3400_f220_capm20_antm10_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-08T10:02:44+00:00
+
+- START `sa2_synth_rfbhtm9k_r1` (soc_sa2_4kb) args: ` --to Yosys.Synthesis` at 2026-10-08T10:27:42+00:00
+- DONE `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-08T10:32:50+00:00
+- DONE `sa2_synth_rfbhtm9k_r1` rc=0 last=`final` final/ present
+
+- START `vc4_synth_rfbhtm9k_r1` (soc_vc4_4kb) args: ` --to Yosys.Synthesis` at 2026-10-08T10:33:19+00:00
+- DONE `vc4_corr3400x3400_f220_capm20_antm10_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3400x3400_f220_capm20_antm10_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-08T10:37:40+00:00
+- DONE `vc4_synth_rfbhtm9k_r1` rc=0 last=`final` final/ present
+
+- START `dm_synth_rfbhtm9k_r1` (soc_dm_4kb) args: ` --to Yosys.Synthesis` at 2026-10-08T10:43:56+00:00
+- DONE `dm_synth_rfbhtm9k_r1` rc=0 last=`final` final/ present
+- DONE `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-08T11:48:20+00:00
+- DONE `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` (soc_sa2_4kb) args: ` --from OpenROAD.PostRouteHoldECO` at 2026-10-08T14:11:52+00:00
+- DONE `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` rc=2 last=`final` final/ present
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` (soc_sa2_4kb) args: ` --from OpenROAD.PostRouteHoldECO --to Checker.LVS` at 2026-10-08T14:17:04+00:00
+
+- START `dm_synth_rfbht_r1` (soc_dm_4kb) args: ` --to Yosys.Synthesis` at 2026-10-08T14:18:58+00:00
+- DONE `dm_synth_rfbht_r1` rc=0 last=`final` final/ present
+- DONE `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1` rc=143 last=`final` final/ present
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_seco_r1` (soc_sa2_4kb) args: ` --from OpenROAD.PostRouteHoldECO --to Checker.LVS` at 2026-10-08T15:58:17+00:00
+- ODD `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_seco_r1` rc=143 last=`59-openroad-irdropreport` empty error.log, suspect a native crash
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_secott_r1` (soc_sa2_4kb) args: ` --from OpenROAD.PostRouteHoldECO --to OpenROAD.PostRouteHoldECO` at 2026-10-08T16:17:16+00:00
+- DONE `vc4_corr3400x3400_f220_capm20_antm10_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3400x3400_f220_capm20_antoff_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-08T16:24:29+00:00
+- DONE `vc4_corr3400x3400_f220_capm20_antoff_r1` rc=0 last=`final` final/ present
+- ODD `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_secott_r1` rc=143 last=`47-openroad-postrouteholdeco` empty error.log, suspect a native crash
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-08T20:06:37+00:00
+- DONE `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-08T20:28:31+00:00
+
+- START `vc4_corr3400x3400_f220_capm20_antoff_rsztf_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-08T20:36:37+00:00
+- DONE `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-08T20:52:37+00:00
+- DONE `sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=143 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-08T20:55:17+00:00
+- DONE `vc4_corr3400x3400_f220_capm20_antoff_rsztf_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3400x3400_f220_capm20_antoff_rsztf_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-08T21:04:55+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-08T21:16:33+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-08T21:36:27+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --from OpenROAD.PostRouteHoldECO --to Checker.LVS` at 2026-10-08T22:14:41+00:00
+- DONE `vc4_corr3400x3400_f220_capm20_antoff_rsztf_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-08T23:11:48+00:00
+- DONE `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-08T23:46:54+00:00
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomin_r1` (soc_sa2_4kb) args: ` --from OpenROAD.PostRouteHoldECO --to Checker.LVS` at 2026-10-08T23:49:11+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=0 last=`final` final/ present
+- DONE `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-09T00:13:06+00:00
+- DONE `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_r1` rc=0 last=`final` final/ present
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomin_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomaxmin_r1` (soc_sa2_4kb) args: ` --from OpenROAD.PostRouteHoldECO --to Checker.LVS` at 2026-10-09T01:23:04+00:00
+
+- START `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-09T01:28:57+00:00
+- STOP `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomaxmin_r1` rc=2 last=`52-odb-reportdisconnectedpins` err: `Subprocess had a non-zero exit. Last 10 line(s):            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   File "/mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/odbpy/reader.py", line 217, in wrapp`
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomaxmin_r1` (soc_sa2_4kb) args: ` --from Odb.ReportDisconnectedPins --to Checker.LVS` at 2026-10-09T01:31:25+00:00
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r2` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-09T01:37:17+00:00
+- DONE `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-09T01:56:59+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r2` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r2` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-09T01:57:33+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r2` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r2` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-09T02:15:46+00:00
+- DONE `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3500x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-09T02:48:27+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r2` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r2` (soc_sa2_4kb) args: ` --from OpenROAD.PostRouteHoldECO --to Checker.LVS` at 2026-10-09T02:51:45+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomaxmin_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomaxmin_r2` (soc_sa2_4kb) args: ` --from OpenROAD.PostRouteHoldECO --to Checker.LVS` at 2026-10-09T03:04:59+00:00
+- DONE `vc4_corr3500x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3500x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-09T03:12:01+00:00
+
+- START `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_grtit150_grtscr_r1` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_r1/38-openroad-stamidpnr-2/state_out.json --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting` at 2026-10-09T03:13:54+00:00
+- DONE `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_grtit150_grtscr_r1` rc=0 last=`final` final/ present
+- DONE `vc4_corr3500x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_grtskew_scr_r1` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4_corr3600x3400_f220_r1/39-openroad-globalrouting/state_out.json --from OpenROAD.STAMidPNR-3 --to OpenROAD.STAMidPNR-3` at 2026-10-09T03:41:39+00:00
+- DONE `vc4_corr3600x3400_f220_grtskew_scr_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3800x3400_f220_grtskew_scr_r1` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4_corr3800x3400_f220_r1/39-openroad-globalrouting/state_out.json --from OpenROAD.STAMidPNR-3 --to OpenROAD.STAMidPNR-3` at 2026-10-09T03:43:14+00:00
+- DONE `vc4_corr3800x3400_f220_grtskew_scr_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3500x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_grtskew_scr_r1` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4_corr3500x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_r1/39-openroad-globalrouting/state_out.json --from OpenROAD.STAMidPNR-3 --to OpenROAD.STAMidPNR-3` at 2026-10-09T03:46:13+00:00
+
+- START `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm4_pad1_grtscr_r1` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_r1/38-openroad-stamidpnr-2/state_out.json --from OpenROAD.GlobalRouting --to OpenROAD.GlobalRouting` at 2026-10-09T03:47:23+00:00
+- DONE `vc4_corr3500x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_pad1_grtskew_scr_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_grtskew_scr_r1` (soc_sa2_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/runs/sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1/39-openroad-globalrouting/state_out.json --from OpenROAD.STAMidPNR-3 --to OpenROAD.STAMidPNR-3` at 2026-10-09T03:48:05+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_grtskew_scr_r1` rc=0 last=`final` final/ present
+- DONE `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm4_pad1_grtscr_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm4_pad1_grtscr_r1_sta` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm4_pad1_grtscr_r1/01-openroad-globalrouting/state_out.json --from OpenROAD.STAMidPNR-3 --to OpenROAD.STAMidPNR-3` at 2026-10-09T04:00:47+00:00
+- DONE `vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm4_pad1_grtscr_r1_sta` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-09T04:04:07+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-09T04:55:24+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r2` rc=0 last=`final` final/ present
+- DONE `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_nogrtd_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-09T05:14:16+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomaxmin_r2` rc=0 last=`final` final/ present
+- DONE `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_nogrtd_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_nogrtd_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-09T06:01:13+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_nogrtd_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_nogrtd_r1` (soc_vc4_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-09T06:21:00+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_antoff_nogrtt_nogrtd_r1` rc=143 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-10T00:47:17+00:00
+- ODD `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_r1` rc=1 last=`37-openroad-resizertimingpostcts` empty error.log, suspect a native crash
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_r1` (soc_vc4_4kb) args: ` --from OpenROAD.ResizerTimingPostCTS --to OpenROAD.GlobalRouting` at 2026-10-10T01:10:07+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_initialgrtskew_r1` (soc_vc4_4kb) args: ` --with-initial-state /mnt/e/Projects/RISCV-research/asic/soc_vc4_4kb/runs/vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_r1/39-openroad-globalrouting/state_out.json --from OpenROAD.STAMidPNR-3 --to OpenROAD.STAMidPNR-3` at 2026-10-10T01:42:13+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_initialgrtskew_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-10T01:44:54+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_r1` (soc_vc4_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-10T01:48:19+00:00
+
+- START `sa2_corr3400x3250_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-10T07:07:45+00:00
+- DONE `sa2_corr3400x3250_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3250_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-10T07:27:56+00:00
+- DONE `sa2_corr3400x3250_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3250_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r2` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-10T12:41:00+00:00
+- DONE `sa2_corr3400x3250_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r2` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3250_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r2` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-10T13:02:06+00:00
+- DONE `sa2_corr3400x3250_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r2` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3325_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-10T19:56:16+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_r1` rc=2 last=`final` final/ present
+- DONE `sa2_corr3400x3325_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3325_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-10T20:21:21+00:00
+- DONE `sa2_corr3400x3325_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3325_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-11T10:27:25+00:00
+- DONE `sa2_corr3400x3325_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3325_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` (soc_sa2_4kb) args: ` --from OpenROAD.PostRouteHoldECO --to Checker.LVS` at 2026-10-12T11:27:49+00:00
+- DONE `sa2_corr3400x3325_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1` rc=1 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r1` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-13T12:21:13+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r1` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r1` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-13T12:39:57+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r1` rc=1 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r2` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-13T12:49:33+00:00
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_antcong_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-13T12:52:13+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r2` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r2` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-13T13:11:22+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r2` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r2` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-13T13:30:07+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_antcong_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_antcong_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-13T13:41:09+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_antcong_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_antcong_r1` (soc_vc4_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-13T13:44:40+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r2` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r2` (soc_sa2_4kb) args: ` --from OpenROAD.PostRouteHoldECO` at 2026-10-13T14:15:58+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r2` rc=2 last=`final` final/ present
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antoff_nogrtt_nogrtd_antcong_r1` rc=143 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r3` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-13T17:12:40+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r3` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r3` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-13T17:31:19+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r3` rc=1 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-13T17:41:47+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-13T18:21:24+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` (soc_vc4_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-13T18:31:01+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` rc=143 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r4` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-13T20:38:54+00:00
+- ODD `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r4` rc=1 last=`34-openroad-detailedplacement` empty error.log, suspect a native crash
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r5` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-14T01:36:24+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r5` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r5` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-14T02:03:11+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r5` rc=0 last=`final` final/ present
+
+- START `vc4_corr3800x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-14T05:11:22+00:00
+- DONE `vc4_corr3800x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3800x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-14T05:47:43+00:00
+- DONE `vc4_corr3800x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_mwl500_r1` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-14T05:58:41+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_mwl500_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_mwl500_r1` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-14T06:32:09+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_mwl500_r1` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r2` (soc_vc4_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-14T06:45:05+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r2` rc=0 last=`final` final/ present
+
+- START `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r2` (soc_vc4_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-14T07:25:13+00:00
+- DONE `vc4_corr3600x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r2` rc=0 last=`final` final/ present
+
+- START `dm_grid3665x2900_r3` (soc_dm_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-14T09:09:42+00:00
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r5` (soc_sa2_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-14T09:34:30+00:00
+- DONE `dm_grid3665x2900_r3` rc=0 last=`final` final/ present
+
+- START `dm_grid3665x2900_r3` (soc_dm_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-14T09:43:47+00:00
+- DONE `dm_grid3665x2900_r3` rc=139 last=`final` final/ present
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r5` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r5` (soc_sa2_4kb) args: ` --from OpenROAD.PostRouteHoldECO --to Checker.LVS` at 2026-10-14T10:13:40+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r5` rc=1 last=`final` final/ present
+
+- START `vc4_corr3800x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` (soc_vc4_4kb) args: ` --from OpenROAD.DetailedRouting --to OpenROAD.DetailedRouting` at 2026-10-14T10:33:32+00:00
+
+- START `dm_grid3665x2900_r4` (soc_dm_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-14T11:14:37+00:00
+- DONE `dm_grid3665x2900_r4` rc=0 last=`final` final/ present
+
+- START `dm_grid3665x2900_r4` (soc_dm_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-14T11:57:03+00:00
+- DONE `dm_grid3665x2900_r4` rc=0 last=`final` final/ present
+- DONE `vc4_corr3800x3400_f220_capm20_pad1_antgrt10_nogrtt_nogrtd_antcong_r1` rc=1 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r5` (soc_sa2_4kb) args: ` --from Odb.ReportDisconnectedPins --to Checker.LVS` at 2026-10-14T14:01:46+00:00
+
+- START `dm_grid3665x2900_rtl6c4c_r1` (soc_dm_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-14T14:12:23+00:00
+- DONE `dm_grid3665x2900_rtl6c4c_r1` rc=0 last=`final` final/ present
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_cts25_r5` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_eco2_rtl6c4c_r1` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-14T15:19:52+00:00
+- STOP `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_eco2_rtl6c4c_r1` rc=2 last=`16-odb-manualmacroplacement` err: `Subprocess had a non-zero exit. Last 10 line(s): {'u_soc.u_axi_ram.g_bank\\[0\\].u_bank': ['u_soc.u_axi_ram.g_bank[0].u_bank', 112000, 112000, 'FS'], 'u_soc.u_axi_ram.g_bank\\[4\\].u_bank': ['u_soc.u_`
+
+- START `dm_grid3665x2900_rtl6c4c_r2` (soc_dm_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-15T00:18:07+00:00
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_eco2_rtl6c4c_r2` (soc_sa2_4kb) args: ` --to OpenROAD.GlobalRouting` at 2026-10-15T00:20:09+00:00
+- DONE `dm_grid3665x2900_rtl6c4c_r2` rc=0 last=`final` final/ present
+
+- START `dm_grid3665x2900_rtl6c4c_r2` (soc_dm_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-15T00:41:54+00:00
+- DONE `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_eco2_rtl6c4c_r2` rc=0 last=`final` final/ present
+
+- START `sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_eco2_rtl6c4c_r2` (soc_sa2_4kb) args: ` --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3` at 2026-10-15T00:43:52+00:00

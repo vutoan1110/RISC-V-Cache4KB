@@ -1,0 +1,16 @@
+# 2026-10-13: the LEC gold side (evert cut model A_gold.il: flops cut, constants tied, one-hot restricted) with every
+# undefined source -- each x constant bit and each undriven net -- turned into a NEW primary input. Mitered against the
+# same AIG with those inputs tied to 0 (aig_tie_inputs.py), every output proved UNSAT is independent of all undefined
+# values in every state, so the x := 0 / undriven := 0 abstraction of the LEC does not matter for it.
+read_ilang A_gold.il
+hierarchy -top soc_asic_top
+setundef -anyseq
+setundef -undriven -anyseq
+delete t:$anyseq
+setundef -undriven -expose
+techmap
+opt_clean
+aigmap
+opt_clean
+check -assert
+write_aiger -symbols A_gold_xf.aig

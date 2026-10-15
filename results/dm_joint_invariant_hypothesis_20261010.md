@@ -1,0 +1,15 @@
+# Joint current-gold invariant induction hypothesis
+
+One hypothesis: the exact current raw gold Boolean model preserves all 235 recorded constant constraints, 28 recorded duplicate equalities and four legal one-hot groups together, under the recorded deasserted external and synchronizer reset conditions.
+
+Let `I(Q)` be the conjunction of each `lec_q_g[index] = const[index]`, each `lec_q_g[index] = lec_q_p[dup[index]]`, and exactly one asserted bit in each of the four disjoint `onehot_gold` groups. The groups contain 3, 3, 3 and 14 bits. All other state and primary inputs remain arbitrary Boolean symbols. In particular, unreset RAM/tag/register state is not tied to zero. Constants and duplicate equalities are premises of this induction step; they become a valid invariant only together with an independently established reset base and every required protocol phase.
+
+For constants and duplicates, check `I(Q) AND violation(D)`. For each of the 23 group codes, add that group's own current legal code and check `I(Q) AND not-exactly-one-hot(Dgroup)`. Applying a constant premise or substituting only a recorded duplicate source Q by its paired target Q is exact cofactoring under `I(Q)`, not an additional assumption. The other group's one-hot predicates remain explicit CNF premises. An explicit satisfying assignment is retained for every current-group premise to reject vacuous results.
+
+The fixed method is structural AND/NOT cofactoring first, followed by the already frozen exact Tseitin/watched-literal SAT algorithm when the violation is not structurally zero. UNSAT requires separately replayed exact resolution, SAT requires a complete witness reevaluated on the original raw graph, satisfying every joint premise and violating the chosen D constraint. Limits yield UNKNOWN. No solver knobs or model inputs are changed between cases.
+
+The new proof process is kernel-limited to 512 MiB and each bounded obligation to 10 seconds, with the existing fixed CNF variable, clause, decision, conflict, learned-clause and resolution budgets. Checker controls cover recorded-only aliasing, unchanged free-state support, nonvacuity, rare 24-input faults, witness-premise rejection and resource UNKNOWN. Controls and actual-model negative controls precede two independent CLI executions.
+
+The deasserted proof requires `reset_n=1`, `lec_q_p19088=1` and `lec_q_p19089=1`. Synchronizer transition equations are checked separately with external reset asserted and with external reset deasserted for both values of meta Q. The existing unrestricted gold reset-base evidence is pinned. This does not claim closure through every possible interrupted reset sequence; unresolved protocol phases remain explicit.
+
+The original source-model undefined-zero abstraction gap, raw N1/final reset relation, all mapped equivalence boundaries and complete sequential LEC remain OPEN. No RTL, old helper, live PD/benchmark input, gate, global environment or heavy external tool is modified or executed. Independent review is required before promoting this subproof.

@@ -1,0 +1,321 @@
+{
+  "STD_CELL_LIBRARY": "sky130_fd_sc_hd",
+  "VDD_PIN": "VPWR",
+  "VDD_PIN_VOLTAGE": 1.8,
+  "GND_PIN": "VGND",
+  "WIRE_LENGTH_THRESHOLD": null,
+  "TECH_LEFS": {
+    "nom_*": "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/techlef/sky130_fd_sc_hd__nom.tlef",
+    "min_*": "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/techlef/sky130_fd_sc_hd__min.tlef",
+    "max_*": "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/techlef/sky130_fd_sc_hd__max.tlef"
+  },
+  "GPIO_PADS_LEF": [
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_io/lef/sky130_fd_io.lef",
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_io/lef/sky130_ef_io.lef"
+  ],
+  "GPIO_PADS_LEF_CORE_SIDE": [
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.tech/openlane/custom_cells/lef/sky130_fd_io_core.lef",
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.tech/openlane/custom_cells/lef/sky130_ef_io_core.lef"
+  ],
+  "GPIO_PADS_VERILOG": [
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_io/verilog/sky130_ef_io.v"
+  ],
+  "GPIO_PAD_CELLS": [
+    "sky130_fd_io*",
+    "sky130_ef_io*"
+  ],
+  "PRIMARY_GDSII_STREAMOUT_TOOL": "klayout",
+  "DEFAULT_MAX_TRAN": null,
+  "SIGNAL_WIRE_RC_LAYERS": null,
+  "CLOCK_WIRE_RC_LAYERS": null,
+  "LAYERS_RC": "li1 1.7536e-04 7.5294e-02,met1 1.6949e-04 8.9286e-04,met2 1.5578e-04 8.9286e-04,met3 1.7138e-04 1.5667e-04,met4 1.5175e-04 1.5667e-04,met5 1.7563e-04 1.7812e-05",
+  "LAYERS_RC_SCOPE": "repair_design",
+  "DEFAULT_CORNER": "nom_tt_025C_1v80",
+  "STA_CORNERS": [
+    "nom_tt_025C_1v80",
+    "nom_ss_100C_1v60",
+    "nom_ff_n40C_1v95",
+    "min_tt_025C_1v80",
+    "min_ss_100C_1v60",
+    "min_ff_n40C_1v95",
+    "max_tt_025C_1v80",
+    "max_ss_100C_1v60",
+    "max_ff_n40C_1v95"
+  ],
+  "FP_TRACKS_INFO": "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.tech/openlane/sky130_fd_sc_hd/tracks.info",
+  "FP_TAPCELL_DIST": 13,
+  "FP_IO_HLAYER": "met3",
+  "FP_IO_VLAYER": "met2",
+  "RT_MIN_LAYER": "met1",
+  "RT_MAX_LAYER": "met5",
+  "SCL_GROUND_PINS": [
+    "VGND",
+    "VNB"
+  ],
+  "SCL_POWER_PINS": [
+    "VPWR",
+    "VPB"
+  ],
+  "TRISTATE_CELLS": [
+    "sky130_fd_sc_hd__ebuf*"
+  ],
+  "FILL_CELL": [
+    "sky130_fd_sc_hd__fill*"
+  ],
+  "DECAP_CELL": [
+    "sky130_ef_sc_hd__decap_12",
+    "sky130_fd_sc_hd__decap_8",
+    "sky130_fd_sc_hd__decap_6",
+    "sky130_fd_sc_hd__decap_4",
+    "sky130_fd_sc_hd__decap_3"
+  ],
+  "LIB": {
+    "*_tt_025C_1v80": [
+      "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib"
+    ],
+    "*_ss_100C_1v60": [
+      "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ss_100C_1v60.lib"
+    ],
+    "*_ff_n40C_1v95": [
+      "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__ff_n40C_1v95.lib"
+    ]
+  },
+  "CELL_LEFS": [
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/lef/sky130_ef_sc_hd.lef",
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/lef/sky130_fd_sc_hd.lef"
+  ],
+  "CELL_GDS": [
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/gds/sky130_fd_sc_hd.gds"
+  ],
+  "CELL_VERILOG_MODELS": [
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/verilog/primitives.v",
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd.v"
+  ],
+  "CELL_BB_VERILOG_MODELS": [
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd__blackbox.v",
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/verilog/sky130_fd_sc_hd__blackbox_pp.v"
+  ],
+  "CELL_SPICE_MODELS": [
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_ef_sc_hd__decap_12.spice",
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_ef_sc_hd__fill_12.spice",
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_ef_sc_hd__fill_4.spice",
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_ef_sc_hd__fill_8.spice",
+    "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/spice/sky130_fd_sc_hd.spice"
+  ],
+  "SYNTH_EXCLUDED_CELL_FILE": "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.tech/openlane/sky130_fd_sc_hd/no_synth.cells",
+  "PNR_EXCLUDED_CELL_FILE": "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.tech/openlane/sky130_fd_sc_hd/drc_exclude.cells",
+  "OUTPUT_CAP_LOAD": 33.442,
+  "MAX_FANOUT_CONSTRAINT": 16,
+  "MAX_TRANSITION_CONSTRAINT": 0.75,
+  "MAX_CAPACITANCE_CONSTRAINT": 0.2,
+  "CLOCK_UNCERTAINTY_CONSTRAINT": 0.25,
+  "CLOCK_TRANSITION_CONSTRAINT": 0.15,
+  "TIME_DERATING_CONSTRAINT": 5,
+  "IO_DELAY_CONSTRAINT": 20,
+  "SYNTH_DRIVING_CELL": "sky130_fd_sc_hd__inv_2/Y",
+  "SYNTH_CLK_DRIVING_CELL": null,
+  "SYNTH_TIEHI_CELL": "sky130_fd_sc_hd__conb_1/HI",
+  "SYNTH_TIELO_CELL": "sky130_fd_sc_hd__conb_1/LO",
+  "SYNTH_BUFFER_CELL": "sky130_fd_sc_hd__buf_2/A/X",
+  "WELLTAP_CELL": "sky130_fd_sc_hd__tapvpwrvgnd_1",
+  "ENDCAP_CELL": "sky130_fd_sc_hd__decap_3",
+  "PLACE_SITE": "unithd",
+  "CELL_PAD_EXCLUDE": [
+    "sky130_fd_sc_hd__tap*",
+    "sky130_fd_sc_hd__decap*",
+    "sky130_ef_sc_hd__decap*",
+    "sky130_fd_sc_hd__fill*"
+  ],
+  "DIODE_CELL": "sky130_fd_sc_hd__diode_2/DIODE",
+  "DESIGN_DIR": "/mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb",
+  "PDK_ROOT": "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af",
+  "DESIGN_NAME": "soc_asic_top",
+  "PDK": "sky130A",
+  "CLOCK_PERIOD": 20,
+  "CLOCK_PORT": "clk",
+  "CLOCK_NET": null,
+  "VDD_NETS": null,
+  "GND_NETS": null,
+  "DIE_AREA": [
+    0,
+    0,
+    3400,
+    3400
+  ],
+  "EXTRA_EXCLUDED_CELLS": null,
+  "MACROS": {
+    "sky130_sram_2kbyte_1rw1r_32x512_8": {
+      "gds": [
+        "/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/gds/sky130_sram_2kbyte_1rw1r_32x512_8.magicsafe.gds"
+      ],
+      "lef": [
+        "/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/lef/sky130_sram_2kbyte_1rw1r_32x512_8.lef"
+      ],
+      "instances": {
+        "u_soc.u_axi_ram.g_bank[0].u_bank": {
+          "location": [
+            150,
+            150
+          ],
+          "orientation": "N"
+        },
+        "u_soc.u_axi_ram.g_bank[1].u_bank": {
+          "location": [
+            150,
+            650
+          ],
+          "orientation": "N"
+        },
+        "u_soc.u_axi_ram.g_bank[2].u_bank": {
+          "location": [
+            150,
+            1150
+          ],
+          "orientation": "N"
+        },
+        "u_soc.u_axi_ram.g_bank[3].u_bank": {
+          "location": [
+            150,
+            1650
+          ],
+          "orientation": "N"
+        },
+        "u_soc.u_axi_ram.g_bank[4].u_bank": {
+          "location": [
+            2787.99,
+            261.58
+          ],
+          "orientation": "N"
+        },
+        "u_soc.u_axi_ram.g_bank[5].u_bank": {
+          "location": [
+            2787.99,
+            927.71
+          ],
+          "orientation": "N"
+        },
+        "u_soc.u_axi_ram.g_bank[6].u_bank": {
+          "location": [
+            2787.99,
+            1593.83
+          ],
+          "orientation": "N"
+        },
+        "u_soc.u_axi_ram.g_bank[7].u_bank": {
+          "location": [
+            2787.99,
+            2240.92
+          ],
+          "orientation": "N"
+        }
+      },
+      "vh": [],
+      "nl": [
+        "/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/verilog/sky130_sram_2kbyte_1rw1r_32x512_8.v"
+      ],
+      "pnl": [],
+      "spef": {},
+      "lib": {
+        "*": [
+          "/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/lib/sky130_sram_2kbyte_1rw1r_32x512_8_TT_1p8V_25C.lib"
+        ]
+      },
+      "spice": [],
+      "sdf": {},
+      "json_h": null
+    },
+    "sky130_sram_1kbyte_1rw1r_32x256_8": {
+      "gds": [
+        "/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/gds/sky130_sram_1kbyte_1rw1r_32x256_8.magicsafe.gds"
+      ],
+      "lef": [
+        "/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/lef/sky130_sram_1kbyte_1rw1r_32x256_8.lef"
+      ],
+      "instances": {},
+      "vh": [],
+      "nl": [
+        "/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v"
+      ],
+      "pnl": [],
+      "spef": {},
+      "lib": {
+        "*": [
+          "/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/lib/sky130_sram_1kbyte_1rw1r_32x256_8_TT_1p8V_25C.lib"
+        ]
+      },
+      "spice": [],
+      "sdf": {},
+      "json_h": null
+    }
+  },
+  "EXTRA_LEFS": null,
+  "EXTRA_VERILOG_MODELS": null,
+  "EXTRA_SPICE_MODELS": null,
+  "EXTRA_LIBS": null,
+  "EXTRA_GDS_FILES": null,
+  "FALLBACK_SDC_FILE": "/mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/base.sdc",
+  "PDN_CONNECT_MACROS_TO_GRID": true,
+  "PDN_MACRO_CONNECTIONS": [
+    ".*u_bank VPWR VGND vccd1 vssd1"
+  ],
+  "PDN_ENABLE_GLOBAL_CONNECTIONS": true,
+  "PNR_SDC_FILE": "/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/soc.sdc",
+  "FP_DEF_TEMPLATE": null,
+  "RT_CLOCK_MIN_LAYER": "met3",
+  "RT_CLOCK_MAX_LAYER": null,
+  "GRT_ADJUSTMENT": 0.2,
+  "GRT_MACRO_EXTENSION": 1,
+  "GRT_LAYER_ADJUSTMENTS": [
+    0.99,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "DIODE_PADDING": null,
+  "GRT_ALLOW_CONGESTION": true,
+  "GRT_ANTENNA_ITERS": 10,
+  "GRT_OVERFLOW_ITERS": 50,
+  "GRT_ANTENNA_MARGIN": 30,
+  "PL_OPTIMIZE_MIRRORING": true,
+  "PL_MAX_DISPLACEMENT_X": 1000,
+  "PL_MAX_DISPLACEMENT_Y": 500,
+  "DPL_CELL_PADDING": 2,
+  "RSZ_DONT_TOUCH_RX": "^macro_pin_(pre_)?net_",
+  "RSZ_DONT_TOUCH_LIST": null,
+  "RSZ_CORNERS": [
+    "nom_tt_025C_1v80",
+    "nom_ff_n40C_1v95"
+  ],
+  "DRT_THREADS": null,
+  "DRT_MIN_LAYER": null,
+  "DRT_MAX_LAYER": null,
+  "DRT_OPT_ITERS": 64,
+  "DRT_ANTENNA_REPAIR_ITERS": 5,
+  "DRT_ANTENNA_REPAIR_MARGIN": 10,
+  "DRT_DRC_REPORT_ITER_STEP": 5,
+  "RCX_MERGE_VIA_WIRE_RES": true,
+  "RCX_RULESETS": {
+    "nom_*": "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.tech/openlane/rules.openrcx.sky130A.nom.calibre",
+    "min_*": "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.tech/openlane/rules.openrcx.sky130A.min.calibre",
+    "max_*": "/home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.tech/openlane/rules.openrcx.sky130A.max.calibre"
+  },
+  "POST_ROUTE_HOLD_ECO_RCX_CORNER": "max_*",
+  "POST_ROUTE_HOLD_ECO_MARGIN": 0.02,
+  "POST_ROUTE_HOLD_ECO_MAX_BUFFER_PCT": 5,
+  "POST_ROUTE_HOLD_ECO_ALLOW_SETUP_VIOS": false,
+  "POST_ROUTE_ECO_REPAIR_DESIGN": false,
+  "POST_ROUTE_ECO_SLEW_PCT": 10,
+  "POST_ROUTE_ECO_CAP_PCT": 10,
+  "POST_ROUTE_ECO_SETUP": false,
+  "POST_ROUTE_ECO_HOLD": true,
+  "POST_ROUTE_ECO_SETUP_MARGIN": 0.05,
+  "POST_ROUTE_ECO_SETUP_MAX_BUFFER_PCT": 1,
+  "POST_ROUTE_ECO_CORNERS": null,
+  "meta": {
+    "openlane_version": "2.3.10",
+    "step": "OpenROAD.PostRouteHoldECO"
+  },
+  "POST_ROUTE_HOLD_ECO_RCX_CORNER_2": "min_*"
+}

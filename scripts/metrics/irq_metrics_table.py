@@ -40,11 +40,15 @@ def load(log):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--configs", default="0,1,2,3")
+    # 2026-10-15: re-execution on RTL 6c4ccffd keeps its own logs / table (defaults unchanged)
+    ap.add_argument("--logs", default=str(LOGS))
+    ap.add_argument("--out", default=str(ROOT / "results" / "irq_metrics.csv"))
     args = ap.parse_args()
+    logs = Path(args.logs)
     rows, bad = [], []
     for cfg in [int(c) for c in args.configs.split(",")]:
-        s1 = load(LOGS / ("cfg%d_p1.log" % cfg))
-        s2 = load(LOGS / ("cfg%d_p2.log" % cfg))
+        s1 = load(logs / ("cfg%d_p1.log" % cfg))
+        s2 = load(logs / ("cfg%d_p2.log" % cfg))
         if s1 is None or s2 is None:
             bad.append("cfg %d: a pass did not finish with [PASS] IRQ_METRICS" % cfg)
             continue
@@ -68,7 +72,7 @@ def main():
                      row["entry_min"], row["entry_median"], row["entry_max"],
                      row["handler_min"], row["handler_median"], row["handler_max"],
                      row["total_min"], row["total_median"], row["total_max"]))
-    out = ROOT / "results" / "irq_metrics.csv"
+    out = Path(args.out)
     with out.open("w", newline="", encoding="utf-8") as f:
         cols = list(rows[0].keys()) if rows else ["config"]
         w = csv.DictWriter(f, fieldnames=cols)

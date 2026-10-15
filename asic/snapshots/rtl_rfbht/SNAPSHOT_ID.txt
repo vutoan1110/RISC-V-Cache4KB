@@ -1,0 +1,13 @@
+Register file / BHT in M9K (2026-10-08, review A1): rtl_r16 + the three files of manifest 6c4ccffd:
+  hdl/regfile.v
+  hdl/predictor/bht_2bit.v
+  hdl/datapath.v
+The change is FPGA-only (`ifndef __openlane__); the ASIC view of these files is token-identical to rtl_r16
+(asic/run_rf_bht_m9k_asic_checks.sh step 1). Every other file is byte-identical to rtl_r16.
+
+2026-10-14 (owner: PD on the newest RTL 6c4ccffd): the SA2 / DM_VC4 ASIC wrappers, which sit outside the RTL
+manifest (committed 4509d5d 2026-10-02, unchanged since, the files every SA2 / DM_VC4 run and the R16 SoC proofs
+used), are frozen here too, so the SA2 / DM_VC4 PD configs read only snapshot files:
+  asic/dse_sram/cache_dse_data_bank_sram.v  sha256 ccfc93970d0f37e6bae667942955594f8ea28280aaf9a737982ed4b7b7d9aff1
+  asic/soc_sa2_4kb/soc_asic_top.v  sha256 dec98f4e50e0f82f5f319ab40911c642313026789e1403b661df369d94b63b87
+  asic/soc_vc4_4kb/soc_asic_top.v  sha256 aca906ee6f3291e867bc924381d7a55a5ddffec54e6e9a84581d424cf41d3ad2

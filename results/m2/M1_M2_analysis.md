@@ -2,6 +2,9 @@
 
 Source: `results/m2/sweep_p1.csv`, `results/m2/sweep_fast_p1.csv`. Every ratio is mcycle against the DM point of the same capacity, geometric mean over the 12 upstream Embench-IoT kernels; CoreMark separately. Negative = faster than DM.
 
+CoreMark rows are repeatable full-program simulation counters (RAM 32 KiB), including initialization/reporting;
+CRC is not part of the wrapper PASS gate. Functional validation remains pending; these are not official scores.
+
 ## M1: controller cost vs organisation (16 B lines)
 
 | capacity | controller GM(DM_DSE/DM) | org SA2/DM_DSE | org SA4/DM_DSE | org VC4/DM_DSE | total SA2/DM | total SA4/DM | total VC4/DM | CoreMark SA2/DM |

@@ -8,6 +8,10 @@
 #     from: drt  (default) detailed routing, then the sign-off part from OpenROAD.PostRouteHoldECO
 #           hold the sign-off part from OpenROAD.PostRouteHoldECO
 #           sta  the sign-off part from OpenROAD.STAPostPNR (the run stopped during or after RCX)
+#           step:<StepID>  the sign-off part from that step (retry of a step that crashed at random; move the crashed
+#                step directory out of the numbering first, e.g. 52-x -> crashed-52-x, so the retry takes its number)
+#           p2   phase P2 only (OpenROAD.CheckAntennas .. OpenROAD.STAMidPNR-3) of a run branched after global
+#                routing (branch_run.sh), then the p2 gate; the run is held after the gate (continue with ... drt)
 #     to:   last step of the sign-off part, default Checker.LVS. Yosys.EQY needs about 13 GB (it was killed by the
 #           kernel OOM killer next to two detailed routings on 2026-10-07) and is run on its own afterwards.
 # Cooperative stop: touch asic/.abort_gated_pd (checked before each phase).
@@ -32,6 +36,30 @@ gate () {
 }
 [ -d "$A/$des/runs/$tag" ] || { echo "no run $des/$tag"; exit 2; }
 [ -f "$A/$des/$CFG" ] || { echo "no config $des/$CFG"; exit 2; }
+if [ "$FROM" = p2 ]; then
+    say "RESUME $tag ($WHY): phase P2, held after the p2 gate"
+    while :; do                        # start lock: two waiting resumes must not both take the last flow slot
+        aborted && { say "STOP $tag before P2 (abort flag)"; exit 0; }
+        if mkdir $LOCK.p2 2>/dev/null; then
+            [ "$(flows)" -lt 3 ] && [ "$(avail)" -ge 10000 ] && break
+            rmdir $LOCK.p2
+        fi
+        sleep 60
+    done
+    say "$tag P2 start (avail $(avail) MB, flows running $(flows))"
+    ( RESUME=1 CONFIG=$CFG bash run_pd_mk.sh "$des" "$tag" --from OpenROAD.CheckAntennas --to OpenROAD.STAMidPNR-3 > "$A/${tag}_p2.log" 2>&1 ) &
+    p=$!
+    sleep 120
+    rmdir $LOCK.p2
+    wait $p
+    say "$tag P2 done, last step $(last_step $des $tag)"
+    if gate "$des" "$tag" p2; then
+        say "HOLD $tag after P2 (continue with run_gated_resume.sh $des $tag $CFG <reason> drt)"
+        exit 0
+    fi
+    say "STOP $tag after the p2 gate"
+    exit 1
+fi
 say "RESUME $tag ($WHY): from $FROM to $TO"
 case $FROM in
     drt)
@@ -62,10 +90,15 @@ case $FROM in
             sleep 60
         done
         say "$tag detailed routing done, last step $(last_step $des $tag)"
+        if [ "${HOLD_AFTER_DRT:-0}" = 1 ]; then
+            say "HOLD $tag after detailed routing (HOLD_AFTER_DRT=1; inspect resource/signoff prerequisites then resume with run_gated_resume.sh $des $tag $CFG <reason> hold)"
+            exit 0
+        fi
         STEP=OpenROAD.PostRouteHoldECO ;;
     hold) STEP=OpenROAD.PostRouteHoldECO ;;
     sta)  STEP=OpenROAD.STAPostPNR ;;
-    *)    echo "from must be drt, hold or sta"; exit 2 ;;
+    step:?*) STEP=${FROM#step:} ;;
+    *)    echo "from must be drt, hold, sta, step:<StepID> or p2"; exit 2 ;;
 esac
 if [ "$FROM" != drt ]; then
     while [ "$(flows)" -ge 3 ]; do aborted && break; sleep 60; done

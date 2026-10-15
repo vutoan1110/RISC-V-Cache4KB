@@ -120,6 +120,7 @@ def worker(k, tasks, results, logdir, max_cycles, lock):
 
 
 def main():
+    global FAST, LIBPFX, OUT, ABORT
     ap = argparse.ArgumentParser()
     ap.add_argument("--pass", dest="pass_", type=int, default=1)
     ap.add_argument("--workers", type=int, default=4)
@@ -129,8 +130,12 @@ def main():
     ap.add_argument("--workloads", default=",".join(WORKLOADS))
     ap.add_argument("--max-cycles", type=int, default=40000000)
     ap.add_argument("--fast", action="store_true", help="R16 CACHE_FAST_HIT=1 (DSE / N-way points only)")
+    ap.add_argument("--out", default=str(OUT),
+                    help="result directory (default results/m2); a new directory means no log of an older RTL is "
+                         "reused (2026-10-14: re-execution on RTL 6c4ccffd goes to results/m2_6c4ccffd)")
     a = ap.parse_args()
-    global FAST, LIBPFX
+    OUT = Path(a.out) if Path(a.out).is_absolute() else ROOT / a.out
+    ABORT = OUT / ".abort"
     FAST = a.fast
     LIBPFX = "work_m2f_" if FAST else "work_m2_"
     pts = grid()

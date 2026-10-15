@@ -83,6 +83,7 @@ vlog -sv \
     tb/performance_counters_tb.sv \
     tb/uart_apb_tb.sv \
     tb/bht_tb.sv \
+    tb/regfile_tb.sv \
     tb/branch_predictor_tb.sv \
     tb/predictor_axi_tb.sv \
     tb/alu_zmmul_tb.sv \

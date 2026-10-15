@@ -1,4 +1,5 @@
 `timescale 1ns/1ps
+`include "tb/rf_bht_backdoor.svh"
 
 // Branch-predictor integration test. The core-level predictor test remains as a
 // detailed six-branch-type waveform test; this bench adds the parameterized
@@ -176,8 +177,8 @@ task automatic clear_program_and_state;
         end
         repeat (3) @(posedge clk);
         for (k = 0; k < 32; k = k + 1) begin
-            dut_on.datapath.regfile.regs[k] = 32'h0;
-            dut_off.datapath.regfile.regs[k] = 32'h0;
+            `RF_SET(dut_on.datapath.regfile, k, 32'h0);
+            `RF_SET(dut_off.datapath.regfile, k, 32'h0);
         end
         predicted_fetch_won = 0;
         correct_without_flush = 0;
@@ -267,10 +268,10 @@ task automatic test_bp_off_on_loop;
         repeat (70) @(posedge clk);
         #2;
 
-        check(dut_on.datapath.regfile.regs[1] == 32'd8 &&
-              dut_off.datapath.regfile.regs[1] == 32'd8 &&
-              dut_on.datapath.regfile.regs[3] == 32'd9 &&
-              dut_off.datapath.regfile.regs[3] == 32'd9,
+        check(`RF_GET(dut_on.datapath.regfile, 1) == 32'd8 &&
+              `RF_GET(dut_off.datapath.regfile, 1) == 32'd8 &&
+              `RF_GET(dut_on.datapath.regfile, 3) == 32'd9 &&
+              `RF_GET(dut_off.datapath.regfile, 3) == 32'd9,
               "BP_OFF and BP_ON have identical architectural registers");
         check(on_cond_count == 8 && on_taken_count == 7 && on_nt_count == 1,
               "BP_ON conditional/taken/not-taken event counts are exact");
@@ -310,9 +311,9 @@ task automatic test_mostly_not_taken;
         #2;
         check(mostly_nt_resolves == 5 && mostly_nt_misses == 0,
               "Five not-taken outcomes remain correctly predicted after training");
-        check(dut_on.datapath.g_bp_on.u_bht.bht_mem[3] == 2'b00,
+        check(`BHT_GET(dut_on.datapath.g_bp_on.u_bht, 3) == 2'b00,
               "Mostly-not-taken branch reaches strongly-not-taken state 00");
-        check(dut_on.datapath.regfile.regs[1] == 32'd5,
+        check(`RF_GET(dut_on.datapath.regfile, 1) == 32'd5,
               "Mostly-not-taken microprogram completes architecturally");
     end
 endtask
@@ -333,7 +334,7 @@ task automatic test_wrong_path_side_effects;
         imem[9] = RV32_J(21'd0, 5'd0);
         // Force only the ON instance to predict taken for branch PC=8.
         @(negedge clk);
-        dut_on.datapath.g_bp_on.u_bht.bht_mem[2] = 2'b11;
+        `BHT_SET(dut_on.datapath.g_bp_on.u_bht, 2, 2'b11);
         reset_n = 1'b1;
         repeat (35) @(posedge clk);
         #2;
@@ -341,13 +342,13 @@ task automatic test_wrong_path_side_effects;
         check(on_miss_count == 1 && on_cond_count == 1,
               "Predicted-taken/actual-not-taken is one misprediction");
         check(dut_on.datapath.branch_recovery_pc == 32'h0000_000c ||
-              dut_on.datapath.regfile.regs[3] == 32'd9,
+              `RF_GET(dut_on.datapath.regfile, 3) == 32'd9,
               "T->NT recovery selects branch PC + 4");
         check(on_store_count == 0 && dmem_on[0] == 32'h0,
               "Wrong-path store produces no memory side effect");
-        check(dut_on.datapath.regfile.regs[20] == 32'h0,
+        check(`RF_GET(dut_on.datapath.regfile, 20) == 32'h0,
               "Wrong-path register write is suppressed");
-        check(dut_on.datapath.regfile.regs[3] == 32'd9,
+        check(`RF_GET(dut_on.datapath.regfile, 3) == 32'd9,
               "Correct recovery path retires normally");
     end
 endtask
@@ -372,8 +373,8 @@ task automatic test_load_use_branch;
               "Exactly one load-use stall is generated");
         check(on_cond_count == 1 && on_miss_count == 1,
               "Stalled branch resolves and updates the BHT exactly once");
-        check(dut_on.datapath.regfile.regs[6] == 32'h0 &&
-              dut_on.datapath.regfile.regs[7] == 32'd7,
+        check(`RF_GET(dut_on.datapath.regfile, 6) == 32'h0 &&
+              `RF_GET(dut_on.datapath.regfile, 7) == 32'd7,
               "Load-use branch flushes stale fall-through and reaches target");
     end
 endtask
@@ -386,7 +387,7 @@ task automatic test_interrupt_priority;
         imem[1]  = RV32_B(-13'sd4, 5'd1, 5'd1, 3'b000); // taken loop to PC0
         imem[32] = RV32_I(12'd1, 5'd0, 3'b000, 5'd20);  // mtvec handler flag
         imem[33] = 32'h3020_0073;                        // mret
-        dut_on.datapath.g_bp_on.u_bht.bht_mem[1] = 2'b11;
+        `BHT_SET(dut_on.datapath.g_bp_on.u_bht, 1, 2'b11);
         release_reset();
         dut_on.datapath.csr_mstatus = 32'h0000_0008;
         dut_on.datapath.csr_mie     = 32'h0000_0080;
@@ -401,7 +402,7 @@ task automatic test_interrupt_priority;
 
         check(trap_count == 1 && mcause_on == 32'h8000_0007,
               "Timer interrupt is accepted once with machine-timer cause");
-        check(dut_on.datapath.regfile.regs[20] == 32'd1,
+        check(`RF_GET(dut_on.datapath.regfile, 20) == 32'd1,
               "Trap redirect reaches mtvec and handler executes");
         check(mepc_on[1:0] == 2'b00 && mepc_on < 32'h0000_0008,
               "mepc records an aligned resumable loop PC");

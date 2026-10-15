@@ -1,7 +1,7 @@
 # Diagnostic probes
 
 Second-top modules used to localise the ASIC-view failures of 2026-09-24
-(see NHAT_KY_RTL.md, 11:50 to 12:40). None of them is part of a regression; each
+(see `NHAT_KY.md`, "2026-09-24 Dot sua RTL va view ASIC", 11:50 to 12:40). None of them is part of a regression; each
 is elaborated next to tb_benchmark_snapshot by hand:
 
 | File | Reports |

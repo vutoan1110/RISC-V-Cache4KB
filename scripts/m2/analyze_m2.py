@@ -63,6 +63,8 @@ L.append("# Review M1 + M2: cache design-space sweep (R15 RTL%s)\n" % (" + R16 F
 L.append("Source: `%s`%s. Every ratio is mcycle against the DM point of the same capacity, geometric mean over the "
          "12 upstream Embench-IoT kernels; CoreMark separately. Negative = faster than DM.\n" %
          (Path(a.base).relative_to(ROOT).as_posix(), (", `%s`" % Path(a.fast).relative_to(ROOT).as_posix()) if f else ""))
+L.append("CoreMark rows are repeatable full-program simulation counters (RAM 32 KiB), including initialization/reporting; "
+         "CRC is not part of the wrapper PASS gate. Functional validation remains pending; these are not official scores.\n")
 
 # ---------------------------------------------------------------- M1 decomposition (16 B lines)
 L.append("## M1: controller cost vs organisation (16 B lines)\n")

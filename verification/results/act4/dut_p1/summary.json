@@ -11,7 +11,7 @@
       "finish": "TOHOST",
       "retirements": 5414,
       "cycles": 6271,
-      "seconds": 2.99
+      "seconds": 3.69
     },
     {
       "test": "rv32i/I/I-addi-00.elf",
@@ -20,7 +20,7 @@
       "finish": "TOHOST",
       "retirements": 4462,
       "cycles": 5357,
-      "seconds": 2.08
+      "seconds": 2.05
     },
     {
       "test": "rv32i/I/I-and-00.elf",
@@ -29,7 +29,7 @@
       "finish": "TOHOST",
       "retirements": 5430,
       "cycles": 6285,
-      "seconds": 1.91
+      "seconds": 1.96
     },
     {
       "test": "rv32i/I/I-andi-00.elf",
@@ -38,7 +38,7 @@
       "finish": "TOHOST",
       "retirements": 4462,
       "cycles": 5357,
-      "seconds": 1.84
+      "seconds": 1.71
     },
     {
       "test": "rv32i/I/I-auipc-00.elf",
@@ -47,7 +47,7 @@
       "finish": "TOHOST",
       "retirements": 2477,
       "cycles": 2663,
-      "seconds": 1.62
+      "seconds": 1.72
     },
     {
       "test": "rv32i/I/I-beq-00.elf",
@@ -56,7 +56,7 @@
       "finish": "TOHOST",
       "retirements": 5760,
       "cycles": 6705,
-      "seconds": 1.67
+      "seconds": 1.75
     },
     {
       "test": "rv32i/I/I-bge-00.elf",
@@ -65,7 +65,7 @@
       "finish": "TOHOST",
       "retirements": 5784,
       "cycles": 6783,
-      "seconds": 1.74
+      "seconds": 1.91
     },
     {
       "test": "rv32i/I/I-bgeu-00.elf",
@@ -74,7 +74,7 @@
       "finish": "TOHOST",
       "retirements": 5784,
       "cycles": 6781,
-      "seconds": 1.61
+      "seconds": 1.92
     },
     {
       "test": "rv32i/I/I-blt-00.elf",
@@ -83,7 +83,7 @@
       "finish": "TOHOST",
       "retirements": 5796,
       "cycles": 6749,
-      "seconds": 1.99
+      "seconds": 1.93
     },
     {
       "test": "rv32i/I/I-bltu-00.elf",
@@ -92,7 +92,7 @@
       "finish": "TOHOST",
       "retirements": 5794,
       "cycles": 6837,
-      "seconds": 2.34
+      "seconds": 1.77
     },
     {
       "test": "rv32i/I/I-bne-00.elf",
@@ -101,7 +101,7 @@
       "finish": "TOHOST",
       "retirements": 5824,
       "cycles": 6705,
-      "seconds": 3.38
+      "seconds": 1.94
     },
     {
       "test": "rv32i/I/I-fence-00.elf",
@@ -110,7 +110,7 @@
       "finish": "TOHOST",
       "retirements": 2238,
       "cycles": 2255,
-      "seconds": 3.1
+      "seconds": 2.11
     },
     {
       "test": "rv32i/I/I-jal-00.elf",
@@ -119,7 +119,7 @@
       "finish": "TOHOST",
       "retirements": 18275,
       "cycles": 18566,
-      "seconds": 3.7
+      "seconds": 3.34
     },
     {
       "test": "rv32i/I/I-jalr-00.elf",
@@ -128,7 +128,7 @@
       "finish": "TOHOST",
       "retirements": 5205,
       "cycles": 5770,
-      "seconds": 3.33
+      "seconds": 1.74
     },
     {
       "test": "rv32i/I/I-lb-00.elf",
@@ -137,7 +137,7 @@
       "finish": "TOHOST",
       "retirements": 3137,
       "cycles": 3489,
-      "seconds": 3.37
+      "seconds": 1.77
     },
     {
       "test": "rv32i/I/I-lbu-00.elf",
@@ -146,7 +146,7 @@
       "finish": "TOHOST",
       "retirements": 3137,
       "cycles": 3499,
-      "seconds": 3.29
+      "seconds": 1.78
     },
     {
       "test": "rv32i/I/I-lh-00.elf",
@@ -155,7 +155,7 @@
       "finish": "TOHOST",
       "retirements": 3053,
       "cycles": 3401,
-      "seconds": 3.15
+      "seconds": 2.11
     },
     {
       "test": "rv32i/I/I-lhu-00.elf",
@@ -164,7 +164,7 @@
       "finish": "TOHOST",
       "retirements": 3053,
       "cycles": 3383,
-      "seconds": 3.25
+      "seconds": 1.97
     },
     {
       "test": "rv32i/I/I-lui-00.elf",
@@ -173,7 +173,7 @@
       "finish": "TOHOST",
       "retirements": 2477,
       "cycles": 2661,
-      "seconds": 3.21
+      "seconds": 1.99
     },
     {
       "test": "rv32i/I/I-lw-00.elf",
@@ -182,7 +182,7 @@
       "finish": "TOHOST",
       "retirements": 3011,
       "cycles": 3375,
-      "seconds": 3.23
+      "seconds": 2.02
     },
     {
       "test": "rv32i/I/I-nop-00.elf",
@@ -191,7 +191,7 @@
       "finish": "TOHOST",
       "retirements": 2230,
       "cycles": 2247,
-      "seconds": 2.45
+      "seconds": 1.95
     },
     {
       "test": "rv32i/I/I-or-00.elf",
@@ -200,7 +200,7 @@
       "finish": "TOHOST",
       "retirements": 5414,
       "cycles": 6291,
-      "seconds": 2.02
+      "seconds": 3.15
     },
     {
       "test": "rv32i/I/I-ori-00.elf",
@@ -209,7 +209,7 @@
       "finish": "TOHOST",
       "retirements": 4454,
       "cycles": 5349,
-      "seconds": 1.59
+      "seconds": 2.53
     },
     {
       "test": "rv32i/I/I-sb-00.elf",
@@ -218,7 +218,7 @@
       "finish": "TOHOST",
       "retirements": 3385,
       "cycles": 3703,
-      "seconds": 1.5
+      "seconds": 2.04
     },
     {
       "test": "rv32i/I/I-sh-00.elf",
@@ -227,7 +227,7 @@
       "finish": "TOHOST",
       "retirements": 3337,
       "cycles": 3619,
-      "seconds": 1.5
+      "seconds": 1.89
     },
     {
       "test": "rv32i/I/I-sll-00.elf",
@@ -236,7 +236,7 @@
       "finish": "TOHOST",
       "retirements": 5414,
       "cycles": 6275,
-      "seconds": 1.55
+      "seconds": 2.33
     },
     {
       "test": "rv32i/I/I-slli-00.elf",
@@ -245,7 +245,7 @@
       "finish": "TOHOST",
       "retirements": 3436,
       "cycles": 3947,
-      "seconds": 1.44
+      "seconds": 3.12
     },
     {
       "test": "rv32i/I/I-slt-00.elf",
@@ -254,7 +254,7 @@
       "finish": "TOHOST",
       "retirements": 5386,
       "cycles": 6261,
-      "seconds": 1.52
+      "seconds": 2.42
     },
     {
       "test": "rv32i/I/I-slti-00.elf",
@@ -263,7 +263,7 @@
       "finish": "TOHOST",
       "retirements": 4444,
       "cycles": 5331,
-      "seconds": 1.51
+      "seconds": 2.77
     },
     {
       "test": "rv32i/I/I-sltiu-00.elf",
@@ -272,7 +272,7 @@
       "finish": "TOHOST",
       "retirements": 4452,
       "cycles": 5345,
-      "seconds": 2.67
+      "seconds": 4.15
     },
     {
       "test": "rv32i/I/I-sltu-00.elf",
@@ -281,7 +281,7 @@
       "finish": "TOHOST",
       "retirements": 5386,
       "cycles": 6219,
-      "seconds": 2.93
+      "seconds": 2.5
     },
     {
       "test": "rv32i/I/I-sra-00.elf",
@@ -290,7 +290,7 @@
       "finish": "TOHOST",
       "retirements": 5414,
       "cycles": 6289,
-      "seconds": 2.87
+      "seconds": 2.3
     },
     {
       "test": "rv32i/I/I-srai-00.elf",
@@ -299,7 +299,7 @@
       "finish": "TOHOST",
       "retirements": 3444,
       "cycles": 3947,
-      "seconds": 2.84
+      "seconds": 1.9
     },
     {
       "test": "rv32i/I/I-srl-00.elf",
@@ -308,7 +308,7 @@
       "finish": "TOHOST",
       "retirements": 5422,
       "cycles": 6285,
-      "seconds": 2.95
+      "seconds": 2.08
     },
     {
       "test": "rv32i/I/I-srli-00.elf",
@@ -317,7 +317,7 @@
       "finish": "TOHOST",
       "retirements": 3444,
       "cycles": 3953,
-      "seconds": 2.89
+      "seconds": 1.95
     },
     {
       "test": "rv32i/I/I-sub-00.elf",
@@ -326,7 +326,7 @@
       "finish": "TOHOST",
       "retirements": 5422,
       "cycles": 6267,
-      "seconds": 2.88
+      "seconds": 1.95
     },
     {
       "test": "rv32i/I/I-sw-00.elf",
@@ -335,7 +335,7 @@
       "finish": "TOHOST",
       "retirements": 3309,
       "cycles": 3587,
-      "seconds": 2.76
+      "seconds": 1.9
     },
     {
       "test": "rv32i/I/I-xor-00.elf",
@@ -344,7 +344,7 @@
       "finish": "TOHOST",
       "retirements": 5414,
       "cycles": 6281,
-      "seconds": 3.32
+      "seconds": 2.06
     },
     {
       "test": "rv32i/I/I-xori-00.elf",
@@ -353,7 +353,7 @@
       "finish": "TOHOST",
       "retirements": 4462,
       "cycles": 5357,
-      "seconds": 3.37
+      "seconds": 2.2
     },
     {
       "test": "rv32i/Zmmul/Zmmul-mul-00.elf",
@@ -362,7 +362,7 @@
       "finish": "TOHOST",
       "retirements": 5422,
       "cycles": 6273,
-      "seconds": 3.4
+      "seconds": 2.69
     },
     {
       "test": "rv32i/Zmmul/Zmmul-mulh-00.elf",
@@ -371,7 +371,7 @@
       "finish": "TOHOST",
       "retirements": 5422,
       "cycles": 6271,
-      "seconds": 3.33
+      "seconds": 2.24
     },
     {
       "test": "rv32i/Zmmul/Zmmul-mulhsu-00.elf",
@@ -380,7 +380,7 @@
       "finish": "TOHOST",
       "retirements": 5430,
       "cycles": 6301,
-      "seconds": 2.84
+      "seconds": 3.07
     },
     {
       "test": "rv32i/Zmmul/Zmmul-mulhu-00.elf",
@@ -389,7 +389,7 @@
       "finish": "TOHOST",
       "retirements": 5422,
       "cycles": 6277,
-      "seconds": 2.27
+      "seconds": 2.78
     }
   ]
 }

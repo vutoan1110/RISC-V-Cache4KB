@@ -4,7 +4,7 @@ Reading pref.tcl
 
 # vsim -onfinish stop -voptargs=+acc work_act4.tb_architecture_signature +HEX=E:/Projects/RISCV-research/verification/results/act4/images/rv32i__I__I-slli-00.hex +SIGNATURE=E:/Projects/RISCV-research/verification/results/act4/dut_p1/signatures/rv32i__I__I-slli-00.signature +SIG_BEGIN=0000ab70 +SIG_END=00019930 +TOHOST_ADDR=00081ff0 +MAX_CYCLES=2000000
 # vsim -onfinish stop -voptargs="+acc" work_act4.tb_architecture_signature "+HEX=E:/Projects/RISCV-research/verification/results/act4/images/rv32i__I__I-slli-00.hex" "+SIGNATURE=E:/Projects/RISCV-research/verification/results/act4/dut_p1/signatures/rv32i__I__I-slli-00.signature" "+SIG_BEGIN=0000ab70" "+SIG_END=00019930" "+TOHOST_ADDR=00081ff0" "+MAX_CYCLES=2000000" 
-# Start time: 11:47:00 on Oct 02,2026
+# Start time: 21:18:50 on Oct 08,2026
 # ** Note: (vsim-8009) Loading existing optimized design _opt
 # //  Questa Sim-64
 # //  Version 2024.1 win64 Feb  1 2024
@@ -41,5 +41,5 @@ Reading pref.tcl
 # Stopped at tb/architecture_signature_tb.sv line 108
 #  quit -f
 # R9_EQUIV tb_architecture_signature.dut.datapath: 3947 cycles matched
-# End time: 11:47:00 on Oct 02,2026, Elapsed time: 0:00:00
+# End time: 21:18:51 on Oct 08,2026, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0

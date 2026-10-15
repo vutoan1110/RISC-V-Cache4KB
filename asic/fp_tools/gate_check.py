@@ -6,7 +6,7 @@ exit 0 = PASS, 1 = FAIL (one line on stdout says why), 2 = data missing (treated
   p1    (after OpenROAD.GlobalRouting)  G1: initial global-route overflow <= P1_MAX_OVF (500)
                                          G2: STAMidPNR-2 setup nom_tt >= P1_MIN_SETUP (+0.5 ns), hold nom_tt >= 0
   p2    (after OpenROAD.STAMidPNR-3)    G3: overflow after the post-GRT design repair re-route <= P2_MAX_OVF (2000)
-                                         G4: STAMidPNR-3 setup nom_tt >= P2_MIN_SETUP (+0.3 ns), hold nom_tt >= 0
+                                         G4: STAMidPNR-3 setup nom_tt >= P2_MIN_SETUP (+0.3 ns), hold nom_tt >= P2_MIN_HOLD (0)
   final (after sign-off)                G6: route / Magic / KLayout DRC 0, LVS 0 (every difference count), XOR 0,
                                          illegal overlap 0, critical disconnected pins 0, antenna nets/pins 0,
                                          setup >= 0 at every tt and ff corner, hold >= 0 at EVERY corner;
@@ -14,6 +14,13 @@ exit 0 = PASS, 1 = FAIL (one line on stdout says why), 2 = data missing (treated
                                          DM signed-off max_ss -7.365 ns) and only fail the gate with FINAL_SS=1.
 The mid-PnR gates use only the tt corner: STAMidPNR ss/ff numbers are stale pre-PnR values (memory note).
 Thresholds can be overridden with the environment variables named above.
+P2_INITIAL_GRT_FALLBACK=1 enables the T9 reader fix when resolved.json explicitly
+disables RUN_POST_GRT_DESIGN_REPAIR. The last post-GRT reroute is still used when
+present, otherwise the initial GlobalRouting overflow is read. Off by default;
+no setup, hold, overflow or final sign-off threshold changes.
+P2_MIN_HOLD (2026-10-13, default 0 = unchanged): for recipes whose hold is repaired after routing
+(RUN_POST_ROUTE_HOLD_ECO, SA2 / DM_VC4), the p2 hold bound is declared at launch instead of logging a
+CONTINUE after a p2 FAIL, because a run may not be continued after a failed gate. The final gate is unchanged.
 """
 import glob
 import json
@@ -96,17 +103,40 @@ def post_grt_overflows():
 if gate == "p2":
     r = step_dir("*-openroad-repairdesignpostgrt")
     s3 = step_dir("*-openroad-stamidpnr-3")
-    if not r or not s3 or metrics_of(s3) is None:
+    fallback = False
+    if not r and E.get("P2_INITIAL_GRT_FALLBACK") == "1":
+        try:
+            config = json.load(open(os.path.join(run, "resolved.json")))
+            fallback = config.get("RUN_POST_GRT_DESIGN_REPAIR") is False
+        except (OSError, ValueError):
+            pass
+    if (not r and not fallback) or not s3 or metrics_of(s3) is None:
         print("MISSING p2 data")
         sys.exit(2)
+    g = step_dir("*-openroad-globalrouting") if fallback else None
+    if fallback and (not g or metrics_of(g) is None or
+                     int(os.path.basename(g).split("-")[0]) >= int(os.path.basename(s3).split("-")[0])):
+        print("MISSING p2 data (no completed GlobalRouting before STAMidPNR-3)")
+        sys.exit(2)
     allv = post_grt_overflows()
-    ovf = allv[-1] if allv else last_total_overflow(os.path.join(r, "openroad-repairdesignpostgrt.log"))
+    if fallback:
+        log = os.path.join(g, "openroad-globalrouting.log")
+        if not allv and not os.path.isfile(log):
+            print("MISSING p2 data (initial GlobalRouting overflow log)")
+            sys.exit(2)
+        ovf = allv[-1] if allv else last_total_overflow(log)
+        source = "last post-GRT reroute" if allv else "initial GlobalRouting"
+        label = "%s overflow (RUN_POST_GRT_DESIGN_REPAIR=false)" % source
+    else:
+        ovf = allv[-1] if allv else last_total_overflow(os.path.join(r, "openroad-repairdesignpostgrt.log"))
+        label = "post-GRT-repair overflow"
     m = metrics_of(s3)
     su, ho = m["timing__setup__ws__corner:nom_tt_025C_1v80"], m["timing__hold__ws__corner:nom_tt_025C_1v80"]
-    msg = ("post-GRT-repair overflow %s (last global route before DRT; max %d; all post-GRT reports %s), "
-           "STAMidPNR-3 setup nom_tt %.3f (min %.2f), hold nom_tt %.3f" % (
-               ovf, thr("P2_MAX_OVF", 2000), allv, su, thr("P2_MIN_SETUP", 0.3), ho))
-    out(ovf is not None and ovf <= thr("P2_MAX_OVF", 2000) and su >= thr("P2_MIN_SETUP", 0.3) and ho >= 0, msg)
+    msg = ("%s %s (last global route before DRT; max %d; all post-GRT reports %s), "
+           "STAMidPNR-3 setup nom_tt %.3f (min %.2f), hold nom_tt %.3f (min %.2f)" % (
+               label, ovf, thr("P2_MAX_OVF", 2000), allv, su, thr("P2_MIN_SETUP", 0.3), ho, thr("P2_MIN_HOLD", 0)))
+    out(ovf is not None and ovf <= thr("P2_MAX_OVF", 2000) and su >= thr("P2_MIN_SETUP", 0.3)
+        and ho >= thr("P2_MIN_HOLD", 0), msg)
 
 if gate == "final":
     m = {}

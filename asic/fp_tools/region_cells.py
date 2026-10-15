@@ -1,72 +1,39 @@
-# NHAT_KY.md section 8: which logic sits in a congested region of a placed ODB?
-# Counts the instances whose origin lies in each given box, grouped by hierarchical prefix of the instance
-# name (first DEPTH dot-separated levels; ABC's anonymous cells "_123_" are grouped as <anon>), and the
-# share of the region's std-cell area per group. Also prints, for the whole die, where the named flops of
-# a few groups sit (bounding box + centroid).
-# Run: openroad -python -exit region_cells.py <odb> <label> x0,y0,x1,y1 [x0,y0,x1,y1 ...]
-import collections
-import re
-import sys
-
-import odb
-
-path, label = sys.argv[1], sys.argv[2]
-boxes = [tuple(float(v) for v in b.split(",")) for b in sys.argv[3:]]
-DEPTH = int(__import__('os').environ.get('DEPTH', '6'))
-db = odb.dbDatabase.create()
-odb.read_db(db, path)
-block = db.getChip().getBlock()
-dbu = block.getDefUnits()
-
-
-def group(name):
-    n = name.replace("\\", "")
-    if re.match(r"^_\d+_$", n) or n.startswith("ANTENNA") or n.startswith("PHY_") or n.startswith("TAP_"):
-        return "<anon/phys>"
-    if n.startswith("FILLER") or n.startswith("clkbuf") or n.startswith("clkload") or n.startswith("delaybuf"):
-        return "<clock/fill>"
-    if n.startswith("rebuffer") or n.startswith("split") or n.startswith("wire") or n.startswith("max_cap") \
-            or n.startswith("max_length") or n.startswith("hold") or n.startswith("input") or n.startswith("output"):
-        return "<repair buf>"
-    parts = re.split(r"\.", n)
-    g = ".".join(parts[:DEPTH])
-    g = re.sub(r"\[\d+\]", "[*]", g)
-    return g
-
-
-stats = [collections.Counter() for _ in boxes]
-area = [collections.Counter() for _ in boxes]
-tot_area = [0.0 for _ in boxes]
-where = collections.defaultdict(list)
-for inst in block.getInsts():
-    m = inst.getMaster()
-    if m.getType() == "BLOCK":
-        continue
-    x, y = inst.getLocation()
-    x, y = x / dbu, y / dbu
-    g = group(inst.getName())
-    if g == "<anon/phys>" and m.isSequential():
-        for it in inst.getITerms():
-            if it.isOutputSignal() and it.getNet() is not None:
-                g = "FF " + group(it.getNet().getName())
-                break
-    elif g == "<anon/phys>":
-        for it in inst.getITerms():
-            if it.isOutputSignal() and it.getNet() is not None:
-                nn = group(it.getNet().getName())
-                if not nn.startswith("<"):
-                    g = "C " + nn
-                break
-    a = m.getWidth() * m.getHeight() / dbu / dbu
-    if m.isSequential() if hasattr(m, "isSequential") else False:
-        where[g].append((x, y))
-    for k, (x0, y0, x1, y1) in enumerate(boxes):
-        if x0 <= x < x1 and y0 <= y < y1:
-            stats[k][g] += 1
-            area[k][g] += a
-            tot_area[k] += a
-for k, b in enumerate(boxes):
-    print("%s box %s: %d cells, %.0f um2 std-cell area (%.1f %% of the box)" % (
-        label, b, sum(stats[k].values()), tot_area[k], 100 * tot_area[k] / ((b[2] - b[0]) * (b[3] - b[1]))))
-    for g, a in area[k].most_common(22):
-        print("   %6.1f %%  %6d cells  %s" % (100 * a / tot_area[k], stats[k][g], g))
+"""Cell composition of a die box from a DEF (read-only).
+usage: python region_cells.py <def> x0 y0 x1 y1        (um)
+Counts the placed instances in the box (fill / decap / tap excluded) by cell family, by resizer-inserted name prefix
+(fanout, max_cap, wire, hold, clock buffers, antenna diodes) and flops by name prefix."""
+import sys, re, collections
+deff = sys.argv[1]
+x0, y0, x1, y1 = (float(v) for v in sys.argv[2:6])
+cnt, fam, hier, n_all = collections.Counter(), collections.Counter(), collections.Counter(), 0
+sect = None
+with open(deff) as f:
+    for ln in f:
+        s = ln.strip()
+        if s.startswith("COMPONENTS"):
+            sect = "C"; continue
+        if s.startswith("END COMPONENTS"):
+            break
+        if sect == "C" and s.startswith("- "):
+            m = re.match(r"- (\S+) (\S+) .*?(?:PLACED|FIXED) \( (-?\d+) (-?\d+) \)", s)
+            if not m:
+                continue
+            x, y = int(m.group(3)) / 1000, int(m.group(4)) / 1000
+            if not (x0 <= x < x1 and y0 <= y < y1):
+                continue
+            inst, cell = m.group(1), m.group(2)
+            c = cell.replace("sky130_fd_sc_hd__", "")
+            if c.startswith(("fill", "decap", "tap")):
+                continue
+            n_all += 1
+            fam[re.sub(r"_\d+$", "", c)] += 1
+            if c.startswith(("df", "edf", "sdf")):
+                name = inst.replace("\\", "")
+                parts = re.split(r"[./]", name)
+                hier[".".join(parts[:4])] += 1
+            if inst.startswith(("wire", "max_cap", "fanout", "split", "hold", "rebuffer", "clkbuf", "clkload", "ANTENNA", "input", "output")):
+                cnt[re.match(r"[A-Za-z_]+", inst).group(0)] += 1
+print("instances (no fill/decap/tap): %d in %.0f x %.0f um" % (n_all, x1 - x0, y1 - y0))
+print("by family:", fam.most_common(14))
+print("inserted-cell prefixes:", cnt.most_common(10))
+print("flops by hierarchy prefix:", hier.most_common(14))

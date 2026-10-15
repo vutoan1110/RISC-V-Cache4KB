@@ -1,0 +1,7 @@
+read_verilog -formal -sv real/rf_old.v real/rf_new.v real/fv_rf.sv
+prep -top fv_rf
+flatten
+async2sync
+memory_map
+opt -fast
+sat -tempinduct -prove-asserts -set-init-zero -set-at 1 reset_n 0 -maxsteps 6 -timeout 3000

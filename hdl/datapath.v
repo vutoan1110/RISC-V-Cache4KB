@@ -455,6 +455,14 @@ assign pc_next = irq_accept         ? csr_mtvec :
                  predict_redirect_f  ? predicted_target_f :
                                        pc_plus4_f;
 
+`ifndef __openlane__
+// FPGA read-ahead addresses of the register file and the BHT in M9K (2026-10-08, review A1): the D inputs of
+// instr_d, pc_f and pc_e, written as their always blocks below load them (enable !stall_pipe, flush, stall).
+wire [31:0] instr_d_next = stall_pipe ? instr_d : flush_d ? 32'h0000_0000 : stall_d ? instr_d : instr;
+wire [31:0] pc_f_next    = stall_pipe ? pc_f : irq_accept ? csr_mtvec : !stall_f ? pc_next : pc_f;
+wire [31:0] pc_e_next    = stall_pipe ? pc_e : flush_e ? 32'h0000_0000 : pc_d;
+`endif
+
 // --- BHT Instance ---
 generate
     if(BP_ON) begin : g_bp_on
@@ -465,6 +473,10 @@ generate
             .clk           (clk),
             .reset_n       (reset_n),
             .fetch_pc      (pc_f),
+`ifndef __openlane__
+            .fetch_pc_next (pc_f_next),
+            .update_pc_next(pc_e_next),
+`endif
             .fetch_index   (bht_index_f),
             .fetch_state   (bht_state_f),
             .predict_taken (bht_pred_f),
@@ -609,6 +621,10 @@ regfile regfile(
     .rs2   (instr_d[24:20]) ,
     .rd    (instr_w[11:7])  ,
     .wd    (result_w)       ,
+`ifndef __openlane__
+    .rs1_next (instr_d_next[19:15]),
+    .rs2_next (instr_d_next[24:20]),
+`endif
     .rd1_d (src_a)          ,
     .rd2_d (src_b)
 );

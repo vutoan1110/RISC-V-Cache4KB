@@ -1,4 +1,5 @@
 `timescale 1ns/1ps
+`include "tb/rf_bht_backdoor.svh"
 
 module tb_random_trace;
 
@@ -229,8 +230,8 @@ initial begin
     for(i = 0; i < 32; i = i + 1) begin
         arch_off[i] = 0;
         arch_on[i] = 0;
-        dut_off.datapath.regfile.regs[i] = 0;
-        dut_on.datapath.regfile.regs[i] = 0;
+        `RF_SET(dut_off.datapath.regfile, i, 0);
+        `RF_SET(dut_on.datapath.regfile, i, 0);
     end
     $readmemh(hex_path, imem);
     fd_off = $fopen(trace_off_path, "w");

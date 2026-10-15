@@ -1,4 +1,5 @@
 `timescale 1ns/1ps
+`include "tb/rf_bht_backdoor.svh"
 
 module tb_valid_irq;
 
@@ -250,7 +251,7 @@ initial begin
 
     // Wait for handler execution, mret, and resumed instruction at 0x14.
     timeout_count = 0;
-    while (dut.datapath.regfile.regs[11] !== 32'h0000_0066) begin
+    while (`RF_GET(dut.datapath.regfile, 11) !== 32'h0000_0066) begin
         @(posedge clk);
         #1;
         timeout_count = timeout_count + 1;
@@ -258,7 +259,7 @@ initial begin
             $fatal(1, "Timeout waiting for resumed instruction");
     end
 
-    if (dut.datapath.regfile.regs[20] !== 32'h0000_0001) begin
+    if (`RF_GET(dut.datapath.regfile, 20) !== 32'h0000_0001) begin
         $display("[ERROR] interrupt handler did not execute");
         errors = errors + 1;
     end
@@ -281,8 +282,8 @@ initial begin
     $display("trap_count        = %0d", trap_count);
     $display("x11_write_count   = %0d", x11_write_count);
     $display("minstret          = %0d", minstret_dbg);
-    $display("x20(handler flag) = 0x%08h", dut.datapath.regfile.regs[20]);
-    $display("x11(resumed)      = 0x%08h", dut.datapath.regfile.regs[11]);
+    $display("x20(handler flag) = 0x%08h", `RF_GET(dut.datapath.regfile, 20));
+    $display("x11(resumed)      = 0x%08h", `RF_GET(dut.datapath.regfile, 11));
 
     if (errors != 0)
         $fatal(1, "valid IRQ test failed with %0d error(s)", errors);

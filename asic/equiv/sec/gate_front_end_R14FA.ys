@@ -1,0 +1,12 @@
+verilog_defines -DPDK_sky130A
+verilog_defines -DSCL_sky130_fd_sc_hd
+verilog_defines -D__openlane__
+verilog_defines -D__pnr__
+read_verilog -sv -lib  /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/verilog/sky130_sram_2kbyte_1rw1r_32x512_8.v
+read_verilog -sv -lib  /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v
+blackbox
+read_liberty -lib -ignore_miss_dir -setattr blackbox /home/toanl/.volare/volare/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog -formal -sv /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/formal_pdk.v /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/r14F_A/55-openroad-fillinsertion/soc_asic_top.nl.v
+hierarchy -top soc_asic_top
+flatten
+rename -hide w:* x:* %d w:u_soc.* %d w:reset_meta_q %d w:reset_sync_q %d w:key1_sync_q* %d w:uart_rx_sync_q* %d w:soc_key1_n %d w:soc_reset_n %d w:soc_uart_rx %d

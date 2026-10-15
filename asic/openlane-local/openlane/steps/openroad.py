@@ -15,6 +15,7 @@ import io
 import os
 import re
 import json
+import shutil
 import tempfile
 import functools
 import subprocess
@@ -1671,6 +1672,19 @@ class DetailedRouting(OpenROADStep):
             "Write the detailed-routing DRC report every N optimization iterations. 0 disables it.",
             default=0,
         ),
+        # Local additions (2026-10-13), off by default (stock behaviour): see drt.tcl.
+        Variable(
+            "DRT_ANTENNA_REPAIR_ALLOW_CONGESTION",
+            bool,
+            "Allow global-route overflow in the incremental re-route of the post-detailed-route antenna repair (grt::set_allow_congestion); the incremental detailed route must then resolve it.",
+            default=False,
+        ),
+        Variable(
+            "DRT_SAVE_MAIN_ROUTE",
+            bool,
+            "Write the database after the main detailed route (main_route.odb in the step directory), before the post-detailed-route antenna repair.",
+            default=False,
+        ),
     ]
 
     def get_script_path(self):
@@ -2536,6 +2550,15 @@ class PostRouteHoldECO(ResizerStep):
                 "The RCX_RULESETS / TECH_LEFS corner pattern whose extraction is annotated on every resizer corner.",
                 default="max_*",
             ),
+            # 2026-10-13: the SA2 sign-off needed a max_* pass then a min_* pass (one extraction per pass); it was
+            # done by branching the run after this step, which is not allowed once the first run's sign-off fails.
+            # With this set, both passes run inside one step of one full flow. Off by default.
+            Variable(
+                "POST_ROUTE_HOLD_ECO_RCX_CORNER_2",
+                Optional[str],
+                "Optional second extraction corner pattern. When set, the step runs a second complete pass (extraction, hold repair, legalisation, incremental routing) on the result of the first, with this extraction annotated on every resizer corner; the first pass's files are kept in pass1/. Unset: one pass, unchanged behaviour.",
+                default=None,
+            ),
             Variable(
                 "POST_ROUTE_HOLD_ECO_MARGIN",
                 Decimal,
@@ -2576,17 +2599,47 @@ class PostRouteHoldECO(ResizerStep):
                 default=10,
                 units="%",
             ),
+            # 2026-10-08: setup repair on the extracted parasitics (SA2 10.54 mm2: 21 endpoints at max_tt -0.571 ns,
+            # half-cycle SRAM paths with high-slew long nets). Off by default.
+            Variable(
+                "POST_ROUTE_ECO_SETUP",
+                bool,
+                "Also runs repair_timing -setup on the extracted parasitics, after the optional repair_design and before the hold repair.",
+                default=False,
+            ),
+            Variable(
+                "POST_ROUTE_ECO_HOLD",
+                bool,
+                "Runs the hold repair (default). False for a setup-only pass whose corners differ from the hold pass.",
+                default=True,
+            ),
+            Variable(
+                "POST_ROUTE_ECO_SETUP_MARGIN",
+                Decimal,
+                "Setup slack margin for the post-route setup repair.",
+                default=0.05,
+                units="ns",
+            ),
+            Variable(
+                "POST_ROUTE_ECO_SETUP_MAX_BUFFER_PCT",
+                Decimal,
+                "Max buffers the post-route setup repair may insert, as a percentage of the instance count.",
+                default=1,
+                units="%",
+            ),
+            Variable(
+                "POST_ROUTE_ECO_CORNERS",
+                Optional[List[str]],
+                "Resizer corners of this step only (e.g. the tt and ff corners, so the repair does not chase the ss corner). Unset: RSZ_CORNERS, else STA_CORNERS.",
+                default=None,
+            ),
         ]
     )
 
     def get_script_path(self):
         return os.path.join(get_script_dir(), "openroad", "post_route_hold_eco.tcl")
 
-    def run(self, state_in: State, **kwargs) -> Tuple[ViewsUpdate, MetricsUpdate]:
-        kwargs, env = self.extract_env(kwargs)
-        env["DRT_THREADS"] = env.get("DRT_THREADS", str(_get_process_limit()))
-
-        corner = self.config["POST_ROUTE_HOLD_ECO_RCX_CORNER"]
+    def _extract(self, env: dict, state: State, corner: str, suffix: str) -> str:
         rcx_ruleset = self.config["RCX_RULESETS"].get(corner)
         if rcx_ruleset is None:
             raise StepException(f"No RCX ruleset for corner '{corner}'.")
@@ -2596,14 +2649,14 @@ class PostRouteHoldECO(ResizerStep):
         if len(tech_lefs) < 1:
             raise StepException(f"No tech LEF for corner '{corner}'.")
 
-        rcx_env = self.prepare_env(env, state_in)
+        rcx_env = self.prepare_env(env, state)
         for key in [k for k in rcx_env if k.startswith("SAVE_")]:
             del rcx_env[key]
-        spef = os.path.join(self.step_dir, "eco.spef")
+        spef = os.path.join(self.step_dir, f"eco{suffix}.spef")
         rcx_env["RCX_LEF"] = tech_lefs[0]
         rcx_env["RCX_RULESET"] = rcx_ruleset
         rcx_env["SAVE_SPEF"] = spef
-        log_path = os.path.join(self.step_dir, "eco_rcx.log")
+        log_path = os.path.join(self.step_dir, f"eco_rcx{suffix}.log")
         info(f"Extracting the routed design for corner {corner} ({log_path})…")
         self.run_subprocess(
             [
@@ -2616,9 +2669,43 @@ class PostRouteHoldECO(ResizerStep):
             env=rcx_env,
             silent=True,
         )
+        return spef
 
-        env["_ECO_SPEF"] = spef
-        return super().run(state_in, env=env, **kwargs)
+    def run(self, state_in: State, **kwargs) -> Tuple[ViewsUpdate, MetricsUpdate]:
+        kwargs, env = self.extract_env(kwargs)
+        env["DRT_THREADS"] = env.get("DRT_THREADS", str(_get_process_limit()))
+        if self.config["POST_ROUTE_ECO_CORNERS"]:
+            kwargs["corners_key"] = "POST_ROUTE_ECO_CORNERS"
+
+        corners = [self.config["POST_ROUTE_HOLD_ECO_RCX_CORNER"]]
+        if self.config["POST_ROUTE_HOLD_ECO_RCX_CORNER_2"]:
+            corners.append(self.config["POST_ROUTE_HOLD_ECO_RCX_CORNER_2"])
+
+        state = state_in
+        result: Tuple[ViewsUpdate, MetricsUpdate] = ({}, {})
+        for i, corner in enumerate(corners):
+            suffix = "" if i == 0 else f"_{i + 1}"
+            pass_kwargs = dict(kwargs)
+            if i > 0:
+                # Keep the previous pass's files (views, logs, metrics) and start this pass from its views.
+                keep = os.path.join(self.step_dir, f"pass{i}")
+                mkdirp(keep)
+                for name in os.listdir(self.step_dir):
+                    src = os.path.join(self.step_dir, name)
+                    if os.path.isfile(src):
+                        shutil.copy2(src, os.path.join(keep, name))
+                overrides = {
+                    fmt: Path(os.path.join(keep, os.path.basename(str(path))))
+                    for fmt, path in result[0].items()
+                }
+                state = State(state, overrides=overrides, metrics=state.metrics)
+                log_stem, log_ext = os.path.splitext(self.get_log_path())
+                pass_kwargs["log_to"] = f"{log_stem}{suffix}{log_ext}"
+                info(f"Post-route hold ECO pass {i + 1} with the {corner} extraction…")
+            pass_env = dict(env)
+            pass_env["_ECO_SPEF"] = self._extract(env, state, corner, suffix)
+            result = super().run(state, env=pass_env, **pass_kwargs)
+        return result
 
 
 @Step.factory.register()

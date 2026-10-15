@@ -1,4 +1,5 @@
 `timescale 1ns/1ps
+`include "tb/rf_bht_backdoor.svh"
 
 module tb_soc_integration;
 
@@ -133,7 +134,7 @@ initial begin
     repeat(4) @(posedge clk);
     @(negedge clk); reset_n = 1;
 
-    while(dut.u_core.u_pipeline.datapath.regfile.regs[4] !== 32'h0000_0006) begin
+    while(`RF_GET(dut.u_core.u_pipeline.datapath.regfile, 4) !== 32'h0000_0006) begin
         @(posedge clk); #1;
         timeout_count = timeout_count + 1;
         if(timeout_count > 2000)
@@ -144,9 +145,9 @@ initial begin
 
     check(soc_ram_get_word(32'h1000 >> 2) === 32'h0000_0005,
           "Shared AXI RAM did not receive the write-through store");
-    check(dut.u_core.u_pipeline.datapath.regfile.regs[3] === 32'h0000_0005,
+    check(`RF_GET(dut.u_core.u_pipeline.datapath.regfile, 3) === 32'h0000_0005,
           "Core load result x3 is incorrect");
-    check(dut.u_core.u_pipeline.datapath.regfile.regs[4] === 32'h0000_0006,
+    check(`RF_GET(dut.u_core.u_pipeline.datapath.regfile, 4) === 32'h0000_0006,
           "Core dependent ALU result x4 is incorrect");
     check((d_request_count == 2) && (store_request_count == 1) &&
           (load_request_count == 1),
@@ -175,8 +176,8 @@ initial begin
              dut.axi_read_txn_count, dut.axi_write_txn_count);
     $display("RAM[0x1000], x3, x4                  = %08h/%08h/%08h",
              soc_ram_get_word(32'h1000 >> 2),
-             dut.u_core.u_pipeline.datapath.regfile.regs[3],
-             dut.u_core.u_pipeline.datapath.regfile.regs[4]);
+             `RF_GET(dut.u_core.u_pipeline.datapath.regfile, 3),
+             `RF_GET(dut.u_core.u_pipeline.datapath.regfile, 4));
 
     if(errors != 0)
         $fatal(1, "[FAIL] SoC integration: %0d error(s)", errors);

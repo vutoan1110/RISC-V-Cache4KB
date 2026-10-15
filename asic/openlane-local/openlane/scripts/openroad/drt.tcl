@@ -26,10 +26,21 @@ if { [info exists ::env(DRT_MAX_LAYER)] } {
     set max_layer $::env(DRT_MAX_LAYER)
 }
 
-# Local addition (2026-10-07, off unless DRT_DRC_REPORT_ITER_STEP > 0): DRC report every N iterations.
+# Local addition (2026-10-07, off unless DRT_DRC_REPORT_ITER_STEP > 0): DRC report every N iterations, also in the
+# antenna-repair calls (2026-10-08).
 set drt_extra {}
 if { [info exists ::env(DRT_DRC_REPORT_ITER_STEP)] && $::env(DRT_DRC_REPORT_ITER_STEP) > 0 } {
     lappend drt_extra -drc_report_iter_step $::env(DRT_DRC_REPORT_ITER_STEP)
+}
+# Every detailed_route call writes <design>.drc-<iteration>.rpt; move them to drc_iter_<call> after each call so the
+# antenna-repair calls below do not overwrite the reports of the main route.
+proc keep_iter_reports {call} {
+    set files [glob -nocomplain -directory $::env(STEP_DIR) "$::env(DESIGN_NAME).drc-*.rpt"]
+    if { [llength $files] > 0 } {
+        set d [file join $::env(STEP_DIR) drc_iter_$call]
+        file mkdir $d
+        foreach f $files { file rename -force $f [file join $d [file tail $f]] }
+    }
 }
 
 detailed_route\
@@ -40,6 +51,14 @@ detailed_route\
     -or_seed 42\
     -verbose 1\
     {*}$drt_extra
+keep_iter_reports main
+
+# Local addition (2026-10-13, off unless DRT_SAVE_MAIN_ROUTE): keep the database of the main detailed route before the
+# antenna repair below, so a failure in that repair does not lose a long main route.
+if { [info exists ::env(DRT_SAVE_MAIN_ROUTE)] && $::env(DRT_SAVE_MAIN_ROUTE) } {
+    write_db $::env(STEP_DIR)/main_route.odb
+    puts "\[INFO\] main detailed route saved to $::env(STEP_DIR)/main_route.odb"
+}
 
 # FLOW_JOURNAL Incident 91 (local addition, off unless DRT_ANTENNA_REPAIR_ITERS > 0): post-detailed-
 # route antenna repair as in ORFS. repair_antennas checks the DETAILED routes and inserts diodes at
@@ -52,6 +71,14 @@ if { [info exists ::env(DRT_ANTENNA_REPAIR_ITERS)] && $::env(DRT_ANTENNA_REPAIR_
         set nv [check_antennas]
         puts "\[INFO\] post-DRT antenna round $i: check_antennas returned '$nv'"
         if { [string is integer -strict $nv] && $nv == 0 } { break }
+        # Local addition (2026-10-13, off unless DRT_ANTENNA_REPAIR_ALLOW_CONGESTION): repair_antennas re-routes the
+        # diode connections with the incremental global router, whose GlobalRouter::updateDirtyRoutes raises GRT-0232
+        # on any remaining 2D overflow unless congestion is allowed; the incremental detailed_route below must then
+        # resolve the overflow (its DRC result is still checked by the sign-off gate).
+        if { [info exists ::env(DRT_ANTENNA_REPAIR_ALLOW_CONGESTION)] && $::env(DRT_ANTENNA_REPAIR_ALLOW_CONGESTION) } {
+            grt::set_allow_congestion 1
+            puts "\[INFO\] post-DRT antenna round $i: global-route overflow allowed in the diode re-route"
+        }
         repair_antennas "[lindex $diode_split 0]" -iterations 1 -ratio_margin $::env(DRT_ANTENNA_REPAIR_MARGIN)
         check_placement -verbose
         set_thread_count $::env(DRT_THREADS)
@@ -61,7 +88,9 @@ if { [info exists ::env(DRT_ANTENNA_REPAIR_ITERS)] && $::env(DRT_ANTENNA_REPAIR_
             -output_drc $::env(STEP_DIR)/$::env(DESIGN_NAME).drc\
             -droute_end_iter $::env(DRT_OPT_ITERS)\
             -or_seed 42\
-            -verbose 1
+            -verbose 1\
+            {*}$drt_extra
+        keep_iter_reports ant$i
     }
     set_thread_count 1
     set nv [check_antennas]

@@ -108,3 +108,16 @@ work_*/
 /asic/pd_exp/rc_corr/est*.txt
 /asic/pd_exp/rc_corr/spef*.txt
 *.elf
+
+# generated PD databases / parasitics / netlists / screening folders inside the design dirs (2026-10-15, before the
+# first push to the private GitHub repo): never in git
+/asic/soc_*_4kb/**/*.odb
+/asic/soc_*_4kb/**/*.def
+/asic/soc_*_4kb/**/*.spef
+/asic/soc_*_4kb/**/*.gds
+/asic/soc_*_4kb/**/*.nl.v
+/asic/soc_*_4kb/**/*.pnl.v
+/asic/soc_*_4kb/**/*.sdf
+/asic/soc_*_4kb/**/*.log
+/asic/soc_*_4kb/screen_*/
+/asic/soc_*_4kb/diag_*/

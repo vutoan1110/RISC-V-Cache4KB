@@ -7,6 +7,7 @@ foreach test {
     tb_valid_irq
     tb_native_interface
     tb_bht
+    tb_regfile
     tb_branch_predictor
     tb_alu_zmmul
 } {

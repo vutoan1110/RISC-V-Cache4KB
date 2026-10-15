@@ -25,6 +25,12 @@ set_propagated_clock [all_clocks]
 set_dont_touch_objects
 
 set eco_drv [expr {[info exists ::env(POST_ROUTE_ECO_REPAIR_DESIGN)] && $::env(POST_ROUTE_ECO_REPAIR_DESIGN)}]
+set eco_setup [expr {[info exists ::env(POST_ROUTE_ECO_SETUP)] && $::env(POST_ROUTE_ECO_SETUP)}]
+set eco_hold [expr {![info exists ::env(POST_ROUTE_ECO_HOLD)] || $::env(POST_ROUTE_ECO_HOLD)}]
+# The setup repair does NOT estimate first: with estimate_parasitics -placement before read_spef the
+# timing of this session stayed on the placement estimate (sa2 ..._seco_r1, 2026-10-08: max_tt +1.425 ns
+# here, -0.571 ns in the sign-off STA of the same, physically unchanged, critical path). On the SPEF alone
+# (as the hold repair has always run) this session reproduces the sign-off STA.
 if { $eco_drv } {
     # Estimate every net first, THEN annotate the SPEF over it: unmodified nets carry the extracted values,
     # and every net the resizer touches is re-estimated from the placement (calibrated LAYERS_RC when set)
@@ -64,15 +70,34 @@ if { $eco_drv } {
     set_max_fanout $::env(MAX_FANOUT_CONSTRAINT) [current_design]
 }
 
-set hold_args [list]
-lappend hold_args -verbose
-lappend hold_args -hold
-lappend hold_args -hold_margin $::env(POST_ROUTE_HOLD_ECO_MARGIN)
-lappend hold_args -max_buffer_percent $::env(POST_ROUTE_HOLD_ECO_MAX_BUFFER_PCT)
-if { $::env(POST_ROUTE_HOLD_ECO_ALLOW_SETUP_VIOS) == 1 } {
-    lappend hold_args -allow_setup_violations
+# Optional setup repair on the extracted parasitics (POST_ROUTE_ECO_SETUP, 2026-10-08). With
+# POST_ROUTE_ECO_CORNERS = the tt and ff corners the repair does not chase the ss corner, which no
+# configuration closes at 20 ns; the SPEF annotated above is the max_* extraction, so the tt corner here
+# is max_tt, the worst tt corner of the sign-off STA.
+if { $eco_setup } {
+    puts "\[INFO\] post-route ECO: setup repair on the extracted parasitics, corners: [join [lmap c [sta::corners] {$c name}] {, }]"
+    repair_timing -verbose -setup \
+        -setup_margin $::env(POST_ROUTE_ECO_SETUP_MARGIN) \
+        -max_buffer_percent $::env(POST_ROUTE_ECO_SETUP_MAX_BUFFER_PCT)
+    puts "\[INFO\] post-route ECO: after the setup repair"
+    report_worst_slack -max -digits 4
 }
-repair_timing {*}$hold_args
+
+# POST_ROUTE_ECO_HOLD false skips the hold repair: a setup pass with its own corners (the tt corner alone,
+# which then also carries the SRAM macro Liberty; the macro has one TT .lib for every corner and OpenSTA
+# keeps it for the first corner only, STA-1140) is followed by a second run of this step for the hold
+# repair on every corner.
+if { $eco_hold } {
+    set hold_args [list]
+    lappend hold_args -verbose
+    lappend hold_args -hold
+    lappend hold_args -hold_margin $::env(POST_ROUTE_HOLD_ECO_MARGIN)
+    lappend hold_args -max_buffer_percent $::env(POST_ROUTE_HOLD_ECO_MAX_BUFFER_PCT)
+    if { $::env(POST_ROUTE_HOLD_ECO_ALLOW_SETUP_VIOS) == 1 } {
+        lappend hold_args -allow_setup_violations
+    }
+    repair_timing {*}$hold_args
+}
 
 # The new buffers' nets are not in the SPEF, so these numbers use wire-load estimates for them.
 puts "\[INFO\] post-route hold ECO: after"
@@ -94,7 +119,11 @@ foreach inst [$::block getInsts] {
     }
 }
 puts "\[INFO\] post-route ECO: legalising $eco_new new and $eco_resized resized cells, [llength $eco_locked] cells held FIRM"
-source $::env(SCRIPTS_DIR)/openroad/common/dpl_cell_pad.tcl
+# No cell padding here (2026-10-08): padding is a placement-density knob of GPL / DPL, not a legality rule. The
+# post-DRT antenna repair of drt.tcl places its diodes without padding, so with DPL_CELL_PADDING 2 the check below
+# reported 1,204 of them as "overlaps" and stopped sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1. With
+# DPL_CELL_PADDING 0 (every other configuration) this is what dpl_cell_pad.tcl set.
+set_placement_padding -global -right 0 -left 0
 detailed_placement -max_displacement [subst { $::env(PL_MAX_DISPLACEMENT_X) $::env(PL_MAX_DISPLACEMENT_Y) }]
 foreach inst $eco_locked {
     $inst setPlacementStatus PLACED

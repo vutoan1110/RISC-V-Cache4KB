@@ -1,0 +1,7 @@
+read_verilog -formal -sv mutant/bht_old.v mutant/bht_new.v mutant/fv_bht.sv
+prep -top fv_bht
+flatten
+async2sync
+memory_map
+opt -fast
+sat -tempinduct -prove-asserts -set-init-zero -set-at 1 reset_n 0 -maxsteps 6 -timeout 3000

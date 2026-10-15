@@ -13,7 +13,9 @@
 # (Older log lines name the gates G1 .. G6 in the order above.)
 # No step of the Classic flow is skipped. P3 waits for a detailed-routing slot (at most ONE other detailed routing
 # running, >= 12 GB free; mkdir lock), so three ~10.5 GB detailed routings never coincide. A new flow (P1) starts only
-# with fewer than 3 OpenLane run tags live, >= 10 GB free and >= 30 min after the previous start.
+# with fewer than 3 OpenLane run tags live, >= 10 GB free and >= 30 min after the previous start, under a start lock
+# (.gated_drt_gate.lock.p2) shared with run_gated_resume.sh p2 and run_gated_branch.sh, so two queues waiting for the
+# same free slot cannot both take it.
 # Every gate result goes to dse_pd.log and gated_pd.log as "GATE <PASS|FAIL> <tag> <gate>: <numbers>".
 # Cooperative stop (no new flows, no new phases; running steps finish): touch asic/.abort_gated_pd
 set -u
@@ -78,7 +80,7 @@ gated_one () {   # <design dir> <tag> <config file>
     say "$tag P4 done, last step $(last_step $des $tag)"
     if gate "$des" "$tag" final; then say "SIGNOFF CLEAN $tag"; else say "SIGNOFF FAILED $tag"; fi
 }
-rmdir $LOCK 2>/dev/null
+find $A -maxdepth 1 -name '.gated_drt_gate.lock*' -mmin +10 -exec rmdir {} + 2>/dev/null   # stale locks only
 say "gated queue start (default config ${CFG0:-none}): ${ITEMS:?set ITEMS}"
 last=0
 for item in $ITEMS; do
@@ -86,11 +88,12 @@ for item in $ITEMS; do
     [ "$rest" != "$tag" ] && cfg=${rest#*:}
     if [ -z "$cfg" ] || [ ! -f "$A/$des/$cfg" ]; then say "SKIP $tag: no config file '$cfg' in $des"; continue; fi
     if [ -d "$A/$des/runs/$tag" ]; then say "SKIP $tag: run directory exists already (a fresh tag is required)"; continue; fi
-    while :; do
+    while :; do                        # start lock shared with run_gated_resume.sh p2 and run_gated_branch.sh
         aborted && { say "gated queue abort before $tag"; wait; exit 0; }
         now=$(date +%s)
-        if [ "$(flows)" -lt 3 ] && [ "$(avail)" -ge 10000 ] && [ $((now - last)) -ge 1800 ]; then
-            break
+        if [ $((now - last)) -ge 1800 ] && mkdir $LOCK.p2 2>/dev/null; then
+            [ "$(flows)" -lt 3 ] && [ "$(avail)" -ge 10000 ] && break
+            rmdir $LOCK.p2
         fi
         sleep 60
     done
@@ -98,6 +101,7 @@ for item in $ITEMS; do
     gated_one "$des" "$tag" "$cfg" &
     last=$(date +%s)
     sleep 120
+    rmdir $LOCK.p2
 done
 wait
 say "gated queue done"

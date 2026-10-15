@@ -22,7 +22,7 @@ if (-not (Test-Path n1_flat.il)) {
 }
 
 # (2) gate side of the new netlist
-$fe = (Get-Content ..\sec\gate_front_end.ys) -replace '/mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/runs/final_B/54-openroad-fillinsertion/soc_asic_top.nl.v', $Net
+$fe = (Get-Content ..\sec\gate_front_end.ys) -replace '/mnt/e/Projects/RISCV-research/results/pd_run_archive/final_B/dependency_inputs/54-openroad-fillinsertion/soc_asic_top.nl.v', $Net
 if (-not ($fe -match [regex]::Escape($Net))) { throw "netlist path not substituted in gate_front_end" }
 $fe | Set-Content -Encoding ascii ..\sec\gate_front_end_$Tag.ys
 (Get-Content ..\sec\gate_pre.ys) -replace 'script gate_front_end.ys', "script gate_front_end_$Tag.ys" -replace 'write_ilang gate_pre.il', "write_ilang gate_pre_$Tag.il" |

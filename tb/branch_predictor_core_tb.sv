@@ -1,4 +1,5 @@
 `timescale 1ns/1ps
+`include "tb/rf_bht_backdoor.svh"
 
 module tb_branch_predictor_core;
 
@@ -174,7 +175,7 @@ task automatic prepare_scenario;
         // The core register file has no reset input. Clear it from the
         // testbench so every scenario starts from the same architectural state.
         for (r = 0; r < 32; r = r + 1)
-            dut.datapath.regfile.regs[r] = 32'h0000_0000;
+            `RF_SET(dut.datapath.regfile, r, 32'h0000_0000);
     end
 endtask
 
@@ -226,7 +227,7 @@ always @(posedge clk) begin
         if (dut.datapath.is_branch_e && !stall_pipe) begin
             if (branch_resolve_count < 32) begin
                 observed_bht_state[branch_resolve_count] =
-                    dut.datapath.g_bp_on.u_bht.bht_mem[dut.datapath.pc_e[9:2]];
+                    `BHT_GET(dut.datapath.g_bp_on.u_bht, dut.datapath.pc_e[9:2]);
                 observed_prediction[branch_resolve_count] =
                     dut.datapath.predict_taken_e;
                 observed_actual[branch_resolve_count] =
@@ -238,7 +239,7 @@ always @(posedge clk) begin
             $display("[C%0d] BRANCH pc=%08h state=%b pred=%0d actual=%0d miss=%0d",
                      cycle_count,
                      dut.datapath.pc_e,
-                     dut.datapath.g_bp_on.u_bht.bht_mem[dut.datapath.pc_e[9:2]],
+                     `BHT_GET(dut.datapath.g_bp_on.u_bht, dut.datapath.pc_e[9:2]),
                      dut.datapath.predict_taken_e,
                      dut.datapath.branch_taken_e,
                      dut.datapath.mispredict_e);
@@ -284,7 +285,7 @@ task automatic test_reset_and_not_taken;
         watch_rd_enable = 1;
         watch_rd = 5'd10;
 
-        check_ok(dut.datapath.g_bp_on.u_bht.bht_mem[1] === 2'b01,
+        check_ok(`BHT_GET(dut.datapath.g_bp_on.u_bht, 1) === 2'b01,
                  "BHT entry resets to weakly not-taken (01)");
         check_ok(dut.datapath.predict_taken_e === 1'b0,
                  "Execute prediction register resets to 0");
@@ -303,11 +304,11 @@ task automatic test_reset_and_not_taken;
                  observed_prediction[0] === 1'b0 &&
                  observed_actual[0] === 1'b0,
                  "Resolution observes state=01, prediction=NT, actual=NT");
-        check_ok(dut.datapath.g_bp_on.u_bht.bht_mem[1] === 2'b00,
+        check_ok(`BHT_GET(dut.datapath.g_bp_on.u_bht, 1) === 2'b00,
                  "Not-taken update changes BHT 01 -> 00");
         check_ok(branch_flush_dbg == 32'd0,
                  "Correct not-taken prediction causes no recovery flush");
-        check_ok(dut.datapath.regfile.regs[10] == 32'h0000_0011 &&
+        check_ok(`RF_GET(dut.datapath.regfile, 10) == 32'h0000_0011 &&
                  watch_rd_write_count == 1,
                  "Fall-through instruction commits exactly once");
 
@@ -360,14 +361,14 @@ task automatic test_loop_learning_and_recovery;
                  observed_prediction[2] === 1'b1 &&
                  observed_prediction[3] === 1'b1,
                  "Prediction sequence is NT,T,T,T");
-        check_ok(dut.datapath.g_bp_on.u_bht.bht_mem[3] === 2'b10,
+        check_ok(`BHT_GET(dut.datapath.g_bp_on.u_bht, 3) === 2'b10,
                  "Final BHT state is weakly taken (10)");
         check_ok(fetch_redirect_count == 3,
                  "Taken prediction redirects Fetch on the last three visits");
         check_ok(branch_flush_dbg == 32'd2,
                  "Only the two mispredictions cause Execute recovery flushes");
-        check_ok(dut.datapath.regfile.regs[1] == 32'd4 &&
-                 dut.datapath.regfile.regs[10] == 32'h0000_0055 &&
+        check_ok(`RF_GET(dut.datapath.regfile, 1) == 32'd4 &&
+                 `RF_GET(dut.datapath.regfile, 10) == 32'h0000_0055 &&
                  watch_rd_write_count == 1,
                  "Loop result is correct and exit path commits once");
 
@@ -421,22 +422,22 @@ task automatic test_all_branch_types;
         check_ok(branch_flush_dbg == 32'd6,
                  "Exactly six recovery flushes occur");
 
-        check_ok(dut.datapath.g_bp_on.u_bht.bht_mem[4]  === 2'b10 &&
-                 dut.datapath.g_bp_on.u_bht.bht_mem[6]  === 2'b10 &&
-                 dut.datapath.g_bp_on.u_bht.bht_mem[8]  === 2'b10 &&
-                 dut.datapath.g_bp_on.u_bht.bht_mem[10] === 2'b10 &&
-                 dut.datapath.g_bp_on.u_bht.bht_mem[12] === 2'b10 &&
-                 dut.datapath.g_bp_on.u_bht.bht_mem[14] === 2'b10,
+        check_ok(`BHT_GET(dut.datapath.g_bp_on.u_bht, 4)  === 2'b10 &&
+                 `BHT_GET(dut.datapath.g_bp_on.u_bht, 6)  === 2'b10 &&
+                 `BHT_GET(dut.datapath.g_bp_on.u_bht, 8)  === 2'b10 &&
+                 `BHT_GET(dut.datapath.g_bp_on.u_bht, 10) === 2'b10 &&
+                 `BHT_GET(dut.datapath.g_bp_on.u_bht, 12) === 2'b10 &&
+                 `BHT_GET(dut.datapath.g_bp_on.u_bht, 14) === 2'b10,
                  "Each branch updates its own BHT entry 01 -> 10");
 
-        check_ok(dut.datapath.regfile.regs[10] == 32'd0 &&
-                 dut.datapath.regfile.regs[11] == 32'd0 &&
-                 dut.datapath.regfile.regs[12] == 32'd0 &&
-                 dut.datapath.regfile.regs[13] == 32'd0 &&
-                 dut.datapath.regfile.regs[14] == 32'd0 &&
-                 dut.datapath.regfile.regs[15] == 32'd0,
+        check_ok(`RF_GET(dut.datapath.regfile, 10) == 32'd0 &&
+                 `RF_GET(dut.datapath.regfile, 11) == 32'd0 &&
+                 `RF_GET(dut.datapath.regfile, 12) == 32'd0 &&
+                 `RF_GET(dut.datapath.regfile, 13) == 32'd0 &&
+                 `RF_GET(dut.datapath.regfile, 14) == 32'd0 &&
+                 `RF_GET(dut.datapath.regfile, 15) == 32'd0,
                  "All six wrong-path instructions are squashed");
-        check_ok(dut.datapath.regfile.regs[20] == 32'h0000_005a &&
+        check_ok(`RF_GET(dut.datapath.regfile, 20) == 32'h0000_005a &&
                  watch_rd_write_count == 1,
                  "Final correct-path marker commits exactly once");
 
@@ -471,7 +472,7 @@ task automatic test_jal_early_redirect;
 
         check_ok(branch_resolve_count == 0,
                  "JAL does not update the conditional-branch BHT");
-        check_ok(dut.datapath.g_bp_on.u_bht.bht_mem[1] === 2'b01,
+        check_ok(`BHT_GET(dut.datapath.g_bp_on.u_bht, 1) === 2'b01,
                  "BHT entry at the JAL PC remains unchanged");
         check_ok(fetch_redirect_count == 1,
                  "JAL redirects Fetch exactly once");
@@ -481,10 +482,10 @@ task automatic test_jal_early_redirect;
                  "JAL is not redirected/flushed again in Execute");
         check_ok(branch_flush_dbg == 32'd0,
                  "Correct early JAL redirect adds no Execute flush");
-        check_ok(dut.datapath.regfile.regs[5] == 32'h0000_0008,
+        check_ok(`RF_GET(dut.datapath.regfile, 5) == 32'h0000_0008,
                  "JAL writes the correct return address to x5");
-        check_ok(dut.datapath.regfile.regs[22] == 32'd0 &&
-                 dut.datapath.regfile.regs[23] == 32'h0000_0023 &&
+        check_ok(`RF_GET(dut.datapath.regfile, 22) == 32'd0 &&
+                 `RF_GET(dut.datapath.regfile, 23) == 32'h0000_0023 &&
                  watch_rd_write_count == 1,
                  "JAL wrong path is squashed and target commits once");
 
@@ -556,12 +557,12 @@ task automatic test_prediction_during_stall;
                  "BHT updates once per branch: 01,10,11 before updates");
         check_ok(fetch_redirect_count == 2,
                  "Each predicted-taken visit redirects once, not once per stall cycle");
-        check_ok(dut.datapath.g_bp_on.u_bht.bht_mem[3] === 2'b10,
+        check_ok(`BHT_GET(dut.datapath.g_bp_on.u_bht, 3) === 2'b10,
                  "Final state after T,T,NT is 10");
         check_ok(branch_flush_dbg == 32'd2,
                  "Only the first-taken and final-not-taken misses flush");
-        check_ok(dut.datapath.regfile.regs[1] == 32'd3 &&
-                 dut.datapath.regfile.regs[10] == 32'h0000_0033 &&
+        check_ok(`RF_GET(dut.datapath.regfile, 1) == 32'd3 &&
+                 `RF_GET(dut.datapath.regfile, 10) == 32'h0000_0033 &&
                  watch_rd_write_count == 1,
                  "Architectural result stays correct across stall_pipe");
 

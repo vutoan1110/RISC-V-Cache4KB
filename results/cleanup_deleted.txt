@@ -6778,3 +6778,49 @@ asic/soc_vc4_4kb/macro_placement_u2s5.cfg
 # Cleanup 2026-10-07, part 4b: 1 KiB design directories out of the 4 KiB comparison (untracked; text files archived in results/pd_run_archive/asic_1kb_designs_20261007.tar.gz, macro GDS copies not archived: PDK / soc_dm_control have them) and a stray note in the published repository (content kept in asic/evidence/MAGIC_NAMESPACE_COLLISION.md section 4)
 45	asic/soc_dm_dse/, asic/soc_dse_vc1/, asic/soc_vc4_check/	deleted
 0	E:/Projects/RISCV-AHB-APB-UART/asic/FLOW_JOURNAL.md	deleted
+
+# 2026-10-08 golden snapshot superseded by RISCV-research_GOLDEN_FINAL3_20260928 (owner request)
+E:\Projects\RISCV-research_GOLDEN_20260927	32 GB on disk (about 12 GB not shared with FINAL3 by hard links)	unique content: failed EQY scratch of final_B (73-/74-yosys-eqy/scratch), SEC intermediates in asic/equiv/sec
+
+# 2026-10-09 18:32 workspace audit cleanup: source/archive hashes verified; 17 obsolete runs; final_B and VC4 pad1 source retained for real dependencies
+asic/soc_sa2_4kb/runs/sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1	9599170182 logical bytes	deleted; evidence results/pd_run_archive/sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_r1
+asic/soc_sa2_4kb/runs/sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1	3809208176 logical bytes	deleted; evidence results/pd_run_archive/sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_r1
+asic/soc_sa2_4kb/runs/sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_seco_r1	7522877737 logical bytes	deleted; evidence results/pd_run_archive/sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_seco_r1
+asic/soc_sa2_4kb/runs/sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_secott_r1	3993687157 logical bytes	deleted; evidence results/pd_run_archive/sa2_corr3400x3100_f220_capm20_fo16_pad1_tdp_clkm3_secott_r1
+asic/soc_sa2_4kb/runs/sa2_corr3400x3100_f220_capm20_fo16_r1	3820291695 logical bytes	deleted; evidence results/pd_run_archive/sa2_corr3400x3100_f220_capm20_fo16_r1
+asic/soc_sa2_4kb/runs/sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomin_r1	12796675453 logical bytes	deleted; evidence results/pd_run_archive/sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomin_r1
+asic/soc_sa2_4kb/runs/sa2_corr3400x3400_f220_capm20_fo16_r1	3922569688 logical bytes	deleted; evidence results/pd_run_archive/sa2_corr3400x3400_f220_capm20_fo16_r1
+asic/soc_sa2_4kb/runs/sa2uA	3980887595 logical bytes	deleted; evidence results/pd_run_archive/sa2uA
+asic/soc_vc4_4kb/runs/vc4_corr3400x3400_f220_capm20_antm10_r1	4126209505 logical bytes	deleted; evidence results/pd_run_archive/vc4_corr3400x3400_f220_capm20_antm10_r1
+asic/soc_vc4_4kb/runs/vc4_corr3400x3400_f220_capm20_antoff_r1	3849711885 logical bytes	deleted; evidence results/pd_run_archive/vc4_corr3400x3400_f220_capm20_antoff_r1
+asic/soc_vc4_4kb/runs/vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_r1	3564132081 logical bytes	deleted; evidence results/pd_run_archive/vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_clkm3_r1
+asic/soc_vc4_4kb/runs/vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_r1	3558963237 logical bytes	deleted; evidence results/pd_run_archive/vc4_corr3400x3400_f220_capm20_antoff_rsztf_nogrtt_r1
+asic/soc_vc4_4kb/runs/vc4_corr3400x3400_f220_capm20_antoff_rsztf_r1	3872190714 logical bytes	deleted; evidence results/pd_run_archive/vc4_corr3400x3400_f220_capm20_antoff_rsztf_r1
+asic/soc_vc4_4kb/runs/vc4_corr3400x3400_f220_capm20_fo16_r1	3145627264 logical bytes	deleted; evidence results/pd_run_archive/vc4_corr3400x3400_f220_capm20_fo16_r1
+asic/soc_vc4_4kb/runs/vc4_corr3400x3400_f220_capm20_r1	4132105130 logical bytes	deleted; evidence results/pd_run_archive/vc4_corr3400x3400_f220_capm20_r1
+asic/soc_vc4_4kb/runs/vc4uA	3552430497 logical bytes	deleted; evidence results/pd_run_archive/vc4uA
+asic/soc_vc4_4kb/runs/vc4uB	3572697933 logical bytes	deleted; evidence results/pd_run_archive/vc4uB
+
+# 2026-10-09 18:39 22 idle, rebuildable Questa libraries; raw compilation/result evidence retained
+work	118993145 logical bytes	removed compiled library; source and raw evidence retained
+work_act4	3394179 logical bytes	removed compiled library; source and raw evidence retained
+work_asic	11501829 logical bytes	removed compiled library; source and raw evidence retained
+work_board_reference_6c4ccffd_20261009_p1_c0	9567097 logical bytes	removed compiled library; source and raw evidence retained
+work_board_reference_6c4ccffd_20261009_p1_c0_continued_20261009155010	9600083 logical bytes	removed compiled library; source and raw evidence retained
+work_board_reference_6c4ccffd_20261009_p1_c1	10427252 logical bytes	removed compiled library; source and raw evidence retained
+work_board_reference_6c4ccffd_20261009_p1_c1_continued_20261009155010	10460576 logical bytes	removed compiled library; source and raw evidence retained
+work_board_reference_6c4ccffd_20261009_p1_c2_continued_20261009155010	10174719 logical bytes	removed compiled library; source and raw evidence retained
+work_board_reference_6c4ccffd_20261009_p1_c3_continued_20261009155010	9956498 logical bytes	removed compiled library; source and raw evidence retained
+work_board_reference_6c4ccffd_20261009_p2_c0_continued_20261009155010	9264134 logical bytes	removed compiled library; source and raw evidence retained
+work_board_reference_6c4ccffd_20261009_p2_c1_continued_20261009155010	10124637 logical bytes	removed compiled library; source and raw evidence retained
+work_board_reference_6c4ccffd_20261009_p2_c2_continued_20261009155010	10174719 logical bytes	removed compiled library; source and raw evidence retained
+work_board_reference_6c4ccffd_20261009_p2_c3_continued_20261009155010	9956423 logical bytes	removed compiled library; source and raw evidence retained
+work_cprobe	9898884 logical bytes	removed compiled library; source and raw evidence retained
+work_glsp_dmuA	1183259768 logical bytes	removed compiled library; source and raw evidence retained
+work_glsp_sa2_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_ecomaxmin_r1	1118954291 logical bytes	removed compiled library; source and raw evidence retained
+work_m2_1	9171953 logical bytes	removed compiled library; source and raw evidence retained
+work_m2_2	10208571 logical bytes	removed compiled library; source and raw evidence retained
+work_m2_3	10163607 logical bytes	removed compiled library; source and raw evidence retained
+work_m2_4	9950981 logical bytes	removed compiled library; source and raw evidence retained
+work_m2_5	10248336 logical bytes	removed compiled library; source and raw evidence retained
+work_m2_6	9863559 logical bytes	removed compiled library; source and raw evidence retained

@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Compare two independent runs of the same measurement, field by field.
 
-The Double-Execution Protocol exists because this host corrupts memory (see
-NHAT_KY.md section 9): a run can finish and be quietly wrong. Random
-corruption cannot repeat itself identically, so two independent runs that agree
-on every digit are trustworthy and two that disagree are not.
+Independent executions establish reproducibility; they do not replace a
+functional oracle or sign-off checks. The complete CSV schema and each row's
+field count must agree before any values are compared.
 
     python scripts/verify_double.py pass_a.csv pass_b.csv --key point
 
@@ -30,8 +29,24 @@ def load(path: str, key: str, also: str | None) -> dict:
     re-keying afterwards silently drops every row but one per kernel: the first
     version of this compared 12 rows of a 48-row matrix and printed VERIFIED.
     """
-    with open(path, encoding="utf-8") as f:
-        rows = list(csv.DictReader(f))
+    with open(path, encoding="utf-8", newline="") as f:
+        reader = csv.reader(f, strict=True)
+        header = next(reader, None)
+        if not header or any(not c.strip() for c in header):
+            sys.exit("[FAIL] %s has a missing or blank CSV column" % path)
+        if len(set(header)) != len(header):
+            sys.exit("[FAIL] %s has duplicate CSV columns" % path)
+        rows = []
+        for number, values in enumerate(reader, 2):
+            if len(values) != len(header):
+                sys.exit("[FAIL] %s row %d has %d fields, expected %d"
+                         % (path, number, len(values), len(header)))
+            missing = [column for column, value in zip(header, values)
+                       if column not in IGNORE and not value.strip()]
+            if missing:
+                sys.exit("[FAIL] %s row %d has missing compared values: %s"
+                         % (path, number, ", ".join(missing)))
+            rows.append(dict(zip(header, values)))
     if not rows:
         sys.exit("[FAIL] %s has no data rows" % path)
     for col in (c for c in (key, also) if c):
@@ -40,6 +55,8 @@ def load(path: str, key: str, also: str | None) -> dict:
                      % (path, col, ", ".join(rows[0])))
     out = {}
     for r in rows:
+        if any(not r[c].strip() for c in (key, also) if c):
+            sys.exit("[FAIL] %s has an empty row identity" % path)
         k = (r[key], r[also]) if also else r[key]
         if k in out:
             sys.exit("[FAIL] %s has duplicate rows for %s -- the key is not "
@@ -61,6 +78,12 @@ def main() -> int:
 
     a = load(args.pass_a, args.key, args.also)
     b = load(args.pass_b, args.key, args.also)
+    columns_a = set(next(iter(a.values())))
+    columns_b = set(next(iter(b.values())))
+    if columns_a != columns_b:
+        print("[FAIL] CSV schema differs: only A=%s, only B=%s"
+              % (sorted(columns_a - columns_b), sorted(columns_b - columns_a)))
+        return 1
 
     only_a, only_b = sorted(set(a) - set(b)), sorted(set(b) - set(a))
     shared = sorted(set(a) & set(b))
@@ -68,7 +91,7 @@ def main() -> int:
     mismatched = 0
     for k in shared:
         diff = [f for f in a[k]
-                if f in b[k] and f not in IGNORE and a[k][f] != b[k][f]]
+                if f not in IGNORE and a[k][f] != b[k][f]]
         if diff:
             mismatched += 1
             print("MISMATCH %s" % (k,))
