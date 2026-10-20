@@ -1,0 +1,7 @@
+# FLOW_JOURNAL Incident 89 (cut-and-substitute): expose, WITHOUT cutting, the multiplier's operand nets
+# (alu.mul_a, alu.mul_b) and result net (alu.product) as extra outputs, so mulsub.py can locate their
+# AIG nodes on each side. Nothing else changes.
+read_ilang n1_flat_r14.il
+hierarchy -top soc_asic_top
+expose w:u_soc.u_core.u_pipeline.datapath.alu.mul_a w:u_soc.u_core.u_pipeline.datapath.alu.mul_b w:u_soc.u_core.u_pipeline.datapath.alu.product
+write_ilang n1_x_r14.il

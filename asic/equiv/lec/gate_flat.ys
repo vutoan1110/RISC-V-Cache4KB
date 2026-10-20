@@ -1,0 +1,11 @@
+# FLOW_JOURNAL Incident 89 (Option A, register-mapped LEC): gate side with the SRAM macros cut
+# (../sec/gate_cut.il), every flop reduced to a plain $dff (async2sync: async reset -> sync reset + output mux, then dffunmap: enables/sync resets -> logic;
+# then only plain $dff remain), ready for evert.py to cut each flop.
+read_ilang ../sec/gate_cut.il
+hierarchy -top soc_asic_top
+async2sync
+dffunmap
+opt_clean
+select -assert-none t:$adff t:$adffe t:$dffe t:$sdff t:$sdffe t:$sdffce t:$aldff t:$aldffe t:$dffsr t:$dffsre t:$dlatch t:$ff
+stat
+write_ilang gate_flat.il

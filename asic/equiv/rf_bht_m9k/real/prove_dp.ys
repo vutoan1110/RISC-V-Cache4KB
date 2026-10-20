@@ -1,0 +1,7 @@
+read_verilog -formal -sv /mnt/e/Projects/RISCV-research/hdl/alu.v /mnt/e/Projects/RISCV-research/hdl/aludec.v /mnt/e/Projects/RISCV-research/hdl/branch.v /mnt/e/Projects/RISCV-research/hdl/predictor/bht_2bit.v /mnt/e/Projects/RISCV-research/hdl/extend.v /mnt/e/Projects/RISCV-research/hdl/hazard_unit.v /mnt/e/Projects/RISCV-research/hdl/regfile.v real/datapath_fv.v
+prep -top datapath
+flatten
+async2sync
+memory_map
+opt -fast
+sat -tempinduct -prove-asserts -set-init-zero -set-at 1 reset_n 0 -maxsteps 8 -timeout 3000

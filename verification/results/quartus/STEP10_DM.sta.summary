@@ -1,0 +1,9 @@
+Slow 1200mV 85C Model
+Clock: clk
+Constraint: 50.0 MHz (20.000 ns)
+Fmax: 47.72 MHz
+Worst-case setup slack: -0.954 ns
+Endpoint TNS: -1.302 ns
+Timing requirement: NOT MET
+Timing Analyzer: successful, 0 errors
+Note: Quartus reports the design is not fully constrained for setup/hold.

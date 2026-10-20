@@ -1,0 +1,14 @@
+original     137719 shapes   soc_dm_4kb/macros/gds/sky130_sram_1kbyte_1rw1r_32x256_8.gds
+magicsafe    137307 shapes   soc_dm_4kb/macros/gds/sky130_sram_1kbyte_1rw1r_32x256_8.magicsafe.gds
+
+shapes removed: 412
+    22/21       35 shapes   expected
+    22/22       12 shapes   expected
+    33/42      155 shapes   expected
+    33/43      192 shapes   expected
+   235/0        18 shapes   expected
+shapes added: 0
+
+layer/datatypes retained and compared: 34
+
+RESULT: every retained layer is shape-for-shape identical; the only difference is the removal of the five annotation layer/datatypes

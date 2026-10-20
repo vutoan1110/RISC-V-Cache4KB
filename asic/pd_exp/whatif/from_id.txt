@@ -1,0 +1,3 @@
+u_soc.if_req_addr*
+# D-side: D-cache request address register
+u_soc.d_req_addr*

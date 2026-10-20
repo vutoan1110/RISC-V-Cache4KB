@@ -1,0 +1,7 @@
+read_verilog -formal -sv -D__openlane__ /mnt/e/Projects/RISCV-research/hdl/alu.v /mnt/e/Projects/RISCV-research/hdl/aludec.v /mnt/e/Projects/RISCV-research/hdl/branch.v /mnt/e/Projects/RISCV-research/hdl/predictor/bht_2bit.v /mnt/e/Projects/RISCV-research/hdl/controller.v /mnt/e/Projects/RISCV-research/hdl/extend.v /mnt/e/Projects/RISCV-research/hdl/hazard_unit.v /mnt/e/Projects/RISCV-research/hdl/maindec.v /mnt/e/Projects/RISCV-research/hdl/regfile.v real/datapath_fv.v real/riscv_core_fv.v real/fv_top.sv
+prep -top fv_top
+flatten
+async2sync
+memory_map
+opt -fast
+sat -tempinduct -prove-asserts -set-at 1 reset_n 0 -maxsteps 6 -timeout 3000

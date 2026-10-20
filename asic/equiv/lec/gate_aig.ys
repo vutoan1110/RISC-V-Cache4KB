@@ -1,0 +1,11 @@
+# FLOW_JOURNAL Incident 89: gate side of the register-mapped combinational LEC -> AIGER
+read_ilang gate_lec.il
+hierarchy -top soc_asic_top
+select -assert-none t:$dff t:$_DFF_*
+setundef -undriven -zero
+techmap
+opt_clean
+aigmap
+opt_clean
+check -assert
+write_aiger -symbols gate_lec.aig

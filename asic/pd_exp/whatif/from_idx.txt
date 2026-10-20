@@ -1,0 +1,7 @@
+u_soc.if_req_addr*
+u_soc.d_req_addr*
+# EX forwarding selects and W-stage result registers
+u_soc.u_core.u_pipeline.datapath.forward_a_e*
+u_soc.u_core.u_pipeline.datapath.forward_b_e*
+u_soc.u_core.u_pipeline.datapath.rd_data_w*
+u_soc.u_core.u_pipeline.datapath.rsel_w*

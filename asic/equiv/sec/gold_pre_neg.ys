@@ -1,0 +1,17 @@
+# NEGATIVE CONTROL (reset PC mutated in neg_rtl/hdl/datapath.v). FLOW_JOURNAL Incident 86, SEC gold: final RTL (EQY's gold front end) + OpenLane's pre-fsm
+# steps + `fsm` (that step proved separately: ../fsm_recode/prove_fsm.ys) + the EQY [script]
+# tail up to memory_map. Async resets are kept as $adff here; the miter maps them.
+script gold_front_end_neg.ys
+proc
+opt_expr
+opt_clean
+opt -nodffe -nosdff
+fsm
+hierarchy -top soc_asic_top
+proc
+prep -top soc_asic_top -flatten
+memory -nomap
+memory_map
+opt_clean
+check -assert -initdrv
+write_ilang gold_pre_neg.il

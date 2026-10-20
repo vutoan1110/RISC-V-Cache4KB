@@ -1,0 +1,10 @@
+# FLOW_JOURNAL Incident 89: gold side with D of every gold-only flop exposed (constancy analysis only)
+read_ilang gold_lec4.il
+hierarchy -top soc_asic_top
+setundef -undriven -zero
+techmap
+opt_clean
+aigmap
+opt_clean
+check -assert
+write_aiger -symbols gold_lec4.aig

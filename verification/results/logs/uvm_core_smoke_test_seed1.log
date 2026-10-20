@@ -1,0 +1,319 @@
+Reading pref.tcl
+
+# 2024.1
+
+# do verification/uvm/run_uvm.do core_smoke_test 1 1
+# onerror {quit -code 1 -f}
+# 
+# if {[info exists 1]} { set test_name $1 } else { set test_name core_smoke_test }
+# core_smoke_test
+# if {[info exists 2]} { set do_compile $2 } else { set do_compile 1 }
+# 1
+# if {[info exists 3]} { set seed $3 }      else { set seed 1 }
+# 1
+## Words per cache line for tb_axi_top. The testbench passes it to
+## cache_axi_master and publishes it to the checkers, so one value drives both.
+# if {[info exists 4]} { set line_words $4 } else { set line_words 4 }
+# 4
+# 
+## Questa 2024.1 maps the logical library mtiUvm to uvm-1.1d, so UVM 1.2 has to
+## be selected explicitly with -L on both vlog and vsim.
+# if {[info exists ::env(QUESTA_HOME)]} {
+#     set questa_home $::env(QUESTA_HOME)
+# } else {
+#     set questa_home C:/questasim64_2024.1
+# }
+# C:/questasim64_2024.1
+# set uvm_lib $questa_home/uvm-1.2
+# C:/questasim64_2024.1/uvm-1.2
+# set uvm_src $questa_home/verilog_src/uvm-1.2/src
+# C:/questasim64_2024.1/verilog_src/uvm-1.2/src
+# 
+## Each test class belongs to one top level.
+# if {[string match "axi_*" $test_name]} {
+#     set tb_top tb_axi_top
+# } elseif {[string match "soc_*" $test_name]} {
+#     set tb_top tb_soc_top
+# } else {
+#     set tb_top tb_core_top
+# }
+# tb_core_top
+# 
+## Tests that need a program image other than the one compiled into the DUT.
+# set extra_args {}
+# if {$tb_top eq "tb_axi_top"} { lappend extra_args "-gLINE_WORDS=$line_words" }
+# if {$test_name eq "soc_periph_test"} {
+#     lappend extra_args "+SOC_HEX=verification/uvm/seq/soc_periph_irq.hex"
+# }
+# 
+# set out_dir  verification/uvm/out
+# verification/uvm/out
+# set status_f $out_dir/$test_name.status
+# verification/uvm/out/core_smoke_test.status
+# 
+# file mkdir $out_dir
+# if {[file exists $status_f]} { file delete -force $status_f }
+# 
+# if {$do_compile} {
+#     if {[file exists work]} { vdel -lib work -all }
+#     vlib work
+#     vlog -sv -f verification/uvm/rtl.f
+#     vlog -sv -L $uvm_lib +incdir+$uvm_src -f verification/uvm/uvm.f
+# }
+# QuestaSim-64 vlog 2024.1 Compiler 2024.02 Feb  1 2024
+# Start time: 02:40:55 on Sep 18,2026
+# vlog -sv -f verification/uvm/rtl.f 
+# -- Compiling module alu
+# -- Compiling module aludec
+# -- Compiling module branch
+# -- Compiling module bht_2bit
+# -- Compiling module controller
+# -- Compiling module datapath
+# -- Compiling module extend
+# -- Compiling module hazard_unit
+# -- Compiling module maindec
+# -- Compiling module regfile
+# -- Compiling module riscv_core
+# -- Compiling module riscv_core_native
+# -- Compiling module cache_axi_master
+# -- Compiling module icache_tag_ram
+# -- Compiling module icache_data_ram
+# -- Compiling module icache_controller
+# -- Compiling module cache_dse_data_bank
+# -- Compiling module icache_dse_core
+# -- Compiling module icache
+# -- Compiling module dcache_tag_ram
+# -- Compiling module dcache_data_ram
+# -- Compiling module dcache_controller
+# -- Compiling module dcache_dse_core
+# -- Compiling module dcache
+# -- Compiling module axi_ram_32
+# -- Compiling module native_axi_lite_master
+# -- Compiling module axi_lite_to_apb
+# -- Compiling module soc_address_decoder
+# -- Compiling module apb_display_regs
+# -- Compiling module apb_timer
+# -- Compiling module perf_counters
+# -- Compiling module apb_performance_monitor
+# -- Compiling module performance_observability
+# -- Compiling module hex7seg_decoder
+# -- Compiling module lcd_1602_hex
+# -- Compiling module fifo
+# -- Compiling module baudrate_gen_block
+# -- Compiling module rx_block
+# -- Compiling module tx_block
+# -- Compiling module uart_core
+# -- Compiling module uart_apb
+# -- Compiling module soc_top
+# -- Compiling module core_assertions
+# -- Compiling module axi_assertions
+# -- Compiling module cache_assertions
+# -- Compiling module core_coverage
+# 
+# Top level modules:
+# 	soc_top
+# 	core_assertions
+# 	axi_assertions
+# 	cache_assertions
+# 	core_coverage
+# End time: 02:40:55 on Sep 18,2026, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# QuestaSim-64 vlog 2024.1 Compiler 2024.02 Feb  1 2024
+# Start time: 02:40:55 on Sep 18,2026
+# vlog -sv -L C:/questasim64_2024.1/uvm-1.2 "+incdir+C:/questasim64_2024.1/verilog_src/uvm-1.2/src" -f verification/uvm/uvm.f 
+# -- Compiling package mem_model_pkg
+# -- Importing package C:/questasim64_2024.1/uvm-1.2.uvm_pkg (uvm-1.2 Built-in)
+# -- Compiling interface native_if
+# -- Compiling interface rvfi_if
+# -- Compiling package core_uvm_pkg
+# -- Importing package mem_model_pkg
+# -- Compiling module core_assertion_bind
+# -- Compiling module tb_core_top
+# -- Importing package core_uvm_pkg
+# -- Compiling interface refill_if
+# -- Compiling interface wthru_if
+# -- Compiling interface axi4_if
+# -- Compiling package axi_uvm_pkg
+# -- Compiling module tb_axi_top
+# -- Importing package axi_uvm_pkg
+# -- Compiling interface soc_obs_if
+# -- Compiling interface apb_if
+# -- Compiling interface uart_if
+# -- Compiling package soc_uvm_pkg
+# -- Compiling module tb_soc_top
+# -- Importing package soc_uvm_pkg
+# 
+# Top level modules:
+# 	tb_core_top
+# 	tb_axi_top
+# 	tb_soc_top
+# End time: 02:40:56 on Sep 18,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+# 
+## -onfinish stop hands control back to this script after the UVM $finish, so
+## the verdict below actually runs and sets the exit code. Without it vsim -c
+## exits straight from $finish and always returns 0.
+##
+## No +acc is needed: the hierarchical paths in tb_core_top and the bind in
+## core_bind.sv are written in the source, so vopt keeps them.
+##
+## -nodpiexports: this Questa install ships no C compiler, and only the library
+## mapped to mtiUvm (uvm-1.1d here) has a prebuilt DPI export wrapper. Loading
+## uvm-1.2 through -L therefore stops at "(vsim-7019) Can't locate a C/C++
+## compiler". The environment uses no DPI export, so turning the wrapper off is
+## safe; uvm_dpi.dll still provides the DPI imports UVM needs. Revisit when
+## phase 5 adds uvm_reg backdoor access.
+## Built as a list and eval'd, the way tb/run_random_trace.do does it: this
+## Questa Tcl does not expand {*} inside a vsim command line.
+## The covergroups in env/*_func_coverage.sv are saved to a UCDB that vcover
+## merges across tests and seeds. No vlog +cover switch is used: this collects
+## functional coverage only, not code coverage, so vsim notes that the code was
+## not compiled with coverage options. Add +cover to the vlog lines above if
+## code coverage is ever wanted as well.
+# set sim_args [list -c -coverage -L $uvm_lib -nodpiexports -onfinish stop -sv_seed $seed]
+# -c -coverage -L C:/questasim64_2024.1/uvm-1.2 -nodpiexports -onfinish stop -sv_seed 1
+# lappend sim_args -suppress 8634
+# -c -coverage -L C:/questasim64_2024.1/uvm-1.2 -nodpiexports -onfinish stop -sv_seed 1 -suppress 8634
+# lappend sim_args "+UVM_TESTNAME=$test_name"
+# -c -coverage -L C:/questasim64_2024.1/uvm-1.2 -nodpiexports -onfinish stop -sv_seed 1 -suppress 8634 +UVM_TESTNAME=core_smoke_test
+# lappend sim_args "+STATUS=$status_f"
+# -c -coverage -L C:/questasim64_2024.1/uvm-1.2 -nodpiexports -onfinish stop -sv_seed 1 -suppress 8634 +UVM_TESTNAME=core_smoke_test +STATUS=verification/uvm/out/core_smoke_test.status
+# foreach arg $extra_args { lappend sim_args $arg }
+# lappend sim_args -l "$out_dir/$test_name.log"
+# -c -coverage -L C:/questasim64_2024.1/uvm-1.2 -nodpiexports -onfinish stop -sv_seed 1 -suppress 8634 +UVM_TESTNAME=core_smoke_test +STATUS=verification/uvm/out/core_smoke_test.status -l verification/uvm/out/core_smoke_test.log
+# lappend sim_args $tb_top
+# -c -coverage -L C:/questasim64_2024.1/uvm-1.2 -nodpiexports -onfinish stop -sv_seed 1 -suppress 8634 +UVM_TESTNAME=core_smoke_test +STATUS=verification/uvm/out/core_smoke_test.status -l verification/uvm/out/core_smoke_test.log tb_core_top
+# eval vsim $sim_args
+# vsim -c -coverage -L C:/questasim64_2024.1/uvm-1.2 -nodpiexports -onfinish stop -sv_seed 1 -suppress 8634 "+UVM_TESTNAME=core_smoke_test" "+STATUS=verification/uvm/out/core_smoke_test.status" -l verification/uvm/out/core_smoke_test.log tb_core_top 
+# Start time: 02:40:56 on Sep 18,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# Support of the MGLS_LICENSE_FILE and LM_LICENSE_FILE licensing environment variables will be discontinued starting with the 2025.1 release. Please update to using the SALT_LICENSE_SERVER variable.
+# Please contact Siemens EDA Customer Support (https://support.sw.siemens.com/) for assistance.
+# //  Questa Sim-64
+# //  Version 2024.1 win64 Feb  1 2024
+# //
+# // Unpublished work. Copyright 2024 Siemens
+# //
+# // This material contains trade secrets or otherwise confidential information
+# // owned by Siemens Industry Software Inc. or its affiliates (collectively,
+# // "SISW"), or its licensors. Access to and use of this information is strictly
+# // limited as set forth in the Customer's applicable agreements with SISW.
+# //
+# // This material may not be copied, distributed, or otherwise disclosed outside
+# // of the Customer's facilities without the express written permission of SISW,
+# // and may not be used in any way not expressly authorized by SISW.
+# //
+# Loading sv_std.std
+# Loading work.native_if(fast)
+# Loading work.rvfi_if(fast)
+# Loading C:/questasim64_2024.1/uvm-1.2.uvm_pkg(fast)
+# Loading work.mem_model_pkg(fast)
+# Loading work.core_uvm_pkg(fast)
+# Loading C:/questasim64_2024.1/uvm-1.2.questa_uvm_pkg(fast)
+# Loading work.tb_core_top(fast)
+# Loading C:/questasim64_2024.1/uvm-1.2\win64\uvm_dpi.dll
+# 
+# run -all
+# UVM_INFO verilog_src/uvm-1.2/src/base/uvm_root.svh(392) @ 0: reporter [UVM/RELNOTES] 
+# ----------------------------------------------------------------
+# UVM-1.2
+# (C) 2007-2014 Mentor Graphics Corporation
+# (C) 2007-2014 Cadence Design Systems, Inc.
+# (C) 2006-2014 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# (C) 2013-2014 NVIDIA Corporation
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_DO_NOT_NEED_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
+# UVM_INFO @ 0: reporter [RNTST] Running test core_smoke_test...
+# UVM_INFO verification/uvm/seq/mem_backdoor.sv(24) @ 0: reporter [core_smoke_test] loaded 325 words from verification/directed/directed_isa.hex
+# UVM_INFO verification/uvm/seq/mem_backdoor.sv(24) @ 0: reporter [core_smoke_test] loaded 325 words from verification/directed/directed_isa.hex
+# UVM_INFO verification/uvm/env/rvfi_monitor.sv(133) @ 6465000: uvm_test_top.env.retire_agent.monitor [HALT] HALT instruction retired at pc=0x00000510 after 217 retirements
+# UVM_INFO verilog_src/uvm-1.2/src/base/uvm_objection.svh(1270) @ 6625000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# UVM_INFO verification/uvm/env/core_scoreboard.sv(382) @ 6625000: uvm_test_top.env.scoreboard [ISS] reference model matched 217 instructions, 32 registers and 8192 bytes of RAM
+# UVM_INFO verification/uvm/env/core_scoreboard.sv(403) @ 6625000: uvm_test_top.env.scoreboard [SUMMARY] 
+#   retirements before HALT : 217
+#   retirements total       : 225
+#   cycles (reset_n high)   : 657
+#   mcycle / minstret       : 655 / 224
+#   counter CSR writes      : mcycle 1, minstret 1
+#   I port accept/response  : 329 / 328
+#   D port accept/response  : 14 / 14 (read 10, write 4)
+#   retired memory ops      : read 10, write 4
+#   branch taken/not-taken  : 50 / 12 of 62
+#   prediction ok/mispred   : 14 / 48 of 62
+#   load-use / redirects    : 2 / 49
+#   ISS instructions matched: 217
+# [PASS] core_smoke_test: 0 UVM_ERROR, 0 UVM_FATAL, 217 retirements before HALT
+# [COVERAGE] Instruction bins R/I/L/S/B/JAL/JALR/LUI/AUIPC/MUL/CSR/FENCE = 111111111111
+# [COVERAGE] Hazard bins EX-a/EX-b/WB-a/WB-b/load-use = 11111
+# [COVERAGE] Branch taken types = 111111 not-taken types = 111111
+# [COVERAGE] Prediction NT/T/correct/miss = 1111
+# [COVERAGE] Cache I-H/I-M/DR-H/DR-M/DW-H/DW-M = 000000
+# [COVERAGE] Bus no-stall/AR-BP/R-gap/AW-first/W-first/AW+W/B-delay = 0000000
+# [COVERAGE] IRQ normal/branch/cache-wait/AXI-wait = 0000
+# [COVERAGE] UNCOVERED: the directed ISA program does not hit every interrupt timing context
+# [COVERAGE] UNCOVERED: specialized AXI ordering/backpressure bins are covered by the bus regression, not this program
+# [COVERAGE] core_assertions sampled 658 cycles with no failure
+# UVM_INFO verilog_src/uvm-1.2/src/base/uvm_report_server.svh(847) @ 6625000: reporter [UVM/REPORT/SERVER] 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :   10
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    0
+# ** Report counts by id
+# [HALT]     1
+# [ISS]     1
+# [Questa UVM]     2
+# [RNTST]     1
+# [SUMMARY]     1
+# [TEST_DONE]     1
+# [UVM/RELNOTES]     1
+# [core_smoke_test]     2
+# 
+# ** Note: $finish    : C:/questasim64_2024.1/win64/../verilog_src/uvm-1.2/src/base/uvm_root.svh(517)
+#    Time: 6625 ns  Iteration: 74  Instance: /tb_core_top
+# Break in Task uvm_pkg/uvm_root::run_test at C:/questasim64_2024.1/win64/../verilog_src/uvm-1.2/src/base/uvm_root.svh line 517
+# Stopped at C:/questasim64_2024.1/win64/../verilog_src/uvm-1.2/src/base/uvm_root.svh line 517
+# 
+## Functional coverage. A missing coverage licence must not fail the test, so
+## the save is guarded.
+# if {[catch {coverage save $out_dir/$test_name.ucdb} cov_err]} {
+#     echo "coverage save skipped: $cov_err"
+# } else {
+#     catch {coverage report -detail -output $out_dir/$test_name.cover.txt}
+# }
+# 0
+# 
+# set rc 1
+# 1
+# if {[file exists $status_f]} {
+#     set fh [open $status_f r]
+#     set verdict [string trim [read $fh]]
+#     close $fh
+#     echo "UVM status: $verdict"
+#     if {[string match "PASS*" $verdict]} { set rc 0 }
+# } else {
+#     echo "\[FAIL\] $test_name finished without writing a status file"
+# }
+# UVM status: PASS core_smoke_test 0
+# 0
+# 
+# quit -f -code $rc
+# End time: 02:41:00 on Sep 18,2026, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 0, Suppressed Warnings: 1

@@ -1,0 +1,9 @@
+# FLOW_JOURNAL Incident 89: S = OpenLane's own synthesis state just before techmap (one $macc = the multiplier) (replayed
+# byte-exactly, synth_replay/), SRAM macros cut like the other sides, flops reduced to $_DFF_P_.
+read_ilang s_cut.il
+hierarchy -top soc_asic_top
+async2sync
+dffunmap
+opt_clean
+select -assert-none t:$adff t:$adffe t:$dffe t:$sdff t:$sdffe t:$sdffce t:$aldff t:$dffsr t:$dlatch t:$_DFF_PN0_ t:$_DFFE_*
+write_ilang s_flat.il

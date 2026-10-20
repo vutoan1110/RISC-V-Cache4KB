@@ -1,0 +1,81 @@
+# FLOW_JOURNAL Incident 89: each cell configuration == its techmap (miter + SAT proof); run by run_celllib.sh
+design -reset
+read_rtlil cells.il
+hierarchy -top fa64
+rename fa64 gold_fa64
+design -stash g
+read_rtlil cells.il
+hierarchy -top fa64
+techmap
+opt_clean
+rename fa64 gate_fa64
+design -stash t
+design -copy-from g -as gold_fa64 gold_fa64
+design -copy-from t -as gate_fa64 gate_fa64
+miter -equiv -flatten -make_assert gold_fa64 gate_fa64 miter_fa64
+hierarchy -top miter_fa64
+sat -verify -prove-asserts miter_fa64
+design -reset
+read_rtlil cells.il
+hierarchy -top fa63
+rename fa63 gold_fa63
+design -stash g
+read_rtlil cells.il
+hierarchy -top fa63
+techmap
+opt_clean
+rename fa63 gate_fa63
+design -stash t
+design -copy-from g -as gold_fa63 gold_fa63
+design -copy-from t -as gate_fa63 gate_fa63
+miter -equiv -flatten -make_assert gold_fa63 gate_fa63 miter_fa63
+hierarchy -top miter_fa63
+sat -verify -prove-asserts miter_fa63
+design -reset
+read_rtlil cells.il
+hierarchy -top alu64
+rename alu64 gold_alu64
+design -stash g
+read_rtlil cells.il
+hierarchy -top alu64
+techmap
+opt_clean
+rename alu64 gate_alu64
+design -stash t
+design -copy-from g -as gold_alu64 gold_alu64
+design -copy-from t -as gate_alu64 gate_alu64
+miter -equiv -flatten -make_assert gold_alu64 gate_alu64 miter_alu64
+hierarchy -top miter_alu64
+sat -verify -prove-asserts miter_alu64
+design -reset
+read_rtlil cells.il
+hierarchy -top and64
+rename and64 gold_and64
+design -stash g
+read_rtlil cells.il
+hierarchy -top and64
+techmap
+opt_clean
+rename and64 gate_and64
+design -stash t
+design -copy-from g -as gold_and64 gold_and64
+design -copy-from t -as gate_and64 gate_and64
+miter -equiv -flatten -make_assert gold_and64 gate_and64 miter_and64
+hierarchy -top miter_and64
+sat -verify -prove-asserts miter_and64
+design -reset
+read_rtlil cells.il
+hierarchy -top not32
+rename not32 gold_not32
+design -stash g
+read_rtlil cells.il
+hierarchy -top not32
+techmap
+opt_clean
+rename not32 gate_not32
+design -stash t
+design -copy-from g -as gold_not32 gold_not32
+design -copy-from t -as gate_not32 gate_not32
+miter -equiv -flatten -make_assert gold_not32 gate_not32 miter_not32
+hierarchy -top miter_not32
+sat -verify -prove-asserts miter_not32

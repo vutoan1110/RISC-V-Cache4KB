@@ -1,0 +1,19 @@
+um2                         final3_A                 r14_A               r14_E10
+logic_synth          971,319 (69737)       977,127 (70236)       977,127 (70236)
+logic_resize         -51,344 (     )       -35,522 (     )       -37,627 (     )
+tap                   90,865 (72622)       113,847 (90990)       113,847 (90990)
+diode                 27,782 (11102)        19,947 ( 7971)        20,219 ( 8080)
+clock_tree            63,746 ( 4959)        60,758 ( 4489)        61,132 ( 4481)
+hold                 189,693 (19019)       183,228 (18309)       182,523 (18259)
+port_buf                 434 (   78)           609 (   78)           601 (   78)
+macro_pin                  0 (    0)         7,575 (  673)         8,693 (  822)
+rd_wire                8,909 ( 1092)       128,528 (11092)        93,358 ( 7349)
+rd_maxcap              3,266 (  183)        12,252 (  828)        12,513 (  855)
+rd_maxlen                  0 (    0)            20 (    1)            20 (    1)
+rd_fanout             93,953 (13066)       110,884 (13170)       110,934 (13158)
+rt_rebuffer              649 (   62)           930 (   98)           881 (   91)
+other                    319 (   85)           469 (  125)           469 (  125)
+TOTAL stdcell      1,399,590             1,580,652             1,544,690        
+final3_A: synth netlist total 971,878 um2; synth cells absent after PnR 149; top 'other': [('u_soc.u_axi_ram.g_bank[#', 40), ('u_soc.u_dcache.g_dm_base', 20), ('u_soc.u_icache.g_dm_base', 20), ('soc_asic_top_#', 3), ('_#__#', 2)]
+r14_A: synth netlist total 977,837 um2; synth cells absent after PnR 189; top 'other': [('u_soc.u_axi_ram.g_bank[#', 80), ('u_soc.u_dcache.g_dm_base', 20), ('u_soc.u_icache.g_dm_base', 20), ('soc_asic_top_#', 3), ('_#__#', 2)]
+r14_E10: synth netlist total 977,837 um2; synth cells absent after PnR 189; top 'other': [('u_soc.u_axi_ram.g_bank[#', 80), ('u_soc.u_dcache.g_dm_base', 20), ('u_soc.u_icache.g_dm_base', 20), ('soc_asic_top_#', 3), ('_#__#', 2)]

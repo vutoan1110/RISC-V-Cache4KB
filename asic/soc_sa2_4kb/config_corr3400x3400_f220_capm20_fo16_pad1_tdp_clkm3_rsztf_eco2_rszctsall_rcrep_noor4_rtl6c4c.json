@@ -1,0 +1,285 @@
+{
+    "//EXPERIMENT": "2026-10-09: the 10.54 mm2 knobs (cap 20, fanout 16, cell padding 1 site per side, timing-driven global placement, clock on met3-met5, resizer on tt / ff) on the 11.56 mm2 corridor floorplan (3400 x 3400, macro_placement_u2fg.cfg); only the die changes. At 10.54 mm2 the I$ way-1 half-cycle SRAM read path had +0.153 ns at p2 (nom_tt); on that die the same path lost 0.85 ns from p2 to the sign-off max_tt in the earlier run (-0.573 ns). Earlier note of the 10.54 config: SA2 ASIC build, CACHE_CONFIG 1, corridor floorplan corr3400x3100_f220 (DIE_AREA 3400 x 3100, macro_placement_corr3400x3100_f220.cfg). Knobs as config_corr3400x3100_f220_capm20_fo16.json plus three placement / clock-routing knobs aimed at the measured failure of that run (2026-10-08).",
+    "DESIGN_NAME": "soc_asic_top",
+    "VERILOG_FILES": [
+        "dir::../snapshots/rtl_rfbht/hdl/alu.v",
+        "dir::../snapshots/rtl_rfbht/hdl/aludec.v",
+        "dir::../snapshots/rtl_rfbht/hdl/branch.v",
+        "dir::../snapshots/rtl_rfbht/hdl/predictor/bht_2bit.v",
+        "dir::../snapshots/rtl_rfbht/hdl/controller.v",
+        "dir::../snapshots/rtl_rfbht/hdl/datapath.v",
+        "dir::../snapshots/rtl_rfbht/hdl/extend.v",
+        "dir::../snapshots/rtl_rfbht/hdl/hazard_unit.v",
+        "dir::../snapshots/rtl_rfbht/hdl/maindec.v",
+        "dir::../snapshots/rtl_rfbht/hdl/regfile.v",
+        "dir::../snapshots/rtl_rfbht/hdl/riscv_core.v",
+        "dir::../snapshots/rtl_rfbht/hdl/riscv_core_native.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/icache_tag_ram.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/icache_controller.v",
+        "dir::../snapshots/rtl_rfbht/asic/dse_sram/cache_dse_data_bank_sram.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/icache_dse_core.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/icache_nway_core.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/icache.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/dcache_tag_ram.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/dcache_controller.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/dcache_dse_core.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/dcache_nway_core.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/dcache.v",
+        "dir::../snapshots/rtl_rfbht/hdl/axi/cache_axi_master.v",
+        "dir::../snapshots/rtl_rfbht/asic/soc_dm_4kb/axi_ram_32_asic_macro.v",
+        "dir::../snapshots/rtl_rfbht/hdl/axi/native_axi_lite_master.v",
+        "dir::../snapshots/rtl_rfbht/hdl/axi/axi_lite_to_apb.v",
+        "dir::../snapshots/rtl_rfbht/hdl/bus/soc_address_decoder.v",
+        "dir::../snapshots/rtl_rfbht/hdl/perf_counters.v",
+        "dir::../snapshots/rtl_rfbht/hdl/apb_performance_monitor.v",
+        "dir::../snapshots/rtl_rfbht/hdl/performance_observability.v",
+        "dir::../snapshots/rtl_rfbht/hdl/apb_timer.v",
+        "dir::../snapshots/rtl_rfbht/hdl/apb_display_regs.v",
+        "dir::../snapshots/rtl_rfbht/hdl/hex7seg_decoder.v",
+        "dir::../snapshots/rtl_rfbht/hdl/lcd_1602_hex.v",
+        "dir::../snapshots/rtl_rfbht/hdl/fifo.sv",
+        "dir::../snapshots/rtl_rfbht/hdl/baudrate_gen_block.sv",
+        "dir::../snapshots/rtl_rfbht/hdl/rx_block.sv",
+        "dir::../snapshots/rtl_rfbht/hdl/tx_block.sv",
+        "dir::../snapshots/rtl_rfbht/hdl/uart_core.sv",
+        "dir::../snapshots/rtl_rfbht/hdl/uart_apb.v",
+        "dir::../snapshots/rtl_rfbht/asic/soc_dm_4kb/cache_data_ram_sram4.v",
+        "dir::../snapshots/rtl_rfbht/hdl/soc_top.v",
+        "dir::../snapshots/rtl_rfbht/asic/soc_sa2_4kb/soc_asic_top.v"
+    ],
+    "CLOCK_PORT": "clk",
+    "CLOCK_PERIOD": 20.0,
+    "PNR_SDC_FILE": "dir::../soc_dm_4kb/soc.sdc",
+    "SIGNOFF_SDC_FILE": "dir::../soc_dm_4kb/soc.sdc",
+    "FP_SIZING": "absolute",
+    "DIE_AREA": [
+        0,
+        0,
+        3400.0,
+        3400.0
+    ],
+    "CORE_AREA": [
+        12,
+        12,
+        3388.0,
+        3388.0
+    ],
+    "FP_CORE_UTIL": 35,
+    "PL_TARGET_DENSITY_PCT": 42,
+    "//MAX_FANOUT_CONSTRAINT": "8 in the base config; the first design repair (RepairDesignPostGPL) then split 2,520 nets into 14,503 fanout buffers (DM_VC4, corr3400x3400_f220)",
+    "MAX_FANOUT_CONSTRAINT": 16,
+    "PL_RESIZER_ALLOW_SETUP_VIOS": true,
+    "GRT_RESIZER_ALLOW_SETUP_VIOS": true,
+    "RUN_POST_CTS_RESIZER_TIMING": true,
+    "RUN_POST_GRT_RESIZER_TIMING": true,
+    "PL_RESIZER_SETUP_MAX_BUFFER_PCT": 15,
+    "PL_RESIZER_HOLD_MAX_BUFFER_PCT": 15,
+    "PL_RESIZER_GATE_CLONING": false,
+    "PL_RESIZER_FIX_HOLD_FIRST": false,
+    "GRT_RESIZER_SETUP_MAX_BUFFER_PCT": 15,
+    "GRT_RESIZER_HOLD_MAX_BUFFER_PCT": 15,
+    "GRT_RESIZER_GATE_CLONING": false,
+    "GRT_MACRO_EXTENSION": 1,
+    "RUN_CTS": true,
+    "RUN_ANTENNA_REPAIR": true,
+    "ERROR_ON_TR_DRC": true,
+    "ERROR_ON_MAGIC_DRC": true,
+    "ERROR_ON_ILLEGAL_OVERLAPS": true,
+    "FP_PIN_ORDER_CFG": "dir::../soc_dm_4kb/pin_order.cfg",
+    "FP_PDN_VPITCH": 90,
+    "FP_PDN_HPITCH": 90,
+    "FP_PDN_VOFFSET": 16.32,
+    "FP_PDN_HOFFSET": 16.65,
+    "FP_PDN_VWIDTH": 3.1,
+    "FP_PDN_HWIDTH": 3.1,
+    "FP_PDN_CORE_RING": true,
+    "FP_PDN_CORE_RING_VWIDTH": 3.1,
+    "FP_PDN_CORE_RING_HWIDTH": 3.1,
+    "FP_PDN_CORE_RING_VOFFSET": 2,
+    "FP_PDN_CORE_RING_HOFFSET": 2,
+    "FP_PDN_CFG": "dir::../soc_dm_4kb/pdn_cfg.tcl",
+    "FP_PDN_HORIZONTAL_HALO": 0,
+    "FP_PDN_VERTICAL_HALO": 0,
+    "RUN_IRDROP_REPORT": true,
+    "RUN_HEURISTIC_DIODE_INSERTION": false,
+    "PRIMARY_GDSII_STREAMOUT_TOOL": "klayout",
+    "PDN_MACRO_CONNECTIONS": [
+        ".*u_bank VPWR VGND vccd1 vssd1"
+    ],
+    "MACROS": {
+        "sky130_sram_2kbyte_1rw1r_32x512_8": {
+            "gds": [
+                "dir::../soc_dm_4kb/macros/gds/sky130_sram_2kbyte_1rw1r_32x512_8.magicsafe.gds"
+            ],
+            "lef": [
+                "dir::../soc_dm_4kb/macros/lef/sky130_sram_2kbyte_1rw1r_32x512_8.lef"
+            ],
+            "nl": [
+                "dir::../soc_dm_4kb/macros/verilog/sky130_sram_2kbyte_1rw1r_32x512_8.v"
+            ],
+            "lib": {
+                "*": "dir::../soc_dm_4kb/macros/lib/sky130_sram_2kbyte_1rw1r_32x512_8_TT_1p8V_25C.lib"
+            },
+            "instances": {
+                "u_soc.u_axi_ram.g_bank[0].u_bank": {
+                    "location": [
+                        150.0,
+                        150.0
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[1].u_bank": {
+                    "location": [
+                        150.0,
+                        650.0
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[2].u_bank": {
+                    "location": [
+                        150.0,
+                        1150.0
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[3].u_bank": {
+                    "location": [
+                        150.0,
+                        1650.0
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[4].u_bank": {
+                    "location": [
+                        2787.99,
+                        261.58
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[5].u_bank": {
+                    "location": [
+                        2787.99,
+                        927.71
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[6].u_bank": {
+                    "location": [
+                        2787.99,
+                        1593.83
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[7].u_bank": {
+                    "location": [
+                        2787.99,
+                        2240.92
+                    ],
+                    "orientation": "N"
+                }
+            }
+        },
+        "sky130_sram_1kbyte_1rw1r_32x256_8": {
+            "gds": [
+                "dir::../soc_dm_4kb/macros/gds/sky130_sram_1kbyte_1rw1r_32x256_8.magicsafe.gds"
+            ],
+            "lef": [
+                "dir::../soc_dm_4kb/macros/lef/sky130_sram_1kbyte_1rw1r_32x256_8.lef"
+            ],
+            "nl": [
+                "dir::../soc_dm_4kb/macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v"
+            ],
+            "lib": {
+                "*": "dir::../soc_dm_4kb/macros/lib/sky130_sram_1kbyte_1rw1r_32x256_8_TT_1p8V_25C.lib"
+            },
+            "instances": {}
+        }
+    },
+    "pdk::sky130A": {
+        "scl::sky130_fd_sc_hd": {
+            "CLOCK_PERIOD": 20.0
+        }
+    },
+    "//IGNORE_DISCONNECTED_MODULES": "The SRAM macro's second port is deliberately unused: csb1 is tied high, addr1 tied low and dout1 left open in axi_ram_32_asic_macro.v. The disconnected-pin checker's own error message says to declare that here when it is intentional. This is a declaration, not a bypass -- the step still runs on every other instance.",
+    "IGNORE_DISCONNECTED_MODULES": [
+        "sky130_sram_1kbyte_1rw1r_32x256_8",
+        "sky130_sram_2kbyte_1rw1r_32x512_8"
+    ],
+    "MAGIC_CAPTURE_ERRORS": true,
+    "MACRO_PLACEMENT_CFG": "dir::macro_placement_u2fg_rtl6c4c.cfg",
+    "PL_TIME_DRIVEN": true,
+    "PL_MAX_DISPLACEMENT_X": 1000,
+    "PL_MAX_DISPLACEMENT_Y": 500,
+    "GRT_ADJUSTMENT": 0.2,
+    "RUN_EQY": true,
+    "EQY_SCRIPT": "dir::eqy_soc_asic_top.eqy",
+    "DIODE_ON_PORTS": "none",
+    "GRT_ANTENNA_ITERS": 10,
+    "GRT_ANTENNA_MARGIN": 30,
+    "RUN_POST_GRT_DESIGN_REPAIR": true,
+    "MAX_SLEW_VIOLATION_CORNERS": [
+        "*tt*"
+    ],
+    "MAX_CAP_VIOLATION_CORNERS": [
+        "*tt*"
+    ],
+    "MAGIC_DRC_USE_GDS": true,
+    "ERROR_ON_LINTER_WARNINGS": false,
+    "GPL_CELL_PADDING": 2,
+    "DPL_CELL_PADDING": 2,
+    "HEURISTIC_ANTENNA_THRESHOLD": 250,
+    "//MAGIC_DRC_USE_GDS": "True since 2026-09-25 (FLOW_JOURNAL Incident 61): Magic DRC runs on the real GDS of the standard cells and routing, with the SRAM macros held as LEF abstracts by a local patch to scripts/magic/drc.tcl. DEF mode checked LEF abstracts of the standard cells and reported 4,187 false nwell.4 (0 with real geometry). Macro internals: KLayout DRC on the full GDS, reported separately.",
+    "GRT_RESIZER_HOLD_SLACK_MARGIN": 0.03,
+    "PL_RESIZER_SETUP_SLACK_MARGIN": 2.0,
+    "GRT_RESIZER_SETUP_SLACK_MARGIN": 2.0,
+    "DRT_ANTENNA_REPAIR_ITERS": 5,
+    "DRT_ANTENNA_REPAIR_MARGIN": 10,
+    "LAYERS_RC": "li1 1.7536e-04 7.5294e-02,met1 1.6949e-04 8.9286e-04,met2 1.5578e-04 8.9286e-04,met3 1.7138e-04 1.5667e-04,met4 1.5175e-04 1.5667e-04,met5 1.7563e-04 1.7812e-05",
+    "LAYERS_RC_SCOPE": "repair",
+    "CTS_CLK_MAX_WIRE_LENGTH": 800,
+    "RUN_MACRO_PIN_BUFFERS": true,
+    "MACRO_PIN_BUFFER_IN_PINS": "^(addr[01]|wmask0)(\\[|$)",
+    "MACRO_PIN_BUFFER_OUT_PINS": "^dout[01](\\[|$)",
+    "MACRO_PIN_BUFFER_OUT_MIN_HPWL": 80,
+    "RSZ_DONT_TOUCH_RX": "^macro_pin_(pre_)?net_",
+    "RUN_POST_ROUTE_HOLD_ECO": true,
+    "POST_ROUTE_HOLD_ECO_MARGIN": 0.02,
+    "MACRO_PIN_BUFFER_IN_PRE_CELL": "sky130_fd_sc_hd__buf_4",
+    "POST_ROUTE_ECO_REPAIR_DESIGN": false,
+    "DESIGN_REPAIR_MAX_CAP_PCT": 20,
+    "//GRT_DESIGN_REPAIR_MAX_CAP_PCT": "50 in the base config; 20 = the pre-GRT margin DESIGN_REPAIR_MAX_CAP_PCT. With 50, detailed routing of sa2uB needed 54 iterations (70 violations flat from iteration 28 to 44, all in one fanout-buffer cluster)",
+    "GRT_DESIGN_REPAIR_MAX_CAP_PCT": 20,
+    "PL_RESIZER_HOLD_SLACK_MARGIN": 0.03,
+    "CTS_SINK_CLUSTERING_SIZE": 8,
+    "//SYNTH_OPT_DFF_SAT": "openlane-local patch (2026-09-30): one extra OPT round with opt_dff -sat. In DM_VC4 the D-cache way-1 data bank is dead (refill_way can only be 0); Quartus removes it (VC4 = DM = 26 M9K), plain Yosys keeps its flop and four 1 KiB macros (vc4_synth: 12 cache macros). Set in both DSE builds so they are synthesised alike; its effect on DM is measured separately (FLOW_JOURNAL).",
+    "SYNTH_OPT_DFF_SAT": true,
+    "//PL_TARGET_DENSITY_PCT": "42 instead of DM's 55 (2026-10-02): at 55 sa2F_A / vc4F_A stopped with GRT-0118 (SA2 overflow 67,971; routed wire 16.2 m vs DM 8.2 m). 42 is the value of config_R14 / E10 / FINAL3, which E15 raised for DM.",
+    "//GRT_ALLOW_CONGESTION": "2026-10-02: on the wide floorplan the initial global route of SA2 has 0 overflow, but the post-GRT design repair (3,400 buffers, 4,000 resized cells) re-routes incrementally and stopped with GRT-0232; with this flag the small overflow it creates is left to detailed routing, and signoff (DRC 0, LVS 0) decides whether the result is valid.",
+    "GRT_ALLOW_CONGESTION": true,
+    "//GPL_CELL_PADDING": "2 = 1 site on each side (gpl.tcl / dpl_cell_pad.tcl halve the value with integer division, so 1 would mean no padding); 0 in the base. The detailed-routing hot spots of SA2 are 20-90 um clusters of fanout and max_cap buffers with large cells (buf_12, nor2_8); the core outside the macros is ~20 % used, so the padding costs no die area",
+    "//PL_TIME_DRIVEN": "timing-driven global placement (off in the base): on 10.54 mm2 setup fell from +1.521 (placement estimate) to -1.287 ns (global-route estimate) on the half-cycle SRAM read path",
+    "//RT_CLOCK_MIN_LAYER": "clock nets on met3-met5 (base: met1-met5): on 10.54 mm2 the level-1 clock net clknet_1_0_1_clk was routed ~4.9 mm for pins ~385 x 324 um apart (met1 869, met2 1,180 um), worst clock skew 0.737 -> 2.088 ns",
+    "RT_CLOCK_MIN_LAYER": "met3",
+    "//DRT_DRC_REPORT_ITER_STEP": "reporting only: DRC report every 5 detailed-routing iterations, kept per routing call in drc_iter_<call>/",
+    "DRT_DRC_REPORT_ITER_STEP": 5,
+    "RSZ_CORNERS": [
+        "nom_tt_025C_1v80",
+        "nom_ff_n40C_1v95"
+    ],
+    "//RSZ_CORNERS": "2026-10-09: every resizer step (post-GPL / post-CTS / post-GRT repair, CTS, the post-route ECO) on the gated corners only. With the default (tt, ss, ff) and a 2.0 ns setup margin the resizer chased the ss corner, which no configuration closes at 20 ns (WNS -9 to -10 ns, about 7,600 endpoints): hours of buffering in the tag clusters; on DM_VC4 3400 the post-GRT timing repair alone raised the global-route overflow 66 -> 1,185 and left setup nom_tt -2.67 ns. ss stays reported in the sign-off STA (not gated). The SRAM macro .lib is kept by the first corner read, tt here (STA-1140).",
+    "//EXPERIMENT_E0": "2026-10-14 E0: the signed SA2 recipe (ecomaxmin) as ONE rule-Q compliant flow: this config's knobs unchanged, second hold-ECO pass on the min_* extraction inside the same step (POST_ROUTE_HOLD_ECO_RCX_CORNER_2, checked byte-identical to the branch + _ecomin procedure), launched with P2_MIN_HOLD=-0.5 instead of a CONTINUE line. Expected: the ecomaxmin netlist byte for byte. Run only if E1 (CTS 25) does not replace ecomaxmin.",
+    "//RTL": "2026-10-14 (owner: PD on the newest RTL): identical to config_..._rsztf_eco2.json (E0) except VERILOG_FILES, which read asic/snapshots/rtl_rfbht = manifest 6c4ccffd (+ the two N-way core files, as for DM) and the SA2 ASIC wrappers frozen into that snapshot, instead of rtl_r14 and the live wrappers. MACRO_PLACEMENT_CFG -> macro_placement_u2fg_rtl6c4c.cfg: the 6c4ccffd netlist names the cache macros u_soc.u_{i,d}cache.genblk1.g_dse.* (run _rtl6c4c_r1 stopped in step 16 on the old names).",
+    "//POST_ROUTE_HOLD_ECO_RCX_CORNER_2": "second ECO pass on the min_* extraction inside the same step; replaces the branch + config_..._ecomin.json procedure of the 11.56 mm2 sign-off (identical passes, checked standalone in eco2pass_check_20261013/).",
+    "//EXPERIMENT_SS": "2026-10-15 (owner: the rsztf sign-off is not accepted, ss far worse than R14). Measured on the signed 6c4ccffd layouts (results/ss_study_20261015): the ss loss sits in paths that are critical only at ss (DM: load data in W -> forwarding -> trap / stall cone into every pipeline register, max_ss -16.8 vs -7.1 on R14; SA2: if_req_addr -> I$ hit -> next-PC cone, -10.3 vs -7.0). With RSZ_CORNERS tt / ff no resizer step sees them. Change: PL_RESIZER_CORNERS = tt / ss / ff (local variable: the post-CTS timing repair alone also works on ss); every other resizer step stays on tt / ff, so the post-GRT repair still closes the tt paths (DM half-cycle RAM -> D$ refill).",
+    "//ACCEPTANCE_RECIPE": "2026-10-20 SA2 acceptance recipe: the rszctsall recipe (development run sa2_..._rszctsall_rtl6c4c_r1 signed clean: max_tt +0.616, max_ss -8.373 / nom_ss -7.441 vs R14 +0.838 / -7.917 / -7.304) plus LAYERS_RC_SCOPE 'repair' (local; on DM it raised the pre-route tt / hold slack and saved cells without changing ss). The or3 / or4 exclusion is NOT used for SA2: it rebuilt the I$ way-1 half-cycle read logic deeper (max_tt +0.616 -> -0.514) for no nom_ss gain after the tt repair ECO (-7.492). CORRECTION 2026-10-20 (measured): LAYERS_RC_SCOPE 'repair' has NO effect in these multi-corner resizer sessions: noor34_r1 and noor34_rcrep_r1 have byte-identical DEFs through step 43 and an identical step-44 netlist. The rszctsall_r1 vs rszctsall_rcrep_r1 differences (p2 nom_tt +1.156 / +1.209) were run-to-run variation: their DEFs already differ after step 37 with identical repair counts. The setting is kept only so that r1 and r2 use one file.",
+    "//EXPERIMENT_SS_CELLS": "2026-10-20 SA2 screen: exclude only the or4 family (or3 kept). SA2 trades tt against ss in the I$ hit -> next-PC cone: the signed SA2 recipe has max_ss -8.37 (development) / -8.88 (acceptance r1) with max_tt +0.62 / +0.58, R14 -7.92 / +0.84; excluding or3 + or4 gave max_ss -7.81 but max_tt -0.51 (the I$ way-1 half-cycle read rebuilt deeper). Hypothesis: or4 alone carries most of the ss gain (largest ss/tt ratio and delay) with a smaller restructuring of the half-cycle read. Judged at p2 (tt) and with the ss proxy.",
+    "POST_ROUTE_HOLD_ECO_RCX_CORNER_2": "min_*",
+    "PL_RESIZER_CORNERS": [
+        "nom_tt_025C_1v80",
+        "nom_ss_100C_1v60",
+        "nom_ff_n40C_1v95"
+    ],
+    "EXTRA_EXCLUDED_CELLS": [
+        "sky130_fd_sc_hd__or4*"
+    ]
+}

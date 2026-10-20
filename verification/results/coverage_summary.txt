@@ -1,0 +1,16 @@
+Portable functional coverage from the directed run
+
+Instruction R/I/L/S/B/JAL/JALR/LUI/AUIPC/MUL/CSR/FENCE = 111111111111
+Hazard EX-a/EX-b/WB-a/WB-b/load-use                    = 11111
+Branch taken BEQ/BNE/BLT/BGE/BLTU/BGEU                 = 111111
+Branch not-taken BEQ/BNE/BLT/BGE/BLTU/BGEU             = 111111
+Prediction NT/T/correct/mispredict                     = 1111
+Cache I-H/I-M/DR-H/DR-M/DW-H/DW-M                     = 111111
+Bus no-stall/AR-BP/R-gap/AW-first/W-first/AW+W/B-delay = 1100101
+IRQ normal/branch/cache-wait/AXI-wait                  = 0000
+
+Uncovered:
+- IRQ timing contexts were not connected to this coverage accumulator.
+- R gaps, AW-first, and W-first were not hit by the Step 9 directed program.
+- Preserved Step 6/8 specialized AXI and interrupt tests passed separately.
+No 100% coverage claim is made.

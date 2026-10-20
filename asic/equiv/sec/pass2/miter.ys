@@ -1,0 +1,26 @@
+# FLOW_JOURNAL Incident 86, SEC miter: gold (RTL + proved fsm) vs gate (final netlist), both
+# with the SRAM macros cut (sram_cut.py) and wrapped (make_wrap.py: reset forced in cycle 0).
+# Output: miter.aig for ABC `dprove` (trigger = 1 when any output or SRAM pin differs).
+read_ilang gold_cut.il
+rename soc_asic_top gold
+design -stash g
+read_ilang gate_cut.il
+rename soc_asic_top gate
+design -stash t
+design -copy-from g gold
+design -copy-from t gate
+read_verilog -sv wrap.v
+proc
+miter -equiv -flatten gold_w gate_w miter
+hierarchy -top miter
+async2sync
+dffunmap
+setundef -undriven -zero
+setundef -zero -init
+techmap
+opt_clean
+aigmap
+opt_clean
+check -assert
+stat
+write_aiger -zinit miter.aig

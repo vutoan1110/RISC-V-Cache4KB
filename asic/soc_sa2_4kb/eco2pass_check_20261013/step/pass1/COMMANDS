@@ -1,0 +1,2 @@
+openroad -exit -no_splash /mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/openroad/rcx.tcl
+openroad -exit -no_splash -metrics /mnt/e/Projects/RISCV-research/asic/soc_sa2_4kb/eco2pass_check_20261013/step/or_metrics_out.json /mnt/e/Projects/RISCV-research/asic/openlane-local/openlane/scripts/openroad/post_route_hold_eco.tcl

@@ -1,0 +1,10 @@
+R16 (2026-10-03, review M1): rtl_r15 + the R16 FAST_HIT files from the working tree (manifest ea3ef852):
+  hdl/cache/dcache.v
+  hdl/cache/dcache_dse_core.v
+  hdl/cache/dcache_nway_core.v
+  hdl/cache/icache.v
+  hdl/cache/icache_dse_core.v
+  hdl/cache/icache_nway_core.v
+  hdl/soc_top.v
+The other 37 files are byte-identical to rtl_r15. FAST_HIT defaults to 0; CACHE_CONFIG 0 (this chip) never
+elaborates the FAST_HIT logic.

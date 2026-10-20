@@ -1,0 +1,4 @@
+configuration,revision,device,compile_status,logic_elements,registers,m9k,total_memory_bits,dsp_9bit_elements,fmax_mhz_slow_85c,wns_ns_slow_85c,constraint_mhz,timing_met,notes
+DM,soc_top_step10_dm,EP4CE115F29C7,PASS,12402,6771,11,83328,24,47.72,-0.954,50.0,NO,Design not fully constrained beyond the shared Step 6 SDC
+SA2,soc_top_step10_sa2,EP4CE115F29C7,PASS,14429,8320,12,81920,24,52.28,0.874,50.0,YES,Design not fully constrained beyond the shared Step 6 SDC
+DM_VC4,soc_top_step10_dm_vc4,EP4CE115F29C7,PASS,16594,9763,10,81920,24,52.54,0.966,50.0,YES,Design not fully constrained beyond the shared Step 6 SDC

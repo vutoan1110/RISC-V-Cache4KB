@@ -1,0 +1,109 @@
+######## 0. RTL manifest (must be the frozen R16, c09143ea)  2026-10-06T09:54:22+07:00
+now              225 files, aggregate c09143ea578a3078
+  IDENTICAL -- verification results for this tree stay valid
+  [OK]   manifest IDENTICAL at start
+######## 1. static checks (WSL): 6 configurations x 64/256/512 lines x FAST_HIT 0/1 (33 combinations)  2026-10-06T09:54:23+07:00
+  [OK]   latch sweep: 0 latches, every one of 33 combinations elaborates
+  [OK]   lint_rtl: 0 correctness warnings, 33 combinations
+  [OK]   lint_asic soc_dm_4kb: 0 correctness warnings, 0 elaboration errors
+######## 2. directed regression x2 (R15 suite + 16 FAST_HIT runs)  2026-10-06T09:57:27+07:00
+  pass 1: 161 PASS, 0 FAIL/Fatal/Error
+  pass 2: 161 PASS, 0 FAIL/Fatal/Error
+  [OK]   regression passes agree (161 = 161)
+  [OK]   regression: 15 FAST_HIT tb_cache_configuration runs + the FAST_HIT architectural equivalence PASS, suite complete
+######## 3. UVM at 256 lines, x2; AXI at 8 / 32 / 64 B lines, x2  2026-10-06T10:00:27+07:00
+  pass 1: 5/5 PASS
+  pass 2: 5/5 PASS
+  [OK]   axi_smoke_test line_words=2 pass 1
+  [OK]   axi_smoke_test line_words=2 pass 2
+  [OK]   axi_smoke_test line_words=8 pass 1
+  [OK]   axi_smoke_test line_words=8 pass 2
+  [OK]   axi_smoke_test line_words=16 pass 1
+  [OK]   axi_smoke_test line_words=16 pass 2
+######## 4. Embench-IoT (12 standard kernels), 4 KiB: configurations 0-5 x2, then FAST_HIT 1-5 x2  2026-10-06T10:02:54+07:00
+[PASS] 72 run(s) -> E:\Projects\RISCV-research\results\r16_4kb_p1.csv
+[PASS] 72 run(s) -> E:\Projects\RISCV-research\results\r16_4kb_p2.csv
+  [OK]   Embench: 72/72 runs pass verify_benchmark and the counter identities
+  [OK]   Embench: pass 1 = pass 2 (72 runs)
+[IDENTICAL] 72 row pair(s) compared
+  [OK]   Embench FAST_HIT 0: identical to R15 (72 runs, every field)
+[PASS] 60 run(s) -> E:\Projects\RISCV-research\results\r16f_4kb_p1.csv
+[PASS] 60 run(s) -> E:\Projects\RISCV-research\results\r16f_4kb_p2.csv
+  [OK]   Embench FAST_HIT: 60/60 runs pass verify_benchmark and the counter identities
+  [OK]   Embench FAST_HIT: pass 1 = pass 2 (60 runs)
+60 FAST rows, 0 problem(s)
+  DM_DSE  12 kernels  GM mcycle FAST/base -8.946 %
+  DM_VC4  12 kernels  GM mcycle FAST/base -8.906 %
+  SA2     12 kernels  GM mcycle FAST/base -8.967 %
+  SA2N    12 kernels  GM mcycle FAST/base -8.967 %
+  SA4     12 kernels  GM mcycle FAST/base -8.962 %
+  DM_DSE FAST mcycle == DM: 11/12 (up_matmult-int)
+  [OK]   Embench FAST_HIT vs 0: every cache / architectural counter equal, mcycle never larger
+  [OK]   Embench FAST_HIT: no R16 checker message in any of 120 run logs
+######## 5. CoreMark: configurations 0-5 x2, FAST_HIT 1-5 x2  2026-10-06T11:56:14+07:00
+[PASS] 6 run(s) -> results/coremark_r16_4kb_p1.csv
+[PASS] 5 run(s) -> results/coremark_r16f_4kb_p1.csv
+[PASS] 6 run(s) -> results/coremark_r16_4kb_p2.csv
+[PASS] 5 run(s) -> results/coremark_r16f_4kb_p2.csv
+  [OK]   CoreMark: pass 1 = pass 2
+[IDENTICAL] 6 row pair(s) compared
+  [OK]   CoreMark FAST_HIT 0: identical to R15
+  [OK]   CoreMark FAST_HIT: pass 1 = pass 2
+5 FAST rows, 0 problem(s)
+  DM_DSE   1 kernels  GM mcycle FAST/base -2.528 %
+  DM_VC4   1 kernels  GM mcycle FAST/base -2.524 %
+  SA2      1 kernels  GM mcycle FAST/base -2.569 %
+  SA2N     1 kernels  GM mcycle FAST/base -2.569 %
+  SA4      1 kernels  GM mcycle FAST/base -2.572 %
+  DM_DSE FAST mcycle == DM: 1/1 (all)
+  [OK]   CoreMark FAST_HIT vs 0: counters equal, mcycle never larger
+######## 6. random differential, 50 seeds, x2 (core only: R16 must not touch it)  2026-10-06T12:09:12+07:00
+random-diff seeds 1..50 : 50 match, 0 not
+random-diff seeds 1..50 : 50 match, 0 not
+  [OK]   random diff: pass 1 = pass 2
+  [OK]   random diff: identical to R15 (hashes included)
+  [OK]   random diff: 50/50 MATCH
+######## 7. ASIC view (8 SRAM banks, DM), x2  2026-10-06T12:11:41+07:00
+[PASS] 12 run(s) -> E:\Projects\RISCV-research\results\upstream_asic_r16_p1.csv
+[PASS] 12 run(s) -> E:\Projects\RISCV-research\results\upstream_asic_r16_p2.csv
+  [OK]   ASIC view: pass 1 = pass 2
+[IDENTICAL] 12 row pair(s) compared
+  [OK]   ASIC view: identical to R15 (12 kernels, every field)
+  [OK]   ASIC view directed ISA: all six checks PASS
+  [OK]   ASIC wrapper synchronisers pass 1
+  [OK]   ASIC wrapper synchronisers pass 2
+######## 8. ramsweep: configurations 0-5 + ASIC view x2, FAST_HIT 1-5 x2  2026-10-06T12:21:45+07:00
+[PASS] 6 run(s) -> E:\Projects\RISCV-research\results\ramsweep_r16_p1.csv
+[PASS] 1 run(s) -> E:\Projects\RISCV-research\results\ramsweep_asic_r16_p1.csv
+[PASS] 5 run(s) -> E:\Projects\RISCV-research\results\ramsweep_r16f_p1.csv
+[PASS] 6 run(s) -> E:\Projects\RISCV-research\results\ramsweep_r16_p2.csv
+[PASS] 1 run(s) -> E:\Projects\RISCV-research\results\ramsweep_asic_r16_p2.csv
+[PASS] 5 run(s) -> E:\Projects\RISCV-research\results\ramsweep_r16f_p2.csv
+  [OK]   ramsweep: pass 1 = pass 2
+[IDENTICAL] 6 row pair(s) compared
+  [OK]   ramsweep FAST_HIT 0: identical to R15
+[IDENTICAL] 1 row pair(s) compared
+  [OK]   ramsweep ASIC view: identical to R15
+  [OK]   ramsweep FAST_HIT: pass 1 = pass 2
+5 FAST rows, 0 problem(s)
+  DM_DSE   1 kernels  GM mcycle FAST/base -0.000 %
+  DM_VC4   1 kernels  GM mcycle FAST/base -0.000 %
+  SA2      1 kernels  GM mcycle FAST/base -0.000 %
+  SA2N     1 kernels  GM mcycle FAST/base -0.000 %
+  SA4      1 kernels  GM mcycle FAST/base -0.000 %
+  [OK]   ramsweep FAST_HIT vs 0: counters equal, mcycle never larger
+######## 9. independent cache model, 12 kernels: FAST_HIT 0 configurations 0-5, FAST_HIT 1-5  2026-10-06T12:28:18+07:00
+  [OK]   cache model: every counter EXACT for DM (with its L0), SA2, DM_VC4, DM_DSE (48 runs)
+  [OK]   cache model: every counter EXACT for SA4 and SA2N (24 runs)
+  [OK]   cache model: every counter EXACT with FAST_HIT for SA2, DM_VC4, DM_DSE, SA4, SA2N (60 runs)
+######## 10. R16 checker liveness: a forced wrong answer must stop each of the four FAST_HIT cores  2026-10-06T15:14:29+07:00
+  [OK]   u_icache/g_dse (cfg 1): checker fired on the forced wrong answer
+  [OK]   u_dcache/g_dse (cfg 1): checker fired on the forced wrong answer
+  [OK]   u_icache/g_nway (cfg 4): checker fired on the forced wrong answer
+  [OK]   u_dcache/g_nway (cfg 4): checker fired on the forced wrong answer
+checker mutation: 4/4 fired
+  [OK]   checker mutation: 4/4 checkers fire (I$ / D$ x DSE / N-way)
+######## 11. RTL manifest at the end  2026-10-06T15:14:40+07:00
+  IDENTICAL -- verification results for this tree stay valid
+  [OK]   manifest IDENTICAL at the end
+######## done  2026-10-06T15:14:41+07:00: 0 failure(s)

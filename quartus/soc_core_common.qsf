@@ -1,0 +1,97 @@
+set_global_assignment -name FAMILY "Cyclone IV E"
+set_global_assignment -name DEVICE EP4CE115F29C7
+set_global_assignment -name TOP_LEVEL_ENTITY soc_top
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 18.1.0
+set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
+# Host: 24 physical cores / 32 logical, 32 GB RAM. Raised from 4 to 16 on
+# 2026-09-11 (16 is the documented numeric maximum for this assignment; the
+# analysis and fitter stages are the long pole). Quartus guarantees that the
+# compilation result does not depend on the processor count, so the pinned
+# SEED 2 fit stays bit-for-bit reproducible.
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 16
+set_global_assignment -name SDC_FILE quartus/soc_core_50mhz.sdc
+
+# Fitter seed, pinned for reproducible builds.
+#
+# NOTE: this assignment does NOT reach the fitter through `source` -- measured
+# 2026-09-11, Quartus ignored SEED from a sourced .qsf while honouring every
+# other assignment in this file. SEED is therefore set again in each revision
+# .qsf. Also note `quartus_fit --seed=N` WRITES N back into the revision .qsf,
+# so check that line after any seed sweep before calling a build canonical.
+#
+# Four-seed sweep on the current RTL (seeds 1/2/3/5, Quartus 20.1.1, 12 fits,
+# all under 20,000 LE and positive at every corner):
+#   DM      15,256 / 15,188 / 15,233 / 15,210   spread  68 LE
+#   SA2     18,243 / 18,168 / 18,134 / 18,201   spread 109 LE
+#   DM_VC4  19,925 / 19,882 / 19,951 / 19,894   spread  69 LE
+# Seed 2 gives DM_VC4 its widest margin (118 LE), which is why it stays pinned.
+#
+# HISTORY: before S29 (register stage in hdl/perf_counters.v) seed 2 was the
+# ONLY seed that closed all three -- seeds 3 and 5 put DM_VC4 at 20,019 / 20,011
+# LE and seed 1 drove SA2 setup to -0.031 ns. S29 removed ~70-85 LE, so every
+# seed now closes. Pinning is now for reproducibility, not a hard constraint.
+# Raw data: results/s29_seed_sweep/seed_sweep.csv
+set_global_assignment -name SEED 2
+
+# CPU pipeline and native request/response wrapper.
+set_global_assignment -name VERILOG_FILE hdl/alu.v
+set_global_assignment -name VERILOG_FILE hdl/aludec.v
+set_global_assignment -name VERILOG_FILE hdl/branch.v
+set_global_assignment -name VERILOG_FILE hdl/predictor/bht_2bit.v
+set_global_assignment -name VERILOG_FILE hdl/controller.v
+set_global_assignment -name VERILOG_FILE hdl/datapath.v
+set_global_assignment -name VERILOG_FILE hdl/extend.v
+set_global_assignment -name VERILOG_FILE hdl/hazard_unit.v
+set_global_assignment -name VERILOG_FILE hdl/maindec.v
+set_global_assignment -name VERILOG_FILE hdl/regfile.v
+set_global_assignment -name VERILOG_FILE hdl/riscv_core.v
+set_global_assignment -name VERILOG_FILE hdl/riscv_core_native.v
+
+# Instruction and data caches.
+set_global_assignment -name VERILOG_FILE hdl/cache/icache_tag_ram.v
+set_global_assignment -name VERILOG_FILE hdl/cache/icache_data_ram.v
+set_global_assignment -name VERILOG_FILE hdl/cache/icache_controller.v
+set_global_assignment -name VERILOG_FILE hdl/cache/cache_dse_data_bank.v
+set_global_assignment -name VERILOG_FILE hdl/cache/icache_dse_core.v
+set_global_assignment -name VERILOG_FILE hdl/cache/icache_nway_core.v
+set_global_assignment -name VERILOG_FILE hdl/cache/icache.v
+set_global_assignment -name VERILOG_FILE hdl/cache/dcache_tag_ram.v
+set_global_assignment -name VERILOG_FILE hdl/cache/dcache_data_ram.v
+set_global_assignment -name VERILOG_FILE hdl/cache/dcache_controller.v
+set_global_assignment -name VERILOG_FILE hdl/cache/dcache_dse_core.v
+set_global_assignment -name VERILOG_FILE hdl/cache/dcache_nway_core.v
+set_global_assignment -name VERILOG_FILE hdl/cache/dcache.v
+
+# AXI4 Full memory and AXI4-Lite/APB bus layers.
+set_global_assignment -name VERILOG_FILE hdl/axi/cache_axi_master.v
+set_global_assignment -name VERILOG_FILE hdl/axi/axi_ram_32.v
+set_global_assignment -name VERILOG_FILE hdl/axi/native_axi_lite_master.v
+set_global_assignment -name VERILOG_FILE hdl/axi/axi_lite_to_apb.v
+set_global_assignment -name VERILOG_FILE hdl/bus/soc_address_decoder.v
+
+# Existing APB peripherals and board display logic.
+set_global_assignment -name VERILOG_FILE hdl/apb_display_regs.v
+set_global_assignment -name VERILOG_FILE hdl/apb_timer.v
+set_global_assignment -name VERILOG_FILE hdl/perf_counters.v
+set_global_assignment -name VERILOG_FILE hdl/apb_performance_monitor.v
+set_global_assignment -name VERILOG_FILE hdl/performance_observability.v
+set_global_assignment -name VERILOG_FILE hdl/hex7seg_decoder.v
+set_global_assignment -name VERILOG_FILE hdl/lcd_1602_hex.v
+set_global_assignment -name SYSTEMVERILOG_FILE hdl/fifo.sv
+set_global_assignment -name SYSTEMVERILOG_FILE hdl/baudrate_gen_block.sv
+set_global_assignment -name SYSTEMVERILOG_FILE hdl/rx_block.sv
+set_global_assignment -name SYSTEMVERILOG_FILE hdl/tx_block.sv
+set_global_assignment -name SYSTEMVERILOG_FILE hdl/uart_core.sv
+set_global_assignment -name VERILOG_FILE hdl/uart_apb.v
+set_global_assignment -name VERILOG_FILE hdl/soc_top.v
+
+set_global_assignment -name SEARCH_PATH hdl
+set_global_assignment -name HEX_FILE hdl/riscv_full.hex
+set_global_assignment -name MIF_FILE hdl/riscv_full_byte0.mif
+set_global_assignment -name MIF_FILE hdl/riscv_full_byte1.mif
+set_global_assignment -name MIF_FILE hdl/riscv_full_byte2.mif
+set_global_assignment -name MIF_FILE hdl/riscv_full_byte3.mif
+
+# This snapshot intentionally does not invent pin assignments. Copy the proven
+# DE2-115 pin/I/O-standard assignments from the user's board project before
+# programming hardware. The active timing constraint is the 50 MHz SDC above.

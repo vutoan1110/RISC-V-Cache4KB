@@ -1,0 +1,266 @@
+{
+    "//EXPERIMENT": "2026-10-15 DM_VC4 on RTL 6c4ccffd (owner: optimise DM, SA2 and DM_VC4). Recipe = the SA2 6c4ccffd recipe (config_corr3400x3400_f220_capm20_fo16_pad1_tdp_clkm3_rsztf_eco2_rszctsall_rtl6c4c.json: cap 20, fanout 16, cell padding 1, timing-driven GPL, clock met3-met5, resizer tt / ff with the post-CTS timing repair also on ss, two-pass post-route hold ECO). Floorplan corridor 3600x3400 with cache orientation V (macro_placement_corr3600x3400_v220_rtl6c4c.cfg): DM_VC4 reads every lane through port 1, and with orientation F the 128 read bits of each cluster left through the inter-row gap; the R14 DM_VC4 runs routed slowly (iteration 5: 4,376-7,169 violations vs DM 2,450 / SA2 708; 3600x3400 main route 18.5 h) and failed in the post-route antenna re-route.",
+    "DESIGN_NAME": "soc_asic_top",
+    "VERILOG_FILES": [
+        "dir::../snapshots/rtl_rfbht/hdl/alu.v",
+        "dir::../snapshots/rtl_rfbht/hdl/aludec.v",
+        "dir::../snapshots/rtl_rfbht/hdl/branch.v",
+        "dir::../snapshots/rtl_rfbht/hdl/predictor/bht_2bit.v",
+        "dir::../snapshots/rtl_rfbht/hdl/controller.v",
+        "dir::../snapshots/rtl_rfbht/hdl/datapath.v",
+        "dir::../snapshots/rtl_rfbht/hdl/extend.v",
+        "dir::../snapshots/rtl_rfbht/hdl/hazard_unit.v",
+        "dir::../snapshots/rtl_rfbht/hdl/maindec.v",
+        "dir::../snapshots/rtl_rfbht/hdl/regfile.v",
+        "dir::../snapshots/rtl_rfbht/hdl/riscv_core.v",
+        "dir::../snapshots/rtl_rfbht/hdl/riscv_core_native.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/icache_tag_ram.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/icache_controller.v",
+        "dir::../snapshots/rtl_rfbht/asic/dse_sram/cache_dse_data_bank_sram.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/icache_dse_core.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/icache_nway_core.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/icache.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/dcache_tag_ram.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/dcache_controller.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/dcache_dse_core.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/dcache_nway_core.v",
+        "dir::../snapshots/rtl_rfbht/hdl/cache/dcache.v",
+        "dir::../snapshots/rtl_rfbht/hdl/axi/cache_axi_master.v",
+        "dir::../snapshots/rtl_rfbht/asic/soc_dm_4kb/axi_ram_32_asic_macro.v",
+        "dir::../snapshots/rtl_rfbht/hdl/axi/native_axi_lite_master.v",
+        "dir::../snapshots/rtl_rfbht/hdl/axi/axi_lite_to_apb.v",
+        "dir::../snapshots/rtl_rfbht/hdl/bus/soc_address_decoder.v",
+        "dir::../snapshots/rtl_rfbht/hdl/perf_counters.v",
+        "dir::../snapshots/rtl_rfbht/hdl/apb_performance_monitor.v",
+        "dir::../snapshots/rtl_rfbht/hdl/performance_observability.v",
+        "dir::../snapshots/rtl_rfbht/hdl/apb_timer.v",
+        "dir::../snapshots/rtl_rfbht/hdl/apb_display_regs.v",
+        "dir::../snapshots/rtl_rfbht/hdl/hex7seg_decoder.v",
+        "dir::../snapshots/rtl_rfbht/hdl/lcd_1602_hex.v",
+        "dir::../snapshots/rtl_rfbht/hdl/fifo.sv",
+        "dir::../snapshots/rtl_rfbht/hdl/baudrate_gen_block.sv",
+        "dir::../snapshots/rtl_rfbht/hdl/rx_block.sv",
+        "dir::../snapshots/rtl_rfbht/hdl/tx_block.sv",
+        "dir::../snapshots/rtl_rfbht/hdl/uart_core.sv",
+        "dir::../snapshots/rtl_rfbht/hdl/uart_apb.v",
+        "dir::../snapshots/rtl_rfbht/asic/soc_dm_4kb/cache_data_ram_sram4.v",
+        "dir::../snapshots/rtl_rfbht/hdl/soc_top.v",
+        "dir::../snapshots/rtl_rfbht/asic/soc_vc4_4kb/soc_asic_top.v"
+    ],
+    "CLOCK_PORT": "clk",
+    "CLOCK_PERIOD": 20.0,
+    "PNR_SDC_FILE": "dir::../soc_dm_4kb/soc.sdc",
+    "SIGNOFF_SDC_FILE": "dir::../soc_dm_4kb/soc.sdc",
+    "FP_SIZING": "absolute",
+    "DIE_AREA": [
+        0,
+        0,
+        3600.0,
+        3400.0
+    ],
+    "CORE_AREA": [
+        12,
+        12,
+        3588.0,
+        3388.0
+    ],
+    "FP_CORE_UTIL": 35,
+    "PL_TARGET_DENSITY_PCT": 42,
+    "MAX_FANOUT_CONSTRAINT": 16,
+    "PL_RESIZER_ALLOW_SETUP_VIOS": true,
+    "GRT_RESIZER_ALLOW_SETUP_VIOS": true,
+    "RUN_POST_CTS_RESIZER_TIMING": true,
+    "RUN_POST_GRT_RESIZER_TIMING": true,
+    "PL_RESIZER_SETUP_MAX_BUFFER_PCT": 15,
+    "PL_RESIZER_HOLD_MAX_BUFFER_PCT": 15,
+    "PL_RESIZER_GATE_CLONING": false,
+    "PL_RESIZER_FIX_HOLD_FIRST": false,
+    "GRT_RESIZER_SETUP_MAX_BUFFER_PCT": 15,
+    "GRT_RESIZER_HOLD_MAX_BUFFER_PCT": 15,
+    "GRT_RESIZER_GATE_CLONING": false,
+    "GRT_MACRO_EXTENSION": 1,
+    "RUN_CTS": true,
+    "RUN_ANTENNA_REPAIR": true,
+    "ERROR_ON_TR_DRC": true,
+    "ERROR_ON_MAGIC_DRC": true,
+    "ERROR_ON_ILLEGAL_OVERLAPS": true,
+    "FP_PIN_ORDER_CFG": "dir::../soc_dm_4kb/pin_order.cfg",
+    "FP_PDN_VPITCH": 90,
+    "FP_PDN_HPITCH": 90,
+    "FP_PDN_VOFFSET": 16.32,
+    "FP_PDN_HOFFSET": 16.65,
+    "FP_PDN_VWIDTH": 3.1,
+    "FP_PDN_HWIDTH": 3.1,
+    "FP_PDN_CORE_RING": true,
+    "FP_PDN_CORE_RING_VWIDTH": 3.1,
+    "FP_PDN_CORE_RING_HWIDTH": 3.1,
+    "FP_PDN_CORE_RING_VOFFSET": 2,
+    "FP_PDN_CORE_RING_HOFFSET": 2,
+    "FP_PDN_CFG": "dir::../soc_dm_4kb/pdn_cfg.tcl",
+    "FP_PDN_HORIZONTAL_HALO": 0,
+    "FP_PDN_VERTICAL_HALO": 0,
+    "RUN_IRDROP_REPORT": true,
+    "RUN_HEURISTIC_DIODE_INSERTION": false,
+    "PRIMARY_GDSII_STREAMOUT_TOOL": "klayout",
+    "PDN_MACRO_CONNECTIONS": [
+        ".*u_bank VPWR VGND vccd1 vssd1"
+    ],
+    "MACROS": {
+        "sky130_sram_2kbyte_1rw1r_32x512_8": {
+            "gds": [
+                "dir::../soc_dm_4kb/macros/gds/sky130_sram_2kbyte_1rw1r_32x512_8.magicsafe.gds"
+            ],
+            "lef": [
+                "dir::../soc_dm_4kb/macros/lef/sky130_sram_2kbyte_1rw1r_32x512_8.lef"
+            ],
+            "nl": [
+                "dir::../soc_dm_4kb/macros/verilog/sky130_sram_2kbyte_1rw1r_32x512_8.v"
+            ],
+            "lib": {
+                "*": "dir::../soc_dm_4kb/macros/lib/sky130_sram_2kbyte_1rw1r_32x512_8_TT_1p8V_25C.lib"
+            },
+            "instances": {
+                "u_soc.u_axi_ram.g_bank[0].u_bank": {
+                    "location": [
+                        150.0,
+                        150.0
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[1].u_bank": {
+                    "location": [
+                        150.0,
+                        650.0
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[2].u_bank": {
+                    "location": [
+                        150.0,
+                        1150.0
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[3].u_bank": {
+                    "location": [
+                        150.0,
+                        1650.0
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[4].u_bank": {
+                    "location": [
+                        2787.99,
+                        261.58
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[5].u_bank": {
+                    "location": [
+                        2787.99,
+                        927.71
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[6].u_bank": {
+                    "location": [
+                        2787.99,
+                        1593.83
+                    ],
+                    "orientation": "N"
+                },
+                "u_soc.u_axi_ram.g_bank[7].u_bank": {
+                    "location": [
+                        2787.99,
+                        2240.92
+                    ],
+                    "orientation": "N"
+                }
+            }
+        },
+        "sky130_sram_1kbyte_1rw1r_32x256_8": {
+            "gds": [
+                "dir::../soc_dm_4kb/macros/gds/sky130_sram_1kbyte_1rw1r_32x256_8.magicsafe.gds"
+            ],
+            "lef": [
+                "dir::../soc_dm_4kb/macros/lef/sky130_sram_1kbyte_1rw1r_32x256_8.lef"
+            ],
+            "nl": [
+                "dir::../soc_dm_4kb/macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v"
+            ],
+            "lib": {
+                "*": "dir::../soc_dm_4kb/macros/lib/sky130_sram_1kbyte_1rw1r_32x256_8_TT_1p8V_25C.lib"
+            },
+            "instances": {}
+        }
+    },
+    "pdk::sky130A": {
+        "scl::sky130_fd_sc_hd": {
+            "CLOCK_PERIOD": 20.0
+        }
+    },
+    "IGNORE_DISCONNECTED_MODULES": [
+        "sky130_sram_1kbyte_1rw1r_32x256_8",
+        "sky130_sram_2kbyte_1rw1r_32x512_8"
+    ],
+    "MAGIC_CAPTURE_ERRORS": true,
+    "MACRO_PLACEMENT_CFG": "dir::macro_placement_corr3600x3400_v220_rtl6c4c.cfg",
+    "PL_TIME_DRIVEN": true,
+    "PL_MAX_DISPLACEMENT_X": 1000,
+    "PL_MAX_DISPLACEMENT_Y": 500,
+    "GRT_ADJUSTMENT": 0.2,
+    "RUN_EQY": true,
+    "EQY_SCRIPT": "dir::eqy_soc_asic_top.eqy",
+    "DIODE_ON_PORTS": "none",
+    "GRT_ANTENNA_ITERS": 10,
+    "GRT_ANTENNA_MARGIN": 30,
+    "RUN_POST_GRT_DESIGN_REPAIR": true,
+    "MAX_SLEW_VIOLATION_CORNERS": [
+        "*tt*"
+    ],
+    "MAX_CAP_VIOLATION_CORNERS": [
+        "*tt*"
+    ],
+    "MAGIC_DRC_USE_GDS": true,
+    "ERROR_ON_LINTER_WARNINGS": false,
+    "GPL_CELL_PADDING": 2,
+    "DPL_CELL_PADDING": 2,
+    "HEURISTIC_ANTENNA_THRESHOLD": 250,
+    "GRT_RESIZER_HOLD_SLACK_MARGIN": 0.03,
+    "PL_RESIZER_SETUP_SLACK_MARGIN": 2.0,
+    "GRT_RESIZER_SETUP_SLACK_MARGIN": 2.0,
+    "DRT_ANTENNA_REPAIR_ITERS": 5,
+    "DRT_ANTENNA_REPAIR_MARGIN": 10,
+    "LAYERS_RC": "li1 1.7536e-04 7.5294e-02,met1 1.6949e-04 8.9286e-04,met2 1.5578e-04 8.9286e-04,met3 1.7138e-04 1.5667e-04,met4 1.5175e-04 1.5667e-04,met5 1.7563e-04 1.7812e-05",
+    "LAYERS_RC_SCOPE": "repair_design",
+    "CTS_CLK_MAX_WIRE_LENGTH": 800,
+    "RUN_MACRO_PIN_BUFFERS": true,
+    "MACRO_PIN_BUFFER_IN_PINS": "^(addr[01]|wmask0)(\\[|$)",
+    "MACRO_PIN_BUFFER_OUT_PINS": "^dout[01](\\[|$)",
+    "MACRO_PIN_BUFFER_OUT_MIN_HPWL": 80,
+    "RSZ_DONT_TOUCH_RX": "^macro_pin_(pre_)?net_",
+    "RUN_POST_ROUTE_HOLD_ECO": true,
+    "POST_ROUTE_HOLD_ECO_MARGIN": 0.02,
+    "MACRO_PIN_BUFFER_IN_PRE_CELL": "sky130_fd_sc_hd__buf_4",
+    "POST_ROUTE_ECO_REPAIR_DESIGN": false,
+    "DESIGN_REPAIR_MAX_CAP_PCT": 20,
+    "GRT_DESIGN_REPAIR_MAX_CAP_PCT": 20,
+    "PL_RESIZER_HOLD_SLACK_MARGIN": 0.03,
+    "CTS_SINK_CLUSTERING_SIZE": 8,
+    "SYNTH_OPT_DFF_SAT": true,
+    "GRT_ALLOW_CONGESTION": true,
+    "RT_CLOCK_MIN_LAYER": "met3",
+    "DRT_DRC_REPORT_ITER_STEP": 5,
+    "RSZ_CORNERS": [
+        "nom_tt_025C_1v80",
+        "nom_ff_n40C_1v95"
+    ],
+    "POST_ROUTE_HOLD_ECO_RCX_CORNER_2": "min_*",
+    "PL_RESIZER_CORNERS": [
+        "nom_tt_025C_1v80",
+        "nom_ss_100C_1v60",
+        "nom_ff_n40C_1v95"
+    ],
+    "DRT_SAVE_MAIN_ROUTE": true,
+    "PWR_CONN_SKIP_SYNTH_REMOVED": true
+}

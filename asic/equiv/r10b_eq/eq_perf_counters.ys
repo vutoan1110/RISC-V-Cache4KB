@@ -1,0 +1,22 @@
+read_verilog -sv -D__openlane__ perf_counters_old.v 
+hierarchy -top perf_counters
+proc
+flatten
+rename perf_counters perf_counters_gold
+design -stash gold
+read_verilog -sv -D__openlane__ /mnt/e/Projects/RISCV-research/hdl/perf_counters.v 
+hierarchy -top perf_counters
+proc
+flatten
+rename perf_counters perf_counters_gate
+design -stash gate
+design -copy-from gold -as perf_counters_gold perf_counters_gold
+design -copy-from gate -as perf_counters_gate perf_counters_gate
+proc; opt_clean
+async2sync
+equiv_make perf_counters_gold perf_counters_gate eq
+hierarchy -top eq
+flatten
+equiv_simple -seq 2
+equiv_induct -seq 2
+equiv_status -assert

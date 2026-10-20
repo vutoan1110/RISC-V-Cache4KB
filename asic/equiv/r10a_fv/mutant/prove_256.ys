@@ -1,0 +1,8 @@
+read_verilog -formal -sv mutant/icache_controller_fv.v mutant/icache_tag_ram_fv.v mutant/fv_top.sv
+hierarchy -top fv_top -chparam LINE_COUNT 256
+prep -top fv_top
+flatten
+async2sync
+memory_map
+opt -fast
+sat -tempinduct -prove-asserts -set-at 1 reset_n 0 -maxsteps 8 -timeout 3000

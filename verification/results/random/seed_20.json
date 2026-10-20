@@ -1,0 +1,8 @@
+{
+  "seed": 20,
+  "static_instruction_words": 101,
+  "requested_length_before_halt": 100,
+  "sha256": "fe93310ca3cf493f98a323df67d1a2931855a0e9d2e37314cd4f2ca04760d78e",
+  "hex": "verification\\results\\random\\seed_20.hex",
+  "scope": "RV32I computational/control/load-store subset + Zmmul"
+}

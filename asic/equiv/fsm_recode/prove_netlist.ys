@@ -1,0 +1,21 @@
+# FLOW_JOURNAL Incident 86: RTL (+ proved fsm re-encoding) vs the FINAL netlist of final_B
+# (54-openroad-fillinsertion/soc_asic_top.nl.v, read through EQY's gate front end with the
+# sky130 formal cell models: eqy_standalone/fh2/gate.il).
+#
+# One monolithic proof, no partitions: equiv_make pairs every signal name the two designs
+# share with a $equiv cell; equiv_simple proves each one from its local cone; equiv_induct
+# proves the rest by temporal induction over the whole design, with every $equiv assumed in
+# the previous steps. equiv_status -assert fails the run if a single cell stays unproven.
+read_ilang gold_fsm.il
+design -stash gold_d
+read_ilang ../../eqy_standalone/fh2/gate.il
+design -stash gate_d
+design -copy-from gold_d -as gold soc_asic_top
+design -copy-from gate_d -as gate soc_asic_top
+design -copy-from gold_d sky130_sram_*
+equiv_make gold gate equiv
+hierarchy -top equiv
+equiv_simple -seq 2
+equiv_status
+equiv_induct -seq 2
+equiv_status -assert

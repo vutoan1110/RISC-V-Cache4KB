@@ -1,0 +1,4 @@
+# cut 1: I-cache hit registered (arrival at the cut 22.7 ns: OK)
+_019357_
+# cut 2: EX redirect registered (arrival 29.9 ns: needs a faster branch comparator too)
+_021005_

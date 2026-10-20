@@ -1,0 +1,4 @@
+Configuration,Main cache organization,Main capacity,Victim capacity,Line size,LE,FF,M9K,Memory bits,DSP 9-bit elements,Fmax slow 85C MHz,WNS at 50 MHz ns,Aggregate CPI,I-MPKI,D-MPKI
+DM,64 sets x 1 way,1024 B,0 B,16 B,12402,6771,11,83328,24,47.72,-0.954,NOT_RUN,NOT_RUN,NOT_RUN
+SA2,32 sets x 2 ways,1024 B,0 B,16 B,14429,8320,12,81920,24,52.28,0.874,NOT_RUN,NOT_RUN,NOT_RUN
+DM_VC4,64 sets x 1 way,1024 B,64 B plus metadata,16 B,16594,9763,10,81920,24,52.54,0.966,NOT_RUN,NOT_RUN,NOT_RUN

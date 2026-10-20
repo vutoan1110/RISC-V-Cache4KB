@@ -1,0 +1,18 @@
+
+3. Printing statistics.
+
+=== dup_test ===
+
+   Number of wires:                 14
+   Number of wire bits:             91
+   Number of public wires:          14
+   Number of public wire bits:      91
+   Number of ports:                 10
+   Number of port bits:             59
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                 16
+     $_AND_                          8
+     $_DFFE_PN0P_                    8
+

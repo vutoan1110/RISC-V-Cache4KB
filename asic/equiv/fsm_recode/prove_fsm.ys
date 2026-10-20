@@ -1,0 +1,50 @@
+# FLOW_JOURNAL Incident 86: prove that Yosys' `fsm` pass (the FSM re-encoding that OpenLane's
+# synthesis applies) preserves the behaviour of the final RTL (rtl_r12b = 8b163675).
+#
+# EQY then compares the final netlist with gold = RTL + this same `fsm` pass. Together:
+#   RTL  ==(this proof)==  RTL + fsm  ==(EQY)==  final netlist.
+#
+# Method: Yosys' own tool for exactly this. `fsm -encfile` writes the old -> new state codes;
+# `equiv_make -encfile` builds the equivalence module with the gate state decoded through
+# that table; equiv_simple / equiv_induct prove every $equiv cell; equiv_status -assert
+# fails the script if any cell stays unproven.
+#
+# run: yosys -l prove_fsm.log prove_fsm.ys  (from this directory)
+
+# RTL front end = the [script]+[gold] sections of the EQY script, as EQY writes gold.ys
+script front_end.ys
+proc
+# the steps OpenLane's synthesis runs before `fsm` (openlane_synth: opt_expr, opt_clean,
+# openlane_opt(nodffe, nosdff))
+opt_expr
+opt_clean
+opt -nodffe -nosdff
+design -save pre
+
+fsm -encfile enc.txt
+design -save post
+
+# identical back end on both copies: memories to flops, async resets to sync (SAT models)
+design -load pre
+memory -nomap
+memory_map
+async2sync
+opt_clean
+design -save pre_m
+design -load post
+memory -nomap
+memory_map
+async2sync
+opt_clean
+design -save post_m
+
+design -reset
+design -copy-from pre_m -as gold soc_asic_top
+design -copy-from post_m -as gate soc_asic_top
+design -copy-from pre_m sky130_sram_*
+equiv_make -encfile enc.txt gold gate equiv
+hierarchy -top equiv
+equiv_simple -seq 2
+equiv_status
+equiv_induct -seq 2
+equiv_status -assert

@@ -1,0 +1,16 @@
+Fitter Status : Successful - Thu Aug 20 14:21:27 2026
+Quartus Prime Version : 20.1.1 Build 720 11/11/2020 SJ Lite Edition
+Revision Name : soc_top_step8_bp_off
+Top-level Entity Name : soc_top_step8_bp_off
+Family : Cyclone IV E
+Device : EP4CE115F29C7
+Timing Models : Final
+Total logic elements : 10,783 / 114,480 ( 9 % )
+    Total combinational functions : 9,591 / 114,480 ( 8 % )
+    Dedicated logic registers : 5,745 / 114,480 ( 5 % )
+Total registers : 5745
+Total pins : 82 / 529 ( 16 % )
+Total virtual pins : 0
+Total memory bits : 83,328 / 3,981,312 ( 2 % )
+Embedded Multiplier 9-bit elements : 24 / 532 ( 5 % )
+Total PLLs : 0 / 4 ( 0 % )

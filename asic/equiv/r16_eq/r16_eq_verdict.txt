@@ -1,0 +1,30 @@
+dm_soc_fast0               expect-equivalent rc=0  proven=35067 unproven=0  PASS
+icache_cfg1_l64_fast0      expect-equivalent rc=0  proven=13517 unproven=0  PASS
+icache_cfg1_l64_fast1      negative-control  rc=0  proven=13451 unproven=66  PASS  unproven (a lower bound of what differs): genblk1.g_dse.u_core.rsp_data, genblk1.g_dse.u_core.rsp_valid, rsp_data, rsp_valid
+icache_cfg2_l64_fast0      expect-equivalent rc=0  proven=22245 unproven=0  PASS
+icache_cfg3_l64_fast0      expect-equivalent rc=0  proven=21592 unproven=0  PASS
+icache_cfg4_l64_fast0      expect-equivalent rc=0  proven=14311 unproven=0  PASS
+icache_cfg4_l64_fast1      negative-control  rc=0  proven=14245 unproven=66  PASS  unproven (a lower bound of what differs): genblk1.g_nway.u_core.rsp_data, genblk1.g_nway.u_core.rsp_valid, rsp_data, rsp_valid
+icache_cfg1_l256_fast0     expect-equivalent rc=0  proven=42293 unproven=0  PASS
+icache_cfg1_l256_fast1     negative-control  rc=0  proven=42227 unproven=66  PASS  unproven (a lower bound of what differs): genblk1.g_dse.u_core.rsp_data, genblk1.g_dse.u_core.rsp_valid, rsp_data, rsp_valid
+icache_cfg2_l256_fast0     expect-equivalent rc=0  proven=75311 unproven=0  PASS
+icache_cfg3_l256_fast0     expect-equivalent rc=0  proven=74658 unproven=0  PASS
+icache_cfg4_l256_fast0     expect-equivalent rc=0  proven=43331 unproven=0  PASS
+icache_cfg4_l256_fast1     negative-control  rc=0  proven=43265 unproven=66  PASS  unproven (a lower bound of what differs): genblk1.g_nway.u_core.rsp_data, genblk1.g_nway.u_core.rsp_valid, rsp_data, rsp_valid
+dcache_cfg1_l64_fast0      expect-equivalent rc=0  proven=13565 unproven=0  PASS
+dcache_cfg1_l64_fast1      negative-control  rc=0  proven=13499 unproven=66  PASS  unproven (a lower bound of what differs): genblk1.g_dse.u_core.rsp_rdata, genblk1.g_dse.u_core.rsp_valid, rsp_rdata, rsp_valid
+dcache_cfg2_l64_fast0      expect-equivalent rc=0  proven=22357 unproven=0  PASS
+dcache_cfg3_l64_fast0      expect-equivalent rc=0  proven=21704 unproven=0  PASS
+dcache_cfg4_l64_fast0      expect-equivalent rc=0  proven=14518 unproven=0  PASS
+dcache_cfg4_l64_fast1      negative-control  rc=0  proven=14452 unproven=66  PASS  unproven (a lower bound of what differs): genblk1.g_nway.u_core.rsp_rdata, genblk1.g_nway.u_core.rsp_valid, rsp_rdata, rsp_valid
+dcache_cfg1_l256_fast0     expect-equivalent rc=0  proven=42533 unproven=0  PASS
+dcache_cfg1_l256_fast1     negative-control  rc=0  proven=42467 unproven=66  PASS  unproven (a lower bound of what differs): genblk1.g_dse.u_core.rsp_rdata, genblk1.g_dse.u_core.rsp_valid, rsp_rdata, rsp_valid
+dcache_cfg2_l256_fast0     expect-equivalent rc=0  proven=75807 unproven=0  PASS
+dcache_cfg3_l256_fast0     expect-equivalent rc=0  proven=75154 unproven=0  PASS
+dcache_cfg4_l256_fast0     expect-equivalent rc=0  proven=43730 unproven=0  PASS
+dcache_cfg4_l256_fast1     negative-control  rc=0  proven=43664 unproven=66  PASS  unproven (a lower bound of what differs): genblk1.g_nway.u_core.rsp_rdata, genblk1.g_nway.u_core.rsp_valid, rsp_rdata, rsp_valid
+soc_sa2_4kb_soc_fast0      expect-equivalent rc=0  proven=36741 unproven=0  PASS
+soc_sa2_4kb_soc_fast1      negative-control  rc=143  SUPERSEDED: stopped 2026-10-06 in equiv_induct at 14 GB (after equiv_simple: 1,824 of 36,741 cells unproven); replaced by soc_sa2_4kb_soc_fast1s, the same check ending at the stage where the FAST_HIT 0 proof was already complete
+soc_vc4_4kb_soc_fast0      expect-equivalent rc=0  proven=37441 unproven=0  PASS
+soc_sa2_4kb_soc_fast1s     negative-control  rc=0  proven=34917 unproven=1824  PASS  unproven (a lower bound of what differs): u_soc.dcache_rsp_rdata, u_soc.dcache_rsp_valid, u_soc.if_rsp_data, u_soc.if_rsp_valid, u_soc.instr, u_soc.u_core.if_rsp_data, u_soc.u_core.if_rsp_valid, u_soc.u_dcache.g_dse.u_core.hot_block0, u_soc.u_dcache.g_dse.u_core.hot_block1, u_soc.u_dcache.g_dse.u_core.hot_epoch0, u_soc.u_dcache.g_dse.u_core.hot_epoch1, u_soc.u_dcache.g_dse.u_core.hot_line0, u_soc.u_dcache.g_dse.u_core.hot_line1, u_soc.u_dcache.g_dse.u_core.hot_replace, u_soc.u_dcache.g_dse.u_core.hot_valid, u_soc.u_dcache.g_dse.u_core.hot_way0, u_soc.u_dcache.g_dse.u_core.hot_way1, u_soc.u_dcache.g_dse.u_core.rsp_rdata, u_soc.u_dcache.g_dse.u_core.rsp_valid, u_soc.u_dcache.g_dse.u_core.state, u_soc.u_dcache.rsp_rdata, u_soc.u_dcache.rsp_valid, u_soc.u_icache.g_dse.u_core.hot_line[0], u_soc.u_icache.g_dse.u_core.hot_line[1], u_soc.u_icache.g_dse.u_core.hot_line[2], u_soc.u_icache.g_dse.u_core.hot_line[3], u_soc.u_icache.g_dse.u_core.hot_line[4], u_soc.u_icache.g_dse.u_core.hot_line[5], u_soc.u_icache.g_dse.u_core.hot_line[6], u_soc.u_icache.g_dse.u_core.hot_line[7], u_soc.u_icache.g_dse.u_core.hot_tag[0], u_soc.u_icache.g_dse.u_core.hot_tag[1], u_soc.u_icache.g_dse.u_core.hot_tag[2], u_soc.u_icache.g_dse.u_core.hot_tag[3], u_soc.u_icache.g_dse.u_core.hot_tag[4], u_soc.u_icache.g_dse.u_core.hot_tag[5], u_soc.u_icache.g_dse.u_core.hot_tag[6], u_soc.u_icache.g_dse.u_core.hot_tag[7], u_soc.u_icache.g_dse.u_core.hot_valid, u_soc.u_icache.g_dse.u_core.hot_way, u_soc.u_icache.g_dse.u_core.rsp_data, u_soc.u_icache.g_dse.u_core.rsp_valid, u_soc.u_icache.g_dse.u_core.state, u_soc.u_icache.rsp_data, u_soc.u_icache.rsp_valid
+29 checks, 0 FAIL

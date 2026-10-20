@@ -1,0 +1,19 @@
+verilog_defines -DPDK_sky130A
+verilog_defines -DSCL_sky130_fd_sc_hd
+verilog_defines -D__openlane__
+verilog_defines -D__pnr__
+read_verilog -sv -lib  /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/verilog/sky130_sram_2kbyte_1rw1r_32x512_8.v
+read_verilog -sv -lib  /mnt/e/Projects/RISCV-research/asic/soc_dm_4kb/macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v
+blackbox
+read_verilog -formal -sv /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/alu.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/aludec.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/branch.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/predictor/bht_2bit.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/controller.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/datapath.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/extend.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/hazard_unit.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/maindec.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/regfile.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/riscv_core.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/riscv_core_native.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/cache/icache_tag_ram.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/cache/icache_controller.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/cache/cache_dse_data_bank.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/cache/icache_dse_core.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/cache/icache.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/cache/dcache_tag_ram.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/cache/dcache_controller.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/cache/dcache_dse_core.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/cache/dcache.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/axi/cache_axi_master.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/asic/soc_dm_4kb/axi_ram_32_asic_macro.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/axi/native_axi_lite_master.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/axi/axi_lite_to_apb.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/bus/soc_address_decoder.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/perf_counters.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/apb_performance_monitor.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/performance_observability.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/apb_timer.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/apb_display_regs.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/hex7seg_decoder.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/lcd_1602_hex.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/fifo.sv /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/baudrate_gen_block.sv /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/rx_block.sv /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/tx_block.sv /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/uart_core.sv /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/uart_apb.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/asic/soc_dm_4kb/cache_data_ram_sram4.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/hdl/soc_top.v /mnt/e/Projects/RISCV-research/asic/snapshots/rtl_r12b/asic/soc_dm_4kb/soc_asic_top.v
+hierarchy -top soc_asic_top
+flatten
+rename -hide w:*.clk w:*.PCLK w:*.pclk
+hierarchy -top soc_asic_top
+proc
+prep -top soc_asic_top -flatten
+memory -nomap
+memory_map
+async2sync
+splitnets
+tee -q -o gold_wires.txt select -list w:*
