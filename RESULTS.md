@@ -202,7 +202,9 @@ current one is `asic/snapshots/rtl_rfbht` (RTL manifest 6c4ccffd, run names `*_r
 
 Each configuration was run twice as a complete flow from step 1 with fresh tags and gates declared at launch (one planned
 pause after the second gate, then the detailed routing and the sign-off part). Both runs of each pair produced the same
-final netlist byte for byte and the same GDS once the GDS timestamps are ignored.
+final netlist and DEF byte for byte and the same KLayout GDS once the GDS timestamps are ignored. The Magic GDS of every
+pair differs only in the random two-letter prefix Magic gives the sub-cells of the 2 KiB SRAM macro (320 structure names
+and 56,677 references, identical record count; checked record by record), so the geometry is the same.
 
 | item | DM | SA2 | DM_VC4 |
 |---|---:|---:|---:|
@@ -223,7 +225,7 @@ final netlist byte for byte and the same GDS once the GDS timestamps are ignored
 | power, activity-based exact window (12 kernels, nom_tt, RCX) | 115.40 - 123.98 mW, mean 120.28 | in progress | in progress |
 | energy per instruction, exact window | 2,633 - 6,580 pJ, GM 3,633 | in progress | in progress |
 | gate-level simulation, 12 kernels x 2 | mcycle = ASIC-view RTL, windows equal | in progress | in progress |
-| register-mapped LEC RTL == final netlist | proved, two passes | gold == N1 proved; N1 == final in progress | gold == N1 proved; N1 == final in progress |
+| register-mapped LEC RTL == final netlist | proved, two passes | gold == N1 proved; N1 == final in progress | proved, two passes |
 
 Recipe per configuration (each knob was measured as one change against the previous recipe, section 4.2):
 DM: the signed R14 grid floorplan and knobs, post-CTS timing repair also at ss (`PL_RESIZER_CORNERS` tt / ss / ff, a local
@@ -316,11 +318,12 @@ netlist, every step in two independent passes compared object by object, every s
   one-hot and undefined-value checks ALL_PROVED; N1 == final netlist: 20,096 outputs, 0 SAT, 32 residual outputs
   equivalent by `&cec`; the AND2 -> OR2 mutant is detected; full chain PASS1_EQUALS_PASS2.
 - SA2: gold == N1 PASS1_EQUALS_PASS2 (the synthesis of every SA2 acceptance run is byte-identical to the replay source);
-  N1 == final netlist follows the acceptance pair.
+  N1 == final netlist (ceab735e, shared by the development run and the acceptance runs) in progress.
 - DM_VC4: gold == N1 PASS1_EQUALS_PASS2: 22,117 outputs, 34 closed by the multiplier proof; the eight way-1 SRAM macros the
   RTL instantiates but DM_VC4 never reads are removed by synthesis and their read data are free inputs of the proof
-  (`asic/equiv/lec/sram_align.py`), with a negative control that is detected. N1 == final netlist, pass 1: both signed
-  netlists 0 SAT, residuals equivalent by `&cec`, mutant detected (184 SAT outputs); pass 2 in progress.
+  (`asic/equiv/lec/sram_align.py`), with a negative control that is detected. N1 == final netlist, both signed netlists
+  (byte-identical, ca3a7314): 22,099 outputs, 0 SAT, 40 residual outputs equivalent by `&cec`; the AND2 -> OR2 mutant
+  is detected (184 SAT outputs); full chain PASS1_EQUALS_PASS2 (`results/lec_vc4_6c4c_d34_20261020b/`).
 
 The exact-window activity power needs a counter-freeze observer mapped onto each netlist; it is proved per netlist
 (`scripts/verification/mapped_counter_freeze_rtl6c4c.py`, 65 obligations, twice): DM `~dut._029269_`, SA2 `~dut._031071_`,
