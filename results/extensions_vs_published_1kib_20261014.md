@@ -66,7 +66,7 @@ evidence paths are given per item. Items marked OPEN or in progress are not fini
 | 33 | Minimum-die search for SA2 (10.54 / 11.05 / 11.305 mm2 fail, 11.56 signs off) and DM_VC4 (3600 um fails, 3800 um signs off) | `RESULTS.md` 4.8 |
 | 34 | Gate-level simulation of the signed netlists: the ASIC-view cycle counts of all 12 kernels are reproduced (DM current RTL, DM / SA2 R14 references; SA2 / DM_VC4 current RTL in progress) | `RESULTS.md` 4.1, 4.5 |
 | 35 | Activity-based power (GLS -> SAIF -> OpenSTA, RCX parasitics, nom_tt), exact mcycle x 20 ns windows, two GLS + two STA passes each: DM current RTL mean 120.28 mW (EPI GM 3,633 pJ); R14 DM 119.45 mW, SA2 129.64 mW; SA2 / DM_VC4 current RTL in progress | `REVIEW_RESPONSE.md` A9 |
-| 36 | RTL-to-routed-netlist equivalence (register-mapped LEC + algebraic multiplier proof) with closed premises (asynchronous reset audit, undefined-value independence, clock / edge audit, one-hot invariants): DM and DM_VC4 current RTL and DM / SA2 R14 complete; SA2 current RTL: RTL == pre-ABC netlist proved, final netlist in progress | `RESULTS.md` 4.4, 4.5 |
+| 36 | RTL-to-routed-netlist equivalence (register-mapped LEC + algebraic multiplier proof) with closed premises (asynchronous reset audit, undefined-value independence, clock / edge audit, one-hot invariants): DM, SA2 and DM_VC4 current RTL and DM / SA2 R14 complete | `RESULTS.md` 4.4, 4.5 |
 | 37 | Timing per corner incl. the ss corner (reported, not gated), DRV classification | `RESULTS.md` 4 |
 
 ## 6. Method and records
@@ -78,8 +78,7 @@ evidence paths are given per item. Items marked OPEN or in progress are not fini
 
 ## Still open
 
-- SA2 / DM_VC4 on the current RTL: gate-level simulation and activity power are in progress; for SA2 also the LEC step
-  against the final netlist.
+- SA2 / DM_VC4 on the current RTL: gate-level simulation and activity power are in progress.
 - The ss corner does not close at 50 MHz (max_ss -6.8 to -8.4 ns); closing it needs RTL changes in the critical cones,
   which are outside the agreed scope (no CPI change).
 - Board: a second physical pass is not scheduled; cases 43..100 have UART evidence only.

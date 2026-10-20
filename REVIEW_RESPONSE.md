@@ -227,8 +227,8 @@ Manuscript fix: absolute counts are identical between configurations; shares dif
   wrong-byte controls fail as required (`results/uvm_cache_uart_20261009/verification.json`). This is the stated
   functional scope, not complete code coverage or SA4 / FAST_HIT coverage.
 - Equivalence of the signed layouts: register-mapped LEC RTL == final netlist with an algebraic proof of the multiplier
-  cone, every step in two passes with a negative control. Complete for DM and DM_VC4 on the current RTL and for the R14
-  DM / SA2 reference layouts; SA2 on the current RTL in progress (`RESULTS.md` section 4.4).
+  cone, every step in two passes with a negative control. Complete for DM, SA2 and DM_VC4 on the current RTL and for the
+  R14 DM / SA2 reference layouts (`RESULTS.md` section 4.4).
 
 ## A8: branch predictor
 

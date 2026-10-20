@@ -225,7 +225,7 @@ and 56,677 references, identical record count; checked record by record), so the
 | power, activity-based exact window (12 kernels, nom_tt, RCX) | 115.40 - 123.98 mW, mean 120.28 | in progress | in progress |
 | energy per instruction, exact window | 2,633 - 6,580 pJ, GM 3,633 | in progress | in progress |
 | gate-level simulation, 12 kernels x 2 | mcycle = ASIC-view RTL, windows equal | in progress | in progress |
-| register-mapped LEC RTL == final netlist | proved, two passes | gold == N1 proved; N1 == final in progress | proved, two passes |
+| register-mapped LEC RTL == final netlist | proved, two passes | proved, two passes | proved, two passes |
 
 Recipe per configuration (each knob was measured as one change against the previous recipe, section 4.2):
 DM: the signed R14 grid floorplan and knobs, post-CTS timing repair also at ss (`PL_RESIZER_CORNERS` tt / ss / ff, a local
@@ -318,7 +318,9 @@ netlist, every step in two independent passes compared object by object, every s
   one-hot and undefined-value checks ALL_PROVED; N1 == final netlist: 20,096 outputs, 0 SAT, 32 residual outputs
   equivalent by `&cec`; the AND2 -> OR2 mutant is detected; full chain PASS1_EQUALS_PASS2.
 - SA2: gold == N1 PASS1_EQUALS_PASS2 (the synthesis of every SA2 acceptance run is byte-identical to the replay source);
-  N1 == final netlist (ceab735e, shared by the development run and the acceptance runs) in progress.
+  N1 == final netlist (ceab735e, byte-identical in the development run and both acceptance runs): 21,471 outputs, 0 SAT,
+  32 residual outputs equivalent by `&cec`; the AND2 -> OR2 mutant is detected (184 SAT outputs); full chain
+  PASS1_EQUALS_PASS2 (`results/lec_sa2_6c4c_20261015/`).
 - DM_VC4: gold == N1 PASS1_EQUALS_PASS2: 22,117 outputs, 34 closed by the multiplier proof; the eight way-1 SRAM macros the
   RTL instantiates but DM_VC4 never reads are removed by synthesis and their read data are free inputs of the proof
   (`asic/equiv/lec/sram_align.py`), with a negative control that is detected. N1 == final netlist, both signed netlists
