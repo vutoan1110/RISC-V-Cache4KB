@@ -216,7 +216,8 @@ final netlist byte for byte and the same GDS once the GDS timestamps are ignored
 | setup max_ss / nom_ss / min_ss, ns (reported) | -6.755 / -5.941 / -5.594 | -8.373 / -7.441 / -6.491 | -7.039 / -6.504 / -5.908 |
 | worst hold, ns (9 corners) | +0.010 (min_ff) | +0.020 (max_ff) | +0.020 (max_ff) |
 | timing-repair buffers / clock buffers / antenna diodes | 26,198 / 3,685 / 7,580 | 16,302 / 4,561 / 15,355 | 15,979 / 5,118 / 16,832 |
-| DRV at nom_tt (reported): max slew / cap / fanout | 1,449 / 446 / 1,398 | 7,610 / 2,015 / 427 | 7,181 / 2,601 / 437 |
+| DRV at nom_tt (reported): max slew / cap / fanout | 317 / 368 / 1,398 | 1,847 / 1,195 / 427 | 1,459 / 1,334 / 437 |
+| DRV, worst corner (reported): max slew / cap / fanout | 1,449 / 446 / 1,398 | 7,610 / 2,015 / 427 | 7,181 / 2,601 / 437 |
 | power, vectorless (OpenSTA default activity, nom_tt) | 109.43 mW | 121.69 mW | 127.85 mW |
 | power, flow estimate (`power__total`, max_ff) | 122.27 mW | 136.68 mW | 143.90 mW |
 | power, activity-based exact window (12 kernels, nom_tt, RCX) | 115.40 - 123.98 mW, mean 120.28 | in progress | in progress |
@@ -245,10 +246,12 @@ kernels, and the 6c4ccffd DM netlist reproduces every reference mcycle in GLS):
 | routed wire | 6.585 m | 6.958 m (+5.7 %) | 9.274 m | 9.370 m (+1.0 %) |
 | vectorless nom_tt | 109.15 mW | 109.43 mW | 121.99 mW | 121.69 mW |
 | exact-window mean | 119.45 mW | 120.28 mW (+0.7 %) | 129.64 mW | in progress |
+| DRV at nom_tt: max slew / cap / fanout | 142 / 298 / 1,428 | 317 / 368 / 1,398 | 1,084 / 1,036 / 383 | 1,847 / 1,195 / 427 |
 
 DM trades tt margin for ss: max_tt is 1.07 ns lower than R14 but still positive, ss is 0.61 - 0.96 ns better. SA2 is
-0.46 ns (max_ss) / 0.14 ns (nom_ss) worse than R14 at ss (section 4.2). There is no DM_VC4 reference: R14 had no signed
-DM_VC4 layout.
+0.46 ns (max_ss) / 0.14 ns (nom_ss) worse than R14 at ss (section 4.2). The remaining max slew / cap violations at nom_tt
+rose against R14 in both designs (slew DM 142 -> 317, SA2 1,084 -> 1,847); they are reported, not gated. There is no
+DM_VC4 reference: R14 had no signed DM_VC4 layout.
 
 ### 4.2 The ss corner on RTL 6c4ccffd
 
